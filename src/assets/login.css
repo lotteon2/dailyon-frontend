@@ -1,0 +1,205 @@
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2.1875rem;
+}
+
+.login-title-wrapper {
+    display: flex;
+    padding: 0.625rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
+}
+
+.login-title-text {
+    color: var(--Grayscale7, #000);
+    text-align: center;
+    font-family: The Jamsil;
+    font-size: 2.5rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.login-body-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.oauth-container {
+    display: flex;
+    padding: 0rem 0.625rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.oauth-title-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.oauth-title-line-wrapper, .member-title-line-wrapper {
+    display: flex;
+    padding: 0.625rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
+}
+
+.oauth-title-line, .member-title-line {
+    width: 2.5rem;
+    height: 0.0625rem;
+
+    background: #000;
+}
+
+.oauth-title-text-wrapper, .member-title-text-wrapper {
+    display: flex;
+    padding: 0.625rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
+}
+
+.oauth-title-text, .member-title-text {
+    color: var(--Grayscale7, #000);
+    text-align: center;
+    font-family: The Jamsil;
+    font-size: 1.25rem;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+}
+
+.oauth-body-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.875rem;
+}
+
+.oauth-kakao-wrapper {
+    display: flex;
+    align-items: flex-start;
+}
+
+.oauth-kakao-wrapper:hover {
+    cursor: pointer;
+}
+
+.oauth-kakao {
+    width: 5rem;
+    height: 5rem;
+}
+
+.oauth-google-wrapper {
+    display: flex;
+    padding: 0.8rem;
+    align-items: flex-start;
+    gap: 0.625rem;
+
+    border-radius: 5.625rem;
+    background: #FFF;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.oauth-google-wrapper:hover {
+    cursor: pointer;
+}
+
+.oauth-google {
+    width: 3.125rem;
+    height: 3.1254rem;
+}
+
+.member-benefit-title-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3125rem;
+}
+
+.member-benefit-title-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.member-benefit-body-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.625rem;
+}
+
+.member-benefit-body-content {
+    display: flex;
+    width: 11.9375rem;
+    height: 3.375rem;
+    padding: 0.625rem 3.125rem 0.625rem 1.25rem;
+    align-items: center;
+    gap: 2.875rem;
+
+    border: 1px solid #C6C6C6;
+}
+
+.member-benefit-body-left-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
+}
+
+.member-benefit-body-left-image {
+    width: 2.8125rem;
+    height: 1.87506rem;
+
+    fill: #000;
+}
+
+.member-benefit-body-right-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 0.625rem;
+}
+
+.member-benefit-body-right-title {
+    display: flex;
+    padding: 0.625rem 0rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.member-benefit-body-right-title-text {
+    color: var(--Grayscale7, #000);
+    font-family: The Jamsil;
+    font-size: 1.25rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 0rem;
+}
+
+.member-benefit-body-right-content {
+    display: flex;
+    padding: 0.625rem 0rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.member-benefit-body-right-content-text {
+    color: var(--Grayscale7, #000);
+    font-family: The Jamsil;
+    font-size: 0.9375rem;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 0rem;
+}
