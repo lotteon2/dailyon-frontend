@@ -1,13 +1,18 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import LuxuryView from '@/views/LuxuryView.vue'
+import HomeView from '@/views/HomeView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
+      name: 'home',
+      component: HomeView
+    },
+    {
+      path: '/luxury',
       name: 'luxury',
-      component: LuxuryView
+      component: () => import('@/views/LuxuryView.vue')
     },
     {
       path: '/fashions',
@@ -15,9 +20,24 @@ const router = createRouter({
       component: () => import('@/views/FashionView.vue')
     },
     {
+      path: '/products/:id',
+      name: 'productDetails',
+      component: () => import('@/views/ProductDetailView.vue')
+    },
+    {
+      path: '/orders',
+      name: 'orders',
+      component: () => import('@/views/OrderView.vue')
+    },
+    {
       path: '/ootds',
       name: 'ootds',
       component: () => import('@/views/OOTDView.vue')
+    },
+    {
+      path: '/ootds/:id',
+      name: 'ootdDetails',
+      component: () => import('@/views/OOTDDetailView.vue')
     },
     {
       path: '/events',

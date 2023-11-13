@@ -46,13 +46,13 @@ import { RouterLink } from 'vue-router'
       </div>
     </div>
     <div class='nav-tab-wrapper'>
-      <RouterLink to="/" class='nav-tab-text' :class="{ 'selected': $route.path === '/' }">LUXURY</RouterLink>
+      <RouterLink to="/luxury" class='nav-tab-text' :class="{ 'selected': $route.path === '/luxury' }">LUXURY</RouterLink>
     </div>
     <div class='nav-tab-wrapper'>
       <RouterLink to="/fashions" class='nav-tab-text' :class="{ 'selected': $route.path === '/fashions' }">FASHION</RouterLink>
     </div>
     <div class='nav-tab-wrapper'>
-      <RouterLink to="/ootds" class='nav-tab-text' :class="{ 'selected': $route.path === '/ootds' }">OOTD</RouterLink>
+      <RouterLink to="/ootds?sort=view" class='nav-tab-text' :class="{ 'selected': $route.path === '/ootds' }">OOTD</RouterLink>
     </div>
     <div class='nav-tab-wrapper'>
       <RouterLink to="/events" class='nav-tab-text' :class="{ 'selected': $route.path === '/events' }">EVENT</RouterLink>

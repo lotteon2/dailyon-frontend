@@ -1,0 +1,342 @@
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+    display: block;
+}
+body {
+    line-height: 1;
+}
+ol,
+ul {
+    list-style: none;
+}
+blockquote,
+q {
+    quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+    content: "";
+    content: none;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    width: 1600px;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.md-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    margin-bottom: 90px;
+}
+
+.md-container > h1 {
+    color: var(--Grayscale7, #000);
+    font-family: The Jamsil;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: 36px;
+}
+
+.md-prod-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.info-wrapper {
+    display: flex;
+    width: 1510px;
+    justify-content: space-between;
+    margin: 0 10px;
+}
+
+.md-prod-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.md-prod-info > h1 {
+    color: var(--Grayscale7, #000);
+    font-family: The Jamsil;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin: 0;
+    margin-top: 28px;
+}
+
+.md-prod-info > h2 {
+    color: var(--Grayscale7, #000);
+    font-family: The Jamsil;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+    margin: 0;
+}
+
+.new-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    margin-bottom: 127px;
+}
+
+.new-container > h1 {
+    color: var(--Grayscale7, #000);
+    text-align: center;
+    font-family: The Jamsil;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: 55px;
+}
+
+.gender-wrapper {
+    width: 253px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 7px;
+}
+
+.gender-wrapper > h2 {
+    color: var(--Grayscale7, #000);
+    text-align: center;
+    font-family: The Jamsil;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin: 0;
+}
+
+.line-wrapper {
+    width: 253px;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.gender-line {
+    width: 110px;
+    height: 2px;
+    background: #c22727;
+}
+
+.new-more-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    align-items: center;
+    padding-right: 50px;
+}
+
+.new-more-wrapper > span {
+    color: var(--Grayscale4, #c6c6c6);
+    font-family: The Jamsil;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 30px; /* 150% */
+    margin-right: 5px;
+}
+
+.new-prod-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.new-prod-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-gap: 40px;
+    margin: 0 12px;
+    /* display: flex;
+    width: 100%;
+    flex-wrap: wrap; */
+}
+
+.new-prod-info {
+    display: flex;
+    flex-direction: column;
+    width: 275px;
+}
+
+.new-prod-info > h1 {
+    color: var(--Grayscale7, #000);
+    font-family: The Jamsil;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 30px; /* 150% */
+}
+
+.new-prod-info > h2 {
+    color: var(--Grayscale7, #000);
+    font-family: The Jamsil;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 30px;
+}
+
+.new-prod-info > h3 {
+    display: flex;
+    width: 100%;
+    justify-content: end;
+    color: var(--Grayscale7, #000);
+    text-align: right;
+    font-family: The Jamsil;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 30px; /* 120% */
+}
+
+.new-prod-info-highlight {
+    color: #c22727;
+    margin-right: 20px;
+}
+
+.new-prod-more-wrapper {
+    margin-top: 42px;
+    width: 172px;
+    height: 75px;
+    flex-shrink: 0;
+    border-radius: 50px;
+    border: 1px solid var(--Grayscale5, #808080);
+    background: var(--Grayscale1, #fff);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.new-prod-more-wrapper > span {
+    color: var(--Grayscale7, #000);
+    text-align: center;
+    font-family: The Jamsil;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-right: 10px;
+}
