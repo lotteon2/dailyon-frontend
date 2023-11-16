@@ -157,6 +157,10 @@ table {
     align-items: center;
 }
 
+.back-btn:hover,.front-btn:hover {
+    cursor: pointer;
+}
+
 .info-wrapper {
     display: flex;
     width: 1510px;
@@ -204,27 +208,9 @@ table {
     font-family: The Jamsil;
     font-size: 40px;
     font-style: normal;
-    font-weight: 700;
+    font-weight: 400;
     line-height: normal;
     margin-bottom: 55px;
-}
-
-.gender-wrapper {
-    width: 253px;
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 7px;
-}
-
-.gender-wrapper > h2 {
-    color: var(--Grayscale7, #000);
-    text-align: center;
-    font-family: The Jamsil;
-    font-size: 25px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-    margin: 0;
 }
 
 .line-wrapper {
@@ -233,21 +219,20 @@ table {
     justify-content: flex-start;
 }
 
-.gender-line {
-    width: 110px;
-    height: 2px;
-    background: #c22727;
-}
-
 .new-more-wrapper {
     display: flex;
     justify-content: flex-end;
     width: 100%;
     align-items: center;
-    padding-right: 50px;
+    padding-right: 400px;
 }
 
-.new-more-wrapper > span {
+.new-more-btn-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.new-more-btn-wrapper > span {
     color: var(--Grayscale4, #c6c6c6);
     font-family: The Jamsil;
     font-size: 20px;
@@ -255,6 +240,10 @@ table {
     font-weight: 500;
     line-height: 30px; /* 150% */
     margin-right: 5px;
+}
+
+.new-more-btn-wrapper:hover {
+    cursor: pointer;
 }
 
 .new-prod-wrapper {
@@ -266,8 +255,7 @@ table {
 
 .new-prod-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     grid-gap: 40px;
     margin: 0 12px;
     /* display: flex;
@@ -278,7 +266,7 @@ table {
 .new-prod-info {
     display: flex;
     flex-direction: column;
-    width: 275px;
+    width: 255px;
 }
 
 .new-prod-info > h1 {
@@ -286,7 +274,7 @@ table {
     font-family: The Jamsil;
     font-size: 20px;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 400;
     line-height: 30px; /* 150% */
 }
 
@@ -306,9 +294,9 @@ table {
     color: var(--Grayscale7, #000);
     text-align: right;
     font-family: The Jamsil;
-    font-size: 25px;
+    font-size: 20px;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 400;
     line-height: 30px; /* 120% */
 }
 

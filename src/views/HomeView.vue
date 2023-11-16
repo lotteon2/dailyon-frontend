@@ -5,9 +5,9 @@
 <template>
   <div class='main-container'>
     <div class='md-container'>
-      <h1>MD's PICK</h1>
       <div class='md-prod-container'>
         <svg
+          class='back-btn'
           width='17'
           height='30'
           viewBox='0 0 17 30'
@@ -20,18 +20,12 @@
           />
         </svg>
         <div class='info-wrapper'>
-          <div class='md-prod-info'>
+          <div v-for='n in 2' class='md-prod-info'>
             <img src='@/assets/images/md-img1.png' alt='' />
-            <h1>NEW ARRIVALS</h1>
-            <h2>MARNI</h2>
-          </div>
-          <div class='md-prod-info'>
-            <img src='@/assets/images/md-img2.png' alt='' />
-            <h1>NEW ARRIVALS</h1>
-            <h2>HUNDER BOOTS</h2>
           </div>
         </div>
         <svg
+          class='front-btn'
           width='17'
           height='30'
           viewBox='0 0 17 30'
@@ -46,31 +40,27 @@
       </div>
     </div>
     <div class='new-container'>
-      <h1>NEW ARRIVALS</h1>
-      <div class='gender-wrapper'>
-        <h2>WOMEN</h2>
-        <h2>MEN</h2>
-      </div>
-      <div class='line-wrapper'>
-        <div class='gender-line'></div>
-      </div>
+      <h1>신상품</h1>
       <div class='new-more-wrapper'>
-        <span>더보기</span>
-        <svg
-          width='11'
-          height='20'
-          viewBox='0 0 11 20'
-          fill='none'
-          xmlns='http://www.w3.org/2000/svg'
-        >
-          <path
-            d='M0.998998 19.9999C0.867977 20.0015 0.738073 19.9757 0.617638 19.9241C0.497202 19.8725 0.388901 19.7962 0.299699 19.7002C-0.0998997 19.3006 -0.0998997 18.6813 0.299699 18.2817L8.59138 9.98997L0.299699 1.71828C-0.0998997 1.31868 -0.0998997 0.699298 0.299699 0.299699C0.699298 -0.0998998 1.31868 -0.0998998 1.71828 0.299699L10.6893 9.31066C11.0889 9.71026 11.0889 10.3296 10.6893 10.7292L1.6983 19.7002C1.4985 19.9 1.23876 19.9999 0.998998 19.9999Z'
-            fill='#C6C6C6'
-          />
-        </svg>
+        <div class='new-more-btn-wrapper'>
+          <span>더보기</span>
+          <svg
+            width='11'
+            height='20'
+            viewBox='0 0 11 20'
+            fill='none'
+            xmlns='http://www.w3.org/2000/svg'
+          >
+            <path
+              d='M0.998998 19.9999C0.867977 20.0015 0.738073 19.9757 0.617638 19.9241C0.497202 19.8725 0.388901 19.7962 0.299699 19.7002C-0.0998997 19.3006 -0.0998997 18.6813 0.299699 18.2817L8.59138 9.98997L0.299699 1.71828C-0.0998997 1.31868 -0.0998997 0.699298 0.299699 0.299699C0.699298 -0.0998998 1.31868 -0.0998998 1.71828 0.299699L10.6893 9.31066C11.0889 9.71026 11.0889 10.3296 10.6893 10.7292L1.6983 19.7002C1.4985 19.9 1.23876 19.9999 0.998998 19.9999Z'
+              fill='#C6C6C6'
+            />
+          </svg>
+        </div>
       </div>
       <div class='new-prod-wrapper'>
         <svg
+          class='back-btn'
           width='17'
           height='30'
           viewBox='0 0 17 30'
@@ -84,118 +74,17 @@
         </svg>
 
         <div class='new-prod-grid'>
-          <div class='new-prod-info'>
+          <div v-for='n in 4' class='new-prod-info'>
             <img src='@/assets/images/prod-img.png' alt='' />
             <h1>BRAND</h1>
             <h2>상품명</h2>
             <h3>
-              <div class='new-prod-info-highlight'>
-                할인율%
-              </div>
-              가격
-            </h3>
-          </div>
-          <div class='new-prod-info'>
-            <img src='@/assets/images/prod-img.png' alt='' />
-            <h1>BRAND</h1>
-            <h2>상품명</h2>
-            <h3>
-              <div class='new-prod-info-highlight'>
-                할인율%
-              </div>
-              가격
-            </h3>
-          </div>
-          <div class='new-prod-info'>
-            <img src='@/assets/images/prod-img.png' alt='' />
-            <h1>BRAND</h1>
-            <h2>상품명</h2>
-            <h3>
-              <div class='new-prod-info-highlight'>
-                할인율%
-              </div>
-              가격
-            </h3>
-          </div>
-          <div class='new-prod-info'>
-            <img src='@/assets/images/prod-img.png' alt='' />
-            <h1>BRAND</h1>
-            <h2>상품명</h2>
-            <h3>
-              <div class='new-prod-info-highlight'>
-                할인율%
-              </div>
-              가격
-            </h3>
-          </div>
-          <div class='new-prod-info'>
-            <img src='@/assets/images/prod-img.png' alt='' />
-            <h1>BRAND</h1>
-            <h2>상품명</h2>
-            <h3>
-              <div class='new-prod-info-highlight'>
-                할인율%
-              </div>
-              가격
-            </h3>
-          </div>
-          <div class='new-prod-info'>
-            <img src='@/assets/images/prod-img.png' alt='' />
-            <h1>BRAND</h1>
-            <h2>상품명</h2>
-            <h3>
-              <div class='new-prod-info-highlight'>
-                할인율%
-              </div>
-              가격
-            </h3>
-          </div>
-          <div class='new-prod-info'>
-            <img src='@/assets/images/prod-img.png' alt='' />
-            <h1>BRAND</h1>
-            <h2>상품명</h2>
-            <h3>
-              <div class='new-prod-info-highlight'>
-                할인율%
-              </div>
-              가격
-            </h3>
-          </div>
-          <div class='new-prod-info'>
-            <img src='@/assets/images/prod-img.png' alt='' />
-            <h1>BRAND</h1>
-            <h2>상품명</h2>
-            <h3>
-              <div class='new-prod-info-highlight'>
-                할인율%
-              </div>
-              가격
-            </h3>
-          </div>
-          <div class='new-prod-info'>
-            <img src='@/assets/images/prod-img.png' alt='' />
-            <h1>BRAND</h1>
-            <h2>상품명</h2>
-            <h3>
-              <div class='new-prod-info-highlight'>
-                할인율%
-              </div>
-              가격
-            </h3>
-          </div>
-          <div class='new-prod-info'>
-            <img src='@/assets/images/prod-img.png' alt='' />
-            <h1>BRAND</h1>
-            <h2>상품명</h2>
-            <h3>
-              <div class='new-prod-info-highlight'>
-                할인율%
-              </div>
               가격
             </h3>
           </div>
         </div>
         <svg
+          class='front-btn'
           width='17'
           height='30'
           viewBox='0 0 17 30'
@@ -205,52 +94,33 @@
           <path
             d='M1.4985 29.9999C1.30197 30.0023 1.10711 29.9635 0.926456 29.8861C0.745803 29.8087 0.583352 29.6943 0.449549 29.5503C-0.14985 28.951 -0.14985 28.0219 0.449549 27.4225L12.8871 14.985L0.449549 2.57741C-0.14985 1.97801 -0.14985 1.04895 0.449549 0.449549C1.04895 -0.14985 1.97802 -0.14985 2.57741 0.449549L16.0339 13.966C16.6333 14.5654 16.6333 15.4944 16.0339 16.0938L2.54744 29.5503C2.24774 29.85 1.85814 29.9999 1.4985 29.9999Z'
             fill='#4D4D4D'
-          />
-        </svg>
-      </div>
-      <div class='new-prod-more-wrapper'>
-        <span>MORE</span>
-        <svg
-          width='14'
-          height='14'
-          viewBox='0 0 14 14'
-          fill='none'
-          xmlns='http://www.w3.org/2000/svg'
-        >
-          <path
-            d='M14 8H8V14H6V8H0V6H6V0H8V6H14V8Z'
-            fill='black'
           />
         </svg>
       </div>
     </div>
 
     <div class='new-container'>
-      <h1>BEST ITEM</h1>
-      <div class='gender-wrapper'>
-        <h2>WOMEN</h2>
-        <h2>MEN</h2>
-      </div>
-      <div class='line-wrapper'>
-        <div class='gender-line'></div>
-      </div>
+      <h1>베스트 상품</h1>
       <div class='new-more-wrapper'>
-        <span>더보기</span>
-        <svg
-          width='11'
-          height='20'
-          viewBox='0 0 11 20'
-          fill='none'
-          xmlns='http://www.w3.org/2000/svg'
-        >
-          <path
-            d='M0.998998 19.9999C0.867977 20.0015 0.738073 19.9757 0.617638 19.9241C0.497202 19.8725 0.388901 19.7962 0.299699 19.7002C-0.0998997 19.3006 -0.0998997 18.6813 0.299699 18.2817L8.59138 9.98997L0.299699 1.71828C-0.0998997 1.31868 -0.0998997 0.699298 0.299699 0.299699C0.699298 -0.0998998 1.31868 -0.0998998 1.71828 0.299699L10.6893 9.31066C11.0889 9.71026 11.0889 10.3296 10.6893 10.7292L1.6983 19.7002C1.4985 19.9 1.23876 19.9999 0.998998 19.9999Z'
-            fill='#C6C6C6'
-          />
-        </svg>
+        <div class='new-more-btn-wrapper'>
+          <span>더보기</span>
+          <svg
+            width='11'
+            height='20'
+            viewBox='0 0 11 20'
+            fill='none'
+            xmlns='http://www.w3.org/2000/svg'
+          >
+            <path
+              d='M0.998998 19.9999C0.867977 20.0015 0.738073 19.9757 0.617638 19.9241C0.497202 19.8725 0.388901 19.7962 0.299699 19.7002C-0.0998997 19.3006 -0.0998997 18.6813 0.299699 18.2817L8.59138 9.98997L0.299699 1.71828C-0.0998997 1.31868 -0.0998997 0.699298 0.299699 0.299699C0.699298 -0.0998998 1.31868 -0.0998998 1.71828 0.299699L10.6893 9.31066C11.0889 9.71026 11.0889 10.3296 10.6893 10.7292L1.6983 19.7002C1.4985 19.9 1.23876 19.9999 0.998998 19.9999Z'
+              fill='#C6C6C6'
+            />
+          </svg>
+        </div>
       </div>
       <div class='new-prod-wrapper'>
         <svg
+          class='back-btn'
           width='17'
           height='30'
           viewBox='0 0 17 30'
@@ -264,118 +134,17 @@
         </svg>
 
         <div class='new-prod-grid'>
-          <div class='new-prod-info'>
+          <div v-for='n in 4' class='new-prod-info'>
             <img src='@/assets/images/prod-img.png' alt='' />
             <h1>BRAND</h1>
             <h2>상품명</h2>
             <h3>
-              <div class='new-prod-info-highlight'>
-                할인율%
-              </div>
-              가격
-            </h3>
-          </div>
-          <div class='new-prod-info'>
-            <img src='@/assets/images/prod-img.png' alt='' />
-            <h1>BRAND</h1>
-            <h2>상품명</h2>
-            <h3>
-              <div class='new-prod-info-highlight'>
-                할인율%
-              </div>
-              가격
-            </h3>
-          </div>
-          <div class='new-prod-info'>
-            <img src='@/assets/images/prod-img.png' alt='' />
-            <h1>BRAND</h1>
-            <h2>상품명</h2>
-            <h3>
-              <div class='new-prod-info-highlight'>
-                할인율%
-              </div>
-              가격
-            </h3>
-          </div>
-          <div class='new-prod-info'>
-            <img src='@/assets/images/prod-img.png' alt='' />
-            <h1>BRAND</h1>
-            <h2>상품명</h2>
-            <h3>
-              <div class='new-prod-info-highlight'>
-                할인율%
-              </div>
-              가격
-            </h3>
-          </div>
-          <div class='new-prod-info'>
-            <img src='@/assets/images/prod-img.png' alt='' />
-            <h1>BRAND</h1>
-            <h2>상품명</h2>
-            <h3>
-              <div class='new-prod-info-highlight'>
-                할인율%
-              </div>
-              가격
-            </h3>
-          </div>
-          <div class='new-prod-info'>
-            <img src='@/assets/images/prod-img.png' alt='' />
-            <h1>BRAND</h1>
-            <h2>상품명</h2>
-            <h3>
-              <div class='new-prod-info-highlight'>
-                할인율%
-              </div>
-              가격
-            </h3>
-          </div>
-          <div class='new-prod-info'>
-            <img src='@/assets/images/prod-img.png' alt='' />
-            <h1>BRAND</h1>
-            <h2>상품명</h2>
-            <h3>
-              <div class='new-prod-info-highlight'>
-                할인율%
-              </div>
-              가격
-            </h3>
-          </div>
-          <div class='new-prod-info'>
-            <img src='@/assets/images/prod-img.png' alt='' />
-            <h1>BRAND</h1>
-            <h2>상품명</h2>
-            <h3>
-              <div class='new-prod-info-highlight'>
-                할인율%
-              </div>
-              가격
-            </h3>
-          </div>
-          <div class='new-prod-info'>
-            <img src='@/assets/images/prod-img.png' alt='' />
-            <h1>BRAND</h1>
-            <h2>상품명</h2>
-            <h3>
-              <div class='new-prod-info-highlight'>
-                할인율%
-              </div>
-              가격
-            </h3>
-          </div>
-          <div class='new-prod-info'>
-            <img src='@/assets/images/prod-img.png' alt='' />
-            <h1>BRAND</h1>
-            <h2>상품명</h2>
-            <h3>
-              <div class='new-prod-info-highlight'>
-                할인율%
-              </div>
               가격
             </h3>
           </div>
         </div>
         <svg
+          class='front-btn'
           width='17'
           height='30'
           viewBox='0 0 17 30'
@@ -385,21 +154,6 @@
           <path
             d='M1.4985 29.9999C1.30197 30.0023 1.10711 29.9635 0.926456 29.8861C0.745803 29.8087 0.583352 29.6943 0.449549 29.5503C-0.14985 28.951 -0.14985 28.0219 0.449549 27.4225L12.8871 14.985L0.449549 2.57741C-0.14985 1.97801 -0.14985 1.04895 0.449549 0.449549C1.04895 -0.14985 1.97802 -0.14985 2.57741 0.449549L16.0339 13.966C16.6333 14.5654 16.6333 15.4944 16.0339 16.0938L2.54744 29.5503C2.24774 29.85 1.85814 29.9999 1.4985 29.9999Z'
             fill='#4D4D4D'
-          />
-        </svg>
-      </div>
-      <div class='new-prod-more-wrapper'>
-        <span>MORE</span>
-        <svg
-          width='14'
-          height='14'
-          viewBox='0 0 14 14'
-          fill='none'
-          xmlns='http://www.w3.org/2000/svg'
-        >
-          <path
-            d='M14 8H8V14H6V8H0V6H6V0H8V6H14V8Z'
-            fill='black'
           />
         </svg>
       </div>
