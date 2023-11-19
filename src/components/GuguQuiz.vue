@@ -5,18 +5,18 @@
   </div>
 </template>
 
-<script setup lang='ts'>
+<script setup lang="ts">
 import { ref } from 'vue'
 
-const myProps = defineProps(["quiz"])
+const myProps = defineProps(['quiz'])
 // 부모 컴포넌트로 발생할 이벤트를 정의
-const myEmits = defineEmits(["solved"])
+const myEmits = defineEmits(['solved'])
 // 부모 컴포넌트로 이벤트 발행
-myEmits("solved", 123)
+myEmits('solved', 123)
 
 const num1 = Math.random() * 9 + 1
 const num2 = Math.random() * 9 + 1
-const result = ref("0")
+const result = ref('0')
 const solve = () => {
   alert(result.value)
 }

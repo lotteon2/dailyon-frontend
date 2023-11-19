@@ -5,14 +5,14 @@ import { ref } from 'vue'
 import HeaderComponent from '@/components/HeaderComponent.vue'
 import FooterComponent from '@/components/FooterComponent.vue'
 
-const quiz = ref<string>("hello")
+const quiz = ref<string>('hello')
 const receivedEmit = (sendNumber: number) => {
   console.log(sendNumber)
 }
 </script>
 
 <template>
-  <div class='container'>
+  <div class="container">
     <header>
       <HeaderComponent />
     </header>
@@ -23,9 +23,8 @@ const receivedEmit = (sendNumber: number) => {
       <FooterComponent />
     </footer>
   </div>
-
 </template>
 
 <style>
-@import "@/assets/main.css";
+@import '@/assets/main.css';
 </style>

@@ -1,6 +1,4 @@
-<script setup lang='ts'>
-
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <div class="main-container">
@@ -34,27 +32,17 @@
               <div class="shop-prod-inner-div">
                 <h1>상품명1</h1>
                 <div class="shop-prod-inner-info">
-                  <img
-                    class="info-img"
-                    src="@/assets/images/prod-img.png"
-                    alt=""
-                  />
+                  <img class="info-img" src="@/assets/images/prod-img.png" alt="" />
                   <div class="info-first-col">
-                    <div
-                      class="info-first-col-first-row"
-                    >
+                    <div class="info-first-col-first-row">
                       <div class="button1">옵션</div>
                       옵션명
                     </div>
-                    <div
-                      class="info-first-col-first-row"
-                    >
+                    <div class="info-first-col-first-row">
                       <div class="button1">수량</div>
                       수량
                     </div>
-                    <div class="button2">
-                      옵션/수량 변경
-                    </div>
+                    <div class="button2">옵션/수량 변경</div>
                   </div>
                   <div class="info-second-col">
                     <span>상품금액</span>
@@ -63,16 +51,8 @@
                   </div>
                   <div class="info-third-col">
                     <span>상품금액</span>
-                    <span
-                    ><div class="highlight1">
-                                                    할인금액
-                                                </div></span
-                    >
-                    <span>
-                                                <div class="highlight2">
-                                                    할인적용금액
-                                                </div></span
-                    >
+                    <span><div class="highlight1">할인금액</div></span>
+                    <span> <div class="highlight2">할인적용금액</div></span>
                   </div>
                 </div>
               </div>
@@ -96,27 +76,17 @@
               <div class="shop-prod-inner-div">
                 <h1>상품명1</h1>
                 <div class="shop-prod-inner-info">
-                  <img
-                    class="info-img"
-                    src="@/assets/images/prod-img.png"
-                    alt=""
-                  />
+                  <img class="info-img" src="@/assets/images/prod-img.png" alt="" />
                   <div class="info-first-col">
-                    <div
-                      class="info-first-col-first-row"
-                    >
+                    <div class="info-first-col-first-row">
                       <div class="button1">옵션</div>
                       옵션명
                     </div>
-                    <div
-                      class="info-first-col-first-row"
-                    >
+                    <div class="info-first-col-first-row">
                       <div class="button1">수량</div>
                       수량
                     </div>
-                    <div class="button2">
-                      옵션/수량 변경
-                    </div>
+                    <div class="button2">옵션/수량 변경</div>
                   </div>
                   <div class="info-second-col">
                     <span>상품금액</span>
@@ -125,16 +95,8 @@
                   </div>
                   <div class="info-third-col">
                     <span>상품금액</span>
-                    <span
-                    ><div class="highlight1">
-                                                    할인금액
-                                                </div></span
-                    >
-                    <span>
-                                                <div class="highlight2">
-                                                    할인적용금액
-                                                </div></span
-                    >
+                    <span><div class="highlight1">할인금액</div></span>
+                    <span> <div class="highlight2">할인적용금액</div></span>
                   </div>
                 </div>
               </div>
@@ -164,27 +126,17 @@
               <div class="shop-prod-inner-div">
                 <h1>상품명1</h1>
                 <div class="shop-prod-inner-info">
-                  <img
-                    class="info-img"
-                    src="@/assets/images/prod-img.png"
-                    alt=""
-                  />
+                  <img class="info-img" src="@/assets/images/prod-img.png" alt="" />
                   <div class="info-first-col">
-                    <div
-                      class="info-first-col-first-row"
-                    >
+                    <div class="info-first-col-first-row">
                       <div class="button1">옵션</div>
                       옵션명
                     </div>
-                    <div
-                      class="info-first-col-first-row"
-                    >
+                    <div class="info-first-col-first-row">
                       <div class="button1">수량</div>
                       수량
                     </div>
-                    <div class="button2">
-                      옵션/수량 변경
-                    </div>
+                    <div class="button2">옵션/수량 변경</div>
                   </div>
                   <div class="info-second-col">
                     <span>상품금액</span>
@@ -193,16 +145,8 @@
                   </div>
                   <div class="info-third-col">
                     <span>상품금액</span>
-                    <span
-                    ><div class="highlight1">
-                                                    할인금액
-                                                </div></span
-                    >
-                    <span>
-                                                <div class="highlight2">
-                                                    할인적용금액
-                                                </div></span
-                    >
+                    <span><div class="highlight1">할인금액</div></span>
+                    <span> <div class="highlight2">할인적용금액</div></span>
                   </div>
                 </div>
               </div>
@@ -226,27 +170,17 @@
               <div class="shop-prod-inner-div">
                 <h1>상품명1</h1>
                 <div class="shop-prod-inner-info">
-                  <img
-                    class="info-img"
-                    src="@/assets/images/prod-img.png"
-                    alt=""
-                  />
+                  <img class="info-img" src="@/assets/images/prod-img.png" alt="" />
                   <div class="info-first-col">
-                    <div
-                      class="info-first-col-first-row"
-                    >
+                    <div class="info-first-col-first-row">
                       <div class="button1">옵션</div>
                       옵션명
                     </div>
-                    <div
-                      class="info-first-col-first-row"
-                    >
+                    <div class="info-first-col-first-row">
                       <div class="button1">수량</div>
                       수량
                     </div>
-                    <div class="button2">
-                      옵션/수량 변경
-                    </div>
+                    <div class="button2">옵션/수량 변경</div>
                   </div>
                   <div class="info-second-col">
                     <span>상품금액</span>
@@ -255,16 +189,8 @@
                   </div>
                   <div class="info-third-col">
                     <span>상품금액</span>
-                    <span
-                    ><div class="highlight1">
-                                                    할인금액
-                                                </div></span
-                    >
-                    <span>
-                                                <div class="highlight2">
-                                                    할인적용금액
-                                                </div></span
-                    >
+                    <span><div class="highlight1">할인금액</div></span>
+                    <span> <div class="highlight2">할인적용금액</div></span>
                   </div>
                 </div>
               </div>
@@ -296,9 +222,7 @@
           <div class="place-first-row">
             <div class="container-title">배송지</div>
             <div class="place-button-wrapper">
-              <div class="black-button">
-                주문자 정보와 동일
-              </div>
+              <div class="black-button">주문자 정보와 동일</div>
               <div class="black-button">배송지 목록 조회</div>
             </div>
           </div>
@@ -405,10 +329,7 @@
         <div class="pay-method-container">
           <div class="pay-method-first-row">
             <div class="container-title">결제 수단</div>
-            <span
-            >주문 내용을 확인하였으며, 정보 제공 등에
-                                동의합니다.</span
-            >
+            <span>주문 내용을 확인하였으며, 정보 제공 등에 동의합니다.</span>
           </div>
           <div class="line"></div>
           <div class="kakao-pay">
@@ -445,5 +366,5 @@
 </template>
 
 <style scoped>
-@import "@/assets/order.css";
+@import '@/assets/order.css';
 </style>

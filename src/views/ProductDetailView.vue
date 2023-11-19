@@ -1,6 +1,4 @@
-<script setup lang='ts'>
-
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <div class="main-container">
@@ -480,5 +478,5 @@
 </template>
 
 <style scoped>
-@import "@/assets/product-detail.css";
+@import '@/assets/product-detail.css';
 </style>
