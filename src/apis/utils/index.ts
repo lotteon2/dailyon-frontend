@@ -4,7 +4,7 @@ import axios from 'axios'
 const BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 // 기본 API 요청 처리
-const axiosApi = (baseURL: any) => {
+const axiosApi = (baseURL: string) => {
   const instance = axios.create({
     baseURL
     // withCredentials: true,
@@ -12,7 +12,7 @@ const axiosApi = (baseURL: any) => {
   return instance
 }
 // 인증 요청
-const axiosAuthApi = (baseURL: any) => {
+const axiosAuthApi = (baseURL: string) => {
   const instance = axios.create({
     baseURL
     // withCredentials: true,

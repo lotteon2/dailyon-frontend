@@ -11,5 +11,5 @@
       "path": "./tsconfig.vitest.json"
     }
   ],
-  "compilerOptions": { "module": "es2020" }
+  "compilerOptions": { "module": "es2020", "types": ["node", "vite/client"] }
 }
