@@ -1,6 +1,4 @@
-<script setup lang="ts">
-const a = import.meta.env.VITE_API_BASE_URL
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <div class="main-container">
