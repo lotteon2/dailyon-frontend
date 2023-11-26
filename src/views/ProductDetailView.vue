@@ -473,6 +473,17 @@
         </div>
       </div>
       <div class="line"></div>
+
+      <div class='top4-ootd-wrapper'>
+        <div class='top4-ootd-title-wrapper'>
+          <div class='top4-ootd-title-text'>TOP 4 OOTD</div>
+        </div>
+        <div class='top4-ootd-list-wrapper'>
+          <div v-for='n in 4' class='top4-ootd-post-card-image-wrapper'>
+            <img class='top4-ootd-post-card-image' src='@/assets/images/ootd-detail-image-example.png'>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>

@@ -1,0 +1,356 @@
+.frame {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 65rem;
+    gap: 1.6875rem;
+}
+
+.div {
+    display: flex;
+    height: 6.25rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.8125rem;
+}
+
+.text-wrapper, .text-wrapper-2 {
+    color: var(--Grayscale7, #000);
+    font-family: The Jamsil;
+    font-size: 0.9375rem;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+}
+
+.span {
+    color: var(--Grayscale7, #000);
+    font-family: The Jamsil;
+    font-size: 0.9375rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.div-2 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.875rem;
+}
+
+.div, .div-2 {
+    width: 95%;
+    padding: 0.625rem;
+
+    border: 1px solid var(--Grayscale4, #C6C6C6);
+    background: var(--Grayscale1, #FFF);
+}
+
+.text-wrapper-3 {
+    color: var(--Grayscale7, #000);
+    font-family: The Jamsil;
+    font-size: 0.9375rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.div-3 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6875rem;
+}
+
+.div-4 {
+    display: flex;
+    align-items: center;
+    gap: 4.0625rem;
+}
+
+.text-wrapper-4 {
+    color: #000;
+    font-family: The Jamsil;
+    font-size: 0.9375rem;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 1.25rem; /* 133.333% */
+}
+
+.rectangle {
+    width: 9.375rem;
+    height: 1.875rem;
+
+    border: 1px solid var(--Grayscale3, #E9E9E9);
+    background: var(--Grayscale1, #FFF);
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.rectangle:focus {
+    outline: none;
+}
+
+.div-5 {
+    display: flex;
+    align-items: center;
+    gap: 2.3125rem;
+}
+
+.div-6 {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.div-7 {
+    display: flex;
+    align-items: center;
+    gap: 0.5625rem;
+}
+
+.div-wrapper {
+    display: flex;
+    width: 5.125rem;
+    padding: 0.3125rem;
+    justify-content: center;
+    align-items: center;
+
+    background: #000;
+}
+
+.text-wrapper-5 {
+    flex: 1 0 0;
+    text-align: center;
+    align-self: stretch;
+
+    color: var(--Grayscale1, #FFF);
+    font-family: The Jamsil;
+    font-size: 0.9375rem;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+}
+
+.div-8 {
+    display: flex;
+    align-items: center;
+    gap: 3.1875rem;
+}
+
+.div-9 {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8125rem;
+}
+
+.div-10 {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6875rem;
+}
+
+.div-wrapper-2 {
+    display: flex;
+    width: 3.125rem;
+    padding: 0.3125rem;
+    justify-content: center;
+    align-items: center;
+
+    background: #000;
+}
+
+.div-11 {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.875rem;
+}
+
+.div-wrapper-3 {
+    display: flex;
+    width: 4.875rem;
+    padding: 0.3125rem;
+    justify-content: center;
+    align-items: center;
+
+    border: 1px solid #E9E9E9;
+}
+
+.div-wrapper-3:focus {
+    outline: none;
+}
+
+.div-wrapper-3::placeholder {
+    flex: 1 0 0;
+    align-self: stretch;
+
+    color: var(--Grayscale5, #808080);
+    text-align: center;
+    font-family: The Jamsil;
+    font-size: 0.9375rem;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+}
+
+.div-wrapper-4 {
+    display: flex;
+    padding: 0.3125rem 0.625rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
+
+    background: #C22727;
+}
+
+.div-wrapper-4:hover {
+    cursor: pointer;
+}
+
+.text-wrapper-7 {
+    color: var(--Grayscale1, #FFF);
+    font-family: The Jamsil;
+    font-size: 0.9375rem;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+}
+
+.div-12 {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1.75rem;
+}
+
+.div-wrapper-5 {
+    display: flex;
+    width: 95%;
+    padding: 0.625rem;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 0.625rem;
+
+    border-bottom: 1px solid #C6C6C6;
+}
+
+.text-wrapper-8 {
+    width: 100%;
+
+    color: var(--Grayscale4, #000000);
+    font-family: The Jamsil;
+    font-size: 1.875rem;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+
+    border: none;
+}
+
+.text-wrapper-8:focus {
+    outline: none;
+}
+
+.div-13 {
+    display: flex;
+    width: 95%;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.625rem;
+    gap: 2.875rem;
+
+    border: 1px solid var(--Grayscale2, #F3F3F3);
+    background: var(--Grayscale2, #F3F3F3);
+}
+
+.div-13 > .p {
+    text-align: center;
+}
+
+.text-wrapper-9 {
+    width: 100%;
+
+    color: var(--Grayscale7, #000);
+    text-align: center;
+    font-family: The Jamsil;
+    font-size: 0.9375rem;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+}
+
+.text-wrapper-10 {
+    color: var(--Grayscale5, #808080);
+    text-align: center;
+    font-family: The Jamsil;
+    font-size: 0.9375rem;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+}
+
+.div-wrapper-6 {
+    display: flex;
+    width: 7.4375rem;
+    padding: 0.3125rem 0.625rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
+
+    background: #000;
+}
+
+.div-wrapper-6:hover {
+    cursor: pointer;
+}
+
+.text-wrapper-11 {
+    flex: 1 0 0;
+    align-self: stretch;
+
+    color: var(--Grayscale1, #FFF);
+    text-align: center;
+    font-family: The Jamsil;
+    font-size: 0.9375rem;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+}
+
+.div-wrapper-7 {
+    display: flex;
+    width: 95%;
+    height: 18.75rem;
+    padding: 0.625rem;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 0.625rem;
+
+    border: 1px solid #C6C6C6;
+}
+
+.text-wrapper-12 {
+    flex: 1 0 0;
+    align-self: stretch;
+
+    color: var(--Grayscale4, #000000);
+    font-family: The Jamsil;
+    font-size: 1.25rem;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+
+    border: none;
+}
+
+.text-wrapper-12:focus {
+    outline: none;
+}

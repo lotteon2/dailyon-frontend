@@ -1,7 +1,7 @@
 name: Deploy development profile about lotdiz
 on:
   workflow_dispatch:
-  push:
+  pull_request:
     branches:
       - 'develop'
 jobs:
