@@ -517,7 +517,7 @@
             <td class="left-align">
               <img
                 class="basket-img"
-                src="/src/prod-img.png"
+                src="@/assets/images/prod-img.png"
                 alt=""
               />
             </td>
@@ -578,7 +578,7 @@
             <td class="left-align">
               <img
                 class="basket-img"
-                src="/src/prod-img.png"
+                src="@/assets/images/prod-img.png"
                 alt=""
               />
             </td>
@@ -711,7 +711,7 @@
             <td class="left-align">
               <img
                 class="basket-img"
-                src="/src/prod-img.png"
+                src="@/assets/images/prod-img.png"
                 alt=""
               />
             </td>
@@ -735,7 +735,7 @@
             <td class="left-align">
               <img
                 class="basket-img"
-                src="/src/prod-img.png"
+                src="@/assets/images/prod-img.png"
                 alt=""
               />
             </td>
@@ -969,7 +969,7 @@
           </div>
           <img
             class="review-prod-img"
-            src="/src/prod-img.png"
+            src="@/assets/images/prod-img.png"
             alt=""
           />
           <div class="review-last-column">
@@ -1066,7 +1066,7 @@
           </div>
           <img
             class="review-prod-img"
-            src="/src/prod-img.png"
+            src="@/assets/images/prod-img.png"
             alt=""
           />
           <div class="review-last-column">
@@ -1137,7 +1137,7 @@
         </div>
         <div class="img-container">
           <div class="single-img-container">
-            <img src="/src/prod-img2.png" alt="" />
+            <img src="@/assets/images/prod-img.png" alt="" />
             <svg
               class="like-button"
               xmlns="http://www.w3.org/2000/svg"
@@ -1181,7 +1181,7 @@
             </div>
           </div>
           <div class="single-img-container">
-            <img src="/src/prod-img2.png" alt="" />
+            <img src="@/assets/images/prod-img.png" alt="" />
             <svg
               class="like-button"
               xmlns="http://www.w3.org/2000/svg"
@@ -1225,7 +1225,7 @@
             </div>
           </div>
           <div class="single-img-container">
-            <img src="/src/prod-img2.png" alt="" />
+            <img src="@/assets/images/prod-img.png" alt="" />
             <svg
               class="like-button"
               xmlns="http://www.w3.org/2000/svg"
@@ -1269,7 +1269,7 @@
             </div>
           </div>
           <div class="single-img-container">
-            <img src="/src/prod-img2.png" alt="" />
+            <img src="@/assets/images/prod-img.png" alt="" />
             <svg
               class="like-button"
               xmlns="http://www.w3.org/2000/svg"
@@ -1313,7 +1313,7 @@
             </div>
           </div>
           <div class="single-img-container">
-            <img src="/src/prod-img2.png" alt="" />
+            <img src="@/assets/images/prod-img.png" alt="" />
             <svg
               class="like-button"
               xmlns="http://www.w3.org/2000/svg"
