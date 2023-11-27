@@ -1,93 +1,72 @@
 <script setup lang='ts'>
 
-import router from '@/router'
-import { ref } from 'vue'
+import { inject, onBeforeMount, reactive, type Ref, ref, watch } from 'vue'
+import { getPosts } from '@/services/ootd/PostService'
+import type { PostPageResponse, PostResponse } from '@/services/ootd/PostDto'
+import OOTDCardComponent from '@/components/ootd/OOTDCardComponent.vue'
 
-let isLike = ref<boolean>(false)
-const likeButtonClickListener = () => {
-  isLike.value = !isLike.value
+const sortOptions = reactive([
+  { label: '조회순', value: 'viewCount,desc' },
+  { label: '최신순', value: 'createdAt,desc' },
+  { label: '인기순', value: 'likeCount,desc' }
+])
+const requestPage = ref<number>(0)
+const requestSize = ref<number>(8)
+const requestSort = ref<string>(sortOptions[0].value)
+const posts = ref<Array<PostResponse>>()
+const hasNext = ref<boolean>()
+
+const fetchDefaultData = async (): Promise<PostPageResponse<PostResponse>> => {
+  const postPageResponse = await getPosts(0, 8, sortOptions[0].value)
+  posts.value = postPageResponse.posts
+  hasNext.value = postPageResponse.hasNext
+
+  return postPageResponse
 }
 
-const updateSortParameter = (sortValue: string) => {
-  router.push({ query: { sort: sortValue } })
+onBeforeMount(async () => {
+  await fetchDefaultData()
+})
+
+const onChangeSort = async (sort: string) => {
+  requestSort.value = sort
 }
+
+watch(requestSort, async (afterSort, beforeSort) => {
+  requestPage.value = 0
+  if (beforeSort !== afterSort) {
+    const postPageResponse = await getPosts(requestPage.value, requestSize.value, afterSort)
+    posts.value = postPageResponse.posts
+  }
+})
+
+const onChangePage = async (page: number) => {
+  requestPage.value = page
+}
+
+watch(requestPage, async (afterPage, beforePage) => {
+  if (afterPage !== 0 && beforePage !== afterPage && hasNext.value) {
+    const postPageResponse = await getPosts(afterPage, requestSize.value, requestSort.value)
+    postPageResponse.posts.forEach((post) => {
+      posts.value?.push(post)
+    })
+  }
+})
+
+const isScrollEnd = inject<Ref<boolean | undefined>>('isScrollEnd') as Ref<boolean | undefined>
+watch(isScrollEnd, async (afterScrollEnd, beforeScrollEnd) => {
+  if (afterScrollEnd !== beforeScrollEnd) {
+    const currentPage = requestPage.value
+    if (hasNext.value) {
+      await onChangePage(currentPage + 1)
+    }
+  }
+})
 </script>
 
 <template>
-  <div class='ootd-container'>
-    <div class='ootd-header-container'>
-      <div class='ootd-header-title-wrapper'>
-        <div class='ootd-header-title-text'>
-          OOTD
-        </div>
-      </div>
-      <div class='ootd-header-bar-wrapper'>
-        <div class='ootd-header-sort-wrapper'>
-          <div class='ootd-sort-wrapper'>
-            <div class='ootd-sort-text' @click="updateSortParameter('view')"
-                 :class="{ 'selected': $route.query.sort === 'view' }">
-              조회순
-            </div>
-          </div>
-          <div class='ootd-sort-line-wrapper'>
-            <div class='ootd-sort-line'>|</div>
-          </div>
-          <div class='ootd-sort-wrapper'>
-            <div class='ootd-sort-text' @click="updateSortParameter('recent')"
-                 :class="{ 'selected': $route.query.sort === 'recent' }">
-              최신순
-            </div>
-          </div>
-          <div class='ootd-sort-line-wrapper'>
-            <div class='ootd-sort-line'>|</div>
-          </div>
-          <div class='ootd-sort-wrapper'>
-            <div class='ootd-sort-text' @click="updateSortParameter('popular')"
-                 :class="{ 'selected': $route.query.sort === 'popular' }">
-              인기순
-            </div>
-          </div>
-        </div>
-        <div class='ootd-header-write-btn-wrapper'>
-          <RouterLink to='/ootds/create' class='ootd-header-write-btn'>글쓰기</RouterLink>
-        </div>
-      </div>
-    </div>
-    <div class='ootd-body-container'>
-      <div v-for="n in 2" class='ootd-post-card-line-wrapper'>
-        <div v-for="m in 4" class='ootd-post-card-wrapper'>
-          <div class='ootd-post-card-image-wrapper'>
-            <RouterLink to='/ootds/1'>
-              <img class='ootd-post-card-image' src='/example.png'/>
-            </RouterLink>
-            <div class='ootd-post-card-like-wrapper' @click='likeButtonClickListener()'>
-              <svg class='ootd-post-card-like' xmlns="http://www.w3.org/2000/svg" width="44" height="42" viewBox="0 0 44 42" fill="none">
-                <path class='ootd-post-card-like-icon' :class="{ 'selected': n === 1 && m === 2 && isLike }" d="M21.3268 39.4395L22 40.0523L22.6732 39.4395L25.5717 36.8008C25.5718 36.8007 25.5719 36.8007 25.572 36.8006C30.7022 32.1485 35.0416 28.2134 38.0868 24.4879C41.143 20.7488 43 17.0988 43 13C43 6.26652 37.7111 1 31 1C27.6025 1 24.3411 2.41653 22 4.70025C19.6589 2.41653 16.3975 1 13 1C6.28891 1 1 6.26652 1 13C1 17.0988 2.85704 20.7488 5.91324 24.4879C8.9584 28.2134 13.2978 32.1485 18.428 36.8006C18.4281 36.8007 18.4282 36.8007 18.4283 36.8008L21.3268 39.4395Z" fill="#DADADA" fill-opacity="0.4" stroke="white" stroke-width="2"/>
-              </svg>
-            </div>
-          </div>
-          <div class='ootd-post-card-view-wrapper'>
-            <div class='ootd-post-card-like-view-wrapper'>
-              <svg xmlns="http://www.w3.org/2000/svg" width="17" height="15" viewBox="0 0 17 15" fill="none">
-                <path d="M8.82563 15L7.64035 13.921C3.43054 10.1035 0.651245 7.57766 0.651245 4.49591C0.651245 1.97003 2.62945 0 5.14716 0C6.5695 0 7.93462 0.662125 8.82563 1.70027C9.71664 0.662125 11.0818 0 12.5041 0C15.0218 0 17 1.97003 17 4.49591C17 7.57766 14.2207 10.1035 10.0109 13.921L8.82563 15Z" fill="#FF0000"/>
-              </svg>
-              <div class='ootd-post-card-like-view-count-text'>
-                999+
-              </div>
-            </div>
-            <div class='ootd-post-card-count-view-wrapper'>
-              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="15" viewBox="0 0 22 15" fill="none">
-                <path d="M11 4.5C10.2044 4.5 9.44129 4.81607 8.87868 5.37868C8.31607 5.94129 8 6.70435 8 7.5C8 8.29565 8.31607 9.05871 8.87868 9.62132C9.44129 10.1839 10.2044 10.5 11 10.5C11.7956 10.5 12.5587 10.1839 13.1213 9.62132C13.6839 9.05871 14 8.29565 14 7.5C14 6.70435 13.6839 5.94129 13.1213 5.37868C12.5587 4.81607 11.7956 4.5 11 4.5ZM11 12.5C9.67392 12.5 8.40215 11.9732 7.46447 11.0355C6.52678 10.0979 6 8.82608 6 7.5C6 6.17392 6.52678 4.90215 7.46447 3.96447C8.40215 3.02678 9.67392 2.5 11 2.5C12.3261 2.5 13.5979 3.02678 14.5355 3.96447C15.4732 4.90215 16 6.17392 16 7.5C16 8.82608 15.4732 10.0979 14.5355 11.0355C13.5979 11.9732 12.3261 12.5 11 12.5ZM11 0C6 0 1.73 3.11 0 7.5C1.73 11.89 6 15 11 15C16 15 20.27 11.89 22 7.5C20.27 3.11 16 0 11 0Z" fill="#C6C6C6"/>
-              </svg>
-              <div class='ootd-post-card-count-view-count-text'>
-                999+
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <OOTDCardComponent :posts='posts' :onChangeSort='onChangeSort' :requestSort='requestSort'
+                     :sortOptions='sortOptions' />
 </template>
 
 <style scoped>

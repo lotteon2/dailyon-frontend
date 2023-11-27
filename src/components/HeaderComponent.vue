@@ -72,7 +72,7 @@ import { RouterLink } from 'vue-router'
     </div>
     <div class="nav-tab-wrapper">
       <RouterLink
-        to="/ootds?sort=view"
+        to="/ootds"
         class="nav-tab-text"
         :class="{ selected: $route.path === '/ootds' }"
         >OOTD</RouterLink
