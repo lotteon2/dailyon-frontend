@@ -1,6 +1,6 @@
 <script setup lang='ts'>
 
-import { ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { type PostResponse } from '@/services/ootd/PostDto'
 import { usePostLikeStore } from '@/stores/postlike/PostLikeStore'
 import router from '@/router'
@@ -46,6 +46,7 @@ const likeButtonClickListener = (postId: number, isLike: boolean | undefined) =>
   }
 }
 
+// 페이지 이동 시 이벤트
 onBeforeRouteLeave(async (to, from) => {
   postLikes.forEach((postId: number) => {
     togglePostLike(postId)
@@ -53,6 +54,13 @@ onBeforeRouteLeave(async (to, from) => {
   postLikes.clear()
 })
 
+// 새로고침 or 브라우저 창 닫을 때 이벤트
+window.onbeforeunload = function() {
+  postLikes.forEach((postId: number) => {
+    togglePostLike(postId)
+  })
+  postLikes.clear()
+}
 </script>
 
 <template>
