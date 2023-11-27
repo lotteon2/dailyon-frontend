@@ -2,10 +2,14 @@
 
 import { ref } from 'vue'
 import { type PostResponse } from '@/services/ootd/PostDto'
+import { usePostLikeStore } from '@/stores/postlike/PostLikeStore'
+import router from '@/router'
+import { onBeforeRouteLeave } from 'vue-router'
+import { togglePostLike } from '@/services/ootd/PostLikeService'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
-defineProps({
+const props = defineProps({
   sortOptions: {
     type: Array as () => Array<{ value: string, label: string }>,
     required: true
@@ -25,11 +29,30 @@ defineProps({
   }
 })
 
-// TODO: 추후 구현
-let isLike = ref<boolean>(false)
-const likeButtonClickListener = () => {
-  isLike.value = !isLike.value
+const postLikeStore = usePostLikeStore()
+const postLikes = postLikeStore.postLikes
+const likeButtonClickListener = (postId: number, isLike: boolean | undefined) => {
+  if (isLike === undefined) {
+    alert('로그인이 필요합니다.')
+    router.push({ path: 'login' })
+  } else {
+    const postIndex = props.posts.findIndex((post) => post.id === postId)
+    if (postIndex !== -1) {
+      props.posts[postIndex].isLike ? props.posts[postIndex].likeCount -= 1 : props.posts[postIndex].likeCount += 1
+      props.posts[postIndex].isLike = !isLike
+
+      postLikes.has(postId) ? postLikes.delete(postId) : postLikes.add(postId)
+    }
+  }
 }
+
+onBeforeRouteLeave(async (to, from) => {
+  postLikes.forEach((postId: number) => {
+    togglePostLike(postId)
+  })
+  postLikes.clear()
+})
+
 </script>
 
 <template>
@@ -60,7 +83,7 @@ const likeButtonClickListener = () => {
           <RouterLink :to='`/ootds/${post.id}`'>
             <img class='ootd-post-card-image' :src='`${VITE_STATIC_IMG_URL}${post.thumbnailImgUrl}`' />
           </RouterLink>
-          <div class='ootd-post-card-like-wrapper' @click='likeButtonClickListener()'>
+          <div class='ootd-post-card-like-wrapper' @click='likeButtonClickListener(post.id, post.isLike)'>
             <svg class='ootd-post-card-like' xmlns='http://www.w3.org/2000/svg' width='44' height='42'
                  viewBox='0 0 44 42' fill='none'>
               <path class='ootd-post-card-like-icon'
