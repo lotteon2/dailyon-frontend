@@ -21,4 +21,5 @@ export interface FollowingResponse {
   id: number;
   nickname: string;
   profileImgUrl: string;
+  isFollowing: boolean;
 }

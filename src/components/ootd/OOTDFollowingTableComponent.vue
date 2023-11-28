@@ -3,13 +3,13 @@
 import { ref } from 'vue'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 import type {
-  FollowerPageResponse,
-  FollowerResponse,
   FollowingPageResponse,
   FollowingResponse
 } from '@/apis/ootd/FollowDto'
-import { getFollowers, getFollowings } from '@/apis/ootd/FollowService'
+import { getFollowings, toggleFollow } from '@/apis/ootd/FollowService'
 import { onBeforeMount, watch } from 'vue'
+import { useFollowStore } from '@/stores/follow/FollowStore'
+import { onBeforeRouteLeave } from 'vue-router'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -39,12 +39,40 @@ const onChangePage = async (page: number) => {
 
 watch(requestPage, async (afterPage, beforePage) => {
   if (afterPage < totalPages.value!) {
+    await flushFollowStore()
     const followingPageResponse = await getFollowings(afterPage, 5, 'createdAt,desc')
     followings.value = followingPageResponse.followings
     totalPages.value = followingPageResponse.totalPages
     totalElements.value = followingPageResponse.totalElements
   }
 })
+
+const followStore = useFollowStore()
+const follows = followStore.follows
+const followButtonClickListener = (followingId: number, isFollowing: boolean | undefined) => {
+  const followIndex = followings.value?.findIndex((following) => following.id === followingId)
+  if (followIndex !== -1) {
+    followings.value![followIndex!].isFollowing = !isFollowing
+    follows.has(followingId) ? follows.delete(followingId) : follows.add(followingId)
+  }
+}
+
+const flushFollowStore = async () => {
+  follows.forEach((followingId: number) => {
+    toggleFollow(followingId)
+  })
+  follows.clear()
+}
+
+// 페이지 이동 시 이벤트
+onBeforeRouteLeave(async (to, from) => {
+  await flushFollowStore()
+})
+
+// 새로고침 or 브라우저 창 닫을 때 이벤트
+window.onbeforeunload = function() {
+  flushFollowStore()
+}
 </script>
 
 <template>
@@ -52,7 +80,8 @@ watch(requestPage, async (afterPage, beforePage) => {
     <div v-for='following in followings' :key='following.id' class='follow-row'>
       <img class='follow-img' :src='`${VITE_STATIC_IMG_URL}${following.profileImgUrl}`' />
       <div class='nickname'>{{ following.nickname }}</div>
-      <div class='follow-btn following'>
+      <div v-if='following.isFollowing' class='follow-btn following'
+           @click='followButtonClickListener(following.id, following.isFollowing)'>
         <svg
           xmlns='http://www.w3.org/2000/svg'
           width='13'
@@ -67,7 +96,9 @@ watch(requestPage, async (afterPage, beforePage) => {
         </svg>
         팔로잉
       </div>
-      <!--      <div class='follow-btn non-following'>+팔로우</div>-->
+      <div v-else class='follow-btn non-following'
+           @click='followButtonClickListener(following.id, following.isFollowing)'>+팔로우
+      </div>
     </div>
   </div>
   <PaginationComponent :onChangePage='onChangePage' :requestPage='requestPage' :totalPages='totalPages' />
