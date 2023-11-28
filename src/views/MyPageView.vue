@@ -10,7 +10,7 @@ import CartComponent from '@/components/wishcart/CartComponent.vue'
 import WishComponent from '@/components/wishcart/WishComponent.vue'
 import MemberInfoComponent from '@/components/member/MemberInfoComponent.vue'
 import ReviewComponent from '@/components/product/ReviewComponent.vue'
-import FollowComponent from '@/components/ootd/FollowComponent.vue'
+import OOTDFollowComponent from '@/components/ootd/OOTDFollowComponent.vue'
 import OOTDPostLikeComponent from '@/components/ootd/OOTDPostLikeComponent.vue'
 </script>
 
@@ -27,7 +27,7 @@ import OOTDPostLikeComponent from '@/components/ootd/OOTDPostLikeComponent.vue'
       <WishComponent v-if="$route.name === 'wishlist'" />
       <MemberInfoComponent v-if="$route.name === 'memberInfo'" />
       <ReviewComponent v-if="$route.name === 'reviews'" />
-      <FollowComponent v-if="$route.name === 'follows'" />
+      <OOTDFollowComponent v-if="$route.name === 'follows'" />
       <OOTDPostLikeComponent v-if="$route.name === 'likePosts'" />
     </div>
   </div>

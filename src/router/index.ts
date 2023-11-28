@@ -103,7 +103,7 @@ const router = createRouter({
         {
           path: '/follows',
           name: 'follows',
-          component: () => import('@/components/ootd/FollowComponent.vue')
+          component: () => import('@/components/ootd/OOTDFollowComponent.vue')
         },
         // {
         //   path: '/my-posts',
