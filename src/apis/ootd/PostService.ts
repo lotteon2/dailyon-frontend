@@ -1,5 +1,5 @@
 import { authAxiosInstance } from '@/apis/utils'
-import type { PostPageResponse, PostResponse } from '@/services/ootd/PostDto'
+import type { PostPageResponse, PostResponse } from '@/apis/ootd/PostDto'
 import type { AxiosResponse } from 'axios'
 import { AxiosError } from 'axios'
 
@@ -7,7 +7,13 @@ const SNS_SERVICE_PREFIX_PATH = '/sns-service'
 
 export const getPosts = async (page: number, size: number, sort: string): Promise<PostPageResponse<PostResponse>> => {
   try {
-    const response: AxiosResponse = await authAxiosInstance.get(`/posts?page=${page}&size=${size}&sort=${sort}`)
+    const response: AxiosResponse = await authAxiosInstance.get(`/posts`, {
+      params: {
+        page: page,
+        size: size,
+        sort: sort
+      }
+    })
     return response.data
   } catch (error) {
     if (error instanceof AxiosError) {

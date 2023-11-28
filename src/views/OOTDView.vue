@@ -1,8 +1,8 @@
 <script setup lang='ts'>
 
 import { inject, onBeforeMount, reactive, type Ref, ref, watch } from 'vue'
-import { getPosts } from '@/services/ootd/PostService'
-import type { PostPageResponse, PostResponse } from '@/services/ootd/PostDto'
+import { getPosts } from '@/apis/ootd/PostService'
+import type { PostPageResponse, PostResponse } from '@/apis/ootd/PostDto'
 import OOTDCardComponent from '@/components/ootd/OOTDCardComponent.vue'
 
 const sortOptions = reactive([
