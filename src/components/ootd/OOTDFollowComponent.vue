@@ -1,8 +1,10 @@
 <script setup lang='ts'>
 
-import { reactive, ref } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import OOTDFollowerTableComponent from '@/components/ootd/OOTDFollowerTableComponent.vue'
 import OOTDFollowingTableComponent from '@/components/ootd/OOTDFollowingTableComponent.vue'
+import { toggleFollow } from '@/apis/ootd/FollowService'
+import { useFollowStore } from '@/stores/follow/FollowStore'
 
 const tabOptions = reactive([
   { label: '팔로워', value: 'follower' },
@@ -13,6 +15,22 @@ const requestTab = ref<string>(tabOptions[0].value)
 const onTabChange = async (tabOption: string) => {
   requestTab.value = tabOption
 }
+
+const followStore = useFollowStore()
+const follows = followStore.follows
+const flushFollowStore = async () => {
+  follows.forEach((followingId: number) => {
+    toggleFollow(followingId)
+  })
+  follows.clear()
+}
+
+watch(requestTab, async (afterRequestTab, beforeRequestTab) => {
+  if(afterRequestTab !== beforeRequestTab) {
+    await flushFollowStore()
+  }
+})
+
 </script>
 
 <template>
@@ -21,12 +39,15 @@ const onTabChange = async (tabOption: string) => {
     <div class='container-line'></div>
     <div class='follow-text-container'>
       <div v-for='tabOption in tabOptions' :key='tabOption.value'
-           class='follow-text' :class="{ 'selected': requestTab === tabOption.value }" @click='onTabChange(tabOption.value)'>
+           class='follow-text' :class="{ 'selected': requestTab === tabOption.value }"
+           @click='onTabChange(tabOption.value)'>
         {{ tabOption.label }}
       </div>
     </div>
-    <OOTDFollowerTableComponent v-if='requestTab === tabOptions[0].value'/>
-    <OOTDFollowingTableComponent v-if='requestTab === tabOptions[1].value'/>
+    <OOTDFollowerTableComponent
+      v-if='requestTab === tabOptions[0].value' />
+    <OOTDFollowingTableComponent
+      v-if='requestTab === tabOptions[1].value' />
   </div>
 </template>
 
