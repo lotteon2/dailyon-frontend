@@ -4,9 +4,15 @@ import type { FollowerPageResponse, FollowerResponse } from '@/services/ootd/Fol
 
 const SNS_SERVICE_PREFIX_PATH = '/sns-service'
 
-export const getFollowers = async (): Promise<FollowerPageResponse<FollowerResponse>> => {
+export const getFollowers = async (page: number, size: number, sort: string): Promise<FollowerPageResponse<FollowerResponse>> => {
   try {
-    const response: AxiosResponse = await authAxiosInstance.get(`/follows/followers`)
+    const response: AxiosResponse = await authAxiosInstance.get(`/follows/followers`, {
+      params: {
+        page: page,
+        size: size,
+        sort: sort
+      }
+    })
     return response.data
   } catch (error) {
     if (error instanceof AxiosError) {
