@@ -1,11 +1,11 @@
 <script setup lang='ts'>
 
 import { onBeforeUnmount, onMounted, ref } from 'vue'
-import { type PostResponse } from '@/services/ootd/PostDto'
+import { type PostResponse } from '@/apis/ootd/PostDto'
 import { usePostLikeStore } from '@/stores/postlike/PostLikeStore'
 import router from '@/router'
 import { onBeforeRouteLeave } from 'vue-router'
-import { togglePostLike } from '@/services/ootd/PostLikeService'
+import { togglePostLike } from '@/apis/ootd/PostLikeService'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 

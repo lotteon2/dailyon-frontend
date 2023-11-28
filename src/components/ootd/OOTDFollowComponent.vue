@@ -1,8 +1,8 @@
 <script setup lang='ts'>
 
 import { onBeforeMount, reactive, ref, watch } from 'vue'
-import type { FollowerPageResponse, FollowerResponse } from '@/services/ootd/FollowDto'
-import { getFollowers } from '@/services/ootd/FollowService'
+import type { FollowerPageResponse, FollowerResponse } from '@/apis/ootd/FollowDto'
+import { getFollowers } from '@/apis/ootd/FollowService'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 

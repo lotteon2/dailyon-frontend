@@ -1,5 +1,5 @@
 import { authAxiosInstance } from '@/apis/utils'
-import type { PostPageResponse, PostResponse } from '@/services/ootd/PostDto'
+import type { PostPageResponse, PostResponse } from '@/apis/ootd/PostDto'
 import type { AxiosResponse } from 'axios'
 import { AxiosError } from 'axios'
 
