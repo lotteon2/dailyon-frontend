@@ -1,0 +1,113 @@
+.user-container {
+    display: flex;
+    height: 183px;
+    align-items: center;
+    margin-bottom: 44px;
+}
+
+.user-name-container {
+    display: flex;
+    flex-direction: column;
+    margin-left: 39px;
+    margin-right: 145px;
+}
+
+.user-name-container-first-line {
+    display: flex;
+    color: var(--Grayscale7, #000);
+    font-family: The Jamsil;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 50px; /* 166.667% */
+    flex-direction: row;
+}
+
+.user-name-container-first-line > h1 {
+    display: flex;
+    color: var(--Grayscale7, #000);
+    font-family: The Jamsil;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 50px; /* 166.667% */
+    flex-direction: row;
+}
+
+.user-name-container-first-line > h2 {
+    color: var(--Grayscale7, #000);
+    font-family: The Jamsil;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 50px;
+}
+
+.user-name-container > h3 {
+    color: var(--Grayscale5, #808080);
+    font-family: The Jamsil;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 30px;
+}
+
+.user-container-point-container {
+    display: flex;
+    flex-wrap: wrap;
+    /* flex-direction: column; */
+    width: 83px;
+    justify-content: center;
+    color: var(--Grayscale7, #000);
+    text-align: center;
+    font-family: The Jamsil;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 50px; /* 166.667% */
+    margin-top: -30px;
+    margin-right: 202px;
+}
+
+.user-container-point-container > h1 {
+    color: var(--Dark-Red, #c22727);
+    font-family: The Jamsil;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 50px;
+}
+
+.modify-button {
+    width: 108px;
+    height: 54px;
+    border: 1px solid #000;
+    background: var(--Grayscale1, #fff);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--Grayscale7, #000);
+    font-family: The Jamsil;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 50px; /* 250% */
+    margin-right: 10px;
+    margin-left: 15px;
+}
+
+.logout-button {
+    width: 108px;
+    height: 54px;
+    border: 1px solid #000;
+    background: var(--Grayscale1, #000);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--Grayscale7, #fff);
+    font-family: The Jamsil;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 50px; /* 250% */
+}

@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
+import OrderHistoryComponent from '@/components/order/OrderHistoryComponent.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -55,19 +56,66 @@ const router = createRouter({
       component: () => import('@/views/NotificationView.vue')
     },
     {
-      path: '/carts',
-      name: 'carts',
-      component: () => import('@/views/CartView.vue')
-    },
-    {
-      path: '/likes',
-      name: 'likes',
-      component: () => import('@/views/LikeView.vue')
-    },
-    {
       path: '/my-page',
       name: 'my-page',
-      component: () => import('@/views/MyPageView.vue')
+      component: () => import('@/views/MyPageView.vue'),
+      children: [
+        {
+          path: '/order-history',
+          name: 'orderHistory',
+          component: () => import('@/components/order/OrderHistoryComponent.vue'),
+        },
+        {
+          path: '/point-history',
+          name: 'pointHistory',
+          component: () => import('@/components/member/PointHistoryComponent.vue'),
+        },
+        {
+          path: '/coupons',
+          name: 'coupons',
+          component: () => import('@/components/promotion/CouponComponent.vue'),
+        },
+        {
+          path: '/events',
+          name: 'events',
+          component: () => import('@/components/promotion/EventComponent.vue'),
+        },
+        {
+          path: '/carts',
+          name: 'carts',
+          component: () => import('@/components/wishcart/CartComponent.vue')
+        },
+        {
+          path: '/wishlist',
+          name: 'wishlist',
+          component: () => import('@/components/wishcart/WishComponent.vue')
+        },
+        {
+          path: '/member-info',
+          name: 'memberInfo',
+          component: () => import('@/components/member/MemberInfoComponent.vue')
+        },
+        {
+          path: '/reviews',
+          name: 'reviews',
+          component: () => import('@/components/product/ReviewComponent.vue')
+        },
+        {
+          path: '/follows',
+          name: 'follows',
+          component: () => import('@/components/ootd/FollowComponent.vue')
+        },
+        // {
+        //   path: '/my-posts',
+        //   name: 'myPosts',
+        //   component: () => import('@/components/ootd/MyPostComponent.vue')
+        // },
+        {
+          path: '/like-posts',
+          name: 'likePosts',
+          component: () => import('@/components/ootd/OOTDPostLikeComponent.vue')
+        },
+      ]
     },
     {
       path: '/login',

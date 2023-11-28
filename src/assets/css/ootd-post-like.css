@@ -1,0 +1,108 @@
+.container-title {
+    color: var(--Grayscale7, #000);
+    font-family: The Jamsil;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 50px; /* 166.667% */
+    margin-bottom: 10px;
+}
+
+.container-line {
+    width: 100%;
+    height: 2px;
+    background: #000;
+}
+
+
+.board-container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 43px;
+}
+
+.query-option-container {
+    display: flex;
+    margin-top: 28px;
+    margin-bottom: 21px;
+    align-self: flex-end;
+    margin-right: 14px;
+}
+
+.option-text {
+    color: var(--Grayscale7, #000);
+    font-family: The Jamsil;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.option-ontap {
+    color: var(--Dark-Red, #c22727);
+    text-align: right;
+    font-family: The Jamsil;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.both-small-margin {
+    margin: 0 15px;
+}
+
+.img-container {
+    display: flex;
+    width: 96%;
+    flex-wrap: wrap;
+    margin: 0 auto;
+}
+
+.single-img-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 23px;
+    margin: 0 12.5px;
+}
+
+.single-img-container > img {
+    width: 342px;
+    height: 431px;
+    flex-shrink: 0;
+}
+
+.like-button {
+    position: absolute;
+    top: 381px;
+    left: 290px;
+}
+
+.heart-view-container {
+    display: flex;
+    align-self: flex-end;
+    margin-top: 3px;
+}
+
+.heart-view-container > h1 {
+    color: var(--Red, #f00);
+    text-align: center;
+    font-family: The Jamsil;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin: 0 3px;
+}
+
+.heart-view-container > h2 {
+    color: var(--Grayscale4, #c6c6c6);
+    text-align: center;
+    font-family: The Jamsil;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-left: 3px;
+}
