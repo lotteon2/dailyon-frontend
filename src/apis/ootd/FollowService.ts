@@ -62,3 +62,23 @@ export const getFollowings = async (page: number, size: number, sort: string): P
     throw error
   }
 }
+
+export const toggleFollow = async (followingId: number): Promise<void> => {
+  try {
+    await authAxiosInstance.put(`/follows/${followingId}`)
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      if (error.response) {
+        if (error.response.status >= 400) {
+          alert(error.response.data.message)
+          console.error(`Client Error=${error.response.data.message}`)
+        }
+        if (error.response.status < 500) {
+          alert('서버 내부 오류')
+          console.error('Internal Server Error')
+        }
+      }
+    }
+    throw error
+  }
+}
