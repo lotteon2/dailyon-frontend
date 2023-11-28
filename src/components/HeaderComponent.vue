@@ -127,7 +127,7 @@ import { RouterLink } from 'vue-router'
       </RouterLink>
     </div>
     <div class="nav-tab-wrapper">
-      <RouterLink to="/likes" class="nav-tab-like-icon">
+      <RouterLink to="/wishlist" class="nav-tab-like-icon">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="20"
