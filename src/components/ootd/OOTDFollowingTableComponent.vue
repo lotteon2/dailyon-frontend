@@ -7,7 +7,7 @@ import type {
   FollowingResponse
 } from '@/apis/ootd/FollowDto'
 import { getFollowings, toggleFollow } from '@/apis/ootd/FollowService'
-import { onBeforeMount, onBeforeUnmount, watch } from 'vue'
+import { onBeforeMount, watch } from 'vue'
 import { useFollowStore } from '@/stores/follow/FollowStore'
 import { onBeforeRouteLeave } from 'vue-router'
 
@@ -39,6 +39,7 @@ const onChangePage = async (page: number) => {
 
 watch(requestPage, async (afterPage, beforePage) => {
   if (afterPage < totalPages.value!) {
+    await flushFollowStore()
     const followingPageResponse = await getFollowings(afterPage, 5, 'createdAt,desc')
     followings.value = followingPageResponse.followings
     totalPages.value = followingPageResponse.totalPages
@@ -69,7 +70,7 @@ onBeforeRouteLeave(async (to, from) => {
 })
 
 // 새로고침 or 브라우저 창 닫을 때 이벤트
-window.onbeforeunload = function () {
+window.onbeforeunload = function() {
   flushFollowStore()
 }
 </script>
@@ -96,7 +97,8 @@ window.onbeforeunload = function () {
         팔로잉
       </div>
       <div v-else class='follow-btn non-following'
-           @click='followButtonClickListener(following.id, following.isFollowing)'>+팔로우</div>
+           @click='followButtonClickListener(following.id, following.isFollowing)'>+팔로우
+      </div>
     </div>
   </div>
   <PaginationComponent :onChangePage='onChangePage' :requestPage='requestPage' :totalPages='totalPages' />
