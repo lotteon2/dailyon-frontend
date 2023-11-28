@@ -12,6 +12,7 @@ import MemberInfoComponent from '@/components/member/MemberInfoComponent.vue'
 import ReviewComponent from '@/components/product/ReviewComponent.vue'
 import OOTDFollowComponent from '@/components/ootd/OOTDFollowComponent.vue'
 import OOTDPostLikeComponent from '@/components/ootd/OOTDPostLikeComponent.vue'
+import MyOOTDPostComponent from '@/components/ootd/MyOOTDPostComponent.vue'
 </script>
 
 <template>
@@ -28,6 +29,7 @@ import OOTDPostLikeComponent from '@/components/ootd/OOTDPostLikeComponent.vue'
       <MemberInfoComponent v-if="$route.name === 'memberInfo'" />
       <ReviewComponent v-if="$route.name === 'reviews'" />
       <OOTDFollowComponent v-if="$route.name === 'follows'" />
+      <MyOOTDPostComponent v-if="$route.name === 'myPosts'" />
       <OOTDPostLikeComponent v-if="$route.name === 'likePosts'" />
     </div>
   </div>

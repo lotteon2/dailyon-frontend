@@ -1,0 +1,60 @@
+.ootd-container {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.1875rem;
+
+    overflow-y: hidden;
+}
+
+.ootd-header-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2.8125rem;
+}
+
+.ootd-header-title-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
+}
+
+.ootd-header-title-text {
+    color: var(--Dark-Red, #C22727);
+    font-family: The Jamsil;
+    font-size: 3.125rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.ootd-header-bar-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 64.75rem;
+}
+
+.ootd-header-write-btn-wrapper {
+    display: flex;
+    height: 1.5rem;
+    padding: 0.625rem;
+    justify-content: center;
+    align-items: center;
+
+    background: #000;
+}
+
+.ootd-header-write-btn {
+    color: var(--Grayscale1, #FFF);
+    font-family: The Jamsil;
+    font-size: 1.25rem;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+}
+
+.ootd-header-write-btn-wrapper:hover {
+    cursor: pointer;
+}

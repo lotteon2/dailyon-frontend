@@ -1,4 +1,4 @@
-<link rel='stylesheet' href='../assets/ootd-post-create.css'>
+<link rel='stylesheet' href='../assets/css/ootd/ootd-post-create.css'>
 <script setup lang='ts'>
 
 import { ref, type Ref } from 'vue';
@@ -87,5 +87,5 @@ const handleFileChange = () => {
 </template>
 
 <style scoped>
-@import "@/assets/ootd-post-create.css";
+@import "@/assets/css/ootd/ootd-post-create.css";
 </style>

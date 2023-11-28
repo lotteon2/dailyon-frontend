@@ -239,5 +239,5 @@
 </template>
 
 <style scoped>
-@import "@/assets/css/ootd-post-like.css";
+@import "@/assets/css/ootd/ootd-post-like.css";
 </style>
