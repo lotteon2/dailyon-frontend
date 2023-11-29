@@ -46,6 +46,11 @@ const router = createRouter({
       component: () => import('@/views/OOTDPostCreateView.vue')
     },
     {
+      path: '/ootds/profile/:id',
+      name: 'ootdProfile',
+      component: () => import('@/views/OOTDProfileView.vue')
+    },
+    {
       path: '/events',
       name: 'events',
       component: () => import('@/views/EventView.vue')

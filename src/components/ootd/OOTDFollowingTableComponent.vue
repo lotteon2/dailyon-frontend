@@ -78,11 +78,11 @@ window.onbeforeunload = function() {
 <template>
   <div class='follow-row-container'>
     <div v-for='following in followings' :key='following.id' class='follow-row'>
-      <RouterLink to='/ootds/profile'>
+      <RouterLink :to='`/ootds/profile/${following.id}`'>
         <img class='follow-img' :src='`${VITE_STATIC_IMG_URL}${following.profileImgUrl}`' />
       </RouterLink>
       <div class='nickname-wrapper'>
-        <RouterLink to='/ootds/profile'>
+        <RouterLink :to='`/ootds/profile/${following.id}`'>
           <div class='nickname'>{{ following.nickname }}</div>
         </RouterLink>
       </div>

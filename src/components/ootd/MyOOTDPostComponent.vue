@@ -1,7 +1,7 @@
 <script setup lang='ts'>
 
 import { inject, onBeforeMount, reactive, type Ref, ref, watch } from 'vue'
-import type { MyPostPageResponse, MyPostResponse } from '@/apis/ootd/PostDto'
+import type { OOTDPostPageResponse, OOTDPostResponse } from '@/apis/ootd/PostDto'
 import { getMyPosts } from '@/apis/ootd/PostService'
 import OOTDPostCardComponent from '@/components/ootd/OOTDPostCardComponent.vue'
 import OOTDSortComponent from '@/components/ootd/OOTDSortComponent.vue'
@@ -17,14 +17,14 @@ const sortOptions = reactive([
 const requestPage = ref<number>(0)
 const requestSize = ref<number>(6)
 const requestSort = ref<string>(sortOptions[0].value)
-const posts = ref<Array<MyPostResponse>>()
+const posts = ref<Array<OOTDPostResponse>>()
 const totalPages = ref<number>()
 const totalElements = ref<number>()
 
 const postLikeStore = usePostLikeStore()
 const postLikes = postLikeStore.postLikes
 
-const fetchDefaultData = async (): Promise<MyPostPageResponse<MyPostResponse>> => {
+const fetchDefaultData = async (): Promise<OOTDPostPageResponse<OOTDPostResponse>> => {
   const postPageResponse = await getMyPosts(0, 6, sortOptions[0].value)
   posts.value = postPageResponse.posts
   totalPages.value = postPageResponse.totalPages
