@@ -1,7 +1,7 @@
 <script setup lang='ts'>
 
 import { inject, onBeforeMount, reactive, type Ref, ref, watch } from 'vue'
-import type { MyPostPageResponse, MyPostResponse, PostLikePageResponse, PostLikeResponse } from '@/apis/ootd/PostDto'
+import type { OOTDPostPageResponse, OOTDPostResponse, PostLikePageResponse, PostLikeResponse } from '@/apis/ootd/PostDto'
 import { getMyPosts, getPostLikes } from '@/apis/ootd/PostService'
 import OOTDPostCardComponent from '@/components/ootd/OOTDPostCardComponent.vue'
 import OOTDSortComponent from '@/components/ootd/OOTDSortComponent.vue'

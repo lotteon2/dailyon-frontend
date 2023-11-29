@@ -11,13 +11,13 @@ export interface PostResponse {
   isLike?: boolean;
 }
 
-export interface MyPostPageResponse<T extends MyPostResponse> {
+export interface OOTDPostPageResponse<T extends OOTDPostResponse> {
   totalPages: number;
   totalElements: number;
   posts: Array<T>;
 }
 
-export interface MyPostResponse {
+export interface OOTDPostResponse {
   id: number;
   thumbnailImgUrl: string;
   likeCount: number;

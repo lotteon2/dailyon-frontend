@@ -1,0 +1,104 @@
+.profile-card {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+
+    width: 20rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+
+    border: 1px solid var(--Grayscale4, #C6C6C6);
+    border-radius: 1rem;
+    background: var(--Grayscale1, #FFF);
+
+    gap: 1rem;
+}
+
+.profile-img {
+    width: 8rem;
+    height: 8rem;
+}
+
+.nickname {
+    color: var(--Grayscale7, #000);
+    font-family: The Jamsil;
+    font-size: 1.5rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.follow-wrapper {
+    color: var(--Grayscale7, #000);
+    font-family: The Jamsil;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+}
+
+.follow-count {
+    font-weight: 400;
+}
+
+.follow-active-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 13.5625rem;
+    height: 2.1875rem;
+
+    background: var(--Dark-Red, #C22727);
+}
+
+.follow-active-btn:hover {
+    cursor: pointer;
+}
+
+.follow-active-btn-text {
+    width: fit-content;
+    text-align: center;
+
+    color: var(--Grayscale1, #FFF);
+    text-align: center;
+    font-family: The Jamsil;
+    font-size: 1.25rem;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+}
+
+.follow-inactive-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 13.5625rem;
+    height: 2.1875rem;
+
+    border: 1px solid var(--Grayscale3, #E9E9E9);
+    background: var(--Grayscale1, #FFF);
+}
+
+.follow-inactive-btn:hover {
+    cursor: pointer;
+}
+
+.follow-inactive-check-icon {
+    width: 0.78869rem;
+    height: 0.5625rem;
+}
+
+.follow-inactive-btn-text {
+    width: fit-content;
+    text-align: center;
+
+    color: var(--Grayscale4, #C6C6C6);
+    font-family: The Jamsil;
+    font-size: 1.25rem;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+}

@@ -76,8 +76,14 @@ window.onbeforeunload = function() {
 <template>
   <div class='follow-row-container'>
     <div v-for='follower in followers' :key='follower.id' class='follow-row'>
-      <img class='follow-img' :src='`${VITE_STATIC_IMG_URL}${follower.profileImgUrl}`' />
-      <div class='nickname'>{{ follower.nickname }}</div>
+      <RouterLink :to='`/ootds/profile/${follower.id}`'>
+        <img class='follow-img' :src='`${VITE_STATIC_IMG_URL}${follower.profileImgUrl}`' />
+      </RouterLink>
+      <div class='nickname-wrapper'>
+        <RouterLink :to='`/ootds/profile/${follower.id}`'>
+          <div class='nickname'>{{ follower.nickname }}</div>
+        </RouterLink>
+      </div>
       <div v-if='follower.isFollowing' class='follow-btn following'
            @click='followButtonClickListener(follower.id, follower.isFollowing)'>
         <svg

@@ -1,0 +1,52 @@
+.main-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 1500px;
+    margin: 0 auto;
+    margin-bottom: 100px;
+}
+
+.right-container {
+    display: flex;
+    flex-direction: column;
+    width: 1150px;
+
+    gap: 1rem;
+}
+
+.content-header-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    width: 100%;
+}
+
+.content-nav-wrapper {
+    padding: 0.5rem;
+}
+
+.content-nav-wrapper:hover {
+    cursor: pointer;
+    color: #C22727;
+}
+
+.content-nav-text {
+    width: fit-content;
+    text-align: center;
+
+    font-family: The Jamsil;
+    font-size: 1.7rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.content-nav-text.selected {
+    color: var(--Dark-Red, #C22727);
+}
+
+.content-nav-divide-line {
+    color: var(--Grayscale7, #000);
+}

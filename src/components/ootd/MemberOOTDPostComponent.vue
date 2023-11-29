@@ -2,12 +2,19 @@
 
 import { inject, onBeforeMount, reactive, type Ref, ref, watch } from 'vue'
 import type { OOTDPostPageResponse, OOTDPostResponse } from '@/apis/ootd/PostDto'
-import { getMyPosts } from '@/apis/ootd/PostService'
+import { getMemberPosts, getMyPosts } from '@/apis/ootd/PostService'
 import OOTDPostCardComponent from '@/components/ootd/OOTDPostCardComponent.vue'
 import OOTDSortComponent from '@/components/ootd/OOTDSortComponent.vue'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 import { togglePostLike } from '@/apis/ootd/PostLikeService'
 import { usePostLikeStore } from '@/stores/postlike/PostLikeStore'
+
+const props = defineProps({
+  postMemberId: {
+    type: Number,
+    require: true
+  }
+})
 
 const sortOptions = reactive([
   { label: '조회순', value: 'viewCount,desc' },
@@ -25,7 +32,7 @@ const postLikeStore = usePostLikeStore()
 const postLikes = postLikeStore.postLikes
 
 const fetchDefaultData = async (): Promise<OOTDPostPageResponse<OOTDPostResponse>> => {
-  const postPageResponse = await getMyPosts(0, 6, sortOptions[0].value)
+  const postPageResponse = await getMemberPosts(props.postMemberId!, 0, 6, sortOptions[0].value)
   posts.value = postPageResponse.posts
   totalPages.value = postPageResponse.totalPages
   totalElements.value = postPageResponse.totalElements
@@ -49,7 +56,7 @@ const onChangeSort = async (sort: string) => {
 watch(requestSort, async (afterSort, beforeSort) => {
   requestPage.value = 0
   if (beforeSort !== afterSort) {
-    const postPageResponse = await getMyPosts(requestPage.value, requestSize.value, afterSort)
+    const postPageResponse = await getMemberPosts(props.postMemberId!, requestPage.value, requestSize.value, afterSort)
     posts.value = postPageResponse.posts
   }
 })
@@ -67,7 +74,7 @@ const onChangePage = async (page: number) => {
 
 watch(requestPage, async (afterPage, beforePage) => {
   if (afterPage < totalPages.value!) {
-    const postPageResponse = await getMyPosts(afterPage, requestSize.value, requestSort.value)
+    const postPageResponse = await getMemberPosts(props.postMemberId!, afterPage, requestSize.value, requestSort.value)
     posts.value = postPageResponse.posts
     totalPages.value = postPageResponse.totalPages
     totalElements.value = postPageResponse.totalElements
@@ -81,9 +88,7 @@ watch(requestPage, async (afterPage, beforePage) => {
     <div class='ootd-header-container'>
       <div class='ootd-header-bar-wrapper'>
         <OOTDSortComponent :onChangeSort='onChangeSort' :requestSort='requestSort' :sortOptions='sortOptions' />
-        <div class='ootd-header-write-btn-wrapper'>
-          <RouterLink to='/ootds/create' class='ootd-header-write-btn'>글쓰기</RouterLink>
-        </div>
+        <div class='blank-gap'></div>
       </div>
     </div>
     <OOTDPostCardComponent :posts='posts' />
@@ -92,5 +97,5 @@ watch(requestPage, async (afterPage, beforePage) => {
 </template>
 
 <style scoped>
-@import "@/assets/css/ootd/my-ootd-post.css";
+@import "@/assets/css/ootd/member-ootd-post.css";
 </style>
