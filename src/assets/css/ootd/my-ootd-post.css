@@ -49,3 +49,7 @@
 .ootd-header-write-btn-wrapper:hover {
     cursor: pointer;
 }
+
+.blank-gap {
+    margin-left: 5rem;
+}
