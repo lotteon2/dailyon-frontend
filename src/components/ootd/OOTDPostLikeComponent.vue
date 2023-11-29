@@ -1,243 +1,93 @@
 <script setup lang='ts'>
 
+import { inject, onBeforeMount, reactive, type Ref, ref, watch } from 'vue'
+import type { MyPostPageResponse, MyPostResponse, PostLikePageResponse, PostLikeResponse } from '@/apis/ootd/PostDto'
+import { getMyPosts, getPostLikes } from '@/apis/ootd/PostService'
+import OOTDPostCardComponent from '@/components/ootd/OOTDPostCardComponent.vue'
+import OOTDSortComponent from '@/components/ootd/OOTDSortComponent.vue'
+import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
+import { usePostLikeStore } from '@/stores/postlike/PostLikeStore'
+import { togglePostLike } from '@/apis/ootd/PostLikeService'
+
+const sortOptions = reactive([
+  { label: '조회순', value: 'viewCount,desc' },
+  { label: '최신순', value: 'createdAt,desc' },
+  { label: '인기순', value: 'likeCount,desc' }
+])
+const requestPage = ref<number>(0)
+const requestSize = ref<number>(6)
+const requestSort = ref<string>(sortOptions[0].value)
+const posts = ref<Array<PostLikeResponse>>()
+const totalPages = ref<number>()
+const totalElements = ref<number>()
+
+const postLikeStore = usePostLikeStore()
+const postLikes = postLikeStore.postLikes
+
+const fetchDefaultData = async (): Promise<PostLikePageResponse<PostLikeResponse>> => {
+  const postPageResponse = await getPostLikes(0, 6, sortOptions[0].value)
+  posts.value = postPageResponse.posts
+  totalPages.value = postPageResponse.totalPages
+
+  return postPageResponse
+}
+
+onBeforeMount(async () => {
+  await fetchDefaultData()
+})
+
+const onChangeSort = async (sort: string) => {
+  postLikes.forEach((postId: number) => {
+    togglePostLike(postId)
+  })
+  postLikes.clear()
+
+  requestSort.value = sort
+}
+
+watch(requestSort, async (afterSort, beforeSort) => {
+  requestPage.value = 0
+  if (beforeSort !== afterSort) {
+    const postPageResponse = await getPostLikes(requestPage.value, requestSize.value, afterSort)
+    posts.value = postPageResponse.posts
+  }
+})
+
+const onChangePage = async (page: number) => {
+  if (page >= 0 && page < totalPages.value!) {
+    postLikes.forEach((postId: number) => {
+      togglePostLike(postId)
+    })
+    postLikes.clear()
+
+    requestPage.value = page
+  }
+}
+
+watch(requestPage, async (afterPage, beforePage) => {
+  if (afterPage < totalPages.value!) {
+    const postPageResponse = await getPostLikes(afterPage, requestSize.value, requestSort.value)
+    posts.value = postPageResponse.posts
+    totalPages.value = postPageResponse.totalPages
+    totalElements.value = postPageResponse.totalElements
+  }
+})
+
 </script>
 
 <template>
-  <div class="board-container">
-    <div class="container-title">게시글 관리</div>
-    <div class="container-line"></div>
-    <div class="query-option-container">
-      <div class="option-text option-ontap">조회순</div>
-      <div class="option-text both-small-margin">|</div>
-      <div class="option-text">최신순</div>
-      <div class="option-text both-small-margin">|</div>
-      <div class="option-text">인기순</div>
-    </div>
-    <div class="img-container">
-      <div class="single-img-container">
-        <img src="@/assets/images/prod-img.png" alt="" />
-        <svg
-          class="like-button"
-          xmlns="http://www.w3.org/2000/svg"
-          width="40"
-          height="37"
-          viewBox="0 0 40 37"
-          fill="none"
-        >
-          <path
-            d="M20 36.7L17.1 34.06C6.8 24.72 0 18.54 0 11C0 4.82 4.84 0 11 0C14.48 0 17.82 1.62 20 4.16C22.18 1.62 25.52 0 29 0C35.16 0 40 4.82 40 11C40 18.54 33.2 24.72 22.9 34.06L20 36.7Z"
-            fill="#C6C6C6"
-          />
-        </svg>
-        <div class="heart-view-container">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="17"
-            height="15"
-            viewBox="0 0 17 15"
-            fill="none"
-          >
-            <path
-              d="M8.17439 15L6.9891 13.921C2.77929 10.1035 0 7.57766 0 4.49591C0 1.97003 1.9782 0 4.49591 0C5.91826 0 7.28338 0.662125 8.17439 1.70027C9.0654 0.662125 10.4305 0 11.8529 0C14.3706 0 16.3488 1.97003 16.3488 4.49591C16.3488 7.57766 13.5695 10.1035 9.35967 13.921L8.17439 15Z"
-              fill="#FF0000"
-            />
-          </svg>
-          <h1>999+</h1>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="22"
-            height="15"
-            viewBox="0 0 22 15"
-            fill="none"
-          >
-            <path
-              d="M11 4.5C10.2044 4.5 9.44129 4.81607 8.87868 5.37868C8.31607 5.94129 8 6.70435 8 7.5C8 8.29565 8.31607 9.05871 8.87868 9.62132C9.44129 10.1839 10.2044 10.5 11 10.5C11.7956 10.5 12.5587 10.1839 13.1213 9.62132C13.6839 9.05871 14 8.29565 14 7.5C14 6.70435 13.6839 5.94129 13.1213 5.37868C12.5587 4.81607 11.7956 4.5 11 4.5ZM11 12.5C9.67392 12.5 8.40215 11.9732 7.46447 11.0355C6.52678 10.0979 6 8.82608 6 7.5C6 6.17392 6.52678 4.90215 7.46447 3.96447C8.40215 3.02678 9.67392 2.5 11 2.5C12.3261 2.5 13.5979 3.02678 14.5355 3.96447C15.4732 4.90215 16 6.17392 16 7.5C16 8.82608 15.4732 10.0979 14.5355 11.0355C13.5979 11.9732 12.3261 12.5 11 12.5ZM11 0C6 0 1.73 3.11 0 7.5C1.73 11.89 6 15 11 15C16 15 20.27 11.89 22 7.5C20.27 3.11 16 0 11 0Z"
-              fill="#C6C6C6"
-            />
-          </svg>
-          <h2>999+</h2>
-        </div>
-      </div>
-      <div class="single-img-container">
-        <img src="@/assets/images/prod-img.png" alt="" />
-        <svg
-          class="like-button"
-          xmlns="http://www.w3.org/2000/svg"
-          width="40"
-          height="37"
-          viewBox="0 0 40 37"
-          fill="none"
-        >
-          <path
-            d="M20 36.7L17.1 34.06C6.8 24.72 0 18.54 0 11C0 4.82 4.84 0 11 0C14.48 0 17.82 1.62 20 4.16C22.18 1.62 25.52 0 29 0C35.16 0 40 4.82 40 11C40 18.54 33.2 24.72 22.9 34.06L20 36.7Z"
-            fill="#ff0000"
-          />
-        </svg>
-        <div class="heart-view-container">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="17"
-            height="15"
-            viewBox="0 0 17 15"
-            fill="none"
-          >
-            <path
-              d="M8.17439 15L6.9891 13.921C2.77929 10.1035 0 7.57766 0 4.49591C0 1.97003 1.9782 0 4.49591 0C5.91826 0 7.28338 0.662125 8.17439 1.70027C9.0654 0.662125 10.4305 0 11.8529 0C14.3706 0 16.3488 1.97003 16.3488 4.49591C16.3488 7.57766 13.5695 10.1035 9.35967 13.921L8.17439 15Z"
-              fill="#FF0000"
-            />
-          </svg>
-          <h1>999+</h1>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="22"
-            height="15"
-            viewBox="0 0 22 15"
-            fill="none"
-          >
-            <path
-              d="M11 4.5C10.2044 4.5 9.44129 4.81607 8.87868 5.37868C8.31607 5.94129 8 6.70435 8 7.5C8 8.29565 8.31607 9.05871 8.87868 9.62132C9.44129 10.1839 10.2044 10.5 11 10.5C11.7956 10.5 12.5587 10.1839 13.1213 9.62132C13.6839 9.05871 14 8.29565 14 7.5C14 6.70435 13.6839 5.94129 13.1213 5.37868C12.5587 4.81607 11.7956 4.5 11 4.5ZM11 12.5C9.67392 12.5 8.40215 11.9732 7.46447 11.0355C6.52678 10.0979 6 8.82608 6 7.5C6 6.17392 6.52678 4.90215 7.46447 3.96447C8.40215 3.02678 9.67392 2.5 11 2.5C12.3261 2.5 13.5979 3.02678 14.5355 3.96447C15.4732 4.90215 16 6.17392 16 7.5C16 8.82608 15.4732 10.0979 14.5355 11.0355C13.5979 11.9732 12.3261 12.5 11 12.5ZM11 0C6 0 1.73 3.11 0 7.5C1.73 11.89 6 15 11 15C16 15 20.27 11.89 22 7.5C20.27 3.11 16 0 11 0Z"
-              fill="#C6C6C6"
-            />
-          </svg>
-          <h2>999+</h2>
-        </div>
-      </div>
-      <div class="single-img-container">
-        <img src="@/assets/images/prod-img.png" alt="" />
-        <svg
-          class="like-button"
-          xmlns="http://www.w3.org/2000/svg"
-          width="40"
-          height="37"
-          viewBox="0 0 40 37"
-          fill="none"
-        >
-          <path
-            d="M20 36.7L17.1 34.06C6.8 24.72 0 18.54 0 11C0 4.82 4.84 0 11 0C14.48 0 17.82 1.62 20 4.16C22.18 1.62 25.52 0 29 0C35.16 0 40 4.82 40 11C40 18.54 33.2 24.72 22.9 34.06L20 36.7Z"
-            fill="#C6C6C6"
-          />
-        </svg>
-        <div class="heart-view-container">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="17"
-            height="15"
-            viewBox="0 0 17 15"
-            fill="none"
-          >
-            <path
-              d="M8.17439 15L6.9891 13.921C2.77929 10.1035 0 7.57766 0 4.49591C0 1.97003 1.9782 0 4.49591 0C5.91826 0 7.28338 0.662125 8.17439 1.70027C9.0654 0.662125 10.4305 0 11.8529 0C14.3706 0 16.3488 1.97003 16.3488 4.49591C16.3488 7.57766 13.5695 10.1035 9.35967 13.921L8.17439 15Z"
-              fill="#FF0000"
-            />
-          </svg>
-          <h1>999+</h1>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="22"
-            height="15"
-            viewBox="0 0 22 15"
-            fill="none"
-          >
-            <path
-              d="M11 4.5C10.2044 4.5 9.44129 4.81607 8.87868 5.37868C8.31607 5.94129 8 6.70435 8 7.5C8 8.29565 8.31607 9.05871 8.87868 9.62132C9.44129 10.1839 10.2044 10.5 11 10.5C11.7956 10.5 12.5587 10.1839 13.1213 9.62132C13.6839 9.05871 14 8.29565 14 7.5C14 6.70435 13.6839 5.94129 13.1213 5.37868C12.5587 4.81607 11.7956 4.5 11 4.5ZM11 12.5C9.67392 12.5 8.40215 11.9732 7.46447 11.0355C6.52678 10.0979 6 8.82608 6 7.5C6 6.17392 6.52678 4.90215 7.46447 3.96447C8.40215 3.02678 9.67392 2.5 11 2.5C12.3261 2.5 13.5979 3.02678 14.5355 3.96447C15.4732 4.90215 16 6.17392 16 7.5C16 8.82608 15.4732 10.0979 14.5355 11.0355C13.5979 11.9732 12.3261 12.5 11 12.5ZM11 0C6 0 1.73 3.11 0 7.5C1.73 11.89 6 15 11 15C16 15 20.27 11.89 22 7.5C20.27 3.11 16 0 11 0Z"
-              fill="#C6C6C6"
-            />
-          </svg>
-          <h2>999+</h2>
-        </div>
-      </div>
-      <div class="single-img-container">
-        <img src="@/assets/images/prod-img.png" alt="" />
-        <svg
-          class="like-button"
-          xmlns="http://www.w3.org/2000/svg"
-          width="40"
-          height="37"
-          viewBox="0 0 40 37"
-          fill="none"
-        >
-          <path
-            d="M20 36.7L17.1 34.06C6.8 24.72 0 18.54 0 11C0 4.82 4.84 0 11 0C14.48 0 17.82 1.62 20 4.16C22.18 1.62 25.52 0 29 0C35.16 0 40 4.82 40 11C40 18.54 33.2 24.72 22.9 34.06L20 36.7Z"
-            fill="#C6C6C6"
-          />
-        </svg>
-        <div class="heart-view-container">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="17"
-            height="15"
-            viewBox="0 0 17 15"
-            fill="none"
-          >
-            <path
-              d="M8.17439 15L6.9891 13.921C2.77929 10.1035 0 7.57766 0 4.49591C0 1.97003 1.9782 0 4.49591 0C5.91826 0 7.28338 0.662125 8.17439 1.70027C9.0654 0.662125 10.4305 0 11.8529 0C14.3706 0 16.3488 1.97003 16.3488 4.49591C16.3488 7.57766 13.5695 10.1035 9.35967 13.921L8.17439 15Z"
-              fill="#FF0000"
-            />
-          </svg>
-          <h1>999+</h1>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="22"
-            height="15"
-            viewBox="0 0 22 15"
-            fill="none"
-          >
-            <path
-              d="M11 4.5C10.2044 4.5 9.44129 4.81607 8.87868 5.37868C8.31607 5.94129 8 6.70435 8 7.5C8 8.29565 8.31607 9.05871 8.87868 9.62132C9.44129 10.1839 10.2044 10.5 11 10.5C11.7956 10.5 12.5587 10.1839 13.1213 9.62132C13.6839 9.05871 14 8.29565 14 7.5C14 6.70435 13.6839 5.94129 13.1213 5.37868C12.5587 4.81607 11.7956 4.5 11 4.5ZM11 12.5C9.67392 12.5 8.40215 11.9732 7.46447 11.0355C6.52678 10.0979 6 8.82608 6 7.5C6 6.17392 6.52678 4.90215 7.46447 3.96447C8.40215 3.02678 9.67392 2.5 11 2.5C12.3261 2.5 13.5979 3.02678 14.5355 3.96447C15.4732 4.90215 16 6.17392 16 7.5C16 8.82608 15.4732 10.0979 14.5355 11.0355C13.5979 11.9732 12.3261 12.5 11 12.5ZM11 0C6 0 1.73 3.11 0 7.5C1.73 11.89 6 15 11 15C16 15 20.27 11.89 22 7.5C20.27 3.11 16 0 11 0Z"
-              fill="#C6C6C6"
-            />
-          </svg>
-          <h2>999+</h2>
-        </div>
-      </div>
-      <div class="single-img-container">
-        <img src="@/assets/images/prod-img.png" alt="" />
-        <svg
-          class="like-button"
-          xmlns="http://www.w3.org/2000/svg"
-          width="40"
-          height="37"
-          viewBox="0 0 40 37"
-          fill="none"
-        >
-          <path
-            d="M20 36.7L17.1 34.06C6.8 24.72 0 18.54 0 11C0 4.82 4.84 0 11 0C14.48 0 17.82 1.62 20 4.16C22.18 1.62 25.52 0 29 0C35.16 0 40 4.82 40 11C40 18.54 33.2 24.72 22.9 34.06L20 36.7Z"
-            fill="#C6C6C6"
-          />
-        </svg>
-        <div class="heart-view-container">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="17"
-            height="15"
-            viewBox="0 0 17 15"
-            fill="none"
-          >
-            <path
-              d="M8.17439 15L6.9891 13.921C2.77929 10.1035 0 7.57766 0 4.49591C0 1.97003 1.9782 0 4.49591 0C5.91826 0 7.28338 0.662125 8.17439 1.70027C9.0654 0.662125 10.4305 0 11.8529 0C14.3706 0 16.3488 1.97003 16.3488 4.49591C16.3488 7.57766 13.5695 10.1035 9.35967 13.921L8.17439 15Z"
-              fill="#FF0000"
-            />
-          </svg>
-          <h1>999+</h1>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="22"
-            height="15"
-            viewBox="0 0 22 15"
-            fill="none"
-          >
-            <path
-              d="M11 4.5C10.2044 4.5 9.44129 4.81607 8.87868 5.37868C8.31607 5.94129 8 6.70435 8 7.5C8 8.29565 8.31607 9.05871 8.87868 9.62132C9.44129 10.1839 10.2044 10.5 11 10.5C11.7956 10.5 12.5587 10.1839 13.1213 9.62132C13.6839 9.05871 14 8.29565 14 7.5C14 6.70435 13.6839 5.94129 13.1213 5.37868C12.5587 4.81607 11.7956 4.5 11 4.5ZM11 12.5C9.67392 12.5 8.40215 11.9732 7.46447 11.0355C6.52678 10.0979 6 8.82608 6 7.5C6 6.17392 6.52678 4.90215 7.46447 3.96447C8.40215 3.02678 9.67392 2.5 11 2.5C12.3261 2.5 13.5979 3.02678 14.5355 3.96447C15.4732 4.90215 16 6.17392 16 7.5C16 8.82608 15.4732 10.0979 14.5355 11.0355C13.5979 11.9732 12.3261 12.5 11 12.5ZM11 0C6 0 1.73 3.11 0 7.5C1.73 11.89 6 15 11 15C16 15 20.27 11.89 22 7.5C20.27 3.11 16 0 11 0Z"
-              fill="#C6C6C6"
-            />
-          </svg>
-          <h2>999+</h2>
-        </div>
+  <div class='ootd-container'>
+    <div class='ootd-header-container'>
+      <div class='ootd-header-bar-wrapper'>
+        <OOTDSortComponent :onChangeSort='onChangeSort' :requestSort='requestSort' :sortOptions='sortOptions' />
+        <div class='blank-gap'></div>
       </div>
     </div>
+    <OOTDPostCardComponent :posts='posts' />
+    <PaginationComponent :requestPage='requestPage' :totalPages='totalPages' :onChangePage='onChangePage' />
   </div>
 </template>
 
 <style scoped>
-@import "@/assets/css/ootd/ootd-post-like.css";
+@import "@/assets/css/ootd/my-ootd-post.css";
 </style>
