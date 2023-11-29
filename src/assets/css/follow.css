@@ -79,14 +79,26 @@
     margin-right: 20px;
 }
 
-.nickname {
+.follow-img:hover {
+    cursor: pointer;
+}
+
+.nickname-wrapper {
     width: 100%;
+}
+
+.nickname {
+    width: fit-content;
+    height: fit-content;
     color: var(--Grayscale7, #000);
     font-family: The Jamsil;
     font-size: 20px;
     font-style: normal;
     font-weight: 400;
-    line-height: 80px; /* 320% */
+}
+
+.nickname:hover {
+    cursor: pointer;
 }
 
 .following {
