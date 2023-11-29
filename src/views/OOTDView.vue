@@ -3,7 +3,8 @@
 import { inject, onBeforeMount, reactive, type Ref, ref, watch } from 'vue'
 import { getPosts } from '@/apis/ootd/PostService'
 import type { PostPageResponse, PostResponse } from '@/apis/ootd/PostDto'
-import OOTDCardComponent from '@/components/ootd/OOTDCardComponent.vue'
+import OOTDPostCardComponent from '@/components/ootd/OOTDPostCardComponent.vue'
+import OOTDSortComponent from '@/components/ootd/OOTDSortComponent.vue'
 
 const sortOptions = reactive([
   { label: '조회순', value: 'viewCount,desc' },
@@ -65,10 +66,24 @@ watch(isScrollEnd, async (afterScrollEnd, beforeScrollEnd) => {
 </script>
 
 <template>
-  <OOTDCardComponent :posts='posts' :onChangeSort='onChangeSort' :requestSort='requestSort'
-                     :sortOptions='sortOptions' />
+  <div class='ootd-container'>
+    <div class='ootd-header-container'>
+      <div class='ootd-header-title-wrapper'>
+        <div class='ootd-header-title-text'>
+          OOTD
+        </div>
+      </div>
+      <div class='ootd-header-bar-wrapper'>
+        <OOTDSortComponent :onChangeSort='onChangeSort' :requestSort='requestSort' :sortOptions='sortOptions' />
+        <div class='ootd-header-write-btn-wrapper'>
+          <RouterLink to='/ootds/create' class='ootd-header-write-btn'>글쓰기</RouterLink>
+        </div>
+      </div>
+    </div>
+    <OOTDPostCardComponent :posts='posts' />
+  </div>
 </template>
 
 <style scoped>
-@import "@/assets/ootd.css";
+@import "@/assets/css/ootd/ootd.css";
 </style>

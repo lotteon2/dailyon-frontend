@@ -381,5 +381,5 @@
 </template>
 
 <style scoped>
-@import "@/assets/ootd-detail.css";
+@import "@/assets/css/ootd/ootd-detail.css";
 </style>
