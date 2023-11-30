@@ -1,7 +1,12 @@
 <script setup lang='ts'>
 
 import { inject, onBeforeMount, reactive, type Ref, ref, watch } from 'vue'
-import type { OOTDPostPageResponse, OOTDPostResponse, PostLikePageResponse, PostLikeResponse } from '@/apis/ootd/PostDto'
+import type {
+  OOTDPostPageResponse,
+  OOTDPostResponse,
+  PostLikePageResponse,
+  PostLikeResponse
+} from '@/apis/ootd/PostDto'
 import { getMyPosts, getPostLikes } from '@/apis/ootd/PostService'
 import OOTDPostCardComponent from '@/components/ootd/OOTDPostCardComponent.vue'
 import OOTDSortComponent from '@/components/ootd/OOTDSortComponent.vue'
@@ -21,9 +26,6 @@ const posts = ref<Array<PostLikeResponse>>()
 const totalPages = ref<number>()
 const totalElements = ref<number>()
 
-const postLikeStore = usePostLikeStore()
-const postLikes = postLikeStore.postLikes
-
 const fetchDefaultData = async (): Promise<PostLikePageResponse<PostLikeResponse>> => {
   const postPageResponse = await getPostLikes(0, 6, sortOptions[0].value)
   posts.value = postPageResponse.posts
@@ -37,11 +39,6 @@ onBeforeMount(async () => {
 })
 
 const onChangeSort = async (sort: string) => {
-  postLikes.forEach((postId: number) => {
-    togglePostLike(postId)
-  })
-  postLikes.clear()
-
   requestSort.value = sort
 }
 
@@ -55,11 +52,6 @@ watch(requestSort, async (afterSort, beforeSort) => {
 
 const onChangePage = async (page: number) => {
   if (page >= 0 && page < totalPages.value!) {
-    postLikes.forEach((postId: number) => {
-      togglePostLike(postId)
-    })
-    postLikes.clear()
-
     requestPage.value = page
   }
 }

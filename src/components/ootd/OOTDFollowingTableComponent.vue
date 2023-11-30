@@ -6,10 +6,16 @@ import type {
   FollowingPageResponse,
   FollowingResponse
 } from '@/apis/ootd/FollowDto'
-import { getFollowings, toggleFollow } from '@/apis/ootd/FollowService'
+import { getFollowings } from '@/apis/ootd/FollowService'
 import { onBeforeMount, watch } from 'vue'
 import { useFollowStore } from '@/stores/follow/FollowStore'
-import { onBeforeRouteLeave } from 'vue-router'
+
+const props = defineProps({
+  addedFollowings: {
+    type: Array<FollowingResponse>,
+    require: true
+  }
+})
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -17,6 +23,9 @@ const requestPage = ref<number>(0)
 const followings = ref<Array<FollowingResponse>>()
 const totalPages = ref<number>()
 const totalElements = ref<number>()
+
+const followStore = useFollowStore()
+const follows = followStore.follows
 
 const fetchDefaultData = async (): Promise<FollowingPageResponse<FollowingResponse>> => {
   const followingPageResponse = await getFollowings(0, 5, 'createdAt,desc')
@@ -29,6 +38,14 @@ const fetchDefaultData = async (): Promise<FollowingPageResponse<FollowingRespon
 
 onBeforeMount(async () => {
   await fetchDefaultData()
+  props.addedFollowings!.forEach((addedFollowing: FollowingResponse) => {
+    const duplicatedIndex = followings.value!.findIndex((following) => following.id === addedFollowing.id)
+    if(duplicatedIndex === -1) {
+      followings.value?.unshift(addedFollowing!)
+    } else {
+      followings.value?.splice(duplicatedIndex, duplicatedIndex + 1)
+    }
+  })
 })
 
 const onChangePage = async (page: number) => {
@@ -39,7 +56,6 @@ const onChangePage = async (page: number) => {
 
 watch(requestPage, async (afterPage, beforePage) => {
   if (afterPage < totalPages.value!) {
-    await flushFollowStore()
     const followingPageResponse = await getFollowings(afterPage, 5, 'createdAt,desc')
     followings.value = followingPageResponse.followings
     totalPages.value = followingPageResponse.totalPages
@@ -47,32 +63,12 @@ watch(requestPage, async (afterPage, beforePage) => {
   }
 })
 
-const followStore = useFollowStore()
-const follows = followStore.follows
 const followButtonClickListener = (followingId: number, isFollowing: boolean | undefined) => {
-  const followIndex = followings.value?.findIndex((following) => following.id === followingId)
-  if (followIndex !== -1) {
-    followings.value![followIndex!].isFollowing = !isFollowing
-    follows.has(followingId) ? follows.delete(followingId) : follows.add(followingId)
-  }
+  follows.has(followingId) ? follows.delete(followingId) : follows.add(followingId)
 }
 
-const flushFollowStore = async () => {
-  follows.forEach((followingId: number) => {
-    toggleFollow(followingId)
-  })
-  follows.clear()
-}
-
-// 페이지 이동 시 이벤트
-onBeforeRouteLeave(async (to, from) => {
-  await flushFollowStore()
-})
-
-// 새로고침 or 브라우저 창 닫을 때 이벤트
-window.onbeforeunload = function() {
-  flushFollowStore()
-}
+const followingEmits = defineEmits(["followings"])
+followingEmits("followings", followings)
 </script>
 
 <template>
@@ -82,11 +78,12 @@ window.onbeforeunload = function() {
         <img class='follow-img' :src='`${VITE_STATIC_IMG_URL}${following.profileImgUrl}`' />
       </RouterLink>
       <div class='nickname-wrapper'>
-        <RouterLink :to='`/ootds/profile/${following.id}`'>
-          <div class='nickname'>{{ following.nickname }}</div>
+        <RouterLink class='nickname' :to='`/ootds/profile/${following.id}`'>
+          {{ following.nickname }}
         </RouterLink>
       </div>
-      <div v-if='following.isFollowing' class='follow-btn following'
+      <div v-if='follows.has(following.id) ? !following.isFollowing : following.isFollowing'
+           class='follow-btn following'
            @click='followButtonClickListener(following.id, following.isFollowing)'>
         <svg
           xmlns='http://www.w3.org/2000/svg'
