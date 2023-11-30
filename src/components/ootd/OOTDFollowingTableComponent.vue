@@ -1,13 +1,9 @@
 <script setup lang='ts'>
 
-import { ref } from 'vue'
+import { onBeforeMount, ref, watch } from 'vue'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
-import type {
-  FollowingPageResponse,
-  FollowingResponse
-} from '@/apis/ootd/FollowDto'
+import type { FollowingPageResponse, FollowingResponse } from '@/apis/ootd/FollowDto'
 import { getFollowings } from '@/apis/ootd/FollowService'
-import { onBeforeMount, watch } from 'vue'
 import { useFollowStore } from '@/stores/follow/FollowStore'
 
 const props = defineProps({
@@ -40,7 +36,7 @@ onBeforeMount(async () => {
   await fetchDefaultData()
   props.addedFollowings!.forEach((addedFollowing: FollowingResponse) => {
     const duplicatedIndex = followings.value!.findIndex((following) => following.id === addedFollowing.id)
-    if(duplicatedIndex === -1) {
+    if (duplicatedIndex === -1) {
       followings.value?.unshift(addedFollowing!)
     } else {
       followings.value?.splice(duplicatedIndex, duplicatedIndex + 1)
@@ -67,8 +63,8 @@ const followButtonClickListener = (followingId: number, isFollowing: boolean | u
   follows.has(followingId) ? follows.delete(followingId) : follows.add(followingId)
 }
 
-const followingEmits = defineEmits(["followings"])
-followingEmits("followings", followings)
+const followingEmits = defineEmits(['followings'])
+followingEmits('followings', followings)
 </script>
 
 <template>

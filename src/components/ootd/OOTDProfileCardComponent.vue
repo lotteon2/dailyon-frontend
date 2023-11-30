@@ -7,6 +7,9 @@ import { useFollowStore } from '@/stores/follow/FollowStore'
 import { toggleFollow } from '@/apis/ootd/FollowService'
 import { onBeforeRouteLeave } from 'vue-router'
 
+const followStore = useFollowStore()
+const follows = followStore.follows
+
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
 const props = defineProps({
@@ -36,8 +39,6 @@ onBeforeMount(async () => {
   await fetchDefaultData()
 })
 
-const followStore = useFollowStore()
-const follows = followStore.follows
 const followButtonClickListener = (followingId: number, isFollowing: boolean | undefined) => {
   member.value!.isFollowing ? member.value!.followerCount -= 1 : member.value!.followerCount += 1
   member.value!.isFollowing = !isFollowing

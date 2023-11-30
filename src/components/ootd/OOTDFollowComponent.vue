@@ -1,12 +1,12 @@
 <script setup lang='ts'>
 
-import { reactive, ref, watch } from 'vue'
+import { reactive, ref } from 'vue'
 import OOTDFollowerTableComponent from '@/components/ootd/OOTDFollowerTableComponent.vue'
 import OOTDFollowingTableComponent from '@/components/ootd/OOTDFollowingTableComponent.vue'
 import { useFollowStore } from '@/stores/follow/FollowStore'
 import { toggleFollow } from '@/apis/ootd/FollowService'
 import { onBeforeRouteLeave } from 'vue-router'
-import type { FollowerResponse, FollowingResponse } from '@/apis/ootd/FollowDto'
+import type { FollowingResponse } from '@/apis/ootd/FollowDto'
 
 const followStore = useFollowStore()
 const follows = followStore.follows
@@ -53,9 +53,9 @@ window.onbeforeunload = function() {
       </div>
     </div>
     <OOTDFollowerTableComponent
-      v-if='requestTab === tabOptions[0].value' :addedFollowings='addedFollowings'/>
+      v-if='requestTab === tabOptions[0].value' :addedFollowings='addedFollowings' />
     <OOTDFollowingTableComponent
-      v-if='requestTab === tabOptions[1].value' :addedFollowings='addedFollowings'/>
+      v-if='requestTab === tabOptions[1].value' :addedFollowings='addedFollowings' />
   </div>
 </template>
 

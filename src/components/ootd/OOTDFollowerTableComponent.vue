@@ -103,9 +103,6 @@ const followButtonClickListener = (followerId: number, isFollowing: boolean | un
   }
   follows.has(followerId) ? follows.delete(followerId) : follows.add(followerId)
 }
-
-const followerEmits = defineEmits(["followers"])
-followerEmits("followers", followers)
 </script>
 
 <template>
