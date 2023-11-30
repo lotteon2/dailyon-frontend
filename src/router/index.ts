@@ -63,27 +63,28 @@ const router = createRouter({
     {
       path: '/my-page',
       name: 'my-page',
+      redirect: '/order-history',
       component: () => import('@/views/MyPageView.vue'),
       children: [
         {
           path: '/order-history',
           name: 'orderHistory',
-          component: () => import('@/components/order/OrderHistoryComponent.vue'),
+          component: () => import('@/components/order/OrderHistoryComponent.vue')
         },
         {
           path: '/point-history',
           name: 'pointHistory',
-          component: () => import('@/components/member/PointHistoryComponent.vue'),
+          component: () => import('@/components/member/PointHistoryComponent.vue')
         },
         {
           path: '/coupons',
           name: 'coupons',
-          component: () => import('@/components/promotion/CouponComponent.vue'),
+          component: () => import('@/components/promotion/CouponComponent.vue')
         },
         {
           path: '/events',
           name: 'events',
-          component: () => import('@/components/promotion/EventComponent.vue'),
+          component: () => import('@/components/promotion/EventComponent.vue')
         },
         {
           path: '/carts',
@@ -119,7 +120,7 @@ const router = createRouter({
           path: '/like-posts',
           name: 'likePosts',
           component: () => import('@/components/ootd/OOTDPostLikeComponent.vue')
-        },
+        }
       ]
     },
     {
