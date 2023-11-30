@@ -1,13 +1,19 @@
 <script setup lang='ts'>
 
 import { ref } from 'vue'
-import type { FollowerResponse } from '@/apis/ootd/FollowDto'
+import type { FollowerResponse, FollowingResponse } from '@/apis/ootd/FollowDto'
 import { type FollowerPageResponse } from '@/apis/ootd/FollowDto'
-import { getFollowers, toggleFollow } from '@/apis/ootd/FollowService'
+import { getFollowers } from '@/apis/ootd/FollowService'
 import { onBeforeMount, watch } from 'vue'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 import { useFollowStore } from '@/stores/follow/FollowStore'
-import { onBeforeRouteLeave } from 'vue-router'
+
+const props = defineProps({
+  addedFollowings: {
+    type: Array<FollowingResponse>,
+    require: true
+  }
+})
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -15,6 +21,9 @@ const requestPage = ref<number>(0)
 const followers = ref<Array<FollowerResponse>>()
 const totalPages = ref<number>()
 const totalElements = ref<number>()
+
+const followStore = useFollowStore()
+const follows = followStore.follows
 
 const fetchDefaultData = async (): Promise<FollowerPageResponse<FollowerResponse>> => {
   const followerPageResponse = await getFollowers(0, 5, 'createdAt,desc')
@@ -37,7 +46,6 @@ const onChangePage = async (page: number) => {
 
 watch(requestPage, async (afterPage, beforePage) => {
   if (afterPage < totalPages.value!) {
-    await flushFollowStore()
     const followerPageResponse = await getFollowers(afterPage, 5, 'createdAt,desc')
     followers.value = followerPageResponse.followers
     totalPages.value = followerPageResponse.totalPages
@@ -45,32 +53,59 @@ watch(requestPage, async (afterPage, beforePage) => {
   }
 })
 
-const followStore = useFollowStore()
-const follows = followStore.follows
-const followButtonClickListener = (followingId: number, isFollowing: boolean | undefined) => {
-  const followIndex = followers.value?.findIndex((follower) => follower.id === followingId)
-  if (followIndex !== -1) {
-    followers.value![followIndex!].isFollowing = !isFollowing
-    follows.has(followingId) ? follows.delete(followingId) : follows.add(followingId)
+const followButtonClickListener = (followerId: number, isFollowing: boolean | undefined) => {
+
+  // 이미 팔로잉하는 상태라면
+  if(isFollowing) {
+    // 언팔로우
+    if(!follows.has(followerId)) {
+      followers.value?.forEach((follower) => {
+        if(follower.id === followerId) {
+          props.addedFollowings!.push({
+            id: follower.id,
+            nickname: follower.nickname,
+            profileImgUrl: follower.profileImgUrl,
+            isFollowing: follower.isFollowing
+          })
+        }
+      })
+    }
+    // 팔로우
+    else {
+      const indexToRemove = props.addedFollowings!.findIndex((following) => following.id === followerId)
+      if (indexToRemove !== -1) {
+        props.addedFollowings?.splice(indexToRemove, indexToRemove + 1)
+      }
+    }
   }
+  // 아니라면
+  else {
+    // 언팔로우
+    if(follows.has(followerId)) {
+      const indexToRemove = props.addedFollowings!.findIndex((following) => following.id === followerId)
+      if (indexToRemove !== -1) {
+        props.addedFollowings?.splice(indexToRemove, indexToRemove + 1)
+      }
+    }
+    // 팔로우
+    else {
+      followers.value?.forEach((follower) => {
+        if(follower.id === followerId) {
+          props.addedFollowings!.push({
+            id: follower.id,
+            nickname: follower.nickname,
+            profileImgUrl: follower.profileImgUrl,
+            isFollowing: follower.isFollowing
+          })
+        }
+      })
+    }
+  }
+  follows.has(followerId) ? follows.delete(followerId) : follows.add(followerId)
 }
 
-const flushFollowStore = async () => {
-  follows.forEach((followingId: number) => {
-    toggleFollow(followingId)
-  })
-  follows.clear()
-}
-
-// 페이지 이동 시 이벤트
-onBeforeRouteLeave(async (to, from) => {
-  await flushFollowStore()
-})
-
-// 새로고침 or 브라우저 창 닫을 때 이벤트
-window.onbeforeunload = function() {
-  flushFollowStore()
-}
+const followerEmits = defineEmits(["followers"])
+followerEmits("followers", followers)
 </script>
 
 <template>
@@ -80,11 +115,12 @@ window.onbeforeunload = function() {
         <img class='follow-img' :src='`${VITE_STATIC_IMG_URL}${follower.profileImgUrl}`' />
       </RouterLink>
       <div class='nickname-wrapper'>
-        <RouterLink :to='`/ootds/profile/${follower.id}`'>
-          <div class='nickname'>{{ follower.nickname }}</div>
+        <RouterLink class='nickname' :to='`/ootds/profile/${follower.id}`'>
+          {{ follower.nickname }}
         </RouterLink>
       </div>
-      <div v-if='follower.isFollowing' class='follow-btn following'
+      <div v-if='follows.has(follower.id) ? !follower.isFollowing : follower.isFollowing'
+           class='follow-btn following'
            @click='followButtonClickListener(follower.id, follower.isFollowing)'>
         <svg
           xmlns='http://www.w3.org/2000/svg'
