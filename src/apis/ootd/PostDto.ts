@@ -42,8 +42,8 @@ export interface PostLikeResponse {
 export interface PostCreateRequest<T extends PostImageProductDetailCreateRequest> {
   title: string;
   description: string;
-  stature: number;
-  weight: number;
+  stature?: number;
+  weight?: number;
   hashTagNames: Array<string>;
   postThumbnailImgName: string;
   postImgName: string;

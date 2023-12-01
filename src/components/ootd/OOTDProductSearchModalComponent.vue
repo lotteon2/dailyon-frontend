@@ -1,6 +1,6 @@
 <script setup lang='ts'>
 
-import { ref } from 'vue'
+import { type PropType, ref } from 'vue'
 import type { ProductSearchResponse } from '@/apis/ootd/PostDto'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
@@ -12,7 +12,7 @@ const props = defineProps({
     default: false
   },
   productModalControl: {
-    type: Function,
+    type: Function as PropType<() => void>,
     required: true
   },
   onSelectBtnClick: {
