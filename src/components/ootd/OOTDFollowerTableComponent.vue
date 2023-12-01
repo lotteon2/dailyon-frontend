@@ -74,7 +74,7 @@ const followButtonClickListener = (followerId: number, isFollowing: boolean | un
     else {
       const indexToRemove = props.addedFollowings!.findIndex((following) => following.id === followerId)
       if (indexToRemove !== -1) {
-        props.addedFollowings?.splice(indexToRemove, indexToRemove + 1)
+        props.addedFollowings?.splice(indexToRemove, 1)
       }
     }
   }
@@ -84,7 +84,7 @@ const followButtonClickListener = (followerId: number, isFollowing: boolean | un
     if(follows.has(followerId)) {
       const indexToRemove = props.addedFollowings!.findIndex((following) => following.id === followerId)
       if (indexToRemove !== -1) {
-        props.addedFollowings?.splice(indexToRemove, indexToRemove + 1)
+        props.addedFollowings?.splice(indexToRemove, 1)
       }
     }
     // 팔로우

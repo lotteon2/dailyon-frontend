@@ -39,7 +39,7 @@ onBeforeMount(async () => {
     if (duplicatedIndex === -1) {
       followings.value?.unshift(addedFollowing!)
     } else {
-      followings.value?.splice(duplicatedIndex, duplicatedIndex + 1)
+      followings.value?.splice(duplicatedIndex, 1)
     }
   })
 })
