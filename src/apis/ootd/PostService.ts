@@ -1,7 +1,7 @@
 import { authAxiosInstance } from '@/apis/utils'
 import type {
   OOTDPostPageResponse,
-  OOTDPostResponse,
+  OOTDPostResponse, PostCreateRequest, PostCreateResponse, PostImageProductDetailCreateRequest,
   PostLikePageResponse, PostLikeResponse,
   PostPageResponse,
   PostResponse
@@ -103,6 +103,28 @@ export const getPostLikes = async (page: number, size: number, sort: string): Pr
         sort: sort
       }
     })
+    return response.data
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      if (error.response) {
+        if (error.response.status >= 400) {
+          alert(error.response.data.message)
+          console.error(`Client Error=${error.response.data.message}`)
+        }
+        if (error.response.status < 500) {
+          alert('서버 내부 오류')
+          console.error('Internal Server Error')
+        }
+      }
+    }
+    throw error
+  }
+}
+
+export const createPost = async (postCreateRequest: PostCreateRequest<PostImageProductDetailCreateRequest>)
+  : Promise<PostCreateResponse> => {
+  try {
+    const response: AxiosResponse = await authAxiosInstance.post(`/posts`, postCreateRequest)
     return response.data
   } catch (error) {
     if (error instanceof AxiosError) {

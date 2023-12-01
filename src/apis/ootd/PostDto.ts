@@ -38,3 +38,39 @@ export interface PostLikeResponse {
   viewCount: number;
   isLike: boolean;
 }
+
+export interface PostCreateRequest<T extends PostImageProductDetailCreateRequest> {
+  title: string;
+  description: string;
+  stature: number;
+  weight: number;
+  hashTagNames: Array<string>;
+  postThumbnailImgName: string;
+  postImgName: string;
+  postImageProductDetails: Array<T>
+}
+
+export interface PostImageProductDetailCreateRequest {
+  productId: number;
+  productSize: string;
+  leftGapPercent: number;
+  topGapPercent: number;
+}
+
+export interface PostCreateResponse {
+  thumbnailImgPreSignedUrl: string;
+  imgPreSignedUrl: string;
+}
+
+export interface ProductSearchPageResponse<T extends ProductSearchResponse> {
+  hasNext: boolean;
+  products: Array<T>;
+}
+
+export interface ProductSearchResponse {
+  id: number;
+  imgUrl: string;
+  name: string;
+  brandName: string;
+  sizeNames: Array<string>;
+}
