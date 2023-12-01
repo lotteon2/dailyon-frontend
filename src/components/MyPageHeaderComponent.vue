@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 
+const redirectUrl = ref('')
 const displayModal = ref(false)
 const selectedAmount = ref('')
 const inputAmount = ref('')
@@ -44,6 +45,18 @@ const processPayment = () => {
   const amount = selectedAmount.value || inputAmount.value
   console.log('결제 금액: ', amount)
   displayModal.value = false
+
+  const width = 500
+  const height = 500
+  const left = window.screen.width / 2 - width / 2
+  const top = window.screen.height / 2 - height / 2
+
+  redirectUrl.value = ''
+  window.open(
+    redirectUrl.value,
+    'payment',
+    `width=${width},height=${height},top=${top},left=${left}`
+  )
 }
 </script>
 

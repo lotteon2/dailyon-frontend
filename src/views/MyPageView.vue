@@ -1,5 +1,4 @@
-<script setup lang='ts'>
-
+<script setup lang="ts">
 import MyPageNavbarComponent from '@/components/MyPageNavbarComponent.vue'
 import MyPageHeaderComponent from '@/components/MyPageHeaderComponent.vue'
 import OrderHistoryComponent from '@/components/order/OrderHistoryComponent.vue'
@@ -36,5 +35,5 @@ import MyOOTDPostComponent from '@/components/ootd/MyOOTDPostComponent.vue'
 </template>
 
 <style scoped>
-@import "@/assets/mypage.css";
+@import '@/assets/mypage.css';
 </style>
