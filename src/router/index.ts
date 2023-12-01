@@ -127,6 +127,23 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: () => import('@/views/LoginView.vue')
+    },
+    {
+      path: '/payment-result',
+      redirect: 'paymentResult',
+      children: [
+        {
+          path: 'success',
+          redirect: '/notfound',
+          children: [
+            {
+              path: ':orderId',
+              name: 'paymentResult',
+              component: () => import('@/views/PaymentSuccessView.vue')
+            }
+          ]
+        }
+      ]
     }
   ]
 })

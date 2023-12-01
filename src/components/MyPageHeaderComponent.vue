@@ -1,11 +1,18 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-
+import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
+import { useRouter } from 'vue-router'
+import { pointPaymentReady } from '@/apis/payment/payment'
+import type { PointPaymentDto } from '@/apis/payment/paymentDto'
+const router = useRouter()
 const redirectUrl = ref('')
 const displayModal = ref(false)
 const selectedAmount = ref('')
 const inputAmount = ref('')
-
+const paymentDto = ref<PointPaymentDto>({
+  method: 'KAKAOPAY',
+  totalAmount: 0
+})
+const newWindow = ref<any>()
 // 선택한 값이 변경되면 입력값을 초기화
 watch(selectedAmount, () => {
   if (selectedAmount.value) {
@@ -23,8 +30,11 @@ watch(inputAmount, () => {
 const validateInput = () => {
   // 입력값이 숫자가 아니라면, 마지막 입력값을 제거
   if (!/^\d*$/.test(inputAmount.value)) {
-    inputAmount.value = inputAmount.value.slice(0, -1)
+    alert('숫자만 입력 가능합니다.')
+    inputAmount.value = ''
+    return
   }
+
   // 입력값이 5자리를 초과하면, 마지막 입력값을 제거
   else if (inputAmount.value.length > 9) {
     inputAmount.value = inputAmount.value.slice(0, 9)
@@ -41,23 +51,46 @@ const inputClear = () => {
   selectedAmount.value = ''
 }
 
-const processPayment = () => {
-  const amount = selectedAmount.value || inputAmount.value
-  console.log('결제 금액: ', amount)
+const processPayment = async () => {
+  const amount = Number(selectedAmount.value || inputAmount.value)
+  if (!amount) {
+    alert('0원은 충전할 수 없습니다.')
+    inputAmount.value = ''
+    return
+  }
+
+  paymentDto.value.totalAmount = amount
+
+  redirectUrl.value = await pointPaymentReady(paymentDto.value)
+
+  if (redirectUrl.value) {
+    const width = 500
+    const height = 500
+    const left = window.screen.width / 2 - width / 2
+    const top = window.screen.height / 2 - height / 2
+
+    newWindow.value = window.open(
+      redirectUrl.value,
+      'payment',
+      `width=${width},height=${height},top=${top},left=${left}`
+    )
+  }
   displayModal.value = false
-
-  const width = 500
-  const height = 500
-  const left = window.screen.width / 2 - width / 2
-  const top = window.screen.height / 2 - height / 2
-
-  redirectUrl.value = ''
-  window.open(
-    redirectUrl.value,
-    'payment',
-    `width=${width},height=${height},top=${top},left=${left}`
-  )
 }
+
+const handleMessage = (event: MessageEvent) => {
+  const { routeName } = event.data
+  window.scrollTo(0, 0)
+  router.push({ name: routeName })
+}
+
+onMounted(async () => {
+  window.addEventListener('message', handleMessage)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('message', handleMessage)
+})
 </script>
 
 <template>
