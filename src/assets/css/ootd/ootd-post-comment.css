@@ -74,7 +74,6 @@
 }
 
 .ootd-detail-comment-input {
-    color: var(--Grayscale4, #C6C6C6);
     font-family: The Jamsil;
     font-size: 1.25rem;
     font-style: normal;
@@ -102,10 +101,16 @@
     line-height: normal;
 }
 
+.ootd-detail-comment-input-box-decoration-text.hover:hover {
+    cursor: pointer;
+}
+
 .ootd-detail-comment-body-wrapper {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+
+    width: 65vw;
     gap: 0.625rem;
 }
 
@@ -220,6 +225,10 @@
     line-height: 1.875rem; /* 250% */
 }
 
+.ootd-detail-comment-box-header-content-comment-button:hover {
+    cursor: pointer;
+}
+
 .ootd-detail-comment-box-header-right-wrapper {
     display: flex;
     flex-direction: column;
@@ -247,8 +256,10 @@
     display: flex;
     padding: 0.3125rem;
     align-items: flex-start;
-    gap: 37rem;
+    gap: 35rem;
     align-self: stretch;
+
+    margin-bottom: 1vh;
 
     border-radius: 0.3125rem;
     border: 1px solid #C6C6C6;
@@ -262,7 +273,6 @@
 }
 
 .ootd-detail-reply-input {
-    color: var(--Grayscale5, #808080);
     font-family: The Jamsil;
     font-size: 0.9rem;
     font-style: normal;

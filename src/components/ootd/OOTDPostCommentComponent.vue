@@ -1,7 +1,12 @@
 <script setup lang='ts'>
 import { onBeforeMount, ref, watch } from 'vue'
-import type { CommentPageResponse, CommentResponse } from '@/apis/ootd/CommentDto'
-import { getComments } from '@/apis/ootd/CommentService'
+import type {
+  CommentPageResponse,
+  CommentResponse,
+  CreateCommentRequest,
+  CreateReplyCommentRequest
+} from '@/apis/ootd/CommentDto'
+import { createComment, createReplyComment, getComments } from '@/apis/ootd/CommentService'
 import { useRoute } from 'vue-router'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 
@@ -11,7 +16,7 @@ const route = useRoute()
 const postId = ref<number>(Number(route.params.id))
 const requestPage = ref<number>(0)
 const requestSize = ref<number>(5)
-const requestSort = ref<string>("createdAt,desc")
+const requestSort = ref<string>('createdAt,desc')
 const comments = ref<Array<CommentResponse>>()
 const totalPages = ref<number>()
 const totalElements = ref<number>()
@@ -43,6 +48,43 @@ watch(requestPage, async (afterPage, beforePage) => {
     totalElements.value = commentPageResponse.totalElements
   }
 })
+
+const createCommentRequest = ref<CreateCommentRequest>({
+  description: ""
+})
+
+const onSubmitComment = async () => {
+  if (createCommentRequest.value.description === ""
+    || createCommentRequest.value.description.length < 5 || createCommentRequest.value.description.length > 140) {
+    alert("댓글은 최소 5자 최대 140자까지 등록할 수 있습니다.")
+  } else {
+    await createComment(postId.value, createCommentRequest.value)
+    alert("댓글을 성공적으로 등록하였습니다.")
+    window.location.reload()
+  }
+}
+
+const isOpenReplyCommentInput = ref<Set<number>>(new Set<number>())
+const onOpenReplyCommentInput = async (commentId: number) => {
+  isOpenReplyCommentInput.value.has(commentId)
+    ? isOpenReplyCommentInput.value.delete(commentId) : isOpenReplyCommentInput.value.add(commentId)
+}
+
+const createReplyCommentRequest = ref<CreateReplyCommentRequest>({
+  description: ""
+})
+
+const onSubmitReplyComment = async (commentId: number) => {
+  if (createReplyCommentRequest.value.description === ""
+    || createReplyCommentRequest.value.description.length < 5 || createReplyCommentRequest.value.description.length > 140) {
+    alert("답글은 최소 5자 최대 140자까지 등록할 수 있습니다.")
+  } else {
+    await createReplyComment(postId.value, commentId, createReplyCommentRequest.value)
+    alert("답글을 성공적으로 등록하였습니다.")
+    window.location.reload()
+  }
+}
+
 </script>
 
 <template>
@@ -65,16 +107,20 @@ watch(requestPage, async (afterPage, beforePage) => {
     </div>
     <div class='ootd-detail-comment-input-box-wrapper'>
       <div class='ootd-detail-comment-input-wrapper'>
-        <input class='ootd-detail-comment-input' type='text'>
+        <input class='ootd-detail-comment-input' type='text'
+               v-model='createCommentRequest.description'
+               @keyup.enter='onSubmitComment'>
       </div>
       <div class='ootd-detail-comment-input-box-decoration-wrapper'>
-        <div class='ootd-detail-comment-input-box-decoration-text'>
+        <div class='ootd-detail-comment-input-box-decoration-text'
+             :class='{"hover": createCommentRequest.description !== ""}'
+             @click='onSubmitComment'>
           입력
         </div>
       </div>
     </div>
     <div class='ootd-detail-comment-body-wrapper'>
-      <div v-for='comment in comments' class='ootd-detail-comment-box-wrapper'>
+      <div v-for='comment in comments' :key='comment.id' class='ootd-detail-comment-box-wrapper'>
         <img class='ootd-detail-comment-profile-image' :src='`${VITE_STATIC_IMG_URL}${comment.member.profileImgUrl}`'>
         <div class='ootd-detail-comment-box-wrapper-2'>
           <div class='ootd-detail-comment-box-header-wrapper'>
@@ -99,7 +145,8 @@ watch(requestPage, async (afterPage, beforePage) => {
                   </div>
                 </div>
                 <div class='ootd-detail-comment-box-header-content-comment-wrapper'>
-                  <div class='ootd-detail-comment-box-header-content-comment-button'>
+                  <div class='ootd-detail-comment-box-header-content-comment-button'
+                       @click='onOpenReplyCommentInput(comment.id)'>
                     답글달기
                   </div>
                 </div>
@@ -111,8 +158,21 @@ watch(requestPage, async (afterPage, beforePage) => {
               </div>
             </div>
           </div>
-          <div v-for='replyComment in comment.replyComments' class='ootd-detail-comment-box-wrapper'>
-            <img class='ootd-detail-comment-profile-image' :src='`${VITE_STATIC_IMG_URL}${replyComment.member.profileImgUrl}`'>
+          <div v-if='isOpenReplyCommentInput.has(comment.id)' class='ootd-detail-reply-box-wrapper'>
+            <div class='ootd-detail-reply-input-wrapper'>
+              <input class='ootd-detail-reply-input' placeholder='@답글 닉네임'
+                     v-model='createReplyCommentRequest.description'
+                     @keyup.enter='onSubmitReplyComment(comment.id)'>
+            </div>
+            <div class='ootd-detail-reply-input-hint-wrapper'>
+              <div class='ootd-detail-reply-input-hint-text'
+                   :class='{"hover": createReplyCommentRequest.description !== ""}'
+                   @click='onSubmitReplyComment(comment.id)'>입력</div>
+            </div>
+          </div>
+          <div v-for='replyComment in comment.replyComments' :key='replyComment.id' class='ootd-detail-comment-box-wrapper'>
+            <img class='ootd-detail-comment-profile-image'
+                 :src='`${VITE_STATIC_IMG_URL}${replyComment.member.profileImgUrl}`'>
             <div class='ootd-detail-comment-box-wrapper-2'>
               <div class='ootd-detail-comment-box-header-wrapper'>
                 <div class='ootd-detail-comment-box-header-left-wrapper'>
@@ -135,11 +195,6 @@ watch(requestPage, async (afterPage, beforePage) => {
                         {{ replyComment.createdAt }}
                       </div>
                     </div>
-                    <div class='ootd-detail-comment-box-header-content-comment-wrapper'>
-                      <div class='ootd-detail-comment-box-header-content-comment-button'>
-                        답글달기
-                      </div>
-                    </div>
                   </div>
                 </div>
                 <div class='ootd-detail-comment-box-header-right-wrapper'>
@@ -148,14 +203,6 @@ watch(requestPage, async (afterPage, beforePage) => {
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-          <div class='ootd-detail-reply-box-wrapper'>
-            <div class='ootd-detail-reply-input-wrapper'>
-              <input class='ootd-detail-reply-input' placeholder='@댓글 닉네임'>
-            </div>
-            <div class='ootd-detail-reply-input-hint-wrapper'>
-              <div class='ootd-detail-reply-input-hint-text'>입력</div>
             </div>
           </div>
         </div>
