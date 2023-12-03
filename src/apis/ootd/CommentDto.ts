@@ -18,3 +18,11 @@ export interface MemberResponse {
   nickname: string;
   profileImgUrl: string;
 }
+
+export interface CreateCommentRequest {
+  description: string;
+}
+
+export interface CreateReplyCommentRequest {
+  description: string;
+}
