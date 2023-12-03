@@ -6,7 +6,7 @@ import type {
   CreateCommentRequest,
   CreateReplyCommentRequest
 } from '@/apis/ootd/CommentDto'
-import { createComment, createReplyComment, getComments } from '@/apis/ootd/CommentService'
+import { createComment, createReplyComment, deleteComment, getComments } from '@/apis/ootd/CommentService'
 import { useRoute } from 'vue-router'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 
@@ -85,6 +85,18 @@ const onSubmitReplyComment = async (commentId: number) => {
   }
 }
 
+const onDeleteComment = async (commentId: number) => {
+  await deleteComment(postId.value, commentId)
+  alert("댓글을 성공적으로 삭제하였습니다.")
+  window.location.reload()
+}
+
+const onDeleteReplyComment = async (commentId: number) => {
+  await deleteComment(postId.value, commentId)
+  alert("답글을 성공적으로 삭제하였습니다.")
+  window.location.reload()
+}
+
 </script>
 
 <template>
@@ -121,14 +133,17 @@ const onSubmitReplyComment = async (commentId: number) => {
     </div>
     <div class='ootd-detail-comment-body-wrapper'>
       <div v-for='comment in comments' :key='comment.id' class='ootd-detail-comment-box-wrapper'>
-        <img class='ootd-detail-comment-profile-image' :src='`${VITE_STATIC_IMG_URL}${comment.member.profileImgUrl}`'>
+        <RouterLink :to='`/ootds/profile/${comment.member.id}`'>
+          <img class='ootd-detail-comment-profile-image' :src='`${VITE_STATIC_IMG_URL}${comment.member.profileImgUrl}`'>
+        </RouterLink>
         <div class='ootd-detail-comment-box-wrapper-2'>
           <div class='ootd-detail-comment-box-header-wrapper'>
             <div class='ootd-detail-comment-box-header-left-wrapper'>
               <div class='ootd-detail-comment-box-header-nickname-wrapper'>
-                <div class='ootd-detail-comment-box-header-nickname-text'>
+                <RouterLink :to='`/ootds/profile/${comment.member.id}`'
+                            class='ootd-detail-comment-box-header-nickname-text'>
                   {{ comment.member.nickname }}
-                </div>
+                </RouterLink>
               </div>
               <div class='ootd-detail-comment-box-header-content-wrapper'>
                 <div v-if='!comment.isDeleted' class='ootd-detail-comment-box-header-content-text'>
@@ -153,7 +168,7 @@ const onSubmitReplyComment = async (commentId: number) => {
               </div>
             </div>
             <div class='ootd-detail-comment-box-header-right-wrapper'>
-              <div class='ootd-detail-comment-box-delete-text'>
+              <div class='ootd-detail-comment-box-delete-text' @click='onDeleteComment(comment.id)'>
                 삭제
               </div>
             </div>
@@ -171,15 +186,18 @@ const onSubmitReplyComment = async (commentId: number) => {
             </div>
           </div>
           <div v-for='replyComment in comment.replyComments' :key='replyComment.id' class='ootd-detail-comment-box-wrapper'>
-            <img class='ootd-detail-comment-profile-image'
-                 :src='`${VITE_STATIC_IMG_URL}${replyComment.member.profileImgUrl}`'>
+            <RouterLink :to='`/ootds/profile/${replyComment.member.id}`'>
+              <img class='ootd-detail-comment-profile-image'
+                   :src='`${VITE_STATIC_IMG_URL}${replyComment.member.profileImgUrl}`'>
+            </RouterLink>
             <div class='ootd-detail-comment-box-wrapper-2'>
               <div class='ootd-detail-comment-box-header-wrapper'>
                 <div class='ootd-detail-comment-box-header-left-wrapper'>
                   <div class='ootd-detail-comment-box-header-nickname-wrapper'>
-                    <div class='ootd-detail-comment-box-header-nickname-text'>
+                    <RouterLink :to='`/ootds/profile/${replyComment.member.id}`'
+                                class='ootd-detail-comment-box-header-nickname-text'>
                       {{ replyComment.member.nickname }}
-                    </div>
+                    </RouterLink>
                   </div>
                   <div class='ootd-detail-comment-box-header-content-wrapper'>
                     <div v-if='!replyComment.isDeleted' class='ootd-detail-comment-box-header-content-text'>
@@ -198,7 +216,7 @@ const onSubmitReplyComment = async (commentId: number) => {
                   </div>
                 </div>
                 <div class='ootd-detail-comment-box-header-right-wrapper'>
-                  <div class='ootd-detail-comment-box-delete-text'>
+                  <div class='ootd-detail-comment-box-delete-text' @click='onDeleteReplyComment(replyComment.id)'>
                     삭제
                   </div>
                 </div>

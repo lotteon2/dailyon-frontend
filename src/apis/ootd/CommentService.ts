@@ -78,3 +78,24 @@ export const createReplyComment = async (postId: number, commentId: number, crea
     throw error
   }
 }
+
+export const deleteComment = async (postId: number, commentId: number)
+  : Promise<void> => {
+  try {
+    await authAxiosInstance.delete(`/posts/${postId}/comments/${commentId}`)
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      if (error.response) {
+        if (error.response.status >= 400) {
+          alert(error.response.data.message)
+          console.error(`Client Error=${error.response.data.message}`)
+        }
+        if (error.response.status < 500) {
+          alert('서버 내부 오류')
+          console.error('Internal Server Error')
+        }
+      }
+    }
+    throw error
+  }
+}
