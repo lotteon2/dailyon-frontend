@@ -1,5 +1,24 @@
 <script setup lang='ts'>
 
+import { onBeforeMount, ref } from 'vue'
+import type { PostDetailResponse } from '@/apis/ootd/PostDto'
+import { useRoute } from 'vue-router'
+import { getPostDetail } from '@/apis/ootd/PostService'
+import OOTDPostCommentComponent from '@/components/ootd/OOTDPostCommentComponent.vue'
+
+const route = useRoute()
+const postId = ref<number>(Number(route.params.id))
+const post = ref<PostDetailResponse>()
+const fetchDefaultData = async (): Promise<PostDetailResponse> => {
+  const postDetailResponse = await getPostDetail(postId.value)
+  post.value = postDetailResponse
+
+  return postDetailResponse
+}
+
+onBeforeMount(async () => {
+  // await fetchDefaultData()
+})
 </script>
 
 <template>
@@ -232,138 +251,7 @@
       <div class='ootd-detail-divide-line-wrapper'>
         <div class='ootd-detail-divide-line'></div>
       </div>
-      <div class='ootd-detail-comment-wrapper'>
-
-        <div class='ootd-detail-comment-header-wrapper'>
-          <div class='ootd-detail-comment-count-wrapper'>
-            <div class='ootd-detail-comment-count-text-wrapper'>
-              <div class='ootd-detail-comment-count-text'>
-                댓글
-              </div>
-            </div>
-            <div class='ootd-detail-comment-count-real-text-wrapper'>
-              <div class='ootd-detail-comment-count-real-text'>
-                N
-              </div>
-            </div>
-          </div>
-
-        </div>
-        <div class='ootd-detail-comment-input-box-wrapper'>
-          <div class='ootd-detail-comment-input-wrapper'>
-            <input class='ootd-detail-comment-input' type='text'>
-          </div>
-          <div class='ootd-detail-comment-input-box-decoration-wrapper'>
-            <div class='ootd-detail-comment-input-box-decoration-text'>
-              입력
-            </div>
-          </div>
-        </div>
-        <div class='ootd-detail-comment-body-wrapper'>
-          <div v-for='n in 2' class='ootd-detail-comment-box-wrapper'>
-            <img class='ootd-detail-comment-profile-image' src='@/assets/images/default-profile-image.png'>
-            <div class='ootd-detail-comment-box-wrapper-2'>
-              <div class='ootd-detail-comment-box-header-wrapper'>
-                <div class='ootd-detail-comment-box-header-left-wrapper'>
-                  <div class='ootd-detail-comment-box-header-nickname-wrapper'>
-                    <div class='ootd-detail-comment-box-header-nickname-text'>
-                      작성자 닉네임
-                    </div>
-                  </div>
-                  <div class='ootd-detail-comment-box-header-content-wrapper'>
-                    <div class='ootd-detail-comment-box-header-content-text'>
-                      댓글 내용
-                    </div>
-                  </div>
-                  <div class='ootd-detail-comment-box-header-content-metadata-wrapper'>
-                    <div class='ootd-detail-comment-box-header-content-created-date-wrapper'>
-                      <div class='ootd-detail-comment-box-header-content-created-date-text'>
-                        작성일
-                      </div>
-                    </div>
-                    <div class='ootd-detail-comment-box-header-content-comment-wrapper'>
-                      <div class='ootd-detail-comment-box-header-content-comment-button'>
-                        답글달기
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class='ootd-detail-comment-box-header-right-wrapper'>
-                  <div class='ootd-detail-comment-box-delete-text'>
-                    삭제
-                  </div>
-                </div>
-              </div>
-              <div v-for='n in 2' class='ootd-detail-comment-box-wrapper'>
-                <img class='ootd-detail-comment-profile-image' src='@/assets/images/default-profile-image.png'>
-                <div class='ootd-detail-comment-box-wrapper-2'>
-                  <div class='ootd-detail-comment-box-header-wrapper'>
-                    <div class='ootd-detail-comment-box-header-left-wrapper'>
-                      <div class='ootd-detail-comment-box-header-nickname-wrapper'>
-                        <div class='ootd-detail-comment-box-header-nickname-text'>
-                          작성자 닉네임
-                        </div>
-                      </div>
-                      <div class='ootd-detail-comment-box-header-content-wrapper'>
-                        <div class='ootd-detail-comment-box-header-content-text'>
-                          댓글 내용
-                        </div>
-                      </div>
-                      <div class='ootd-detail-comment-box-header-content-metadata-wrapper'>
-                        <div class='ootd-detail-comment-box-header-content-created-date-wrapper'>
-                          <div class='ootd-detail-comment-box-header-content-created-date-text'>
-                            작성일
-                          </div>
-                        </div>
-                        <div class='ootd-detail-comment-box-header-content-comment-wrapper'>
-                          <div class='ootd-detail-comment-box-header-content-comment-button'>
-                            답글달기
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class='ootd-detail-comment-box-header-right-wrapper'>
-                      <div class='ootd-detail-comment-box-delete-text'>
-                        삭제
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class='ootd-detail-reply-box-wrapper'>
-                <div class='ootd-detail-reply-input-wrapper'>
-                  <input class='ootd-detail-reply-input' placeholder='@댓글 닉네임'>
-                </div>
-                <div class='ootd-detail-reply-input-hint-wrapper'>
-                  <div class='ootd-detail-reply-input-hint-text'>입력</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class='ootd-detail-comment-pagination-wrapper'>
-          <div class='ootd-detail-comment-back-button-wrapper'>
-            <svg class='ootd-detail-comment-back-button' xmlns="http://www.w3.org/2000/svg" width="9" height="14" viewBox="0 0 9 14" fill="none">
-              <path d="M7.41563 13.3557C7.33046 13.3567 7.24602 13.3399 7.16774 13.3064C7.08946 13.2728 7.01906 13.2232 6.96108 13.1609L1.11692 7.3167C0.857184 7.05696 0.857184 6.65437 1.11692 6.39463L6.96108 0.563458C7.22082 0.303717 7.62342 0.303717 7.88316 0.563458C8.1429 0.823198 8.1429 1.22579 7.88316 1.48554L2.49355 6.86216L7.88316 12.2518C8.1429 12.5115 8.1429 12.9141 7.88316 13.1738C7.75329 13.3037 7.58446 13.3687 7.42861 13.3687L7.41563 13.3557Z" fill="#C6C6C6"/>
-            </svg>
-          </div>
-          <div class='ootd-detail-comment-page-button-wrapper selected'>
-            <div class='ootd-detail-comment-page-button selected'>
-              1
-            </div>
-          </div>
-          <div class='ootd-detail-comment-page-button-wrapper' v-for='n in 2'>
-            <div class='ootd-detail-comment-page-button' >
-              {{ n + 1 }}
-            </div>
-          </div>
-          <div class='ootd-detail-comment-front-button-wrapper'>
-            <svg class='ootd-detail-comment-front-button' xmlns="http://www.w3.org/2000/svg" width="9" height="14" viewBox="0 0 9 14" fill="none">
-              <path d="M1.57794 13.3686C1.49277 13.3696 1.40834 13.3528 1.33005 13.3193C1.25177 13.2858 1.18137 13.2362 1.12339 13.1738C0.863654 12.9141 0.863654 12.5115 1.12339 12.2517L6.51299 6.86214L1.12339 1.48553C0.863654 1.22579 0.863654 0.823196 1.12339 0.563457C1.38313 0.303718 1.78573 0.303718 2.04547 0.563457L7.87662 6.42058C8.13636 6.68032 8.13636 7.08291 7.87662 7.34265L2.03248 13.1738C1.90261 13.3037 1.73378 13.3686 1.57794 13.3686Z" fill="black"/>
-            </svg>
-          </div>
-        </div>
-      </div>
+      <OOTDPostCommentComponent />
     </div>
     <div class='ootd-detail-like-button-wrapper'>
       <div class='ootd-detail-like-button'>

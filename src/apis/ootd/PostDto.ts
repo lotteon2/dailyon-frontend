@@ -74,3 +74,43 @@ export interface ProductSearchResponse {
   brandName: string;
   sizeNames: Array<string>;
 }
+
+export interface PostDetailResponse {
+  id: number;
+  title: string;
+  description: string;
+  stature?: number;
+  weight?: number;
+  viewCount: number;
+  commentCount: number;
+  createdAt: string;
+  member: PostDetailMemberResponse;
+  hashTags: Array<PostDetailHashTagResponse>;
+  postImageProductDetails: Array<PostImageProductDetailResponse>;
+}
+
+export interface PostDetailMemberResponse {
+  id: number;
+  nickname: string;
+  profileImgUrl: string;
+  code: string;
+  isFollowing?: boolean;
+}
+
+export interface PostDetailHashTagResponse {
+  id: number;
+  name: string;
+}
+
+export interface PostImageProductDetailResponse {
+  id: number;
+  productId: number;
+  name: string;
+  brandName: string;
+  price: number;
+  imgUrl: string;
+  size: string;
+  leftGapPercent: number;
+  topGapPercent: number;
+  hasAvailableCoupon?: boolean
+}
