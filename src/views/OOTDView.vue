@@ -5,7 +5,6 @@ import { getPosts } from '@/apis/ootd/PostService'
 import type { PostPageResponse, PostResponse } from '@/apis/ootd/PostDto'
 import OOTDPostCardComponent from '@/components/ootd/OOTDPostCardComponent.vue'
 import OOTDSortComponent from '@/components/ootd/OOTDSortComponent.vue'
-import { onBeforeRouteLeave } from 'vue-router'
 
 const sortOptions = reactive([
   { label: '조회순', value: 'viewCount,desc' },
