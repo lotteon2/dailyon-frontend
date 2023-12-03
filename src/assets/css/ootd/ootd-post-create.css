@@ -9,7 +9,7 @@
 
 .div {
     display: flex;
-    height: 22.25rem;
+    height: fit-content;
     flex-direction: column;
     align-items: flex-start;
     gap: 0.8125rem;
@@ -18,7 +18,7 @@
 .text-wrapper-2 {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 1vw;
 }
 
 .text-wrapper, .text-wrapper-2 {

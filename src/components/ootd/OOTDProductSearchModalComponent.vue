@@ -51,7 +51,7 @@ const hasNext = ref<boolean>(false)
 
 <template>
   <div class='product-search-modal-wrapper' v-show='isProductModalOpen'>
-    <div class='container'>
+    <div class='search-container'>
       <div class='header-container'>
         <input class='search-input' type='text' placeholder='상품명, 상품코드로 검색'>
         <div class='cancel-button' @click='productModalControl'>취소</div>

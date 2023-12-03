@@ -49,7 +49,7 @@ const validationMessage = reactive({
 })
 watch(postCreateRequest.value, async (afterPostCreateRequest, beforePostCreateRequest) => {
   const stature = afterPostCreateRequest.stature
-  if (isNaN(Number(stature))) {
+  if (stature !== undefined && isNaN(Number(stature))) {
     afterPostCreateRequest.stature = undefined
     validationMessage.stature.number.isValid = false
   } else if (stature !== undefined && !isNaN(Number(stature))) {
@@ -57,7 +57,7 @@ watch(postCreateRequest.value, async (afterPostCreateRequest, beforePostCreateRe
   }
 
   const weight = afterPostCreateRequest.weight
-  if (isNaN(Number(weight))) {
+  if (weight !== undefined && isNaN(Number(weight))) {
     afterPostCreateRequest.weight = undefined
     validationMessage.weight.number.isValid = false
   } else if (weight !== undefined && !isNaN(Number(weight))) {
@@ -241,6 +241,10 @@ const onSubmit = async () => {
   }
 }
 
+const onCancel = async () => {
+  router.go(-1)
+}
+
 </script>
 
 <template>
@@ -302,7 +306,7 @@ const onSubmit = async () => {
             <div class='div-9'>
               <div class='div-10'>
                 <div v-for='hashTagName in postCreateRequest.hashTagNames' class='div-wrapper-2'>
-                  <div class='text-wrapper-5'>{{ hashTagName }}</div>
+                  <div class='text-wrapper-5'>#{{ hashTagName }}</div>
                 </div>
               </div>
               <div class='div-11'>
@@ -394,7 +398,7 @@ const onSubmit = async () => {
     </div>
     <div class='button-container'>
       <div class='cancel-button'>
-        <span class='cancel-button-text'>
+        <span class='cancel-button-text' @click='onCancel'>
           작성 취소
         </span>
       </div>

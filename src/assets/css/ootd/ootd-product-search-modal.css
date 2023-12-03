@@ -1,5 +1,5 @@
-.container {
-    position: relative;
+.search-container {
+    position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -14,12 +14,16 @@
 }
 
 .header-container {
-    width: 90%;
+    width: 100%;
 
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
+
+    border-bottom: 1px solid var(--Grayscale3, #E9E9E9);
+    padding-bottom: 10px;
+    margin: auto;
 
     gap: 1rem;
 }
@@ -40,7 +44,7 @@
 }
 
 .search-input:focus {
-    outline-color: #C22727;
+    outline-color: #C22727EE;
 }
 
 .search-input::placeholder {
@@ -62,11 +66,15 @@
 
 .content-container {
     width: 90%;
+    height: 18rem;
+
+    padding-top: 10px;
+    margin: auto;
+    overflow-y: auto;
 
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
 
     gap: 1rem;
 }
