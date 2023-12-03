@@ -14,6 +14,9 @@ const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
 const route = useRoute()
 const postId = ref<number>(Number(route.params.id))
+// TODO: memberId 전역에서 불러오기
+const memberId = ref<number>(1)
+
 const requestPage = ref<number>(0)
 const requestSize = ref<number>(5)
 const requestSort = ref<string>('createdAt,desc')
@@ -168,7 +171,8 @@ const onDeleteReplyComment = async (commentId: number) => {
               </div>
             </div>
             <div class='ootd-detail-comment-box-header-right-wrapper'>
-              <div class='ootd-detail-comment-box-delete-text' @click='onDeleteComment(comment.id)'>
+              <div v-if='comment.member.id === memberId && !comment.isDeleted' class='ootd-detail-comment-box-delete-text'
+                   @click='onDeleteComment(comment.id)'>
                 삭제
               </div>
             </div>
@@ -216,7 +220,9 @@ const onDeleteReplyComment = async (commentId: number) => {
                   </div>
                 </div>
                 <div class='ootd-detail-comment-box-header-right-wrapper'>
-                  <div class='ootd-detail-comment-box-delete-text' @click='onDeleteReplyComment(replyComment.id)'>
+                  <div v-if='replyComment.member.id === memberId && !replyComment.isDeleted'
+                       class='ootd-detail-comment-box-delete-text'
+                       @click='onDeleteReplyComment(replyComment.id)'>
                     삭제
                   </div>
                 </div>
