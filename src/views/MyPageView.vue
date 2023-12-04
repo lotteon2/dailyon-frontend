@@ -2,6 +2,7 @@
 import MyPageNavbarComponent from '@/components/MyPageNavbarComponent.vue'
 import MyPageHeaderComponent from '@/components/MyPageHeaderComponent.vue'
 import OrderHistoryComponent from '@/components/order/OrderHistoryComponent.vue'
+import PointPaymentHistoryComponent from '@/components/payment/PointPaymentHistoryComponent.vue'
 import PointHistoryComponent from '@/components/member/PointHistoryComponent.vue'
 import CouponComponent from '@/components/promotion/CouponComponent.vue'
 import EventComponent from '@/components/promotion/EventComponent.vue'
@@ -20,6 +21,7 @@ import MyOOTDPostComponent from '@/components/ootd/MyOOTDPostComponent.vue'
     <div class="right-container">
       <MyPageHeaderComponent />
       <OrderHistoryComponent v-if="$route.name === 'orderHistory'" />
+      <PointPaymentHistoryComponent v-if="$route.name === 'pointPaymentHistory'" />
       <PointHistoryComponent v-if="$route.name === 'pointHistory'" />
       <CouponComponent v-if="$route.name === 'coupons'" />
       <EventComponent v-if="$route.name === 'events'" />
