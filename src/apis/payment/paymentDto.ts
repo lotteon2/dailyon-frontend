@@ -12,5 +12,6 @@ export interface PaymentResponse {
 
 export interface PaymentPageResponse<T extends PaymentResponse> {
   payments: Array<T>
-  hasNext: boolean
+  totalPages: number
+  totalElements: number
 }

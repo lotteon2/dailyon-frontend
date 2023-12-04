@@ -1,22 +1,34 @@
 <script setup lang="ts">
-import { ref, onBeforeMount } from 'vue'
+import { ref, onBeforeMount, watchEffect } from 'vue'
 import { getPointPayments } from '@/apis/payment/payment'
 import type { PaymentPageResponse, PaymentResponse } from '@/apis/payment/paymentDto'
-import { request } from 'http'
 import PointPaymentHistoryItem from './PointPaymentHistoryItem.vue'
+import PaginationComponent from '../ootd/PaginationComponent.vue'
 const requestPage = ref<number>(0)
-const paymentId = ref<Number | null>(null)
+const totalElements = ref<Number | null>(0)
 const payments = ref<Array<PaymentResponse>>()
-const hasNext = ref<boolean>(false)
+const totalPages = ref<number>()
+const type = ref<string>('POINT')
 
-const fetchDefaultData = async (): Promise<PaymentPageResponse<PaymentResponse>> => {
-  const data = await getPointPayments(paymentId.value, requestPage.value)
+const fetchDefaultData = async (requestPage: number, type: string): Promise<void> => {
+  const data = await getPointPayments(requestPage, type)
   payments.value = data.payments
-  hasNext.value = data.hasNext
+  totalElements.value = data.totalElements
+  totalPages.value = data.totalPages
 }
 
 onBeforeMount(async () => {
-  await fetchDefaultData()
+  await fetchDefaultData(0, type.value)
+})
+
+const onChangePage = async (page: number) => {
+  if (page >= 0 && page < totalPages.value!) {
+    requestPage.value = page
+  }
+}
+
+watchEffect(() => {
+  fetchDefaultData(requestPage.value, type.value), requestPage.value
 })
 </script>
 
@@ -37,6 +49,11 @@ onBeforeMount(async () => {
       </tr>
       <point-payment-history-item :payments="payments" />
     </table>
+    <PaginationComponent
+      :onChangePage="onChangePage"
+      :requestPage="requestPage"
+      :totalPages="totalPages"
+    />
   </div>
 </template>
 

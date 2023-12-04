@@ -26,14 +26,14 @@ export const pointPaymentReady = async (pointPaymentDto: PointPaymentDto): Promi
 }
 
 export const getPointPayments = async (
-  paymentId: number | null,
-  page: number
+  page: number,
+  type: string
 ): Promise<PaymentPageResponse<PaymentResponse>> => {
   try {
     const { data } = await authAxiosInstance.get(`/payments`, {
       params: {
-        paymentId: paymentId,
-        page: page
+        page: page,
+        type: type
       }
     })
     return data
