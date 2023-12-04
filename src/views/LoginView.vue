@@ -20,7 +20,7 @@
         </div>
         <div class="oauth-body-wrapper">
           <div class="oauth-kakao-wrapper">
-            <img class="oauth-kakao" src="@/assets/images/kakao-login.png" />
+            <img class="oauth-kakao" src="@/assets/images/kakao-login.png" @click="redirectToKakaoLogin"/>
           </div>
           <div class="oauth-google-wrapper">
             <img class="oauth-google" src="@/assets/images/google-login.png" />
@@ -400,6 +400,19 @@
     </div>
   </div>
 </template>
+
+
+<script>
+export default {
+  methods: {
+    redirectToKakaoLogin() {
+      const kakaoLoginUrl = 'http://localhost:8080/oauth2/authorization/kakao';
+
+      window.location.href = kakaoLoginUrl;
+    },
+  },
+};
+</script>
 
 <style scoped>
 @import '@/assets/login.css';
