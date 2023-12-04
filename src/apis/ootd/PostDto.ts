@@ -58,6 +58,7 @@ export interface PostImageProductDetailCreateRequest {
 }
 
 export interface PostCreateResponse {
+  id: number;
   thumbnailImgPreSignedUrl: string;
   imgPreSignedUrl: string;
 }
@@ -79,10 +80,13 @@ export interface PostDetailResponse {
   id: number;
   title: string;
   description: string;
+  imgUrl: string;
   stature?: number;
   weight?: number;
   viewCount: number;
+  likeCount: number;
   commentCount: number;
+  isLike?: boolean;
   createdAt: string;
   member: PostDetailMemberResponse;
   hashTags: Array<PostDetailHashTagResponse>;
