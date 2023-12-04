@@ -11,13 +11,13 @@ const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
 const fileInput: Ref<HTMLInputElement | null> = ref(null)
 const postCreateRequest = ref<PostCreateRequest<PostImageProductDetailCreateRequest>>({
-  title: "",
-  description: "",
+  title: '',
+  description: '',
   stature: undefined,
   weight: undefined,
   hashTagNames: [] as string[],
-  postThumbnailImgName: "",
-  postImgName: "",
+  postThumbnailImgName: '',
+  postImgName: '',
   postImageProductDetails: [] as PostImageProductDetailCreateRequest[]
 })
 
@@ -74,9 +74,9 @@ const openFileInput = () => {
 const inputPostImgFile = ref<File>()
 const inputPostImg = ref<string>('')
 const handlePostImgChange = async (event: Event) => {
-  if(event.target !== null) {
+  if (event.target !== null) {
     const fileInput = event.target as HTMLInputElement
-    if(fileInput.files && fileInput.files.length > 0) {
+    if (fileInput.files && fileInput.files.length > 0) {
       const file: File = fileInput.files[0]
       inputPostImgFile.value = file
       postCreateRequest.value.postImgName = file.name
@@ -92,7 +92,7 @@ const readFile = async (file: File) => {
   const reader = new FileReader()
 
   reader.onload = (e) => {
-    if(e.target !== null && e.target.result !== null) {
+    if (e.target !== null && e.target.result !== null) {
       inputPostImg.value = e.target.result as string
     }
   }
@@ -100,7 +100,7 @@ const readFile = async (file: File) => {
   reader.readAsDataURL(file)
 }
 
-const hashTagInput = ref<string>("")
+const hashTagInput = ref<string>('')
 const addHashTag = async () => {
   const hashTagNames = postCreateRequest.value.hashTagNames
   if (hashTagNames.length < 3) {
@@ -166,7 +166,7 @@ const onSelectBtnClick = async (
   } else {
     const temporaryTagProductIndex = temporaryTagProducts.value
       .findIndex((temporaryTagProduct) =>
-        (temporaryTagProduct.id === productId && temporaryTagProduct.sizeName === sizeName))
+        (temporaryTagProduct.id === productId))
     if (temporaryTagProductIndex !== -1) {
       alert('이미 태그된 상품입니다.')
     } else {
@@ -233,7 +233,7 @@ const onSubmit = async () => {
     await uploadImageToS3(postCreateResponse.imgPreSignedUrl, inputPostImgFile.value)
     await uploadImageToS3(postCreateResponse.thumbnailImgPreSignedUrl, inputPostImgFile.value)
     alert('게시글 등록이 성공하였습니다.')
-    await router.push({ path: 'ootds' })
+    await router.push({ path: `/ootds/${postCreateResponse.id}` })
   } catch (error: any) {
     alert('게시글 이미지 업로드중 오류가 발생했습니다.')
     console.error(error)

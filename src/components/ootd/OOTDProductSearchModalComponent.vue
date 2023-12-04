@@ -1,6 +1,6 @@
 <script setup lang='ts'>
 
-import { type PropType, ref } from 'vue'
+import { inject, type PropType, type Ref, ref, watch } from 'vue'
 import type { ProductSearchResponse } from '@/apis/ootd/PostDto'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
@@ -21,24 +21,24 @@ const props = defineProps({
   }
 })
 
-// TODO: 상품 검색 API 필요
+// TODO: 상품 검색 API 필요 -> API Gateway 필터 나오면 적용 예정
 const products = ref<Array<ProductSearchResponse>>([
   {
-    id: 101,
+    id: 1,
     imgUrl: "/product-img/default-product-img.png",
     name: "상품명1",
     brandName: "BRAND1",
     sizeNames: ["사이즈1", "사이즈2", "사이즈3"]
   },
   {
-    id: 102,
+    id: 2,
     imgUrl: "/product-img/default-product-img.png",
     name: "상품명2",
     brandName: "BRAND2",
     sizeNames: ["사이즈1", "사이즈2", "사이즈3"]
   },
   {
-    id: 103,
+    id: 3,
     imgUrl: "/product-img/default-product-img.png",
     name: "상품명3",
     brandName: "BRAND3",
@@ -46,6 +46,19 @@ const products = ref<Array<ProductSearchResponse>>([
   }
 ])
 const hasNext = ref<boolean>(false)
+
+const isScrollEnd = inject<Ref<boolean | undefined>>('isScrollEnd') as Ref<boolean | undefined>
+watch(isScrollEnd, async (afterScrollEnd, beforeScrollEnd) => {
+  if (afterScrollEnd !== beforeScrollEnd) {
+    if(hasNext.value) {
+
+    }
+    // const currentPage = requestPage.value
+    // if (hasNext.value) {
+    //   await onChangePage(currentPage + 1)
+    // }
+  }
+})
 
 </script>
 
