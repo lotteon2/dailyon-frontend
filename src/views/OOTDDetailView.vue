@@ -3,7 +3,7 @@
 import { onBeforeMount, ref } from 'vue'
 import type { PostDetailHashTagResponse, PostDetailResponse, PostImageProductDetailResponse } from '@/apis/ootd/PostDto'
 import { onBeforeRouteLeave, useRoute } from 'vue-router'
-import { getPostDetail } from '@/apis/ootd/PostService'
+import { deletePost, getPostDetail } from '@/apis/ootd/PostService'
 import OOTDPostCommentComponent from '@/components/ootd/OOTDPostCommentComponent.vue'
 import { usePostLikeStore } from '@/stores/postlike/PostLikeStore'
 import router from '@/router'
@@ -142,6 +142,12 @@ const onUpdateBtnClick = async () => {
   }))
   await router.push({ path: `/ootds/${postId.value}/edit` })
 }
+
+const onDeleteBtnClick = async () => {
+  await deletePost(postId.value)
+  alert("게시글이 삭제되었습니다.")
+  await router.push({ path: '/ootds' })
+}
 </script>
 
 <template>
@@ -161,7 +167,7 @@ const onUpdateBtnClick = async () => {
                   수정
                 </div>
               </div>
-              <div class='ootd-detail-header-delete-button-wrapper'>
+              <div class='ootd-detail-header-delete-button-wrapper' @click='onDeleteBtnClick'>
                 <div class='ootd-detail-header-delete-button-text'>
                   삭제
                 </div>
