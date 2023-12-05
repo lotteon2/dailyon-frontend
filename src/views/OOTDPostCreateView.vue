@@ -1,7 +1,7 @@
 <script setup lang='ts'>
 
 import { reactive, ref, type Ref, watch } from 'vue'
-import type { PostCreateRequest, PostImageProductDetailCreateRequest } from '@/apis/ootd/PostDto'
+import type { PostCreateRequest, PostImageProductDetailCreateRequest, TemporaryCreateTagProduct } from '@/apis/ootd/PostDto'
 import OOTDProductSearchModalComponent from '@/components/ootd/OOTDProductSearchModalComponent.vue'
 import { createPost } from '@/apis/ootd/PostService'
 import { uploadImageToS3 } from '@/apis/ootd/FileService'
@@ -148,17 +148,7 @@ const onPostImgClick = async (event: any) => {
   }
 }
 
-interface TemporaryTagProduct {
-  id: number;
-  imgUrl: string;
-  name: string;
-  brandName: string;
-  sizeName: string;
-  leftGapPercent: number;
-  topGapPercent: number;
-}
-
-const temporaryTagProducts = ref<Array<TemporaryTagProduct>>(new Array<TemporaryTagProduct>())
+const temporaryTagProducts = ref<Array<TemporaryCreateTagProduct>>(new Array<TemporaryCreateTagProduct>())
 const onSelectBtnClick = async (
   productId: number, imgUrl: string, name: string, brandName: string, sizeName: string) => {
   if (temporaryTagProducts.value.length >= 5) {
