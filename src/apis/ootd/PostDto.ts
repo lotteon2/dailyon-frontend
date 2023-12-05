@@ -50,6 +50,27 @@ export interface PostCreateRequest<T extends PostImageProductDetailCreateRequest
   postImageProductDetails: Array<T>
 }
 
+export interface TemporaryCreateTagProduct {
+  id: number;
+  imgUrl: string;
+  name: string;
+  brandName: string;
+  sizeName: string;
+  leftGapPercent: number;
+  topGapPercent: number;
+}
+
+export interface TemporaryUpdateTagProduct {
+  id: number;
+  productId: number;
+  imgUrl: string;
+  name: string;
+  brandName: string;
+  sizeName: string;
+  leftGapPercent: number;
+  topGapPercent: number;
+}
+
 export interface PostImageProductDetailCreateRequest {
   productId: number;
   productSize: string;
@@ -117,4 +138,34 @@ export interface PostImageProductDetailResponse {
   leftGapPercent: number;
   topGapPercent: number;
   hasAvailableCoupon?: boolean
+}
+
+export interface PostUpdateRequest {
+  title: string;
+  description: string;
+  stature?: number;
+  weight?: number;
+  hashTags: Array<PostUpdateHashTagRequest>;
+  postThumbnailImgName: string;
+  postImgName: string;
+  postImageProductDetails: Array<PostImageProductDetailUpdateRequest>
+}
+
+export interface PostUpdateResponse {
+  id: number;
+  thumbnailImgPreSignedUrl: string;
+  imgPreSignedUrl: string;
+}
+
+export interface PostUpdateHashTagRequest {
+  id: number;
+  name: string;
+}
+
+export interface PostImageProductDetailUpdateRequest {
+  id: number;
+  productId: number;
+  productSize: string;
+  leftGapPercent: number;
+  topGapPercent: number;
 }
