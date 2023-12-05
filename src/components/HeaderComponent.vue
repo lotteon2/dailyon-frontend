@@ -86,9 +86,8 @@ import { RouterLink } from 'vue-router'
     <div class="nav-tab-wrapper">
       <RouterLink to="/notifications" class="nav-tab-icon">
         <svg
+          class='nav-icon'
           xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
           viewBox="0 0 36 36"
           fill="black"
         >
@@ -113,9 +112,8 @@ import { RouterLink } from 'vue-router'
     <div class="nav-tab-wrapper">
       <RouterLink to="/carts" class="nav-tab-icon">
         <svg
+          class='nav-icon'
           xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
           viewBox="0 0 21 24"
           fill="black"
         >
@@ -129,9 +127,8 @@ import { RouterLink } from 'vue-router'
     <div class="nav-tab-wrapper">
       <RouterLink to="/wishlist" class="nav-tab-like-icon">
         <svg
+          class='nav-icon'
           xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
           viewBox="0 0 20 19"
           fill="white"
           stroke="black"
@@ -147,9 +144,8 @@ import { RouterLink } from 'vue-router'
     <div class="nav-tab-wrapper">
       <RouterLink to="/my-page" class="nav-tab-icon">
         <svg
+          class='nav-icon'
           xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
           viewBox="0 0 25 24"
           fill="black"
         >
