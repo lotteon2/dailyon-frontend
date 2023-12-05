@@ -9,7 +9,7 @@ let isScrollEnd = ref<boolean>(false)
 const onScroll = async (event: any) => {
   const { scrollHeight, scrollTop, clientHeight } = event.target
   // 스크롤이 끝에 닿으면 데이터를 추가로 로드
-  if (scrollHeight === (scrollTop + clientHeight)) {
+  if (scrollHeight - 10 <= (scrollTop + clientHeight)) {
     isScrollEnd.value = !isScrollEnd.value
   }
 }
