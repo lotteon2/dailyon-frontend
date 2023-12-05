@@ -1,24 +1,39 @@
 <script setup lang='ts'>
 
-import { reactive, ref, type Ref, watch } from 'vue'
-import type { PostCreateRequest, PostImageProductDetailCreateRequest, TemporaryCreateTagProduct } from '@/apis/ootd/PostDto'
-import OOTDProductSearchModalComponent from '@/components/ootd/OOTDProductSearchModalComponent.vue'
-import { createPost } from '@/apis/ootd/PostService'
-import { uploadImageToS3 } from '@/apis/ootd/FileService'
+import { onBeforeMount, reactive, ref, watch } from 'vue'
+import type {
+  PostImageProductDetailUpdateRequest,
+  PostUpdateHashTagRequest,
+  PostUpdateRequest,
+  TemporaryUpdateTagProduct
+} from '@/apis/ootd/PostDto'
+import { updatePost } from '@/apis/ootd/PostService'
 import router from '@/router'
+import OOTDProductSearchModalComponent from '@/components/ootd/OOTDProductSearchModalComponent.vue'
+import { usePostStore } from '@/stores/post/PostStore'
+import { useRoute } from 'vue-router'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
-const fileInput: Ref<HTMLInputElement | null> = ref(null)
-const postCreateRequest = ref<PostCreateRequest<PostImageProductDetailCreateRequest>>({
+const route = useRoute()
+const postId = ref<number>(Number(route.params.id))
+
+const postStore = usePostStore()
+const postUpdateRequest = ref<PostUpdateRequest>({
   title: '',
   description: '',
   stature: undefined,
   weight: undefined,
-  hashTagNames: [] as string[],
+  hashTags: [] as PostUpdateHashTagRequest[],
   postThumbnailImgName: '',
   postImgName: '',
-  postImageProductDetails: [] as PostImageProductDetailCreateRequest[]
+  postImageProductDetails: [] as PostImageProductDetailUpdateRequest[]
+})
+const temporaryTagProducts = ref<Array<TemporaryUpdateTagProduct>>(new Array<TemporaryUpdateTagProduct>())
+
+onBeforeMount(async () => {
+  postUpdateRequest.value = (await postStore.getPostUpdateRequest()).value
+  temporaryTagProducts.value = (await postStore.getTemporaryTagProducts()).value
 })
 
 const validationMessage = reactive({
@@ -47,84 +62,48 @@ const validationMessage = reactive({
     }
   }
 })
-watch(postCreateRequest.value, async (afterPostCreateRequest, beforePostCreateRequest) => {
-  const stature = afterPostCreateRequest.stature
+watch(postUpdateRequest.value, async (afterPostUpdateRequest, beforePostUpdateRequest) => {
+  const stature = afterPostUpdateRequest.stature
   if (stature !== undefined && isNaN(Number(stature))) {
-    afterPostCreateRequest.stature = undefined
+    afterPostUpdateRequest.stature = undefined
     validationMessage.stature.number.isValid = false
   } else if (stature !== undefined && !isNaN(Number(stature))) {
     validationMessage.stature.number.isValid = true
   }
 
-  const weight = afterPostCreateRequest.weight
+  const weight = afterPostUpdateRequest.weight
   if (weight !== undefined && isNaN(Number(weight))) {
-    afterPostCreateRequest.weight = undefined
+    afterPostUpdateRequest.weight = undefined
     validationMessage.weight.number.isValid = false
   } else if (weight !== undefined && !isNaN(Number(weight))) {
     validationMessage.weight.number.isValid = true
   }
 })
 
-const openFileInput = () => {
-  if (fileInput.value) {
-    fileInput.value.click()
-  }
+const isHashTagInputOpen = ref<Set<number>>(new Set<number>())
+const updateHashTag = async (hashTagId: number) => {
+  !isHashTagInputOpen.value.has(hashTagId)
+    ? isHashTagInputOpen.value.add(hashTagId) : isHashTagInputOpen.value.delete(hashTagId)
 }
 
-const inputPostImgFile = ref<File>()
-const inputPostImg = ref<string>('')
-const handlePostImgChange = async (event: Event) => {
-  if (event.target !== null) {
-    const fileInput = event.target as HTMLInputElement
-    if (fileInput.files && fileInput.files.length > 0) {
-      const file: File = fileInput.files[0]
-      inputPostImgFile.value = file
-      postCreateRequest.value.postImgName = file.name
-      postCreateRequest.value.postThumbnailImgName = 'thumbnail-' + file.name
-      if (file) {
-        await readFile(file)
-      }
+const finishUpdateHashTag = async (hashTagId: number, name: string) => {
+  let isValidHashTagName = true
+  postUpdateRequest.value.hashTags.forEach((hashTag) => {
+    if(hashTag.id !== hashTagId && hashTag.name === name) {
+      alert("이미 존재하는 해시태그 입니다.")
+      isValidHashTagName = false
+      return
     }
-  }
-}
-
-const readFile = async (file: File) => {
-  const reader = new FileReader()
-
-  reader.onload = (e) => {
-    if (e.target !== null && e.target.result !== null) {
-      inputPostImg.value = e.target.result as string
-    }
-  }
-
-  reader.readAsDataURL(file)
-}
-
-const hashTagInput = ref<string>('')
-const addHashTag = async () => {
-  const hashTagNames = postCreateRequest.value.hashTagNames
-  if (hashTagNames.length < 3) {
-    if (hashTagInput.value.length < 1 || hashTagInput.value.length > 10) {
+  })
+  if(isValidHashTagName) {
+    if (name.length < 1 || name.length > 10) {
       validationMessage.hashTag.size.isValid = false
-    } else if (hashTagInput.value.length >= 1 && hashTagInput.value.length <= 10) {
-      if (hashTagNames.indexOf(hashTagInput.value) !== -1) {
-        alert('이미 추가된 해시태그 입니다.')
-      } else {
-        hashTagNames.push(hashTagInput.value)
-        hashTagInput.value = ''
-        validationMessage.hashTag.size.isValid = true
-      }
+    } else if (name.length >= 1 && name.length <= 10) {
+      validationMessage.hashTag.size.isValid = true
+      isHashTagInputOpen.value.delete(hashTagId)
     }
-  } else {
-    alert('해시태그는 최대 3개까지 입력 가능합니다.')
   }
-}
 
-const removeHashTag = async () => {
-  if (postCreateRequest.value.hashTagNames
-    && postCreateRequest.value.hashTagNames.length !== 0) {
-    postCreateRequest.value.hashTagNames.pop()
-  }
 }
 
 const isProductModalOpen = ref<boolean>(false)
@@ -132,65 +111,41 @@ const productModalControl = async () => {
   isProductModalOpen.value = !isProductModalOpen.value
 }
 
-const currentLeftGapPercent = ref<number>(0)
-const currentTopGapPercent = ref<number>(0)
-const onPostImgClick = async (event: any) => {
-  if (temporaryTagProducts.value.length >= 5) {
-    alert('상품 태그는 최대 5개까지 태그할 수 있습니다.')
-  } else {
-    // product search modal open
-    isProductModalOpen.value = !isProductModalOpen.value
-
-    const imgElement = event.target
-
-    currentLeftGapPercent.value = (event.offsetX / imgElement.width) * 100
-    currentTopGapPercent.value = (event.offsetY / imgElement.height) * 100
-  }
-}
-
-const temporaryTagProducts = ref<Array<TemporaryCreateTagProduct>>(new Array<TemporaryCreateTagProduct>())
+const temporaryUpdateTagProductId = ref<number>(0)
 const onSelectBtnClick = async (
   productId: number, imgUrl: string, name: string, brandName: string, sizeName: string) => {
-  if (temporaryTagProducts.value.length >= 5) {
-    alert('상품 태그는 최대 5개까지 태그할 수 있습니다.')
+  const temporaryTagProductIndex = temporaryTagProducts.value
+    .findIndex((temporaryTagProduct) =>
+      ((temporaryTagProduct.productId === productId && temporaryTagProduct.sizeName === sizeName
+        && temporaryTagProduct.id === temporaryUpdateTagProductId.value)
+        || (temporaryTagProduct.productId === productId && temporaryTagProduct.id !== temporaryUpdateTagProductId.value)))
+  if (temporaryTagProductIndex !== -1) {
+    alert('이미 태그된 상품입니다.')
   } else {
-    const temporaryTagProductIndex = temporaryTagProducts.value
-      .findIndex((temporaryTagProduct) =>
-        (temporaryTagProduct.id === productId))
-    if (temporaryTagProductIndex !== -1) {
-      alert('이미 태그된 상품입니다.')
-    } else {
-      temporaryTagProducts.value.push({
-        id: productId,
-        imgUrl: imgUrl,
-        name: name,
-        brandName: brandName,
-        sizeName: sizeName,
-        leftGapPercent: currentLeftGapPercent.value,
-        topGapPercent: currentTopGapPercent.value
-      })
-      isProductModalOpen.value = !isProductModalOpen.value
-    }
+    temporaryTagProducts.value.forEach((temporaryTagProduct) => {
+      if (temporaryTagProduct.id === temporaryUpdateTagProductId.value) {
+        temporaryTagProduct.productId = productId
+        temporaryTagProduct.imgUrl = imgUrl
+        temporaryTagProduct.name = name
+        temporaryTagProduct.brandName = brandName
+        temporaryTagProduct.sizeName = sizeName
+      }
+    })
+    isProductModalOpen.value = !isProductModalOpen.value
   }
 }
 
-const removeTagProduct = async (productId: number, sizeName: string) => {
-  const temporaryTagProductIndex = temporaryTagProducts.value
-    .findIndex((temporaryTagProduct) => (temporaryTagProduct.id === productId && temporaryTagProduct.sizeName === sizeName))
-  if (temporaryTagProductIndex !== -1) {
-    temporaryTagProducts.value.splice(temporaryTagProductIndex, 1)
-  }
+const updateTagProduct = async (id: number) => {
+  isProductModalOpen.value = !isProductModalOpen.value
+  temporaryUpdateTagProductId.value = id
 }
 
 const onSubmit = async () => {
-  const hashTagNames = postCreateRequest.value.hashTagNames
-  const title = postCreateRequest.value.title
-  const description = postCreateRequest.value.description
-  const postImgName = postCreateRequest.value.postImgName
-  const postThumbnailImgName = postCreateRequest.value.postThumbnailImgName
+  const title = postUpdateRequest.value.title
+  const description = postUpdateRequest.value.description
 
-  if (hashTagNames.length < 1 || hashTagNames.length > 3) {
-    alert('해시태그는 최소 1개 최대 3개까지 입력 가능합니다.')
+  if(isHashTagInputOpen.value.size !== 0) {
+    alert("해시태그 작성을 완성해주세요.")
     return
   }
 
@@ -204,37 +159,27 @@ const onSubmit = async () => {
     return
   }
 
-  if (postImgName === '' || postThumbnailImgName === '' || inputPostImgFile.value === undefined) {
-    alert('게시글 이미지를 등록해주세요.')
-    return
-  }
-
   temporaryTagProducts.value.forEach((temporaryTagProduct) => {
-    postCreateRequest.value.postImageProductDetails.push({
-      productId: temporaryTagProduct.id,
-      productSize: temporaryTagProduct.sizeName,
-      leftGapPercent: temporaryTagProduct.leftGapPercent,
-      topGapPercent: temporaryTagProduct.topGapPercent
+    postUpdateRequest.value.postImageProductDetails.forEach((postImageProductDetail) => {
+      if (temporaryTagProduct.id === postImageProductDetail.id) {
+        postImageProductDetail.productId = temporaryTagProduct.productId
+        postImageProductDetail.productSize = temporaryTagProduct.sizeName
+        postImageProductDetail.leftGapPercent = temporaryTagProduct.leftGapPercent
+        postImageProductDetail.topGapPercent = temporaryTagProduct.topGapPercent
+      }
     })
   })
 
-  const postCreateResponse = await createPost(postCreateRequest.value)
-  try {
-    await uploadImageToS3(postCreateResponse.imgPreSignedUrl, inputPostImgFile.value)
-    await uploadImageToS3(postCreateResponse.thumbnailImgPreSignedUrl, inputPostImgFile.value)
-    alert('게시글 등록이 성공하였습니다.')
-    await router.push({ path: `/ootds/${postCreateResponse.id}` })
-  } catch (error: any) {
-    alert('게시글 이미지 업로드중 오류가 발생했습니다.')
-    console.error(error)
-    throw error
-  }
+  const postUpdateResponse = await updatePost(postId.value, postUpdateRequest.value)
+  alert('게시글 수정이 성공하였습니다.')
+  await postStore.clearPostUpdateRequest()
+  await postStore.clearTemporaryTagProducts()
+  await router.push({ path: `/ootds/${postUpdateResponse.id}` })
 }
 
 const onCancel = async () => {
   router.go(-1)
 }
-
 </script>
 
 <template>
@@ -268,7 +213,7 @@ const onCancel = async () => {
           <div class='div-4'>
             <div class='text-wrapper-4'>키</div>
             <input class='rectangle' type='text'
-                   v-model='postCreateRequest.stature' placeholder='키 입력(선택사항)'>
+                   v-model='postUpdateRequest.stature' placeholder='키 입력(선택사항)'>
             <div v-if='!validationMessage.stature.number.isValid' class='validation-wrapper'>
               {{ validationMessage.stature.number.message }}
             </div>
@@ -277,7 +222,7 @@ const onCancel = async () => {
           <div class='div-5'>
             <div class='text-wrapper-4'>몸무게</div>
             <input class='rectangle' type='text'
-                   v-model='postCreateRequest.weight' placeholder='몸무게 입력(선택사항)'>
+                   v-model='postUpdateRequest.weight' placeholder='몸무게 입력(선택사항)'>
             <div v-if='!validationMessage.weight.number.isValid' class='validation-wrapper'>
               {{ validationMessage.weight.number.message }}
             </div>
@@ -294,22 +239,22 @@ const onCancel = async () => {
           <div class='div-8'>
             <div class='text-wrapper-4'>태그</div>
             <div class='div-9'>
-              <div class='div-10'>
-                <div v-for='hashTagName in postCreateRequest.hashTagNames' class='div-wrapper-2'>
-                  <div class='text-wrapper-5'>#{{ hashTagName }}</div>
+              <div v-for='hashTag in postUpdateRequest.hashTags' :key='hashTag.id'
+                   class='hashtag-wrapper'>
+                <div v-if='!isHashTagInputOpen.has(hashTag.id)' class='div-wrapper'>
+                  <div class='text-wrapper-5'>#{{ hashTag.name }}</div>
                 </div>
-              </div>
-              <div class='div-11'>
                 <input class='div-wrapper-3' type='text'
-                       v-if='postCreateRequest.hashTagNames.length < 3'
-                       v-model='hashTagInput'
-                       @keyup.enter='addHashTag'
+                       v-if='isHashTagInputOpen.has(hashTag.id)'
+                       @keyup.enter='finishUpdateHashTag(hashTag.id, hashTag.name)'
+                       v-model='hashTag.name'
                        placeholder='태그 입력'>
-                <div v-if='postCreateRequest.hashTagNames.length < 3' class='div-wrapper-4 hashtag-add-btn'>
-                  <div class='text-wrapper-7' @click='addHashTag'>추가</div>
+                <div v-if='isHashTagInputOpen.has(hashTag.id)' class='div-wrapper-4 hashtag-finish-btn'
+                     @click='finishUpdateHashTag(hashTag.id, hashTag.name)'>
+                  <div class='text-wrapper-7'>완료</div>
                 </div>
-                <div v-if='postCreateRequest.hashTagNames.length !== 0' class='div-wrapper-4 hashtag-remove-btn'>
-                  <div class='text-wrapper-7' @click='removeHashTag'>삭제</div>
+                <div v-else class='div-wrapper-4 hashtag-update-btn' @click='updateHashTag(hashTag.id)'>
+                  <div class='text-wrapper-7'>수정</div>
                 </div>
               </div>
             </div>
@@ -323,11 +268,11 @@ const onCancel = async () => {
     <div class='div-12'>
       <div class='div-wrapper-5'>
         <input class='text-wrapper-8'
-               v-model='postCreateRequest.title'
+               v-model='postUpdateRequest.title'
                placeholder='제목을 입력해주세요.'>
       </div>
-      <div v-if='postCreateRequest.postImgName !== ""' class='post-img-wrapper'>
-        <img class='post-img' :src='inputPostImg' @click='onPostImgClick' />
+      <div class='post-img-wrapper'>
+        <img class='post-img' :src='`${VITE_STATIC_IMG_URL}${postUpdateRequest.postImgName}`' />
         <div v-for='temporaryTagProduct in temporaryTagProducts'
              class='product-detail-tag-wrapper'
              :style='{ left: `${temporaryTagProduct.leftGapPercent}%`, top: `${temporaryTagProduct.topGapPercent}%` }'>
@@ -349,9 +294,9 @@ const onCancel = async () => {
                 <div class='product-image-name'>{{ temporaryTagProduct.name }}</div>
               </div>
               <div class='left-wrapper'>
-                <div class='div-wrapper-4 hashtag-remove-btn'>
+                <div class='div-wrapper-4 tag-product-update-btn'>
                   <div class='text-wrapper-7'
-                       @click='removeTagProduct(temporaryTagProduct.id, temporaryTagProduct.sizeName)'>삭제
+                       @click='updateTagProduct(temporaryTagProduct.id)'>수정
                   </div>
                 </div>
                 <div class='product-size'>
@@ -362,19 +307,6 @@ const onCancel = async () => {
           </div>
         </div>
       </div>
-      <div v-else class='div-13'>
-        <p class='p'>
-          <span class='text-wrapper-9'>드래그 앤 드롭이나 추가하기 버튼으로</span>
-          <br />
-          <span class='text-wrapper-9'>OOTD 사진을 업로드해주세요</span>
-          <br /><br />
-          <span class='text-wrapper-10'>*권장 사이즈<br />너비 1000px 이하 높이 1000px 이하</span>
-        </p>
-        <div class='div-wrapper-6'>
-          <input type='file' style='display:none;' ref='fileInput' @change='handlePostImgChange'>
-          <div class='text-wrapper-11' @click='openFileInput'>OOTD 추가하기</div>
-        </div>
-      </div>
       <!-- modal control -->
       <OOTDProductSearchModalComponent
         :isProductModalOpen='isProductModalOpen'
@@ -382,7 +314,7 @@ const onCancel = async () => {
         :onSelectBtnClick='onSelectBtnClick' />
       <div class='div-wrapper-7'>
         <textarea class='text-wrapper-12'
-                  v-model='postCreateRequest.description'
+                  v-model='postUpdateRequest.description'
                   placeholder='내용을 입력해주세요'></textarea>
       </div>
     </div>
@@ -402,5 +334,5 @@ const onCancel = async () => {
 </template>
 
 <style scoped>
-@import "@/assets/css/ootd/ootd-post-create.css";
+@import "@/assets/css/ootd/ootd-post-update.css";
 </style>

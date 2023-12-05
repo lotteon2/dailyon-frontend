@@ -10,6 +10,7 @@ import router from '@/router'
 import { togglePostLike } from '@/apis/ootd/PostLikeService'
 import { useFollowStore } from '@/stores/follow/FollowStore'
 import { toggleFollow } from '@/apis/ootd/FollowService'
+import { usePostStore } from '@/stores/post/PostStore'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -100,6 +101,47 @@ window.onbeforeunload = function() {
   flushLikeStore()
   flushFollowStore()
 }
+
+
+const postStore = usePostStore()
+const onUpdateBtnClick = async () => {
+  await postStore.setPostUpdateRequest({
+    title: post.value.title,
+    description: post.value.description,
+    stature: post.value.stature,
+    weight: post.value.weight,
+    hashTags: post.value.hashTags.map((hashTag) => {
+      return {
+        id: hashTag.id,
+        name: hashTag.name
+      }
+    }),
+    postThumbnailImgName: post.value.imgUrl,
+    postImgName: post.value.imgUrl,
+    postImageProductDetails: post.value.postImageProductDetails.map((postImageProductDetail) => {
+      return {
+        id: postImageProductDetail.id,
+        productId: postImageProductDetail.productId,
+        productSize: postImageProductDetail.size,
+        leftGapPercent: postImageProductDetail.leftGapPercent,
+        topGapPercent: postImageProductDetail.topGapPercent
+      }
+    })
+  })
+  await postStore.setTemporaryTagProducts(post.value.postImageProductDetails.map((postImageProductDetail) => {
+    return {
+      id: postImageProductDetail.id,
+      productId: postImageProductDetail.productId,
+      imgUrl: postImageProductDetail.imgUrl,
+      name: postImageProductDetail.name,
+      brandName: postImageProductDetail.brandName,
+      sizeName: postImageProductDetail.size,
+      leftGapPercent: postImageProductDetail.leftGapPercent,
+      topGapPercent: postImageProductDetail.topGapPercent
+    }
+  }))
+  await router.push({ path: `/ootds/${postId.value}/edit` })
+}
 </script>
 
 <template>
@@ -114,7 +156,7 @@ window.onbeforeunload = function() {
               </div>
             </div>
             <div v-if='post.member.id === memberId' class='ootd-detail-header-control-button-wrapper'>
-              <div class='ootd-detail-header-edit-button-wrapper'>
+              <div class='ootd-detail-header-edit-button-wrapper' @click='onUpdateBtnClick'>
                 <div class='ootd-detail-header-edit-button-text'>
                   수정
                 </div>
