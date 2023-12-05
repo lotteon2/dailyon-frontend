@@ -165,6 +165,27 @@ export const updatePost = async (postId: number, postUpdateRequest: PostUpdateRe
   }
 }
 
+export const deletePost = async (postId: number)
+  : Promise<void> => {
+  try {
+    await authAxiosInstance.delete(`/posts/${postId}`)
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      if (error.response) {
+        if (error.response.status >= 400) {
+          alert(error.response.data.message)
+          console.error(`Client Error=${error.response.data.message}`)
+        }
+        if (error.response.status < 500) {
+          alert('서버 내부 오류')
+          console.error('Internal Server Error')
+        }
+      }
+    }
+    throw error
+  }
+}
+
 export const getPostDetail = async (postId: number)
   : Promise<PostDetailResponse> => {
   try {
