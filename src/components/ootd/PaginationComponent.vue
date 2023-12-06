@@ -28,6 +28,11 @@ defineProps({
         <path d="M7.41563 13.3557C7.33046 13.3567 7.24602 13.3399 7.16774 13.3064C7.08946 13.2728 7.01906 13.2232 6.96108 13.1609L1.11692 7.3167C0.857184 7.05696 0.857184 6.65437 1.11692 6.39463L6.96108 0.563458C7.22082 0.303717 7.62342 0.303717 7.88316 0.563458C8.1429 0.823198 8.1429 1.22579 7.88316 1.48554L2.49355 6.86216L7.88316 12.2518C8.1429 12.5115 8.1429 12.9141 7.88316 13.1738C7.75329 13.3037 7.58446 13.3687 7.42861 13.3687L7.41563 13.3557Z"/>
       </svg>
     </div>
+    <div v-if='totalPages === 0' class='page-button-wrapper selected'>
+      <div class='page-button selected'>
+        1
+      </div>
+    </div>
     <div class='page-button-wrapper' v-for='page in totalPages'
          @click='onChangePage(page - 1)' :class="{ 'selected': requestPage === page - 1 }">
       <div class='page-button' :class="{ 'selected': requestPage === page - 1 }">
