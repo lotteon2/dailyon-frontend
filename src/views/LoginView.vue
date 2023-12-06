@@ -406,7 +406,8 @@
 export default {
   methods: {
     redirectToKakaoLogin() {
-      const kakaoLoginUrl = 'http://localhost:8080/oauth2/authorization/kakao';
+
+      const kakaoLoginUrl = 'http://localhost:8000/auth-service/oauth2/authorization/kakao';
 
       window.location.href = kakaoLoginUrl;
     },
