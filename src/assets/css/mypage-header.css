@@ -112,7 +112,6 @@
   line-height: 50px; /* 250% */
 }
 
-/* payment-modal, button */
 .payment-modal {
   display: flex;
   justify-content: center;
@@ -128,26 +127,37 @@
 
 .modal-content {
   background-color: #fefefe;
-  border-radius: 10px;
   padding: 20px;
   width: 300px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   animation-name: modalOpen;
   animation-duration: 0.5s;
+  /* position: relative; */
 }
 
 .modal-content p {
-  margin-bottom: 1rem;
-  font-size: 1rem;
+  font-size: 0.9rem;
 }
 
-.modal-content select,
-.modal-content input {
-  width: 100%;
-  padding: 0.5rem;
+.modal-content select {
+  width: 300px;
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
   margin-bottom: 1rem;
   border: none;
-  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.select option {
+  border-radius: 0;
+}
+
+.modal-content input {
+  width: 296px;
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+  margin-bottom: 1rem;
+  border: none;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -155,11 +165,9 @@
   width: 100%;
   padding: 0.5rem;
   border: none;
-  border-radius: 5px;
-  background-color: #ffeb00;
-  color: #000;
+  background-color: var(--Grayscale7, #000);
+  color: #fff;
   font-size: 1rem;
-  font-weight: bold;
 }
 
 .close {
@@ -167,11 +175,12 @@
   float: right;
   font-size: 28px;
   font-weight: bold;
+  margin-top: -23px;
 }
 
 .close:hover,
 .close:focus {
-  color: black;
+  color: var(--Grayscale7, #000);
   text-decoration: none;
   cursor: pointer;
 }
@@ -189,17 +198,12 @@
 .payment-modal-button {
   padding: 0.5rem 0.5rem;
   font-size: 1rem;
-  color: black;
-  background-color: #ffeb00;
+  background-color: #000;
+  color: #fff;
   border: none;
-  border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   transition: all 0.3s ease;
-}
-
-.payment-modal-button:hover {
-  background-color: #ffd600;
 }
 
 .payment-modal-button:active {

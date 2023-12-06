@@ -117,13 +117,12 @@ onBeforeUnmount(() => {
       포인트
       <h1>0</h1>
       점
-      <!-- 시작한다!!!! -->
       <button class="payment-modal-button" @click="open">결제하기</button>
       <div v-if="displayModal" class="payment-modal">
         <div class="modal-content">
           <span @click="displayModal = false" class="close">&times;</span>
           <p>결제 금액을 선택하거나 입력해주세요.</p>
-          <select v-model="selectedAmount">
+          <select v-model="selectedAmount" class="select">
             <option disabled value="">선택해주세요</option>
             <option>10000</option>
             <option>30000</option>
