@@ -60,7 +60,7 @@ window.onbeforeunload = function() {
           <img class='ootd-post-card-image' :src='`${VITE_STATIC_IMG_URL}${post.thumbnailImgUrl}`' />
         </RouterLink>
         <div class='ootd-post-card-like-wrapper' @click='likeButtonClickListener(post.id, post.isLike)'>
-          <svg class='ootd-post-card-like' xmlns='http://www.w3.org/2000/svg' width='44' height='42'
+          <svg class='ootd-post-card-like' xmlns='http://www.w3.org/2000/svg'
                viewBox='0 0 44 42' fill='none'>
             <path class='ootd-post-card-like-icon'
                   :class="{ 'selected': post.isLike === undefined ? false : (postLikes.has(post.id) ? !post.isLike : post.isLike) }"
@@ -71,7 +71,7 @@ window.onbeforeunload = function() {
       </div>
       <div class='ootd-post-card-view-wrapper'>
         <div class='ootd-post-card-like-view-wrapper'>
-          <svg xmlns='http://www.w3.org/2000/svg' width='17' height='15' viewBox='0 0 17 15' fill='none'>
+          <svg class='ootd-post-card-like-count-icon' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 17 15' fill='none'>
             <path
               d='M8.82563 15L7.64035 13.921C3.43054 10.1035 0.651245 7.57766 0.651245 4.49591C0.651245 1.97003 2.62945 0 5.14716 0C6.5695 0 7.93462 0.662125 8.82563 1.70027C9.71664 0.662125 11.0818 0 12.5041 0C15.0218 0 17 1.97003 17 4.49591C17 7.57766 14.2207 10.1035 10.0109 13.921L8.82563 15Z'
               fill='#FF0000' />
@@ -80,7 +80,7 @@ window.onbeforeunload = function() {
           <div v-else class='ootd-post-card-like-view-count-text'>{{ post.likeCount }}+</div>
         </div>
         <div class='ootd-post-card-count-view-wrapper'>
-          <svg xmlns='http://www.w3.org/2000/svg' width='22' height='15' viewBox='0 0 22 15' fill='none'>
+          <svg class='ootd-post-card-view-count-icon' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 15' fill='none'>
             <path
               d='M11 4.5C10.2044 4.5 9.44129 4.81607 8.87868 5.37868C8.31607 5.94129 8 6.70435 8 7.5C8 8.29565 8.31607 9.05871 8.87868 9.62132C9.44129 10.1839 10.2044 10.5 11 10.5C11.7956 10.5 12.5587 10.1839 13.1213 9.62132C13.6839 9.05871 14 8.29565 14 7.5C14 6.70435 13.6839 5.94129 13.1213 5.37868C12.5587 4.81607 11.7956 4.5 11 4.5ZM11 12.5C9.67392 12.5 8.40215 11.9732 7.46447 11.0355C6.52678 10.0979 6 8.82608 6 7.5C6 6.17392 6.52678 4.90215 7.46447 3.96447C8.40215 3.02678 9.67392 2.5 11 2.5C12.3261 2.5 13.5979 3.02678 14.5355 3.96447C15.4732 4.90215 16 6.17392 16 7.5C16 8.82608 15.4732 10.0979 14.5355 11.0355C13.5979 11.9732 12.3261 12.5 11 12.5ZM11 0C6 0 1.73 3.11 0 7.5C1.73 11.89 6 15 11 15C16 15 20.27 11.89 22 7.5C20.27 3.11 16 0 11 0Z'
               fill='#C6C6C6' />

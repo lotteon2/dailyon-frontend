@@ -108,7 +108,7 @@ export interface PostDetailResponse {
   likeCount: number;
   commentCount: number;
   isLike?: boolean;
-  createdAt: string;
+  createdAt: Date;
   member: PostDetailMemberResponse;
   hashTags: Array<PostDetailHashTagResponse>;
   postImageProductDetails: Array<PostImageProductDetailResponse>;

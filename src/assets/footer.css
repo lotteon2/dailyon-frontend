@@ -13,7 +13,7 @@
     color: #000;
     text-align: center;
     font-family: Baskerville Old Face;
-    font-size: 3.75rem;
+    font-size: 3.5vw;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
@@ -26,7 +26,7 @@
 .logo-text-highlight {
     color: #C22727;
     font-family: Baskerville Old Face;
-    font-size: 3.75rem;
+    font-size: 3.75vw;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
@@ -49,6 +49,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    width: fit-content;
 }
 
 .person-info-top-wrapper {
@@ -63,7 +64,7 @@
     color: #000;
     font-feature-settings: 'clig' off, 'liga' off;
     font-family: AppleSDGothicNeoM00;
-    font-size: 0.9625rem;
+    font-size: 0.8vw;
     font-style: normal;
     font-weight: 400;
     line-height: 1.25rem; /* 117.647% */
@@ -80,7 +81,7 @@
     color: #000;
     font-feature-settings: 'clig' off, 'liga' off;
     font-family: AppleSDGothicNeoM00;
-    font-size: 0.8125rem;
+    font-size: 0.8vw;
     font-style: normal;
     font-weight: 400;
     line-height: 1.25rem; /* 153.846% */
@@ -100,7 +101,7 @@
     color: var(--GRAY-03, #424242);
     font-feature-settings: 'clig' off, 'liga' off;
     font-family: AppleSDGothicNeoM00;
-    font-size: 1rem;
+    font-size: 0.8vw;
     font-style: normal;
     font-weight: 400;
     line-height: 2rem; /* 200% */
@@ -110,7 +111,7 @@
     color: #C22727;
     font-feature-settings: 'clig' off, 'liga' off;
     font-family: AppleSDGothicNeoM00;
-    font-size: 1rem;
+    font-size: 1vw;
     font-style: normal;
     font-weight: 400;
     line-height: 2rem;
