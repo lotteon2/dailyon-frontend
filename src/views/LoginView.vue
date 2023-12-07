@@ -406,9 +406,7 @@
 export default {
   methods: {
     redirectToKakaoLogin() {
-
-      const kakaoLoginUrl = 'http://localhost:8000/auth-service/oauth2/authorization/kakao';
-
+      const kakaoLoginUrl = import.meta.env.VITE_LOGIN_URL;
       window.location.href = kakaoLoginUrl;
     },
   },
