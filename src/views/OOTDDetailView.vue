@@ -117,11 +117,17 @@ onBeforeRouteLeave(async (to, from) => {
 })
 
 // 새로고침 or 브라우저 창 닫을 때 이벤트
-window.onbeforeunload = function() {
-  flushLikeStore()
-  flushFollowStore()
-}
-
+window.addEventListener('beforeunload', async (event) => {
+  try {
+    await flushLikeStore()
+    await flushFollowStore()
+    window.location.reload()
+  } catch(error: any) {
+    console.error(error)
+    event.preventDefault()
+    event.returnValue = ''
+  }
+})
 
 const postStore = usePostStore()
 const onUpdateBtnClick = async () => {
