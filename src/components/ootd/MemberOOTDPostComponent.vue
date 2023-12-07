@@ -1,8 +1,8 @@
 <script setup lang='ts'>
 
-import { inject, onBeforeMount, reactive, type Ref, ref, watch } from 'vue'
+import { onBeforeMount, reactive, ref, watch } from 'vue'
 import type { OOTDPostPageResponse, OOTDPostResponse } from '@/apis/ootd/PostDto'
-import { getMemberPosts, getMyPosts } from '@/apis/ootd/PostService'
+import { getMemberPosts } from '@/apis/ootd/PostService'
 import OOTDPostCardComponent from '@/components/ootd/OOTDPostCardComponent.vue'
 import OOTDSortComponent from '@/components/ootd/OOTDSortComponent.vue'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
@@ -80,8 +80,11 @@ const flushLikeStore = async () => {
   postLikes.forEach((postLike) => {
     postIds.push(postLike)
   })
-  await togglePostLike(postIds)
-  postLikes.clear()
+
+  if (postIds.length !== 0) {
+    await togglePostLike(postIds)
+    postLikes.clear()
+  }
 }
 
 </script>

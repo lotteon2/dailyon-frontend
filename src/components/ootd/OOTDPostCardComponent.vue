@@ -40,8 +40,11 @@ const flushLikeStore = async () => {
   postLikes.forEach((postLike) => {
     postIds.push(postLike)
   })
-  await togglePostLike(postIds)
-  postLikes.clear()
+
+  if (postIds.length !== 0) {
+    await togglePostLike(postIds)
+    postLikes.clear()
+  }
 }
 
 // 페이지 이동 시 이벤트
