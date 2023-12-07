@@ -7,6 +7,10 @@ const getMember = async () => {
   try {
     const response = await authAxiosInstance.get('/member-service/members');
     console.log(response.data);
+
+
+    
+
   } catch (error) {
     console.error('API 호출 중 오류 발생:', error);
   }
@@ -17,7 +21,7 @@ const getMember = async () => {
 import { onMounted } from 'vue';
 onMounted(() => {
   getMember();
-  //redirectToMainPage();
+  redirectToMainPage();
 });
 
 const redirectToMainPage = () => {
