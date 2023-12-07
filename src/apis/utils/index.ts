@@ -10,18 +10,17 @@ const axiosApi = (baseURL: string) => {
     // withCredentials: true,
   })
 }
+
 // 인증 요청
 const axiosAuthApi = (baseURL: string) => {
   const instance: AxiosInstance = axios.create({
-    baseURL
-    // withCredentials: true,
+    baseURL,
+    withCredentials: true,
   })
 
   // TODO: 로그인 정보 저장 및 API에 인증 토큰 붙이는 코드
   instance.interceptors.request.use((config) => {
-    config.headers.Authorization = `Bearer ${localStorage.getItem('accessToken')}`
-    config.headers.memberId = 1
-    return config
+       return config
   })
   return instance
 }
