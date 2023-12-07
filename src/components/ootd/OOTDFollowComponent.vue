@@ -27,8 +27,11 @@ const flushFollowStore = async () => {
   follows.forEach((followingId: number) => {
     followingIds.push(followingId)
   })
-  await toggleFollow(followingIds)
-  follows.clear()
+
+  if (followingIds.length !== 0) {
+    await toggleFollow(followingIds)
+    follows.clear()
+  }
 }
 
 // 페이지 이동 시 이벤트

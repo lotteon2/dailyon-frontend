@@ -91,8 +91,11 @@ const flushFollowStore = async () => {
   follows.forEach((followingId: number) => {
     followingIds.push(followingId)
   })
-  await toggleFollow(followingIds)
-  follows.clear()
+
+  if(followingIds.length !== 0) {
+    await toggleFollow(followingIds)
+    follows.clear()
+  }
 }
 
 const flushLikeStore = async () => {
@@ -100,8 +103,11 @@ const flushLikeStore = async () => {
   postLikes.forEach((postLike) => {
     postIds.push(postLike)
   })
-  await togglePostLike(postIds)
-  postLikes.clear()
+
+  if(postIds.length !== 0) {
+    await togglePostLike(postIds)
+    postLikes.clear()
+  }
 }
 
 // 페이지 이동 시 이벤트
@@ -319,7 +325,8 @@ const onDeleteBtnClick = async () => {
                      height='36' viewBox='0 0 33 36' fill='none'>
                   <path d='M16.4974 0L32.0884 35.25H0.911499L16.4974 0Z' fill='white' />
                 </svg>
-                <RouterLink :to='`/products/${postImageProductDetail.productId}`'>
+                <RouterLink
+                  :to='{ path: `/products/${postImageProductDetail.productId}`, query: { code: post.member.code }}'>
                   <div class='product-detail-tag-dropdown-box'>
                     <img class='product-image' :src='`${VITE_STATIC_IMG_URL}${postImageProductDetail.imgUrl}`'>
                     <div class='product-image-brand-and-name-wrapper'>
@@ -341,7 +348,7 @@ const onDeleteBtnClick = async () => {
             <div class='ootd-detail-content-product-list-image-wrapper'>
               <div v-for='postImageProductDetail in post.postImageProductDetails'>
                 <RouterLink class='ootd-detail-content-product-image-wrapper'
-                            :to='`/products/${postImageProductDetail.productId}`'>
+                            :to='{ path: `/products/${postImageProductDetail.productId}`, query: { code: post.member.code }}'>
                   <img class='ootd-detail-content-product-image'
                        :src='`${VITE_STATIC_IMG_URL}${postImageProductDetail.imgUrl}`'>
                 </RouterLink>
