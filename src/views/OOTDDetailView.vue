@@ -94,9 +94,11 @@ const flushFollowStore = async () => {
 }
 
 const flushLikeStore = async () => {
-  postLikes.forEach((postId: number) => {
-    togglePostLike(postId)
+  const postIds: number[] = []
+  postLikes.forEach((postLike) => {
+    postIds.push(postLike)
   })
+  await togglePostLike(postIds)
   postLikes.clear()
 }
 

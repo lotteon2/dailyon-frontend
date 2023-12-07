@@ -1,13 +1,15 @@
 import { authAxiosInstance } from '@/apis/utils'
-import type { PostPageResponse, PostResponse } from '@/apis/ootd/PostDto'
-import type { AxiosResponse } from 'axios'
 import { AxiosError } from 'axios'
 
 const SNS_SERVICE_PREFIX_PATH = '/sns-service'
 
-export const togglePostLike = async (postId: number): Promise<void> => {
+export const togglePostLike = async (postIds: Array<number>): Promise<void> => {
   try {
-    await authAxiosInstance.put(`/posts/${postId}/likes`)
+    await authAxiosInstance.put(`/posts/likes`, null, {
+      params: {
+        postIds: postIds.join(',')
+      }
+    })
   } catch (error) {
     if (error instanceof AxiosError) {
       if (error.response) {
