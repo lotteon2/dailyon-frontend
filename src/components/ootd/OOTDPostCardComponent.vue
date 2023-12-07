@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import { ref } from 'vue'
+import { onBeforeUnmount, onUnmounted, ref } from 'vue'
 import type { PostResponse } from '@/apis/ootd/PostDto'
 import { usePostLikeStore } from '@/stores/postlike/PostLikeStore'
 import router from '@/router'
@@ -53,9 +53,16 @@ onBeforeRouteLeave(async (to, from) => {
 })
 
 // 새로고침 or 브라우저 창 닫을 때 이벤트
-window.onbeforeunload = function() {
-  flushLikeStore()
-}
+window.addEventListener('beforeunload', async (event) => {
+  try {
+    await flushLikeStore()
+    window.location.reload()
+  } catch(error: any) {
+    console.error(error)
+    event.preventDefault()
+    event.returnValue = ''
+  }
+})
 </script>
 
 <template>
