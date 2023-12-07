@@ -45,10 +45,7 @@ onBeforeMount(async () => {
 })
 
 const onChangeSort = async (sort: string) => {
-  postLikes.forEach((postId: number) => {
-    togglePostLike(postId)
-  })
-  postLikes.clear()
+  await flushLikeStore()
 
   requestSort.value = sort
 }
@@ -63,10 +60,7 @@ watch(requestSort, async (afterSort, beforeSort) => {
 
 const onChangePage = async (page: number) => {
   if (page >= 0 && page < totalPages.value!) {
-    postLikes.forEach((postId: number) => {
-      togglePostLike(postId)
-    })
-    postLikes.clear()
+    await flushLikeStore()
 
     requestPage.value = page
   }
@@ -80,6 +74,15 @@ watch(requestPage, async (afterPage, beforePage) => {
     totalElements.value = postPageResponse.totalElements
   }
 })
+
+const flushLikeStore = async () => {
+  const postIds: number[] = []
+  postLikes.forEach((postLike) => {
+    postIds.push(postLike)
+  })
+  await togglePostLike(postIds)
+  postLikes.clear()
+}
 
 </script>
 
