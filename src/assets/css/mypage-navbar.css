@@ -1,7 +1,7 @@
 .left-container {
     display: flex;
     flex-direction: column;
-    width: 277px;
+    width: 16vw;
     height: 1600px;
     border: 1px solid var(--Grayscale4, #c6c6c6);
     background: var(--Grayscale1, #fff);
