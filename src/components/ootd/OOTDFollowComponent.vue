@@ -23,9 +23,11 @@ const onTabChange = async (tabOption: string) => {
 }
 
 const flushFollowStore = async () => {
+  const followingIds: number[] = []
   follows.forEach((followingId: number) => {
-    toggleFollow(followingId)
+    followingIds.push(followingId)
   })
+  await toggleFollow(followingIds)
   follows.clear()
 }
 

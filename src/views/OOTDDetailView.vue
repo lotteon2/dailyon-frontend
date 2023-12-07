@@ -87,9 +87,11 @@ const followButtonClickListener = (followingId: number, isFollowing: boolean | u
 }
 
 const flushFollowStore = async () => {
+  const followingIds: number[] = []
   follows.forEach((followingId: number) => {
-    toggleFollow(followingId)
+    followingIds.push(followingId)
   })
+  await toggleFollow(followingIds)
   follows.clear()
 }
 
