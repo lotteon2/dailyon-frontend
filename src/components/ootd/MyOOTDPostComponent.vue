@@ -62,6 +62,8 @@ watch(requestPage, async (afterPage, beforePage) => {
 </script>
 
 <template>
+  <div class='container-title'>게시글 관리</div>
+  <div class='container-line'></div>
   <div class='ootd-container'>
     <div class='ootd-header-container'>
       <div class='ootd-header-bar-wrapper'>

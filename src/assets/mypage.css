@@ -125,15 +125,14 @@ table {
 
 .main-container {
     display: flex;
-    justify-content: space-between;
-    width: 1500px;
+    justify-content: space-around;
+    width: 72vw;
     margin: 0 auto;
-    margin-top: 68px;
-    margin-bottom: 400px;
+    margin-top: 2vh;
 }
 
 .right-container {
     display: flex;
     flex-direction: column;
-    width: 1150px;
+    width: 54vw;
 }

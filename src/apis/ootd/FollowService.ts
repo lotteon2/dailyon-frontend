@@ -63,9 +63,13 @@ export const getFollowings = async (page: number, size: number, sort: string): P
   }
 }
 
-export const toggleFollow = async (followingId: number): Promise<void> => {
+export const toggleFollow = async (followingIds: Array<number>): Promise<void> => {
   try {
-    await authAxiosInstance.put(`/follows/${followingId}`)
+    await authAxiosInstance.put(`/follows`, null, {
+      params: {
+        followingIds: followingIds.join(',')
+      }
+    })
   } catch (error) {
     if (error instanceof AxiosError) {
       if (error.response) {

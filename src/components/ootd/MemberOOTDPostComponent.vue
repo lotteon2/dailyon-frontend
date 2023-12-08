@@ -1,8 +1,8 @@
 <script setup lang='ts'>
 
-import { inject, onBeforeMount, reactive, type Ref, ref, watch } from 'vue'
+import { onBeforeMount, reactive, ref, watch } from 'vue'
 import type { OOTDPostPageResponse, OOTDPostResponse } from '@/apis/ootd/PostDto'
-import { getMemberPosts, getMyPosts } from '@/apis/ootd/PostService'
+import { getMemberPosts } from '@/apis/ootd/PostService'
 import OOTDPostCardComponent from '@/components/ootd/OOTDPostCardComponent.vue'
 import OOTDSortComponent from '@/components/ootd/OOTDSortComponent.vue'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
@@ -45,10 +45,7 @@ onBeforeMount(async () => {
 })
 
 const onChangeSort = async (sort: string) => {
-  postLikes.forEach((postId: number) => {
-    togglePostLike(postId)
-  })
-  postLikes.clear()
+  await flushLikeStore()
 
   requestSort.value = sort
 }
@@ -63,10 +60,7 @@ watch(requestSort, async (afterSort, beforeSort) => {
 
 const onChangePage = async (page: number) => {
   if (page >= 0 && page < totalPages.value!) {
-    postLikes.forEach((postId: number) => {
-      togglePostLike(postId)
-    })
-    postLikes.clear()
+    await flushLikeStore()
 
     requestPage.value = page
   }
@@ -80,6 +74,18 @@ watch(requestPage, async (afterPage, beforePage) => {
     totalElements.value = postPageResponse.totalElements
   }
 })
+
+const flushLikeStore = async () => {
+  const postIds: number[] = []
+  postLikes.forEach((postLike) => {
+    postIds.push(postLike)
+  })
+
+  if (postIds.length !== 0) {
+    await togglePostLike(postIds)
+    postLikes.clear()
+  }
+}
 
 </script>
 

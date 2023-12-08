@@ -2,7 +2,8 @@
     display: inline-flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.1875rem;
+    width: 72vw;
+    gap: 1vh;
 
     overflow-y: hidden;
 }
@@ -11,20 +12,20 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 2.8125rem;
+    width: 100%;
+    gap: 2vh;
 }
 
 .ootd-header-title-wrapper {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 0.625rem;
 }
 
 .ootd-header-title-text {
     color: var(--Dark-Red, #C22727);
     font-family: The Jamsil;
-    font-size: 3.125rem;
+    font-size: 2.3vw;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
@@ -33,15 +34,18 @@
 .ootd-header-bar-wrapper {
     display: flex;
     align-items: center;
-    gap: 64.75rem;
+    justify-content: space-between;
+    width: 100%;
 }
 
 .ootd-header-write-btn-wrapper {
     display: flex;
-    height: 1.5rem;
-    padding: 0.625rem;
+    padding: 0.5vw;
+    margin-right: 1vw;
     justify-content: center;
     align-items: center;
+
+    border-radius: 5px;
 
     background: #000;
 }
@@ -49,7 +53,7 @@
 .ootd-header-write-btn {
     color: var(--Grayscale1, #FFF);
     font-family: The Jamsil;
-    font-size: 1.25rem;
+    font-size: 1vw;
     font-style: normal;
     font-weight: 300;
     line-height: normal;

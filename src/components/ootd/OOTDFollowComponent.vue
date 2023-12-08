@@ -23,10 +23,15 @@ const onTabChange = async (tabOption: string) => {
 }
 
 const flushFollowStore = async () => {
+  const followingIds: number[] = []
   follows.forEach((followingId: number) => {
-    toggleFollow(followingId)
+    followingIds.push(followingId)
   })
-  follows.clear()
+
+  if (followingIds.length !== 0) {
+    await toggleFollow(followingIds)
+    follows.clear()
+  }
 }
 
 // 페이지 이동 시 이벤트
@@ -35,9 +40,16 @@ onBeforeRouteLeave(async (to, from) => {
 })
 
 // 새로고침 or 브라우저 창 닫을 때 이벤트
-window.onbeforeunload = function() {
-  flushFollowStore()
-}
+window.addEventListener('beforeunload', async (event) => {
+  try {
+    await flushFollowStore()
+    window.location.reload()
+  } catch(error: any) {
+    console.error(error)
+    event.preventDefault()
+    event.returnValue = ''
+  }
+})
 
 </script>
 
