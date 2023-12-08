@@ -1,13 +1,8 @@
 <script setup lang='ts'>
 
-import { inject, onBeforeMount, reactive, type Ref, ref, watch } from 'vue'
-import type {
-  OOTDPostPageResponse,
-  OOTDPostResponse,
-  PostLikePageResponse,
-  PostLikeResponse
-} from '@/apis/ootd/PostDto'
-import { getMyPosts, getPostLikes } from '@/apis/ootd/PostService'
+import { onBeforeMount, reactive, ref, watch } from 'vue'
+import type { PostLikePageResponse, PostLikeResponse } from '@/apis/ootd/PostDto'
+import { getPostLikes } from '@/apis/ootd/PostService'
 import OOTDPostCardComponent from '@/components/ootd/OOTDPostCardComponent.vue'
 import OOTDSortComponent from '@/components/ootd/OOTDSortComponent.vue'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
@@ -65,9 +60,26 @@ watch(requestPage, async (afterPage, beforePage) => {
   }
 })
 
+
+const postLikeStore = usePostLikeStore()
+const postLikes = postLikeStore.postLikes
+
+const flushLikeStore = async () => {
+  const postIds: number[] = []
+  postLikes.forEach((postLike) => {
+    postIds.push(postLike)
+  })
+
+  if (postIds.length !== 0) {
+    await togglePostLike(postIds)
+    postLikes.clear()
+  }
+}
 </script>
 
 <template>
+  <div class='container-title'>관심 게시글</div>
+  <div class='container-line'></div>
   <div class='ootd-container'>
     <div class='ootd-header-container'>
       <div class='ootd-header-bar-wrapper'>

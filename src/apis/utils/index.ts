@@ -15,12 +15,13 @@ const axiosApi = (baseURL: string) => {
 const axiosAuthApi = (baseURL: string) => {
   const instance: AxiosInstance = axios.create({
     baseURL,
-    withCredentials: true,
+    withCredentials: true
   })
 
   // TODO: 로그인 정보 저장 및 API에 인증 토큰 붙이는 코드
   instance.interceptors.request.use((config) => {
-       return config
+    config.headers.memberId = 1
+    return config
   })
   return instance
 }
