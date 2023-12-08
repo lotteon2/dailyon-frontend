@@ -11,7 +11,7 @@ const SNS_SERVICE_PREFIX_PATH = '/sns-service'
 
 export const getFollowers = async (page: number, size: number, sort: string): Promise<FollowerPageResponse<FollowerResponse>> => {
   try {
-    const response: AxiosResponse = await authAxiosInstance.get(`/follows/followers`, {
+    const response: AxiosResponse = await authAxiosInstance.get(`${SNS_SERVICE_PREFIX_PATH}/follows/followers`, {
       params: {
         page: page,
         size: size,
@@ -38,7 +38,7 @@ export const getFollowers = async (page: number, size: number, sort: string): Pr
 
 export const getFollowings = async (page: number, size: number, sort: string): Promise<FollowingPageResponse<FollowingResponse>> => {
   try {
-    const response: AxiosResponse = await authAxiosInstance.get(`/follows/followings`, {
+    const response: AxiosResponse = await authAxiosInstance.get(`${SNS_SERVICE_PREFIX_PATH}/follows/followings`, {
       params: {
         page: page,
         size: size,
@@ -65,7 +65,7 @@ export const getFollowings = async (page: number, size: number, sort: string): P
 
 export const toggleFollow = async (followingIds: Array<number>): Promise<void> => {
   try {
-    await authAxiosInstance.put(`/follows`, null, {
+    await authAxiosInstance.put(`${SNS_SERVICE_PREFIX_PATH}/follows`, null, {
       params: {
         followingIds: followingIds.join(',')
       }
