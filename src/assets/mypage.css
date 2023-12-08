@@ -126,14 +126,13 @@ table {
 .main-container {
     display: flex;
     justify-content: space-around;
-    width: 90vw;
+    width: 72vw;
     margin: 0 auto;
-    margin-top: 68px;
-    margin-bottom: 400px;
+    margin-top: 2vh;
 }
 
 .right-container {
     display: flex;
     flex-direction: column;
-    width: 67vw;
+    width: 54vw;
 }
