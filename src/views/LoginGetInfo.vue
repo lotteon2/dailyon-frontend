@@ -3,6 +3,7 @@
 import { authAxiosInstance } from '@/apis/utils';
 import router from '@/router';
 import { useRoute } from 'vue-router'
+import { onMounted } from 'vue';
 
 const getMember = async () => {
   try {
@@ -16,12 +17,12 @@ const getMember = async () => {
 
 
 
-import { onMounted } from 'vue';
+
 onMounted(() => {
   const route = useRoute()
-  const accessToken = <string>route.query.token
+  const accessToken = route.query.token as string
   localStorage.setItem("accessToken", accessToken)
-  console.log(getMember());
+  getMember();
   redirectToMainPage();
 });
 
