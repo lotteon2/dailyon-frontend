@@ -130,10 +130,10 @@ export interface PostDetailHashTagResponse {
 export interface PostImageProductDetailResponse {
   id: number;
   productId: number;
-  name: string;
-  brandName: string;
-  price: number;
-  imgUrl: string;
+  name?: string;
+  brandName?: string;
+  price?: number;
+  imgUrl?: string;
   size: string;
   leftGapPercent: number;
   topGapPercent: number;

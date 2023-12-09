@@ -2,10 +2,12 @@ import { AxiosError, type AxiosResponse } from 'axios'
 import { authAxiosInstance } from '@/apis/utils'
 import type { OOTDMemberProfileResponse, OOTDMemberProfileResponseWrapper } from '@/apis/ootd/MemberDto'
 
+const SNS_SERVICE_PREFIX_PATH = '/sns-service'
+
 export const getOOTDMemberProfile = async (ootdMemberId: number)
   : Promise<OOTDMemberProfileResponseWrapper<OOTDMemberProfileResponse>> => {
   try {
-    const response: AxiosResponse = await authAxiosInstance.get(`/members/${ootdMemberId}`)
+    const response: AxiosResponse = await authAxiosInstance.get(`${SNS_SERVICE_PREFIX_PATH}/members/${ootdMemberId}`)
     return response.data
   } catch (error) {
     if (error instanceof AxiosError) {

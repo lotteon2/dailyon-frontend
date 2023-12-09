@@ -2,10 +2,12 @@ import type { ProductSearchPageResponse, ProductSearchResponse } from '@/apis/oo
 import { AxiosError, type AxiosResponse } from 'axios'
 import { authAxiosInstance } from '@/apis/utils'
 
+const PRODUCT_SERVICE_PREFIX_PATH = '/product-service'
+
 export const searchProductFromOOTD = async (lastId: number, query: string)
   : Promise<ProductSearchPageResponse<ProductSearchResponse>> => {
   try {
-    const response: AxiosResponse = await authAxiosInstance.get(`/products/search/ootd`, {
+    const response: AxiosResponse = await authAxiosInstance.get(`${PRODUCT_SERVICE_PREFIX_PATH}/products/search/ootd`, {
       params: {
         lastId: lastId,
         query: query

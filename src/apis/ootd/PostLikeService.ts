@@ -5,7 +5,7 @@ const SNS_SERVICE_PREFIX_PATH = '/sns-service'
 
 export const togglePostLike = async (postIds: Array<number>): Promise<void> => {
   try {
-    await authAxiosInstance.put(`/posts/likes`, null, {
+    await authAxiosInstance.put(`${SNS_SERVICE_PREFIX_PATH}/posts/likes`, null, {
       params: {
         postIds: postIds.join(',')
       }

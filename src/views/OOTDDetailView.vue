@@ -92,7 +92,7 @@ const flushFollowStore = async () => {
     followingIds.push(followingId)
   })
 
-  if(followingIds.length !== 0) {
+  if (followingIds.length !== 0) {
     await toggleFollow(followingIds)
     follows.clear()
   }
@@ -104,7 +104,7 @@ const flushLikeStore = async () => {
     postIds.push(postLike)
   })
 
-  if(postIds.length !== 0) {
+  if (postIds.length !== 0) {
     await togglePostLike(postIds)
     postLikes.clear()
   }
@@ -122,7 +122,7 @@ window.addEventListener('beforeunload', async (event) => {
     await flushLikeStore()
     await flushFollowStore()
     window.location.reload()
-  } catch(error: any) {
+  } catch (error: any) {
     console.error(error)
     event.preventDefault()
     event.returnValue = ''
@@ -158,10 +158,10 @@ const onUpdateBtnClick = async () => {
     return {
       id: postImageProductDetail.id,
       productId: postImageProductDetail.productId,
-      imgUrl: postImageProductDetail.imgUrl,
-      name: postImageProductDetail.name,
-      brandName: postImageProductDetail.brandName,
-      sizeName: postImageProductDetail.size,
+      imgUrl: postImageProductDetail.imgUrl!,
+      name: postImageProductDetail.name!,
+      brandName: postImageProductDetail.brandName!,
+      sizeName: postImageProductDetail.size!,
       leftGapPercent: postImageProductDetail.leftGapPercent,
       topGapPercent: postImageProductDetail.topGapPercent
     }
@@ -286,8 +286,13 @@ const onDeleteBtnClick = async () => {
               </div>
               <div v-for='postImageProductDetail in post.postImageProductDetails'
                    :key='postImageProductDetail.id' class='ootd-detail-fashion-size-info-text-wrapper'>
-                <div class='ootd-detail-fashion-size-real-info-text'>
+                <div v-if='postImageProductDetail.name !== undefined'
+                     class='ootd-detail-fashion-size-real-info-text'>
                   {{ postImageProductDetail.name }} - {{ postImageProductDetail.size }}
+                </div>
+                <div v-else
+                     class='ootd-detail-fashion-size-real-info-text'>
+                  상품 정보를 불러올 수 없습니다.
                 </div>
               </div>
             </div>
@@ -332,28 +337,39 @@ const onDeleteBtnClick = async () => {
                   <path d='M16.4974 0L32.0884 35.25H0.911499L16.4974 0Z' fill='white' />
                 </svg>
                 <RouterLink
+                  v-if='postImageProductDetail.name !== undefined'
                   :to='{ path: `/products/${postImageProductDetail.productId}`, query: { code: post.member.code }}'>
                   <div class='product-detail-tag-dropdown-box'>
-                    <img class='product-image' :src='`${VITE_STATIC_IMG_URL}${postImageProductDetail.imgUrl}`'>
+                    <img class='product-image'
+                         :src='`${VITE_STATIC_IMG_URL}${postImageProductDetail.imgUrl}`'>
                     <div class='product-image-brand-and-name-wrapper'>
-                      <div class='product-image-brand'>{{ postImageProductDetail.brandName }}</div>
-                      <div class='product-image-name'>{{ postImageProductDetail.name }}</div>
+                      <div class='product-image-brand'>
+                        {{ postImageProductDetail.brandName }}
+                      </div>
+                      <div class='product-image-name'>
+                        {{ postImageProductDetail.name }}
+                      </div>
                       <div class='product-image-price-wrapper'>
                         <div class='product-image-price'>
                           {{ postImageProductDetail.price }}원
                         </div>
                       </div>
                     </div>
-
                   </div>
                 </RouterLink>
+                <div v-else class='product-detail-tag-dropdown-box-none'>
+                  <div class='product-image-name'>
+                    상품 정보를 불러올 수 없습니다.
+                  </div>
+                </div>
               </div>
             </div>
           </div>
           <div class='ootd-detail-content-product-list-wrapper'>
             <div class='ootd-detail-content-product-list-image-wrapper'>
               <div v-for='postImageProductDetail in post.postImageProductDetails'>
-                <RouterLink class='ootd-detail-content-product-image-wrapper'
+                <RouterLink v-if='postImageProductDetail.imgUrl !== undefined'
+                            class='ootd-detail-content-product-image-wrapper'
                             :to='{ path: `/products/${postImageProductDetail.productId}`, query: { code: post.member.code }}'>
                   <img class='ootd-detail-content-product-image'
                        :src='`${VITE_STATIC_IMG_URL}${postImageProductDetail.imgUrl}`'>
