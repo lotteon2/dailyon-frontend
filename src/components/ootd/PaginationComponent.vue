@@ -1,6 +1,8 @@
 <script setup lang='ts'>
 
-defineProps({
+import { computed, ref } from 'vue'
+
+const props = defineProps({
   requestPage: {
     type: Number,
     require: true,
@@ -18,6 +20,18 @@ defineProps({
   }
 })
 
+const getPageRange = computed(() => {
+  let rangeStart = ref<number>(0)
+  if(props.totalPages < 5 || props.requestPage + 5 < props.totalPages) {
+    rangeStart.value = props.requestPage
+  } else {
+    rangeStart.value = props.totalPages - 5
+  }
+  const rangeEnd = Math.min(rangeStart.value + 5, props.totalPages);
+
+  return Array.from({ length: rangeEnd - rangeStart.value }, (_, index) => rangeStart.value + index + 1);
+})
+
 </script>
 
 <template>
@@ -33,7 +47,8 @@ defineProps({
         1
       </div>
     </div>
-    <div class='page-button-wrapper' v-for='page in totalPages'
+    <div class='page-button-wrapper'
+         v-for='page in getPageRange'
          @click='onChangePage(page - 1)' :class="{ 'selected': requestPage === page - 1 }">
       <div class='page-button' :class="{ 'selected': requestPage === page - 1 }">
         {{ page }}
