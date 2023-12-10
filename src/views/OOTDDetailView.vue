@@ -3,7 +3,7 @@
 import { onBeforeMount, ref } from 'vue'
 import type { PostDetailHashTagResponse, PostDetailResponse, PostImageProductDetailResponse } from '@/apis/ootd/PostDto'
 import { onBeforeRouteLeave, useRoute } from 'vue-router'
-import { deletePost, getPostDetail } from '@/apis/ootd/PostService'
+import { addViewCount, deletePost, getPostDetail } from '@/apis/ootd/PostService'
 import OOTDPostCommentComponent from '@/components/ootd/OOTDPostCommentComponent.vue'
 import { usePostLikeStore } from '@/stores/postlike/PostLikeStore'
 import router from '@/router'
@@ -57,7 +57,17 @@ const formatDate = async () => {
     (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':' +
     (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes())
 }
+
+const onAddViewCount = async () => {
+  const postViews = await postStore.getPostViews()
+  if(postViews.value.indexOf(postId.value) === -1) {
+    await addViewCount(postId.value)
+    await postStore.addPostView(postId.value)
+  }
+}
+
 onBeforeMount(async () => {
+  await onAddViewCount()
   await fetchDefaultData()
   await formatDate()
 })

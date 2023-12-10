@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { PostUpdateRequest, TemporaryCreateTagProduct, TemporaryUpdateTagProduct } from '@/apis/ootd/PostDto'
+import type { PostUpdateRequest, TemporaryUpdateTagProduct } from '@/apis/ootd/PostDto'
 import type { PostImageProductDetailUpdateRequest, PostUpdateHashTagRequest } from '@/apis/ootd/PostDto'
 
 export const usePostStore
@@ -19,6 +19,8 @@ export const usePostStore
 
   const temporaryUpdateTagProducts = ref<Array<TemporaryUpdateTagProduct>>(new Array<TemporaryUpdateTagProduct>())
 
+  const postViews = ref<Array<number>>([])
+
   const setPostUpdateRequest = async (post: PostUpdateRequest) => {
     postUpdateRequest.value = post
     sessionStorage.setItem('postUpdateRequest', JSON.stringify(post))
@@ -27,6 +29,10 @@ export const usePostStore
   const setTemporaryTagProducts = async (tagProducts: Array<TemporaryUpdateTagProduct>) => {
     temporaryUpdateTagProducts.value = tagProducts
     sessionStorage.setItem('temporaryTagProducts', JSON.stringify(tagProducts))
+  }
+
+  const addPostView = async (postId: number) => {
+    postViews.value.push(postId)
   }
 
   const getPostUpdateRequest = async () => {
@@ -47,6 +53,22 @@ export const usePostStore
     return temporaryUpdateTagProducts
   }
 
+  const getPostViews = async () => {
+    const postViewsStorage
+      = JSON.parse(localStorage.getItem("postViews")!) as {value: number[], expiry: Date}
+    const expiryDate: Date = postViewsStorage.expiry
+    if(!postViewsStorage || expiryDate < new Date()) {
+      const newPostViews = {
+        value: [] as number[],
+        expiry: new Date(Date.now() + 24 * 60 * 60 * 1000)
+      }
+      localStorage.setItem("postViews", JSON.stringify(postViews))
+      postViews.value = newPostViews.value
+    }
+
+    return postViews
+  }
+
   const clearPostUpdateRequest = async () => {
     sessionStorage.removeItem('postUpdateRequest')
   }
@@ -56,7 +78,7 @@ export const usePostStore
   }
 
   return {
-    setPostUpdateRequest, getPostUpdateRequest, setTemporaryTagProducts,
-    getTemporaryTagProducts, clearPostUpdateRequest, clearTemporaryTagProducts
+    setPostUpdateRequest, getPostUpdateRequest, setTemporaryTagProducts, addPostView,
+    getTemporaryTagProducts, clearPostUpdateRequest, clearTemporaryTagProducts, getPostViews
   }
 })
