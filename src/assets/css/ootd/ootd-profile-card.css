@@ -16,14 +16,14 @@
 }
 
 .profile-img {
-    width: 8rem;
-    height: 8rem;
+    width: 7vw;
+    height: 14vh;
 }
 
 .nickname {
     color: var(--Grayscale7, #000);
     font-family: The Jamsil;
-    font-size: 1.5rem;
+    font-size: 1.4vw;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
@@ -32,7 +32,7 @@
 .follow-wrapper {
     color: var(--Grayscale7, #000);
     font-family: The Jamsil;
-    font-size: 1rem;
+    font-size: 0.9vw;
     font-style: normal;
     font-weight: 300;
     line-height: normal;
@@ -47,8 +47,8 @@
     align-items: center;
     justify-content: center;
 
-    width: 13.5625rem;
-    height: 2.1875rem;
+    width: 12vw;
+    height: 3.5vh;
 
     background: var(--Dark-Red, #C22727);
 }
@@ -64,7 +64,7 @@
     color: var(--Grayscale1, #FFF);
     text-align: center;
     font-family: The Jamsil;
-    font-size: 1.25rem;
+    font-size: 1vw;
     font-style: normal;
     font-weight: 300;
     line-height: normal;
@@ -75,8 +75,8 @@
     align-items: center;
     justify-content: center;
 
-    width: 13.5625rem;
-    height: 2.1875rem;
+    width: 12vw;
+    height: 3.5vh;
 
     border: 1px solid var(--Grayscale3, #E9E9E9);
     background: var(--Grayscale1, #FFF);
@@ -87,8 +87,8 @@
 }
 
 .follow-inactive-check-icon {
-    width: 0.78869rem;
-    height: 0.5625rem;
+    width: 0.7vw;
+    height: 0.9vh;
 }
 
 .follow-inactive-btn-text {
@@ -97,7 +97,7 @@
 
     color: var(--Grayscale4, #C6C6C6);
     font-family: The Jamsil;
-    font-size: 1.25rem;
+    font-size: 1vw;
     font-style: normal;
     font-weight: 300;
     line-height: normal;

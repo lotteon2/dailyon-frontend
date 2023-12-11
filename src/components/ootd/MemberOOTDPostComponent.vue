@@ -8,6 +8,7 @@ import OOTDSortComponent from '@/components/ootd/OOTDSortComponent.vue'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 import { togglePostLike } from '@/apis/ootd/PostLikeService'
 import { usePostLikeStore } from '@/stores/postlike/PostLikeStore'
+import { onBeforeRouteLeave } from 'vue-router'
 
 const props = defineProps({
   postMemberId: {
@@ -28,9 +29,6 @@ const posts = ref<Array<OOTDPostResponse>>()
 const totalPages = ref<number>()
 const totalElements = ref<number>()
 
-const postLikeStore = usePostLikeStore()
-const postLikes = postLikeStore.postLikes
-
 const fetchDefaultData = async (): Promise<OOTDPostPageResponse<OOTDPostResponse>> => {
   const postPageResponse = await getMemberPosts(props.postMemberId!, 0, 6, sortOptions[0].value)
   posts.value = postPageResponse.posts
@@ -45,8 +43,6 @@ onBeforeMount(async () => {
 })
 
 const onChangeSort = async (sort: string) => {
-  await flushLikeStore()
-
   requestSort.value = sort
 }
 
@@ -60,8 +56,6 @@ watch(requestSort, async (afterSort, beforeSort) => {
 
 const onChangePage = async (page: number) => {
   if (page >= 0 && page < totalPages.value!) {
-    await flushLikeStore()
-
     requestPage.value = page
   }
 }
@@ -74,18 +68,6 @@ watch(requestPage, async (afterPage, beforePage) => {
     totalElements.value = postPageResponse.totalElements
   }
 })
-
-const flushLikeStore = async () => {
-  const postIds: number[] = []
-  postLikes.forEach((postLike) => {
-    postIds.push(postLike)
-  })
-
-  if (postIds.length !== 0) {
-    await togglePostLike(postIds)
-    postLikes.clear()
-  }
-}
 
 </script>
 

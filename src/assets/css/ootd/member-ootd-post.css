@@ -8,8 +8,8 @@
 }
 
 .ootd-body-container {
-    width: 95%;
-    min-height: 930px;
+    width: 100%;
+    min-height: 97vh;
     justify-content: flex-start;
 }
 
@@ -17,14 +17,14 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    width: 95%;
+    width: 100%;
     gap: 2.8125rem;
 }
 
 .ootd-header-bar-wrapper {
     display: flex;
     align-items: center;
-    gap: 45rem;
+    width: 100%;
 }
 
 .ootd-header-write-btn-wrapper {
