@@ -103,13 +103,39 @@ const followButtonClickListener = (followerId: number, isFollowing: boolean | un
   }
   follows.has(followerId) ? follows.delete(followerId) : follows.add(followerId)
 }
+
+const img = ref<Array<HTMLImageElement>>(new Array<HTMLImageElement>())
+const imageSize = ref({
+  width: 0,
+  height: 0
+})
+
+const getImageSize = async () => {
+  if (img.value[0]) {
+    await handleImageLoad()
+  } else {
+    (img.value[0] as HTMLImageElement).onload = handleImageLoad
+  }
+}
+
+const handleImageLoad = async () => {
+  if (img.value) {
+    imageSize.value = {
+      width: img.value[0]!.width,
+      height: img.value[0]!.height,
+    }
+  }
+}
 </script>
 
 <template>
   <div class='follow-row-container'>
     <div v-for='follower in followers' :key='follower.id' class='follow-row'>
-      <RouterLink :to='`/ootds/profile/${follower.id}`'>
-        <img class='follow-img' :src='`${VITE_STATIC_IMG_URL}${follower.profileImgUrl}`' />
+      <RouterLink :to='`/ootds/profile/${follower.id}`' class='follow-img-wrapper'>
+        <img v-if='imageSize.width === 0 || imageSize.height === 0' class='follow-img' ref='img' @load='getImageSize'
+             src='@/assets/images/loading.gif' />
+        <img v-else class='follow-img' ref='img' @load='getImageSize'
+             :src='`${VITE_STATIC_IMG_URL}${follower.profileImgUrl}?w=${imageSize.width}&h=${imageSize.height}`' />
       </RouterLink>
       <div class='nickname-wrapper'>
         <RouterLink class='nickname' :to='`/ootds/profile/${follower.id}`'>
