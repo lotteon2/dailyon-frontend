@@ -73,11 +73,39 @@ window.addEventListener('beforeunload', async (event) => {
     event.returnValue = ''
   }
 })
+
+const img = ref<HTMLImageElement | null>(null)
+const imageSize = ref({
+  width: 0,
+  height: 0
+})
+
+const getImageSize = async () => {
+
+  console.log(img.value)
+  if (img.value) {
+    await handleImageLoad()
+  } else {
+    img.value!.onload = handleImageLoad
+  }
+}
+
+const handleImageLoad = async () => {
+  if (img.value) {
+    imageSize.value = {
+      width: img.value.width,
+      height: img.value.height,
+    }
+  }
+}
 </script>
 
 <template>
   <div class='profile-card'>
-    <img class='profile-img' :src='`${VITE_STATIC_IMG_URL}${member.profileImgUrl}`' />
+    <img v-if='imageSize.width === 0 || imageSize.height === 0' class='profile-img' ref='img' @load='getImageSize'
+         src='@/assets/images/loading.gif' />
+    <img v-else class='profile-img' ref='img' @load='getImageSize'
+         :src='`${VITE_STATIC_IMG_URL}${member.profileImgUrl}?w=${imageSize.width}&h=${imageSize.height}`' />
     <div class='nickname'>{{ member.nickname }}</div>
     <div class='follow-wrapper'>
       팔로워 <span class='follow-count'>{{ member.followerCount }}</span>
