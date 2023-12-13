@@ -1,39 +1,35 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onBeforeMount, watchEffect } from 'vue'
+import { getOrders } from '@/apis/order/order'
+import type { OrderPageResponse, OrderResponse } from '@/apis/order/orderDto'
 import PaginationComponent from '../ootd/PaginationComponent.vue'
 import OrderHistoryComponent from './OrderComponent.vue'
+
 const requestPage = ref<number>(0)
 const totalElements = ref<Number | null>(0)
 const totalPages = ref<number>()
+const orders = ref<Array<OrderResponse>>([])
+
+const fetchDefaultData = async (requestPage: number): Promise<void> => {
+  const data = await getOrders(requestPage)
+  orders.value = data.orders
+  totalElements.value = data.totalElements
+  totalPages.value = data.totalPages
+}
+
+onBeforeMount(async () => {
+  await fetchDefaultData(0)
+})
 
 const onChangePage = async (page: number) => {
   if (page >= 0 && page < totalPages.value!) {
     requestPage.value = page
   }
 }
-const orders = ref([
-  {
-    orderNumber: '1',
-    productName: '나이키',
-    price: 15000,
-    status: '주문완료',
-    paymentDate: '2023-12-13'
-  },
-  {
-    orderNumber: '2',
-    productName: '맨투맨',
-    price: 55000,
-    status: '주문완료',
-    paymentDate: '2023-12-13'
-  },
-  {
-    orderNumber: '3',
-    productName: '신발',
-    price: 115000,
-    status: '주문완료',
-    paymentDate: '2023-12-13'
-  }
-])
+
+watchEffect(() => {
+  fetchDefaultData(requestPage.value), requestPage.value
+})
 </script>
 
 <template>

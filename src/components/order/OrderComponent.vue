@@ -39,22 +39,22 @@ const orderDetails = ref<any>([
     status: '배송완료'
   }
 ])
-
 const selectedRowIndex = ref<any>(null)
 
 const toggleCard = (index: any) => {
   selectedRowIndex.value = selectedRowIndex.value === index ? null : index
 }
+console.log(props.orders)
 </script>
 
 <template v-if="props.orders">
   <tbody v-for="(order, index) in props.orders" :key="'row-' + index">
     <tr @click="toggleCard(index)" class="table-inner-header">
-      <th>{{ order.orderNumber }}</th>
-      <th>{{ order.productName }}</th>
-      <th>{{ order.price }}</th>
+      <th>{{ order.orderNo }}</th>
+      <th>{{ order.productsName }}</th>
+      <th>{{ order.totalAmount }}</th>
       <th>{{ order.status }}</th>
-      <th>{{ order.paymentDate }}</th>
+      <th>{{ order.createdAt }}</th>
     </tr>
 
     <tr v-if="selectedRowIndex === index" :key="'card-' + index">
