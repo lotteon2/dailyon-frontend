@@ -11,3 +11,15 @@ export interface OrderPageResponse<T extends OrderResponse> {
   totalPages: number
   totalElements: number
 }
+
+export interface OrderDetailResponse {
+  id: number
+  orderNo: string
+  productName: string
+  productQuantity: number
+  thumbnail: string
+  orderPrice: number
+  couponName: string | undefined | null
+  couponDiscountPrice: number | undefined | null
+  status: string
+}

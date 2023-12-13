@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import type { OrderDetailResponse } from '@/apis/order/orderDto'
 const props = defineProps({
   orderDetails: {
-    type: Array as () => Array<any>,
+    type: Array as () => Array<OrderDetailResponse>,
     default: () => [],
     required: true
   }
