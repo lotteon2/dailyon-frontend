@@ -1,14 +1,21 @@
 <script setup lang="ts">
 import { ref, onBeforeMount, watchEffect } from 'vue'
-import { getOrders } from '@/apis/order/order'
-import type { OrderPageResponse, OrderResponse } from '@/apis/order/orderDto'
+import { getOrders, getOrderDetails } from '@/apis/order/order'
+import type { OrderPageResponse, OrderResponse, OrderDetailResponse } from '@/apis/order/orderDto'
 import PaginationComponent from '../ootd/PaginationComponent.vue'
-import OrderHistoryComponent from './OrderComponent.vue'
+import OrderComponent from './OrderComponent.vue'
+import OrderDetailComponent from './OrderDetailComponent.vue'
 
 const requestPage = ref<number>(0)
 const totalElements = ref<Number | null>(0)
 const totalPages = ref<number>()
 const orders = ref<Array<OrderResponse>>([])
+const orderDetails = ref<Array<OrderDetailResponse>>([])
+const showModal = ref<boolean>(false)
+
+onBeforeMount(async () => {
+  await fetchDefaultData(0)
+})
 
 const fetchDefaultData = async (requestPage: number): Promise<void> => {
   const data = await getOrders(requestPage)
@@ -17,9 +24,16 @@ const fetchDefaultData = async (requestPage: number): Promise<void> => {
   totalPages.value = data.totalPages
 }
 
-onBeforeMount(async () => {
-  await fetchDefaultData(0)
-})
+const open = async (orderNo: string) => {
+  console.log(orderNo)
+  const data = await getOrderDetails(orderNo)
+  orderDetails.value = data
+  showModal.value = true
+}
+
+const closeModal = () => {
+  showModal.value = false
+}
 
 const onChangePage = async (page: number) => {
   if (page >= 0 && page < totalPages.value!) {
@@ -31,7 +45,6 @@ watchEffect(() => {
   fetchDefaultData(requestPage.value), requestPage.value
 })
 </script>
-
 <template>
   <div class="order-check-container">
     <div class="container-title">주문/배송 조회</div>
@@ -133,28 +146,22 @@ watchEffect(() => {
         <th>주문상태</th>
         <th>결제일시</th>
       </tr>
-      <OrderHistoryComponent :orders="orders" />
+      <OrderComponent :orders="orders" @showModal="(index) => open(index)" />
     </table>
+    <div v-if="showModal" class="modal" @click="closeModal">
+      <div v-if="orderDetails.length" class="modal-content" @click.stop>
+        <span class="close" @click="closeModal">&times;</span>
+        <OrderDetailComponent :orderDetails="orderDetails" />
+      </div>
+    </div>
     <PaginationComponent
       :onChangePage="onChangePage"
       :requestPage="requestPage"
       :totalPages="totalPages"
     />
-    <!-- <div class="button-container">
-      <div class="button-row">
-        <div class="grey-button2">주문 취소</div>
-      </div>
-      <div class="button-row">
-        <div class="black-button">배송지 변경</div>
-        <div class="grey-button2">주문 취소</div>
-      </div>
-      <div class="button-row">
-        <div class="black-button">운송장번호 조회</div>
-      </div>
-    </div> -->
   </div>
 </template>
 
 <style scoped>
-@import '@/assets/css/order-history.css';
+@import '@/assets/css/order/order-history.css';
 </style>

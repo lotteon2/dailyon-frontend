@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import OrderDetailComponent from './OrderDetailComponent.vue'
+import type { OrderDetailResponse } from '@/apis/order/orderDto'
 
+const emit = defineEmits(['showModal'])
 const props = defineProps({
   orders: {
     type: Array as () => Array<any>,
@@ -9,47 +11,18 @@ const props = defineProps({
     required: true
   }
 })
+const orderDetails = ref<Array<OrderDetailResponse>>([])
 
-const orderDetails = ref<any>([
-  {
-    id: 1,
-    orderNo: '20231213-0001',
-    productName: '상품명1',
-    productQuantity: 1,
-    thumbnail: '상품이미지URL1',
-    orderPrice: 100000,
-    status: '배송준비중'
-  },
-  {
-    id: 2,
-    orderNo: '20231213-0002',
-    productName: '상품명2',
-    productQuantity: 2,
-    thumbnail: '상품이미지URL2',
-    orderPrice: 200000,
-    status: '배송중'
-  },
-  {
-    id: 3,
-    orderNo: '20231213-0003',
-    productName: '상품명3',
-    productQuantity: 3,
-    thumbnail: '상품이미지URL3',
-    orderPrice: 300000,
-    status: '배송완료'
-  }
-])
 const selectedRowIndex = ref<any>(null)
 
-const toggleCard = (index: any) => {
-  selectedRowIndex.value = selectedRowIndex.value === index ? null : index
+const toggleCard = async (orderNo: string) => {
+  emit('showModal', orderNo)
 }
-console.log(props.orders)
 </script>
 
 <template v-if="props.orders">
   <tbody v-for="(order, index) in props.orders" :key="'row-' + index">
-    <tr @click="toggleCard(index)" class="table-inner-header">
+    <tr @click="toggleCard(order.orderNo)" class="table-inner-header">
       <th>{{ order.orderNo }}</th>
       <th>{{ order.productsName }}</th>
       <th>{{ order.totalAmount }}</th>
@@ -57,7 +30,7 @@ console.log(props.orders)
       <th>{{ order.createdAt }}</th>
     </tr>
 
-    <tr v-if="selectedRowIndex === index" :key="'card-' + index">
+    <tr v-if="selectedRowIndex === order.orderNo" :key="'card-' + index">
       <td colspan="6">
         <div class="order-history">
           <OrderDetailComponent :orderDetails="orderDetails" />
@@ -68,5 +41,5 @@ console.log(props.orders)
 </template>
 
 <style scoped>
-@import '@/assets/css/order-history.css';
+@import '@/assets/css/order/order-history.css';
 </style>

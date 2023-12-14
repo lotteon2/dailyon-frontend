@@ -1,28 +1,56 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import type { OrderDetailResponse } from '@/apis/order/orderDto'
 const props = defineProps({
   orderDetails: {
-    type: Array as () => Array<any>,
+    type: Array as () => Array<OrderDetailResponse>,
     default: () => [],
     required: true
   }
 })
 </script>
 <template v-if="props.orderDetails">
-  <div v-for="(orderDetail, index) in props.orderDetails" :key="index" class="card">
-    <img :src="orderDetail.thumbnail" class="thumbnail" />
-    <p class="product-name">{{ orderDetail.productName }}</p>
-    <p class="product-quantity">{{ orderDetail.productQuantity }}개</p>
-    <p class="order-price">{{ orderDetail.orderPrice }}원</p>
-    <p class="status">{{ orderDetail.status }}</p>
-    <button class="black-button">상세 보기</button>
-  </div>
-  <div class="card2">
-    <div>나 주문에 사용 된 포인트</div>
-    <div>주문에 적용 된 배달 비</div>
+  <div div v-for="(orderDetail, index) in orderDetails" :key="index" class="order-detail-container">
+    <div class="left-section">
+      <div class="left-inner-status">
+        <div class="product-status bold-text">{{ orderDetail.status }}</div>
+      </div>
+      <div class="left-inner-contents">
+        <div class="product-thumbnail">
+          <img class="image" :src="orderDetail.thumbnail" />
+        </div>
+        <div class="text-contents">
+          <div class="product-name">상품명 : {{ orderDetail.productName }}</div>
+          <div class="product-price">
+            가격 : {{ new Intl.NumberFormat('ko-KR').format(orderDetail.orderPrice) }}원
+            <span class="gray-text mid-bar">|</span>
+            {{ orderDetail.productQuantity }}개
+          </div>
+          <div>쿠폰이름 : {{ orderDetail.couponName }}</div>
+          <div>쿠폰 적용 금액 : {{ orderDetail.couponDiscountPrice }}</div>
+        </div>
+      </div>
+      <div class="left-inner-empty"></div>
+    </div>
+    <div class="right-section">
+      <div v-if="orderDetail.status == 'PaymentStatus'">
+        <div class="right-section-buttons">
+          <div class="right-inner-button">
+            <button class="white-button">결제 조회</button>
+          </div>
+        </div>
+      </div>
+      <div v-else-if="orderDetail.status == '주문 완료'">
+        <div class="right-section-buttons">
+          <div class="right-inner-button">
+            <button class="white-button">주문취소</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <style scoped>
-@import '@/assets/css/order-history.css';
+@import '@/assets/css/order/order-detail.css';
 </style>
