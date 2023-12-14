@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import OrderDetailComponent from './OrderDetailComponent.vue'
-import { getOrderDetails } from '@/apis/order/order'
 import type { OrderDetailResponse } from '@/apis/order/orderDto'
+
+const emit = defineEmits(['showModal'])
 const props = defineProps({
   orders: {
     type: Array as () => Array<any>,
@@ -14,10 +15,8 @@ const orderDetails = ref<Array<OrderDetailResponse>>([])
 
 const selectedRowIndex = ref<any>(null)
 
-const toggleCard = async (index: string) => {
-  const data = await getOrderDetails(index)
-  orderDetails.value = data
-  selectedRowIndex.value = selectedRowIndex.value === index ? null : index
+const toggleCard = async (orderNo: string) => {
+  emit('showModal', orderNo)
 }
 </script>
 
@@ -42,5 +41,5 @@ const toggleCard = async (index: string) => {
 </template>
 
 <style scoped>
-@import '@/assets/css/order-history.css';
+@import '@/assets/css/order/order-history.css';
 </style>

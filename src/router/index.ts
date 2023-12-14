@@ -159,7 +159,7 @@ const router = createRouter({
       path: '/logininfo',
       name: 'info',
       component: () => import('@/views/LoginGetInfo.vue')
-    },
+    }
   ]
 })
 
