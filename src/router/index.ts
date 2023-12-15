@@ -28,7 +28,8 @@ const router = createRouter({
     {
       path: '/orders',
       name: 'orders',
-      component: () => import('@/views/OrderView.vue')
+      component: () => import('@/views/OrderView.vue'),
+      meta: { requiresAuth: true }
     },
     {
       path: '/ootds',
@@ -43,7 +44,8 @@ const router = createRouter({
     {
       path: '/ootds/create',
       name: 'ootdPostCreate',
-      component: () => import('@/views/OOTDPostCreateView.vue')
+      component: () => import('@/views/OOTDPostCreateView.vue'),
+      meta: { requiresAuth: true }
     },
     {
       path: '/ootds/:id/edit',
@@ -63,13 +65,15 @@ const router = createRouter({
     {
       path: '/notifications',
       name: 'notifications',
-      component: () => import('@/views/NotificationView.vue')
+      component: () => import('@/views/NotificationView.vue'),
+      meta: { requiresAuth: true }
     },
     {
       path: '/my-page',
       name: 'my-page',
       redirect: '/order-history',
       component: () => import('@/views/MyPageView.vue'),
+      meta: { requiresAuth: true },
       children: [
         {
           path: '/order-history',
@@ -124,7 +128,7 @@ const router = createRouter({
         {
           path: '/my-posts',
           name: 'myPosts',
-          component: () => import('@/components/ootd/MyOOTDPostComponent.vue')
+          component: () => import('@/components/ootd/MyOOTDPostComponent.vue'),
         },
         {
           path: '/like-posts',
@@ -162,5 +166,23 @@ const router = createRouter({
     }
   ]
 })
+
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.requiresAuth && !isLoggedIn()) {
+    alert('로그인이 필요한 페이지입니다.');
+    next('/login');
+  } else if (to.name === 'login' && isLoggedIn()) {
+    alert('이미 로그인한 상태입니다.');
+    next('/main');
+  } else {
+    next();
+  }
+});
+
+const isLoggedIn = () => {
+  const token = localStorage.getItem('accessToken');
+  return !!token;
+};
 
 export default router
