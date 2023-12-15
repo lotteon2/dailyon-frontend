@@ -51,6 +51,13 @@ const inputClear = () => {
   selectedAmount.value = ''
 }
 
+
+const logout = () => {
+  localStorage.removeItem('accessToken');
+  router.push({ name: 'home' });
+  alert("로그아웃 완료")
+};
+
 const processPayment = async () => {
   const amount = Number(selectedAmount.value || inputAmount.value)
   if (!amount) {
@@ -135,7 +142,7 @@ onBeforeUnmount(() => {
     </div>
     <div class='user-info-change-btn-wrapper'>
       <div class="modify-button">정보 수정</div>
-      <div class="logout-button">로그아웃</div>
+      <div class="logout-button" @click="logout()">로그아웃</div>
     </div>
   </div>
 </template>

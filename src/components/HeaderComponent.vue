@@ -1,5 +1,12 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
+
+const isLoggedIn = () => {
+  const token = localStorage.getItem('accessToken');
+  const isLoggedIn = !!token;
+  return isLoggedIn;
+};
+
 </script>
 
 <template>
@@ -32,8 +39,8 @@ import { RouterLink } from 'vue-router'
       </div>
     </div>
     <div class="auth-wrapper">
-      <RouterLink to="/login" class="login-text">LOGIN</RouterLink>
-      <div class="logout-text" hidden>LOGOUT</div>
+      <RouterLink v-if="!isLoggedIn()"  to="/login" class="login-text">Login</RouterLink>
+      <div v-else class="login-text">환영합니다!</div>
     </div>
   </div>
   <div class="header-divide-line-wrapper">
