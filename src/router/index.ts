@@ -145,6 +145,7 @@ const router = createRouter({
     {
       path: '/payment-result',
       redirect: 'paymentResult',
+      meta: { requiresAuth: true },
       children: [
         {
           path: 'success',
