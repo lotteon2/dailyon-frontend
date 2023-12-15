@@ -1,6 +1,35 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref, onMounted, defineEmits, defineProps, computed, watch } from 'vue'
+import ProductDetailCouponModal from '@/components/promotion/coupon/ProductDetailCouponModal.vue'
+
+const productId = ref<number>(1) // 종민님이 정해주시면 됩니다.
+const categoryId = ref<number>(1) // 종민님이 정해주시면 됩니다.
+const productPriceValue = ref<number>(50000) // 종민님이 정해주시면 됩니다.
+const showCouponModal = ref<boolean>(true)
+const closeCouponModal = () => {
+  showCouponModal.value = false
+}
+const openCouponModal = () => {
+  showCouponModal.value = true
+}
+
+const handleTotalPriceUpdated = (newTotalPrice: number) => {
+  // TODO: 종민님이 만드실때 레이아웃 맞춰서 화면에 넣겠습니다.
+  // 기존 price와 같을때, 안보이고, 다를때 보여줄지? 아니면 이거 자체를 기준가로 해서 먼저
+  // 보여주고 original 가격을 optional 하게 보여줄지?
+  console.log(`혜택가 업데이트: ${newTotalPrice}`)
+}
+</script>
 
 <template>
+  <ProductDetailCouponModal
+    @close-coupon-modal="closeCouponModal"
+    @total-price-updated="handleTotalPriceUpdated"
+    :showModal="showCouponModal"
+    :productId="productId"
+    :categoryId="categoryId"
+    :productPriceValue="productPriceValue"
+  ></ProductDetailCouponModal>
   <div class="main-container">
     <div class="category">홈 > WOMEN > SHOES</div>
     <div class="first-wrapper">
@@ -66,7 +95,7 @@
           </div>
           <div class="price-info-row">
             <h1>&nbsp;</h1>
-            <div class="black-button">
+            <div @click="openCouponModal" class="black-button">
               쿠폰 받기
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -474,13 +503,16 @@
       </div>
       <div class="line"></div>
 
-      <div class='top4-ootd-wrapper'>
-        <div class='top4-ootd-title-wrapper'>
-          <div class='top4-ootd-title-text'>TOP 4 OOTD</div>
+      <div class="top4-ootd-wrapper">
+        <div class="top4-ootd-title-wrapper">
+          <div class="top4-ootd-title-text">TOP 4 OOTD</div>
         </div>
-        <div class='top4-ootd-list-wrapper'>
-          <div v-for='n in 4' class='top4-ootd-post-card-image-wrapper'>
-            <img class='top4-ootd-post-card-image' src='@/assets/images/ootd-detail-image-example.png'>
+        <div class="top4-ootd-list-wrapper">
+          <div v-for="n in 4" class="top4-ootd-post-card-image-wrapper">
+            <img
+              class="top4-ootd-post-card-image"
+              src="@/assets/images/ootd-detail-image-example.png"
+            />
           </div>
         </div>
       </div>
@@ -489,5 +521,5 @@
 </template>
 
 <style scoped>
-@import '@/assets/product-detail.css';
+@import url('@/assets/product-detail.css');
 </style>
