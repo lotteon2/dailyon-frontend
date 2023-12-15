@@ -18,7 +18,7 @@ onMounted(() => {
   setTimeout(() => {
     window.opener.postMessage(
       {
-        routeName: 'pointHistory',
+        routeName: 'pointPaymentHistory',
         params: {
           orderId: orderId.value
         }
