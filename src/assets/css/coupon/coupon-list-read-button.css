@@ -1,0 +1,16 @@
+.black-button {
+  width: 218px;
+  height: 43px;
+  flex-shrink: 0;
+  background: var(--Grayscale7, #000);
+  color: var(--Grayscale1, #fff);
+  font-family: The Jamsil;
+  font-size: 25px;
+  font-style: normal;
+  font-weight: 300;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 10px;
+  margin: 5px 0;
+}

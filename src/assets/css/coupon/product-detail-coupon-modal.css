@@ -1,0 +1,112 @@
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  width: 30%; /* Adjust to your preference, maybe keeping consistent with category-modal.css width */
+  min-height: 60%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2vh;
+}
+
+.modal-close-button {
+  margin-left: auto;
+  font-size: 2rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.title-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1vh;
+  font-size: 2rem;
+  font-family: 'TheJamsil4Medium';
+  margin-bottom: 1vh;
+}
+
+.coupon-body-content-wrapper {
+  min-height: 42vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.discount-highlight {
+  width: 40%;
+  /* // The effect that looks like a highlighter is applied below the text */
+  background-image: linear-gradient(transparent 40%, #c22727 1%);
+}
+
+.bottom-section {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  /* // You can define additional styles for flex-row if needed */
+}
+
+.price-content {
+  text-align: center;
+  font-family: 'TheJamsil4Medium';
+  font-size: 1.3rem;
+}
+
+.discount-value {
+  color: #e00303;
+}
+
+.price-calculation > div {
+  /* // Add margins or other styles for the price calculation layout */
+}
+
+.no-content {
+  font-size: 1.8rem;
+  font-family: 'TheJamsil4Medium';
+  color: #c8c8c8;
+  align-self: center;
+  justify-content: center;
+}
+
+.download-all {
+  margin-top: 3vh;
+  /* // Styles for the download all button */
+  align-self: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--Grayscale7, #000);
+  height: 6vh;
+  width: 75%;
+  color: white;
+  text-align: center;
+
+  font-size: 1.8rem;
+  font-family: 'TheJamsil4Medium';
+  cursor: pointer;
+}
