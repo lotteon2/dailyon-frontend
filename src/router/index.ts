@@ -50,7 +50,8 @@ const router = createRouter({
     {
       path: '/ootds/:id/edit',
       name: 'ootdPostUpdate',
-      component: () => import('@/views/OOTDPostUpdateView.vue')
+      component: () => import('@/views/OOTDPostUpdateView.vue'),
+      meta: { requiresAuth: true }
     },
     {
       path: '/ootds/profile/:id',
