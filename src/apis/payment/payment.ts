@@ -6,7 +6,10 @@ const PAYMENT_SERVICE_PREFIX_PATH = '/payment-service'
 
 export const pointPaymentReady = async (pointPaymentDto: PointPaymentDto): Promise<string> => {
   try {
-    const { data } = await authAxiosInstance.post(`/payments/ready`, pointPaymentDto)
+    const { data } = await authAxiosInstance.post(
+      `${PAYMENT_SERVICE_PREFIX_PATH}/payments/ready`,
+      pointPaymentDto
+    )
     return data
   } catch (error) {
     if (error instanceof AxiosError) {
@@ -30,7 +33,7 @@ export const getPointPayments = async (
   type: string
 ): Promise<PaymentPageResponse<PaymentResponse>> => {
   try {
-    const { data } = await authAxiosInstance.get(`/payments`, {
+    const { data } = await authAxiosInstance.get(`${PAYMENT_SERVICE_PREFIX_PATH}/payments`, {
       params: {
         page: page,
         type: type
