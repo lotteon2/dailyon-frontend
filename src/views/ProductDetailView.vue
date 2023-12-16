@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, defineEmits, defineProps, computed, watch } from 'vue'
-import ProductDetailCouponModal from '@/components/promotion/coupon/ProductDetailCouponModal.vue'
+import ProductDetailCouponModal from '@/components/promotion/coupon/productdetail/ProductDetailCouponModal.vue'
 
 const productId = ref<number>(1) // 종민님이 정해주시면 됩니다.
 const categoryId = ref<number>(1) // 종민님이 정해주시면 됩니다.
