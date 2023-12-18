@@ -1,5 +1,16 @@
-<script setup lang='ts'>
+<script setup lang="ts">
+import { ref } from 'vue';
+import ModalView from './AddressModal.vue';
 
+const isModalVisible = ref(false);
+
+const openModal = () => {
+  isModalVisible.value = true;
+};
+
+const closeModal = () => {
+  isModalVisible.value = false;
+};
 </script>
 
 <template>
@@ -44,7 +55,6 @@
       </div>
     </div>
     <div class="container-inner-title">배송지 관리</div>
-    <div class="place-add-button">추가</div>
     <table>
       <col width="80px" />
       <col width="100px" />
@@ -56,19 +66,8 @@
         <td>배송지명</td>
         <td>이름</td>
         <td>배송지 주소</td>
-        <td class="text-align-right">
-          <div class="place-choice-button-wrapper">
-            <div class="place-white-button">
-              전체 선택
-            </div>
-            <div class="place-white-button">
-              선택 삭제
-            </div>
-            <div class="place-white-button">
-              전체 삭제
-            </div>
-          </div>
-        </td>
+        <div class="place-add-button" @click="openModal"> 배송지 추가</div>
+        <ModalView v-if="isModalVisible" :closeModal="closeModal" />
       </tr>
       <tr class="place-font memberinfo-table-data1">
         <td class="padding-left-10">
@@ -80,6 +79,7 @@
         <td>배송지명</td>
         <td>이름</td>
         <td>배송지 주소</td>
+        
         <td>
           <div class="close-button-div">
             <svg
@@ -133,3 +133,4 @@
 <style scoped>
 @import "@/assets/css/member-info.css";
 </style>
+
