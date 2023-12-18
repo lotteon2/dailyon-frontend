@@ -1,5 +1,16 @@
-<script setup lang='ts'>
+<script setup lang="ts">
+import { ref } from 'vue';
+import ModalView from './AddressModal.vue';
 
+const isModalVisible = ref(false);
+
+const openModal = () => {
+  isModalVisible.value = true;
+};
+
+const closeModal = () => {
+  isModalVisible.value = false;
+};
 </script>
 
 <template>
@@ -44,7 +55,10 @@
       </div>
     </div>
     <div class="container-inner-title">배송지 관리</div>
-    <div class="place-add-button">추가</div>
+    <div class="place-add-button">
+      <button @click="openModal">배송지 추가</button>
+      <ModalView v-if="isModalVisible" :closeModal="closeModal" />
+    </div>
     <table>
       <col width="80px" />
       <col width="100px" />
@@ -133,3 +147,4 @@
 <style scoped>
 @import "@/assets/css/member-info.css";
 </style>
+
