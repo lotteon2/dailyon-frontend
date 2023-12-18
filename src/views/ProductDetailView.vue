@@ -1,11 +1,55 @@
 <script setup lang="ts">
-import { ref, onMounted, defineEmits, defineProps, computed, watch } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 import ProductDetailCouponModal from '@/components/promotion/coupon/productdetail/ProductDetailCouponModal.vue'
+import BreadCrumbComponent from '@/components/product/BreadCrumbComponent.vue'
+import { useRoute } from 'vue-router'
+import { getProductDetail } from '@/apis/product/ProductClient'
+import type { AxiosResponse } from 'axios'
+import type { ReadProductDetailResponse, ReadProductStockResponse } from '@/apis/product/ProductDto'
 
-const productId = ref<number>(1) // 종민님이 정해주시면 됩니다.
-const categoryId = ref<number>(1) // 종민님이 정해주시면 됩니다.
-const productPriceValue = ref<number>(50000) // 종민님이 정해주시면 됩니다.
+const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
+
+const route = useRoute()
+
+const productId = ref<number>(0)
+const categoryId = ref<number>(0)
+const productPriceValue = ref<number>(0)
 const showCouponModal = ref<boolean>(true)
+
+const brandName = ref<string>('')
+const gender = ref<string>('')
+const productName = ref<string>('')
+const imgUrl = ref<string>('')
+const describeImgUrls = ref<String[]>([])
+
+const productStocks = ref<ReadProductStockResponse[]>([])
+
+const avgRating = ref<number>(0)
+const reviewCount = ref<number>(0)
+const initData = () => {
+  getProductDetail(Number(route.params.id))
+    .then((axiosResponse: AxiosResponse) => {
+      const response: ReadProductDetailResponse = axiosResponse.data
+
+      productId.value = Number(route.params.id)
+      categoryId.value = response.categoryId
+      productPriceValue.value = response.price
+      productName.value = response.name
+      brandName.value = response.brandName
+      gender.value = response.gender
+
+      imgUrl.value = response.imgUrl
+      describeImgUrls.value = response.describeImgUrls
+      productStocks.value = response.productStocks
+
+      avgRating.value = response.avgRating
+      reviewCount.value = response.reviewCount
+    })
+    .catch((error: any) => {
+      alert(error.response!.data!.message)
+    })
+}
+
 const closeCouponModal = () => {
   showCouponModal.value = false
 }
@@ -19,6 +63,8 @@ const handleTotalPriceUpdated = (newTotalPrice: number) => {
   // 보여주고 original 가격을 optional 하게 보여줄지?
   console.log(`혜택가 업데이트: ${newTotalPrice}`)
 }
+
+onBeforeMount(initData)
 </script>
 
 <template>
@@ -31,10 +77,10 @@ const handleTotalPriceUpdated = (newTotalPrice: number) => {
     :productPriceValue="productPriceValue"
   ></ProductDetailCouponModal>
   <div class="main-container">
-    <div class="category">홈 > WOMEN > SHOES</div>
+    <BreadCrumbComponent v-if="categoryId !== 0" :category="categoryId" />
     <div class="first-wrapper">
       <div class="prod-first-col">
-        <img class="img-big" src="@/assets/images/prod-img.png" alt="" />
+        <img class="img-big" :src="`${VITE_STATIC_IMG_URL}${imgUrl}`" alt="" />
         <div class="small-img-container">
           <img class="img-small" src="@/assets/images/prod-img.png" alt="" />
           <img class="img-small" src="@/assets/images/prod-img.png" alt="" />
@@ -61,10 +107,11 @@ const handleTotalPriceUpdated = (newTotalPrice: number) => {
       <div class="prod-second-col">
         <div class="second-col-first-row">
           <div class="brand-prod-name">
-            <h1>BRAND</h1>
-            <h2>상품명</h2>
+            <h1>{{ brandName }}</h1>
+            <h2>{{ productName }}</h2>
           </div>
           <div class="sold-out">품절</div>
+          <!-- component 분리 후 상품 옵션 선택시 재로딩 -->
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="60"
@@ -87,7 +134,7 @@ const handleTotalPriceUpdated = (newTotalPrice: number) => {
           </div>
           <div class="price-info-row">
             <h1>&nbsp;</h1>
-            <div class="dash">원가격</div>
+            <div class="dash">{{ productPriceValue }}</div>
           </div>
           <div class="price-info-row">
             <h1>프로모션</h1>
@@ -133,22 +180,24 @@ const handleTotalPriceUpdated = (newTotalPrice: number) => {
               </svg>
             </div>
           </div>
-          <div class="price-info-row">
+          <!--<div class="price-info-row">
             <h1>배송정보</h1>
             <h4>배송정보</h4>
-          </div>
-          <div class="price-info-row">
+          </div>-->
+          <!--<div class="price-info-row">
             <h1>추가정보</h1>
             <h4>추가정보</h4>
-          </div>
+          </div>-->
           <div class="price-info-row">
             <span>상품옵션</span>
-            <select name="languages" id="lang">
-              <option value="option1">상품옵션</option>
-              <option value="option1">상품옵션</option>
-              <option value="option1">상품옵션</option>
-              <option value="option1">상품옵션</option>
-              <option value="option1">상품옵션</option>
+            <select>
+              <option
+                v-for="(productStock, index) in productStocks"
+                :key="index"
+                :value="productStock"
+              >
+                {{ productStock.productSizeName }} - {{ productStock.quantity }}개
+              </option>
             </select>
           </div>
           <div class="option-container">

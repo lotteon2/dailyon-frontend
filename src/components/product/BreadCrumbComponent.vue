@@ -7,16 +7,21 @@ import type { AxiosResponse } from 'axios'
 
 const route = useRoute()
 const breadCrumbs = ref<Category[]>([])
-const initData = () => {
-  if (route.query.category !== null) {
-    getBreadCrumbs(Number(route.query.category))
-      .then((axiosResponse: AxiosResponse) => {
-        breadCrumbs.value = axiosResponse.data.breadCrumbs
-      })
-      .catch((error: any) => {
-        alert(error.response!.data!.message)
-      })
+
+const props = defineProps({
+  category: {
+    type: Number,
+    required: true
   }
+})
+const initData = () => {
+  getBreadCrumbs(props.category)
+    .then((axiosResponse: AxiosResponse) => {
+      breadCrumbs.value = axiosResponse.data.breadCrumbs
+    })
+    .catch((error: any) => {
+      alert(error.response!.data!.message)
+    })
 }
 
 onMounted(initData)

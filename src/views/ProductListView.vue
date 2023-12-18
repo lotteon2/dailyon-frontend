@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 import type { AxiosResponse } from 'axios'
 import { useRoute } from 'vue-router'
 import type { ReadProductResponse, ReadProductSliceResponse } from '@/apis/product/ProductDto'
 import { getProductSlice } from '@/apis/product/ProductClient'
-import BreadCrumbComponent from "@/components/product/BreadCrumbComponent.vue";
+import BreadCrumbComponent from '@/components/product/BreadCrumbComponent.vue'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -20,7 +20,6 @@ const lastId = ref<number>(0)
 const products = ref<ReadProductResponse[]>([])
 
 const initData = () => {
-
   if (route.query.brand) {
     brandId.value = Number(route.query.brand)
   }
@@ -31,6 +30,10 @@ const initData = () => {
 
   if (route.query.type) {
     type.value = String(route.query.type)
+  }
+
+  if (route.query.category) {
+    categoryId.value = Number(route.query.category)
   }
 
   getProductSlice(lastId.value, brandId.value, categoryId.value, gender.value, type.value)
@@ -45,12 +48,12 @@ const initData = () => {
     })
 }
 
-onMounted(initData)
+onBeforeMount(initData)
 </script>
 
 <template>
   <div style="width: 50vw">
-    <BreadCrumbComponent/>
+    <BreadCrumbComponent :category="categoryId" />
     <div class="product-list-container">
       <a
         v-for="(product, index) in products"
