@@ -49,7 +49,8 @@ const submitForm = async () => {
       },
     });
     props.closeModal();
-
+    alert("배송지 저장이 완료되었습니다.");
+    console.log(formData);
   } catch (error) {
     console.error('API 호출 중 오류 발생:', error);
   }
@@ -82,14 +83,14 @@ const submitForm = async () => {
                 type="radio"
                 name="useDefaultAddr"
                 v-model="useDefaultAddr"
-                value="true"
+                value=true
               />기본</label>
             <label for="useDefaultAddr">
               <input
                 type="radio"
                 name="useDefaultAddr"
                 v-model="useDefaultAddr"
-                value="false"
+                value=false
               />신규</label>
           </td>
         </tr>
