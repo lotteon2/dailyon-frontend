@@ -37,6 +37,8 @@
   cursor: pointer;
 }
 
+/* 아래서부터는 하나씩 지켜봐야함. */
+
 .title-section {
   display: flex;
   flex-direction: column;

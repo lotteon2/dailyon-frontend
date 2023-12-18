@@ -1,0 +1,8 @@
+.order-item-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+  min-height: 60vh;
+  max-height: 70vh;
+}

@@ -1,0 +1,79 @@
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  width: 50%; /* Adjust to your preference, maybe keeping consistent with category-modal.css width */
+
+  /* min-height: 60%; */
+  height: 80%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header-bar {
+  /* width: 100%; */
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  font-family: 'TheJamsil3Regular';
+  border-top: 3px solid black;
+  border-bottom: 3px solid black;
+  padding: 1vh 1vh 1vh 1vh;
+}
+.modal-header-bar > div {
+  flex: 1; /* 기본 값으로 설정 */
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+.modal-header-bar > div:nth-child(1),
+.modal-header-bar > div:nth-child(2) {
+  flex: 2; /* 첫 번째와 두 번째 div는 비율 2로 설정 */
+}
+
+.modal-header-bar > div:nth-child(3) {
+  flex: 1; /* 세 번째 div는 비율 1로 설정 */
+}
+
+.modal-close-button {
+  margin-left: auto;
+  font-size: 2rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  font-family: 'TheJamsil';
+}
+
+.modal-header-bar {
+  margin-top: 2vh;
+}
+
+.modal-title {
+  margin: 0;
+}
