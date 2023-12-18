@@ -60,21 +60,6 @@ const initData = () => {
 }
 
 onMounted(initData)
-
-/*watch([categoryId, brandId, gender, type, lastId], (nv, ov) => {
-  if (nv.some((value, index) => value !== ov[index])) {
-    getProductSlice(lastId.value, brandId.value, categoryId.value, gender.value, type.value)
-      .then((axiosResponse: AxiosResponse) => {
-        const response: ReadProductSliceResponse = axiosResponse.data
-        hasNext.value = response.hasNext
-        lastId.value = response.productResponses[response.productResponses.length - 1].id
-        products.value = [...products.value, ...response.productResponses]
-      })
-      .catch((error: any) => {
-        alert(error.response!.data!.message)
-      })
-  }
-})*/
 </script>
 
 <template>
@@ -89,12 +74,17 @@ onMounted(initData)
       </div>
     </div>
     <div class="product-list-container">
-      <div v-for="(product, index) in products" :key="product.id" class="prod-info">
+      <a
+        v-for="(product, index) in products"
+        :key="product.id"
+        class="prod-info"
+        :href="`/products/${product.id}`"
+      >
         <img :src="`${VITE_STATIC_IMG_URL}${product.imgUrl}`" alt="productImg" />
         <h1>{{ product.brandName }}</h1>
         <h2>{{ product.name }}</h2>
         <h3>{{ product.price }}원</h3>
-      </div>
+      </a>
     </div>
   </div>
 </template>
