@@ -6,29 +6,29 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL
 // 기본 API 요청 처리
 const axiosApi = (baseURL: string) => {
   return axios.create({
-    baseURL
-    // withCredentials: true,
+    baseURL,
+    withCredentials: true
   })
 }
 
 // 인증 요청
 const axiosAuthApi = (baseURL: string) => {
   const instance: AxiosInstance = axios.create({
-    baseURL
-    // withCredentials: true
+    baseURL,
+    withCredentials: true
   })
 
   // TODO: 로그인 정보 저장 및 API에 인증 토큰 붙이는 코드
   instance.interceptors.request.use((config) => {
-    const accessToken = localStorage.getItem('accessToken');
+    const accessToken = localStorage.getItem('accessToken')
 
     // localStorage에 accessToken이 존재할 때만 헤더에 추가
     if (accessToken) {
-      config.headers.Authorization = `Bearer ${accessToken}`;
+      config.headers.Authorization = `Bearer ${accessToken}`
     }
 
-    return config;
-  });
+    return config
+  })
   return instance
 }
 

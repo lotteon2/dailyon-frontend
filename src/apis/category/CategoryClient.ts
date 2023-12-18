@@ -12,3 +12,9 @@ export const getChildCategories = async(id: number | null): Promise<AxiosRespons
         }
     )
 }
+
+export const getBreadCrumbs = async(categoryId: number): Promise<AxiosResponse> => {
+    return await defaultAxiosInstance.get(
+        `${PRODUCT_SERVICE_PREFIX}${CATEGORY_PREFIX}/breadcrumb/${categoryId}`
+    )
+}
