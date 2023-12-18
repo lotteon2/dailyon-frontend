@@ -1,11 +1,29 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
-
+import {onBeforeMount, onMounted, ref} from "vue";
+import type { Category } from "@/apis/product/category/CategoryDto";
+import HeaderCategoryComponent from "@/components/HeaderCategoryComponent.vue";
+import { getChildCategories } from "@/apis/product/category/CategoryClient";
+import type { AxiosResponse } from "axios";
 const isLoggedIn = () => {
   const token = localStorage.getItem('accessToken');
   const isLoggedIn = !!token;
   return isLoggedIn;
 };
+
+const showCategoryDropdown = ref<boolean>(true)
+const rootCategories = ref<Category[]>([])
+
+onBeforeMount(() => {
+  getChildCategories(null)
+      .then((axiosResponse: AxiosResponse) => {
+        console.log(`from main `, axiosResponse.data.categoryResponses)
+        rootCategories.value = axiosResponse.data.categoryResponses
+      })
+      .catch((error: any) => {
+        alert(error.response!.data!.message)
+      })
+})
 
 </script>
 
@@ -48,7 +66,9 @@ const isLoggedIn = () => {
   </div>
   <nav class="header-bottom">
     <div class="category-dropdown">
-      <div class="category-select-wrapper">
+      <div class="category-select-wrapper"
+           @mouseover="showCategoryDropdown = true"
+           @mouseleave="showCategoryDropdown = false">
         <div class="category-select-line-wrapper">
           <div class="category-select-line"></div>
         </div>
@@ -59,10 +79,10 @@ const isLoggedIn = () => {
           <div class="category-select-line"></div>
         </div>
       </div>
-      <div class="category-dropdown-content">
-        <div class="">남성패션</div>
-        <div class="">여성패션</div>
-      </div>
+      <HeaderCategoryComponent
+          :show-dropdown="showCategoryDropdown"
+          :categories="rootCategories"
+      />
     </div>
     <div class="nav-tab-wrapper">
       <RouterLink to="/luxury" class="nav-tab-text" :class="{ selected: $route.path === '/luxury' }"
