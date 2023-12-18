@@ -16,3 +16,28 @@ export interface CouponInfoItemResponse {
   minPurchaseAmount?: number
   maxDiscountAmount?: number
 }
+
+export interface CheckoutCouponApplicationResponse {
+  nestedCouponInfoItemResponses: CouponInfoItemCheckoutResponse[][]
+}
+
+export interface ProductCategoryPair {
+  productId: number
+  categoryId: number
+}
+
+export interface CouponInfoItemCheckoutResponse {
+  couponInfoId: number
+  couponInfoName: string
+
+  appliesToType: string
+  appliedToId: number
+
+  discountType: `PERCENTAGE` | `FIXED_AMOUNT`
+  discountValue: number
+
+  endAt: string
+
+  minPurchaseAmount?: number
+  maxDiscountAmount?: number
+}
