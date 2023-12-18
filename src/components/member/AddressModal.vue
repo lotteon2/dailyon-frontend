@@ -48,8 +48,6 @@ const submitForm = async () => {
         'Content-Type': 'application/json',
       },
     });
-
-    console.log(response.data);
     props.closeModal();
 
   } catch (error) {
