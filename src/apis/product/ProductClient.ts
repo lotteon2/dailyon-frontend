@@ -20,3 +20,9 @@ export const getProductSlice = async (
     params: params
   })
 }
+
+export const getProductDetail = async (productId: number): Promise<AxiosResponse> => {
+  return await defaultAxiosInstance.get(
+    `${PRODUCT_SERVICE_PREFIX}${PRODUCT_PREFIX}/id/${productId}`
+  )
+}
