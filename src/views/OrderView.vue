@@ -1,44 +1,55 @@
 <script setup lang="ts">
+import CheckoutCouponModal from '@/components/promotion/coupon/checkout/CheckoutCouponModal.vue'
 import { ref } from 'vue'
-const orderSheet = ref({
-  orderItems: [
-    {
-      productId: 1,
-      categoryId: 1,
-      sizeId: 1,
-      orderPrice: '1000',
-      quantity: 1,
-      couponInfoId: 1, //null 가능
-      referralCode: '9d81364e-8352-11ee-b962-0242ac120002'
-    },
-    {
-      productId: 1,
-      categoryId: 1,
-      sizeId: 1,
-      orderPrice: '1000',
-      quantity: 1,
-      couponInfoId: 1, //null 가능
-      referralCode: '9d81364e-8352-11ee-b962-0242ac120002'
-    }
-  ],
-  orderInfo: {
-    usedPoints: 1000,
-    type: 'SINGLE',
-    deliveryFee: 3000,
-    totalCouponDiscountPrice: 1000
+import type { OrderItemDto, OrderItemWithCouponInfoIdDto } from '@/types/coupon'
+
+const isCheckoutCouponModalOpen = ref(true)
+const orderItemWithCouponInfoIdList = ref<OrderItemWithCouponInfoIdDto[]>([])
+
+const openCheckoutCouponModal = () => {
+  isCheckoutCouponModalOpen.value = true
+}
+const closeCheckoutCouponModal = () => {
+  isCheckoutCouponModalOpen.value = false
+}
+const applyCoupons = (couponSelections: OrderItemWithCouponInfoIdDto[]) => {
+  orderItemWithCouponInfoIdList.value = couponSelections
+}
+const orderItems = [
+  {
+    productName: '나이키 에어포스1',
+    imgUrl: '',
+    productId: 1,
+    categoryId: 1,
+    count: 1,
+    originalPrice: 10000
   },
-  deliveryInfo: {
-    receiver: '김선비',
-    postCode: '255-255',
-    roadAddress: '강남구 5길',
-    detailAddress: '52번지 비트교육센터',
-    phoneNumber: '010-2555-1021'
+  {
+    productName: '준지 189',
+    imgUrl: 'https://blog.kakaocdn.net/dn/bvusF3/btqDn1mPRqa/lk6VdECDc10kixNhnBHxL1/img.jpg',
+    productId: 2,
+    categoryId: 1,
+    count: 2,
+    originalPrice: 20000
   },
-  paymentType: 'KAKAOPAY'
-})
+  {
+    productName: 'IAB Studio',
+    imgUrl: 'https://iab-studio.com/media/pages/about/aa600c7d43-1694580757/aboutus.jpg',
+    productId: 3,
+    categoryId: 2,
+    count: 1,
+    originalPrice: 15000
+  }
+]
 </script>
 
 <template>
+  <CheckoutCouponModal
+    :isCheckoutCouponModalOpen="isCheckoutCouponModalOpen"
+    :orderItems="orderItems"
+    @close-checkout-coupon-modal="closeCheckoutCouponModal"
+    @apply-coupons="applyCoupons"
+  ></CheckoutCouponModal>
   <div class="main-container">
     <h1>주문/결제</h1>
     <div class="center-container">
