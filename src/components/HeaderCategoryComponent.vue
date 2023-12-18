@@ -2,7 +2,7 @@
 import { getChildCategories } from "@/apis/product/category/CategoryClient";
 import type { Category } from "@/apis/product/category/CategoryDto";
 import type { AxiosResponse } from "axios";
-import { ref, watch } from "vue";
+import { ref } from "vue";
 
 const props = defineProps({
   showDropdown: {
@@ -12,7 +12,7 @@ const props = defineProps({
   categories: {
     type: Array<Category>,
     required: true,
-    default: false
+    default: []
   }
 })
 
@@ -22,7 +22,6 @@ const showChildDropdown = ref<boolean>(false)
 const setChildCategories = (id: number) => {
   getChildCategories(id)
       .then((axiosResponse: AxiosResponse) => {
-        console.log(`from dropdown ${id}`, axiosResponse.data.categoryResponses)
         childCategories.value = axiosResponse.data.categoryResponses
       })
       .catch((error: any) => {
@@ -30,35 +29,28 @@ const setChildCategories = (id: number) => {
       })
 }
 
-watch(() => props.showDropdown, (newVal, oldVal) => {
-  if(newVal) {
-    childCategories.value = props.categories
-    console.log("child category set", childCategories.value)
-  }
-})
-
 const mouseOver = (id: number) => {
-  console.log(`div event on ${id}`)
-  setChildCategories(id)
   showChildDropdown.value = true
+  setChildCategories(id)
 }
 </script>
 
 <template>
-  <div class="category-dropdown-content">
-    <div
-         v-if="categories.length > 0"
-         v-for="category in childCategories"
+  <div v-if="categories.length > 0" class="category-dropdown-content">
+    <div class="category-content"
+         v-for="category in props.categories"
          :key="category.id"
          @mouseover="mouseOver(category.id)"
          @mouseleave="showChildDropdown = false"
     >
       {{ category.name }}
-      <HeaderCategoryComponent
-          :show-dropdown="showChildDropdown"
-          :categories="childCategories"
-      />
     </div>
+    <HeaderCategoryComponent
+        class="child-category"
+        :style="{ left: 100+'%' }"
+        :show-dropdown="showChildDropdown"
+        :categories="childCategories"
+    />
   </div>
 </template>
 
@@ -66,25 +58,34 @@ const mouseOver = (id: number) => {
 .category-dropdown-content {
   display: flex;
   flex-direction: column;
-
-  position: relative;
+  align-items: center;
 
   background-color: #f9f9f9;
   color: black;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  border-bottom: #808080 solid 1px;
+  border-right: #808080 solid 1px;
+  border-left: #808080 solid 1px;
   padding: 12px 16px;
   z-index: 1;
 
   width: 200px;
-  height: 200px;
+  height: 600px;
 }
 
-/*.category-dropdown-content > div {
-  position: absolute;
-  left: 100%;
-  top: 0;
+.category-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 5px;
+  padding-bottom: 5px;
 
-  width: 200px;
-  height: 200px;
-}*/
+  font-family: TheJamsil;
+}
+
+.child-category {
+  top: 0;
+  position: absolute;
+
+  font-family: TheJamsil;
+}
 </style>
