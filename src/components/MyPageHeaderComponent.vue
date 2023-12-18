@@ -51,12 +51,11 @@ const inputClear = () => {
   selectedAmount.value = ''
 }
 
-
 const logout = () => {
-  localStorage.removeItem('accessToken');
-  router.push({ name: 'home' });
-  alert("로그아웃 완료")
-};
+  localStorage.removeItem('accessToken')
+  router.push({ name: 'home' })
+  alert('로그아웃 완료')
+}
 
 const processPayment = async () => {
   const amount = Number(selectedAmount.value || inputAmount.value)
@@ -88,7 +87,11 @@ const processPayment = async () => {
 const handleMessage = (event: MessageEvent) => {
   const { routeName } = event.data
   window.scrollTo(0, 0)
-  router.push({ name: routeName })
+  if (router.currentRoute.value.name == 'pointPaymentHistory') {
+    window.location.reload()
+  } else {
+    router.replace({ name: routeName })
+  }
 }
 
 onMounted(async () => {
@@ -102,8 +105,8 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="user-container">
-    <div class='user-info-container'>
-      <img class='user-profile-img' src='@/assets/images/default-profile-image.png' />
+    <div class="user-info-container">
+      <img class="user-profile-img" src="@/assets/images/default-profile-image.png" />
       <div class="user-name-container">
         <div class="user-name-container-first-line">
           <h1>
@@ -115,8 +118,10 @@ onBeforeUnmount(() => {
       </div>
     </div>
     <div class="user-container-point-container">
-      <div class='point-wrapper'>
-        포인트<h1>0</h1>점
+      <div class="point-wrapper">
+        포인트
+        <h1>0</h1>
+        점
       </div>
       <button class="payment-modal-button" @click="open">결제하기</button>
       <div v-if="displayModal" class="payment-modal">
@@ -140,7 +145,7 @@ onBeforeUnmount(() => {
         </div>
       </div>
     </div>
-    <div class='user-info-change-btn-wrapper'>
+    <div class="user-info-change-btn-wrapper">
       <div class="modify-button">정보 수정</div>
       <div class="logout-button" @click="logout()">로그아웃</div>
     </div>

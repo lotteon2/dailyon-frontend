@@ -14,7 +14,6 @@ const orderId = ref(route.params.orderId)
 const countdown = ref<number>(3)
 
 onMounted(() => {
-  // 부모 창으로 메시지 전달
   setTimeout(() => {
     window.opener.postMessage(
       {

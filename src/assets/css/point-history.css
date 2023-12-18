@@ -33,10 +33,10 @@
 .point-table-data2 > td {
   color: var(--Grayscale7, #202027);
   font-family: The Jamsil;
-  font-size: 20px;
+  font-size: 1vw;
   font-style: normal;
-  font-weight: 400;
-  line-height: 70px; /* 500% */
+  font-weight: 300;
+  line-height: 70px;
   border-bottom: 1px solid #808080;
 }
 
