@@ -42,7 +42,7 @@
                       <div class="button1">수량</div>
                       수량
                     </div>
-                    <div class="button2">옵션/수량 변경</div>
+                    <div class="button2"><span>옵션/수량 변경</span></div>
                   </div>
                   <div class="info-second-col">
                     <span>상품금액</span>
@@ -86,7 +86,7 @@
                       <div class="button1">수량</div>
                       수량
                     </div>
-                    <div class="button2">옵션/수량 변경</div>
+                    <div class="button2"><span>옵션/수량 변경</span></div>
                   </div>
                   <div class="info-second-col">
                     <span>상품금액</span>
@@ -136,7 +136,7 @@
                       <div class="button1">수량</div>
                       수량
                     </div>
-                    <div class="button2">옵션/수량 변경</div>
+                    <div class="button2"><span>옵션/수량 변경</span></div>
                   </div>
                   <div class="info-second-col">
                     <span>상품금액</span>
@@ -180,7 +180,7 @@
                       <div class="button1">수량</div>
                       수량
                     </div>
-                    <div class="button2">옵션/수량 변경</div>
+                    <div class="button2"><span>옵션/수량 변경</span>></div>
                   </div>
                   <div class="info-second-col">
                     <span>상품금액</span>
@@ -200,7 +200,7 @@
         <div class="user-container">
           <div class="user-first-row">
             <div class="container-title">주문자</div>
-            <div class="black-button">주문자 정보와 동일</div>
+            <div class="black-button"><span>주문자 정보와 동일</span></div>
           </div>
           <div class="line"></div>
           <div class="user-info-wrapper">
@@ -222,8 +222,8 @@
           <div class="place-first-row">
             <div class="container-title">배송지</div>
             <div class="place-button-wrapper">
-              <div class="black-button">주문자 정보와 동일</div>
-              <div class="black-button">배송지 목록 조회</div>
+              <div class="black-button"><span>주문자 정보와 동일</span></div>
+              <div class="black-button"><span>배송지 목록 조회</span></div>
             </div>
           </div>
           <div class="line"></div>
@@ -244,7 +244,7 @@
             </div>
             <div class="place-third-col">
               <span>&nbsp;</span>
-              <div class="black-button">검색</div>
+              <div class="black-button"><span>검색</span></div>
             </div>
           </div>
         </div>
@@ -307,7 +307,7 @@
               <div class="pay-first-col">
                 <span>포인트 혜택</span>
               </div>
-              <div class="pay-second-col">
+              <div class="pay-second-col2">
                 <h1>최대 N원</h1>
               </div>
             </div>
@@ -348,7 +348,7 @@
             <span>카카오페이</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="47"
+              width="30"
               height="42"
               viewBox="0 0 47 42"
               fill="none"
@@ -366,5 +366,5 @@
 </template>
 
 <style scoped>
-@import '@/assets/order.css';
+@import '@/assets/css/order/order.css';
 </style>
