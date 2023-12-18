@@ -20,9 +20,15 @@ const axiosAuthApi = (baseURL: string) => {
 
   // TODO: 로그인 정보 저장 및 API에 인증 토큰 붙이는 코드
   instance.interceptors.request.use((config) => {
-    config.headers.Authorization = `Bearer ${localStorage.getItem('accessToken')}`
-    return config
-  })
+    const accessToken = localStorage.getItem('accessToken');
+
+    // localStorage에 accessToken이 존재할 때만 헤더에 추가
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
+    }
+
+    return config;
+  });
   return instance
 }
 
