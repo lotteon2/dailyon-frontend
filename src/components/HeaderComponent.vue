@@ -11,7 +11,7 @@ const isLoggedIn = () => {
   return isLoggedIn;
 };
 
-const showCategoryDropdown = ref<boolean>(false)
+const showCategoryDropdown = ref<boolean>(true)
 const rootCategories = ref<Category[]>([])
 
 onBeforeMount(() => {
