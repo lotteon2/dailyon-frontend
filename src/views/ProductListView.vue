@@ -1,18 +1,14 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue'
-import type { Category } from '@/apis/category/CategoryDto'
-import { getBreadCrumbs } from '@/apis/category/CategoryClient'
+import { onMounted, ref } from 'vue'
 import type { AxiosResponse } from 'axios'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import type { ReadProductResponse, ReadProductSliceResponse } from '@/apis/product/ProductDto'
 import { getProductSlice } from '@/apis/product/ProductClient'
+import BreadCrumbComponent from "@/components/product/BreadCrumbComponent.vue";
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
-const breadCrumbs = ref<Category[]>([])
-
 const route = useRoute()
-const router = useRouter()
 
 const categoryId = ref<number | null>(null)
 const brandId = ref<number | null>(null)
@@ -24,16 +20,6 @@ const lastId = ref<number>(0)
 const products = ref<ReadProductResponse[]>([])
 
 const initData = () => {
-  if (route.query.category !== null) {
-    categoryId.value = Number(route.query.category)
-    getBreadCrumbs(categoryId.value)
-      .then((axiosResponse: AxiosResponse) => {
-        breadCrumbs.value = axiosResponse.data.breadCrumbs
-      })
-      .catch((error: any) => {
-        alert(error.response!.data!.message)
-      })
-  }
 
   if (route.query.brand) {
     brandId.value = Number(route.query.brand)
@@ -64,15 +50,7 @@ onMounted(initData)
 
 <template>
   <div style="width: 50vw">
-    <div class="breadcrumb-container">
-      <a href="/" style="font-family: TheJamsil">홈</a>
-      <div class="breadcrumbs" v-for="category in breadCrumbs">
-        <p style="padding-right: 5px; padding-left: 5px">></p>
-        <a :href="`/product-list?category=${category.id}&type=NORMAL`">
-          {{ category.name }}
-        </a>
-      </div>
-    </div>
+    <BreadCrumbComponent/>
     <div class="product-list-container">
       <a
         v-for="(product, index) in products"
@@ -90,31 +68,6 @@ onMounted(initData)
 </template>
 
 <style scoped>
-.breadcrumb-container {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-items: center;
-
-  padding-left: 10px;
-  padding-bottom: 20px;
-
-  width: 100%;
-}
-
-.breadcrumbs {
-  display: flex;
-  align-items: flex-start;
-  justify-items: center;
-
-  font-family: TheJamsil;
-}
-
-.breadcrumbs > a {
-  color: inherit;
-  text-decoration: none;
-}
-
 .product-list-container {
   display: flex;
   flex-direction: row;
