@@ -36,8 +36,8 @@ watchEffect(() => {
   <div class="point-container">
     <div class="container-title">포인트 결제 내역</div>
     <div class="container-line"></div>
-    <table>
-      <col width="200px" />
+    <table class="point-table">
+      <col width="150px" />
       <col width="150px" />
       <col width="150px" />
       <col width="150px" />
