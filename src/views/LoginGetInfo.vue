@@ -1,28 +1,35 @@
 <script setup lang="ts">
-
 import { authAxiosInstance } from '@/apis/utils';
 import router from '@/router';
 import { useRoute } from 'vue-router'
 import { onMounted } from 'vue';
+import { useMemberStore } from '@/stores/member/MemberStore';
 
 const getMember = async () => {
   try {
     const response = await authAxiosInstance.get('/member-service/members');
     console.log(response.data);
-
+    console.log("완료");
+    return response.data;
   } catch (error) {
     console.error('API 호출 중 오류 발생:', error);
   }
 };
 
-
-
-
-onMounted(() => {
+onMounted(async () => {
   const route = useRoute()
   const accessToken = route.query.token as string
   localStorage.setItem("accessToken", accessToken)
-  getMember();
+
+  const memberStore = useMemberStore() as any;
+  const memberInfo = await getMember()
+ 
+  memberStore.setMemberInfo(memberInfo);
+
+  const info = memberStore.getMemberInfo();
+  console.log(info)
+  console.log("피니아 인포")
+
   redirectToMainPage();
 });
 
