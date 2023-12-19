@@ -5,11 +5,21 @@ import type { Category } from "@/apis/product/category/CategoryDto";
 import HeaderCategoryComponent from "@/components/HeaderCategoryComponent.vue";
 import { getChildCategories } from "@/apis/product/category/CategoryClient";
 import type { AxiosResponse } from "axios";
+import { useMemberStore } from '@/stores/member/MemberStore';
+
+
+
 const isLoggedIn = () => {
   const token = localStorage.getItem('accessToken');
   const isLoggedIn = !!token;
   return isLoggedIn;
 };
+
+const memberStore = useMemberStore();
+const memberInfo = memberStore.getMemberInfo(); 
+
+console.log("피니아 헤더");
+console.log(memberInfo);
 
 const showCategoryDropdown = ref<boolean>(true)
 const rootCategories = ref<Category[]>([])
@@ -57,9 +67,12 @@ onBeforeMount(() => {
       </div>
     </div>
     <div class="auth-wrapper">
-      <RouterLink v-if="!isLoggedIn()"  to="/login" class="login-text">Login</RouterLink>
-      <div v-else class="login-text">환영합니다!</div>
+    <RouterLink v-if="!isLoggedIn()" to="/login" class="login-text">Login</RouterLink>
+    <div v-else class="login-text">
+      <img v-if="memberInfo.profileImgUrl" :src="memberInfo.profileImgUrl" alt="Profile Image" class="profile-image" />
+      <span v-if="memberInfo.email">{{ memberInfo.email }} 환영합니다!</span>
     </div>
+  </div>
   </div>
   <div class="header-divide-line-wrapper">
     <div class="header-divide-line"></div>
@@ -191,4 +204,10 @@ onBeforeMount(() => {
 
 <style scoped>
 @import '@/assets/header.css';
+.profile-image {
+  width: 40px; 
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
 </style>
