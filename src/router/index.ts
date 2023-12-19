@@ -21,9 +21,26 @@ const router = createRouter({
       component: () => import('@/views/FashionView.vue')
     },
     {
+      path: '/product-list',
+      name: 'productList',
+      component: () => import('@/views/ProductListView.vue')
+    },
+    {
       path: '/products/:id',
       name: 'productDetails',
-      component: () => import('@/views/ProductDetailView.vue')
+      component: () => import('@/views/ProductDetailView.vue'),
+      children: [
+        {
+          path: '/describe-images',
+          name: 'describeImages',
+          component: () => import('@/components/product/DescribeImageComponent.vue')
+        },
+        {
+          path: '/reviews',
+          name: 'reviews',
+          component: () => import('@/components/product/ReviewComponent.vue')
+        }
+      ]
     },
     {
       path: '/orders',
@@ -129,7 +146,7 @@ const router = createRouter({
         {
           path: '/my-posts',
           name: 'myPosts',
-          component: () => import('@/components/ootd/MyOOTDPostComponent.vue'),
+          component: () => import('@/components/ootd/MyOOTDPostComponent.vue')
         },
         {
           path: '/like-posts',
@@ -169,22 +186,21 @@ const router = createRouter({
   ]
 })
 
-
 router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth && !isLoggedIn()) {
-    alert('로그인이 필요한 페이지입니다.');
-    next('/login');
+    alert('로그인이 필요한 페이지입니다.')
+    next('/login')
   } else if (to.name === 'login' && isLoggedIn()) {
-    alert('이미 로그인한 상태입니다.');
-    next('/main');
+    alert('이미 로그인한 상태입니다.')
+    next('/main')
   } else {
-    next();
+    next()
   }
-});
+})
 
 const isLoggedIn = () => {
-  const token = localStorage.getItem('accessToken');
-  return !!token;
-};
+  const token = localStorage.getItem('accessToken')
+  return !!token
+}
 
 export default router
