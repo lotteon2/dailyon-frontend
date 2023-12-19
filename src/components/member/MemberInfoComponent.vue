@@ -29,11 +29,12 @@ onMounted(() => {
 });
 
 const formattedAddresses = computed(() => {
-  return addresses.value.map((address) => {
+  return (addresses.value as any[]).map((address) => {
     const deliveryName = `${address.roadAddress} ${address.detailAddress} ${address.postCode}`;
     return { ...address, deliveryName };
   });
 });
+
 </script>
 
 
