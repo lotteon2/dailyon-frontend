@@ -55,17 +55,17 @@ onBeforeMount(initData)
   <div style="width: 50vw">
     <BreadCrumbComponent :category="categoryId" />
     <div class="product-list-container">
-      <a
-        v-for="(product, index) in products"
-        :key="product.id"
+      <RouterLink
         class="prod-info"
-        :href="`/products/${product.id}`"
+        v-for="(product, index) in products"
+        :to="`/products/${product.id}`"
+        :key="product.id"
       >
         <img :src="`${VITE_STATIC_IMG_URL}${product.imgUrl}`" alt="productImg" />
         <h1>{{ product.brandName }}</h1>
         <h2>{{ product.name }}</h2>
         <h3>{{ product.price }}원</h3>
-      </a>
+      </RouterLink>
     </div>
   </div>
 </template>
@@ -83,8 +83,8 @@ onBeforeMount(initData)
 .prod-info {
   display: flex;
   flex-direction: column;
-  flex-basis: calc(25% - 20px);
-  margin: 10px;
+  flex-basis: calc(25% - 40px);
+  margin: 20px;
 }
 
 .prod-info > h1 {
