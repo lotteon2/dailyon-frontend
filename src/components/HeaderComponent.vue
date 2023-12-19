@@ -18,9 +18,6 @@ const isLoggedIn = () => {
 const memberStore = useMemberStore();
 const memberInfo = memberStore.getMemberInfo(); 
 
-console.log("피니아 헤더");
-console.log(memberInfo);
-
 const showCategoryDropdown = ref<boolean>(true)
 const rootCategories = ref<Category[]>([])
 
