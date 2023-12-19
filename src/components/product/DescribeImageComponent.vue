@@ -4,7 +4,7 @@ const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
 const props = defineProps({
   describeImgUrls: {
-    type: [],
+    type: Array<String>,
     required: false
   },
   isDescribeImages: {
@@ -16,7 +16,7 @@ const props = defineProps({
 
 <template>
   <img
-    v-if="props.describeImgUrls.length > 0"
+    v-if="props.describeImgUrls && props.describeImgUrls.length > 0"
     v-for="url in props.describeImgUrls"
     :src="`${VITE_STATIC_IMG_URL}${url}`"
     alt="describeImg"
