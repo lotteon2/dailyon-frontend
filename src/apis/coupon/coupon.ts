@@ -15,9 +15,8 @@ export const getCouponsWithAvailibilityForProductDetail = async (
   categoryId: number
 ): Promise<CouponInfoItemWithAvailabilityResponse[]> => {
   try {
-    const response = await authAxiosInstance.post(
+    const response = await authAxiosInstance.get(
       `${PROMOTION_PREFIX_PATH}${COUPON_DOMAIN_PREFIX_PATH}/single-product/with-availability`,
-      null,
       {
         params: {
           productId,
