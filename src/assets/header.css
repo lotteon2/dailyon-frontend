@@ -142,11 +142,9 @@
 
 .header-bottom {
     display: flex;
-    /*width: 100%;*/
-    width: 50vw;
-    justify-content: space-between;
+    width: 100%;
+    justify-content: center;
     align-items: center;
-    margin: 0 auto;
     gap: 1.5vw;
 }
 

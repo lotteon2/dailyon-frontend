@@ -1,11 +1,68 @@
 <script setup lang="ts">
-import { ref, onMounted, defineEmits, defineProps, computed, watch } from 'vue'
+import { computed, onBeforeMount, ref, watch } from 'vue'
 import ProductDetailCouponModal from '@/components/promotion/coupon/productdetail/ProductDetailCouponModal.vue'
+import BreadCrumbComponent from '@/components/product/BreadCrumbComponent.vue'
+import { useRoute } from 'vue-router'
+import { getProductDetail } from '@/apis/product/ProductClient'
+import type { AxiosResponse } from 'axios'
+import type { ReadProductDetailResponse, ReadProductStockResponse } from '@/apis/product/ProductDto'
+import DescribeImageComponent from '@/components/product/DescribeImageComponent.vue'
+import ReviewComponent from '@/components/product/ReviewComponent.vue'
 
-const productId = ref<number>(1) // 종민님이 정해주시면 됩니다.
-const categoryId = ref<number>(1) // 종민님이 정해주시면 됩니다.
-const productPriceValue = ref<number>(50000) // 종민님이 정해주시면 됩니다.
-const showCouponModal = ref<boolean>(true)
+const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
+
+const route = useRoute()
+
+const isDescribeImages = ref<boolean>(true)
+
+const productId = ref<number>(0)
+const categoryId = ref<number>(0)
+const productPriceValue = ref<number>(0)
+const showCouponModal = ref<boolean>(false)
+
+const brandName = ref<string>('')
+const gender = ref<string>('')
+const productName = ref<string>('')
+const imgUrl = ref<string>('')
+const describeImgUrls = ref<String[]>([])
+
+const productStocks = ref<ReadProductStockResponse[]>([])
+
+const avgRating = ref<number>(0)
+const reviewCount = ref<number>(0)
+
+const selectedProductSize = ref<ReadProductStockResponse>({
+  productSizeId: 0,
+  productSizeName: '',
+  quantity: 1
+})
+const selectedQuantity = ref<number>(0)
+const selectedOriginalPrice = ref<number>(0)
+
+const initData = () => {
+  getProductDetail(Number(route.params.id))
+    .then((axiosResponse: AxiosResponse) => {
+      const response: ReadProductDetailResponse = axiosResponse.data
+
+      productId.value = Number(route.params.id)
+      categoryId.value = response.categoryId
+      productPriceValue.value = response.price
+      productName.value = response.name
+      brandName.value = response.brandName
+      gender.value = response.gender
+
+      imgUrl.value = response.imgUrl
+      describeImgUrls.value = response.describeImgUrls
+      productStocks.value = response.productStocks
+
+      avgRating.value = response.avgRating
+      reviewCount.value = response.reviewCount
+    })
+    .catch((error: any) => {
+      alert(error.response!.data!.message)
+    })
+}
+
 const closeCouponModal = () => {
   showCouponModal.value = false
 }
@@ -19,6 +76,48 @@ const handleTotalPriceUpdated = (newTotalPrice: number) => {
   // 보여주고 original 가격을 optional 하게 보여줄지?
   console.log(`혜택가 업데이트: ${newTotalPrice}`)
 }
+
+const plusQuantity = () => {
+  if (
+    selectedProductSize.value.productSizeId !== 0 &&
+    selectedQuantity.value + 1 <= selectedProductSize.value.quantity
+  ) {
+    ++selectedQuantity.value
+  }
+}
+const minusQuantity = () => {
+  if (selectedProductSize.value.productSizeId !== 0 && selectedQuantity.value - 1 >= 0) {
+    --selectedQuantity.value
+  }
+}
+
+const toggleOption = () => {
+  isDescribeImages.value = !isDescribeImages.value
+}
+
+const addToCart = () => {
+  if (selectedProductSize.value.productSizeId === 0) {
+    alert('옵션을 지정해주세요')
+    return
+  }
+  if (selectedQuantity.value === 0) {
+    alert('개수를 추가해주세요')
+    return
+  }
+  alert(
+    `장바구니 추가 : productId: ${productId.value}, productSizeId: ${selectedProductSize.value.productSizeId}, quantity: ${selectedQuantity.value}`
+  )
+}
+
+onBeforeMount(initData)
+
+watch(selectedQuantity, () => {
+  selectedOriginalPrice.value = selectedQuantity.value * productPriceValue.value
+})
+
+watch(selectedProductSize, () => {
+  selectedQuantity.value = 0
+})
 </script>
 
 <template>
@@ -31,40 +130,18 @@ const handleTotalPriceUpdated = (newTotalPrice: number) => {
     :productPriceValue="productPriceValue"
   ></ProductDetailCouponModal>
   <div class="main-container">
-    <div class="category">홈 > WOMEN > SHOES</div>
+    <BreadCrumbComponent v-if="categoryId !== 0" :category="categoryId" />
     <div class="first-wrapper">
       <div class="prod-first-col">
-        <img class="img-big" src="@/assets/images/prod-img.png" alt="" />
-        <div class="small-img-container">
-          <img class="img-small" src="@/assets/images/prod-img.png" alt="" />
-          <img class="img-small" src="@/assets/images/prod-img.png" alt="" />
-          <img class="img-small" src="@/assets/images/prod-img.png" alt="" />
-          <img class="img-small" src="@/assets/images/prod-img.png" alt="" />
-        </div>
-        <div class="bell-container">
-          <div class="bell-box">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="60"
-              height="60"
-              viewBox="0 0 60 60"
-              fill="none"
-            >
-              <path
-                d="M52.5 47.5V50H7.5V47.5L12.5 42.5V27.5C12.5 19.75 17.575 12.925 25 10.725V10C25 8.67392 25.5268 7.40215 26.4645 6.46447C27.4021 5.52678 28.6739 5 30 5C31.3261 5 32.5979 5.52678 33.5355 6.46447C34.4732 7.40215 35 8.67392 35 10V10.725C42.425 12.925 47.5 19.75 47.5 27.5V42.5L52.5 47.5ZM35 52.5C35 53.8261 34.4732 55.0979 33.5355 56.0355C32.5979 56.9732 31.3261 57.5 30 57.5C28.6739 57.5 27.4021 56.9732 26.4645 56.0355C25.5268 55.0979 25 53.8261 25 52.5"
-                fill="#C22727"
-              />
-            </svg>
-          </div>
-        </div>
+        <img class="img-big" :src="`${VITE_STATIC_IMG_URL}${imgUrl}?w=200&h=200`" alt="" />
       </div>
       <div class="prod-second-col">
         <div class="second-col-first-row">
           <div class="brand-prod-name">
-            <h1>BRAND</h1>
-            <h2>상품명</h2>
+            <h1>{{ brandName }}</h1>
+            <h2>{{ productName }}</h2>
           </div>
-          <div class="sold-out">품절</div>
+          <div v-if="selectedProductSize.quantity === 0" class="sold-out">품절</div>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="60"
@@ -82,12 +159,14 @@ const handleTotalPriceUpdated = (newTotalPrice: number) => {
         <div class="price-info-container">
           <div class="price-info-row">
             <h1>데일리온가</h1>
-            <h2>가격</h2>
+            <!-- TODO : 여기에 할인 적용된 금액 들어가나요? -->
+            <h2>{{ productPriceValue }}</h2>
+            <!-- TODO : 여기에 최대 할인율? 할인 금액 나오는건가요? -->
             <h3>할인율</h3>
           </div>
           <div class="price-info-row">
             <h1>&nbsp;</h1>
-            <div class="dash">원가격</div>
+            <div class="dash">{{ productPriceValue }}</div>
           </div>
           <div class="price-info-row">
             <h1>프로모션</h1>
@@ -134,27 +213,21 @@ const handleTotalPriceUpdated = (newTotalPrice: number) => {
             </div>
           </div>
           <div class="price-info-row">
-            <h1>배송정보</h1>
-            <h4>배송정보</h4>
-          </div>
-          <div class="price-info-row">
-            <h1>추가정보</h1>
-            <h4>추가정보</h4>
-          </div>
-          <div class="price-info-row">
-            <span>상품옵션</span>
-            <select name="languages" id="lang">
-              <option value="option1">상품옵션</option>
-              <option value="option1">상품옵션</option>
-              <option value="option1">상품옵션</option>
-              <option value="option1">상품옵션</option>
-              <option value="option1">상품옵션</option>
+            <span>상품 옵션</span>
+            <select v-model.lazy.number="selectedProductSize">
+              <option
+                v-for="(productStock, index) in productStocks"
+                :key="index"
+                :value="productStock"
+              >
+                {{ productStock.productSizeName }}
+                {{ productStock.quantity <= 100 ? ' - ' + productStock.quantity + '개' : '' }}
+              </option>
             </select>
           </div>
           <div class="option-container">
-            <h1>상품명 - 상품 옵션</h1>
             <div class="plus-minus-wrapper">
-              <div class="count-button">
+              <div class="count-button" @click="minusQuantity">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="18"
@@ -170,8 +243,8 @@ const handleTotalPriceUpdated = (newTotalPrice: number) => {
                   />
                 </svg>
               </div>
-              <span>0</span>
-              <div class="count-button">
+              <span>{{ selectedQuantity }}</span>
+              <div class="count-button" @click="plusQuantity">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="14"
@@ -186,323 +259,63 @@ const handleTotalPriceUpdated = (newTotalPrice: number) => {
                 </svg>
               </div>
             </div>
-            <h2>가격</h2>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="30"
-              height="30"
-              viewBox="0 0 30 30"
-              fill="none"
-            >
-              <path
-                d="M24.4326 22.4426C24.6968 22.7068 24.8452 23.0651 24.8452 23.4387C24.8452 23.8123 24.6968 24.1706 24.4326 24.4348C24.1684 24.699 23.8101 24.8474 23.4365 24.8474C23.0629 24.8474 22.7046 24.699 22.4404 24.4348L15.0002 16.9922L7.55762 24.4324C7.29343 24.6966 6.93513 24.845 6.56152 24.845C6.18791 24.845 5.82961 24.6966 5.56543 24.4324C5.30125 24.1683 5.15283 23.81 5.15283 23.4364C5.15283 23.0627 5.30125 22.7044 5.56543 22.4403L13.008 15L5.56777 7.55744C5.30359 7.29326 5.15518 6.93496 5.15518 6.56135C5.15518 6.18774 5.30359 5.82944 5.56777 5.56526C5.83195 5.30108 6.19026 5.15266 6.56386 5.15266C6.93747 5.15266 7.29578 5.30108 7.55996 5.56526L15.0002 13.0078L22.4428 5.56408C22.707 5.2999 23.0653 5.15149 23.4389 5.15149C23.8125 5.15149 24.1708 5.2999 24.435 5.56408C24.6991 5.82827 24.8476 6.18657 24.8476 6.56018C24.8476 6.93379 24.6991 7.29209 24.435 7.55627L16.9924 15L24.4326 22.4426Z"
-                fill="#C6C6C6"
-              />
-            </svg>
+            <h2>{{ selectedOriginalPrice }} 원</h2>
           </div>
           <div class="line"></div>
           <div class="price-wrapper">
             <h1>총 합계금액</h1>
-            <h2>가격</h2>
+            <!-- TODO : 할인률 적용된 금액 -->
+            <h2>{{ selectedOriginalPrice }} 원</h2>
           </div>
 
           <div class="buttons-wrapper">
-            <div class="bucket-button">장바구니</div>
-            <div class="purchase-button">즉시구매</div>
+            <div class="bell-box">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="60"
+                height="60"
+                viewBox="0 0 60 60"
+                fill="none"
+              >
+                <path
+                  d="M52.5 47.5V50H7.5V47.5L12.5 42.5V27.5C12.5 19.75 17.575 12.925 25 10.725V10C25 8.67392 25.5268 7.40215 26.4645 6.46447C27.4021 5.52678 28.6739 5 30 5C31.3261 5 32.5979 5.52678 33.5355 6.46447C34.4732 7.40215 35 8.67392 35 10V10.725C42.425 12.925 47.5 19.75 47.5 27.5V42.5L52.5 47.5ZM35 52.5C35 53.8261 34.4732 55.0979 33.5355 56.0355C32.5979 56.9732 31.3261 57.5 30 57.5C28.6739 57.5 27.4021 56.9732 26.4645 56.0355C25.5268 55.0979 25 53.8261 25 52.5"
+                  fill="#C22727"
+                />
+              </svg>
+            </div>
+            <!-- TODO : 장바구니 개발 이후 추가 동작 개발 -->
+            <div class="bucket-button" @click="addToCart">장바구니</div>
+            <!-- TODO : 버튼 클릭 시 주문 페이지  (가주문 X) 생성 -->
+            <div class="purchase-button">바로 구매</div>
           </div>
         </div>
       </div>
     </div>
     <div class="second-wrapper">
       <div class="select-button-wrapper">
-        <div class="selected-button">상세 정보</div>
-        <div class="non-selected-button">상품 후기(N)</div>
-        <div class="non-selected-button">상품 문의</div>
+        <div
+          :class="`${isDescribeImages === true ? 'selected-button' : 'non-selected-button'}`"
+          @click="toggleOption"
+        >
+          상세 정보
+        </div>
+        <div
+          :class="`${isDescribeImages === false ? 'selected-button' : 'non-selected-button'}`"
+          @click="toggleOption"
+        >
+          상품 후기
+        </div>
       </div>
       <div class="line"></div>
-      <span>상세 정보</span>
+      <DescribeImageComponent
+        v-if="isDescribeImages"
+        :is-describe-images="isDescribeImages"
+        :describe-img-urls="describeImgUrls"
+      />
+      <ReviewComponent v-if="!isDescribeImages" />
     </div>
     <div class="third-wrapper">
-      <div class="select-button-wrapper">
-        <div class="non-selected-button">상세 정보</div>
-        <div class="selected-button">상품 후기(N)</div>
-        <div class="non-selected-button">상품 문의</div>
-      </div>
       <div class="line"></div>
-      <h1>상품 후기(N)</h1>
-      <div class="thick-line"></div>
-      <div class="star-container">
-        <div class="star-text">고객 만족도</div>
-        <div class="star-wrapper">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="35"
-            height="34"
-            viewBox="0 0 35 34"
-            fill="none"
-          >
-            <path
-              d="M6.69375 33.25L9.5375 20.9563L0 12.6875L12.6 11.5938L17.5 0L22.4 11.5938L35 12.6875L25.4625 20.9563L28.3062 33.25L17.5 26.7312L6.69375 33.25Z"
-              fill="black"
-            />
-          </svg>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="35"
-            height="34"
-            viewBox="0 0 35 34"
-            fill="none"
-          >
-            <path
-              d="M6.69375 33.25L9.5375 20.9563L0 12.6875L12.6 11.5938L17.5 0L22.4 11.5938L35 12.6875L25.4625 20.9563L28.3062 33.25L17.5 26.7312L6.69375 33.25Z"
-              fill="black"
-            />
-          </svg>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="35"
-            height="34"
-            viewBox="0 0 35 34"
-            fill="none"
-          >
-            <path
-              d="M6.69375 33.25L9.5375 20.9563L0 12.6875L12.6 11.5938L17.5 0L22.4 11.5938L35 12.6875L25.4625 20.9563L28.3062 33.25L17.5 26.7312L6.69375 33.25Z"
-              fill="black"
-            />
-          </svg>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="35"
-            height="34"
-            viewBox="0 0 35 34"
-            fill="none"
-          >
-            <path
-              d="M6.69375 33.25L9.5375 20.9563L0 12.6875L12.6 11.5938L17.5 0L22.4 11.5938L35 12.6875L25.4625 20.9563L28.3062 33.25L17.5 26.7312L6.69375 33.25Z"
-              fill="black"
-            />
-          </svg>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="35"
-            height="34"
-            viewBox="0 0 35 34"
-            fill="none"
-          >
-            <path
-              d="M6.69375 33.25L9.5375 20.9563L0 12.6875L12.6 11.5938L17.5 0L22.4 11.5938L35 12.6875L25.4625 20.9563L28.3062 33.25L17.5 26.7312L6.69375 33.25Z"
-              fill="#C6C6C6"
-            />
-          </svg>
-        </div>
-        <h1>4.2</h1>
-        <h2>/5.0</h2>
-      </div>
-      <img class="summary-img" src="@/assets/images/review-summary.png" alt="" />
-      <div class="line"></div>
-      <div class="review-first-row">
-        <div class="tap-wrapper">
-          <h1>전체(N)</h1>
-          |
-          <h2>포토리뷰</h2>
-        </div>
-        <select name="languages" id="lang">
-          <option value="option1">최신순</option>
-          <option value="option1">오래된순</option>
-          <option value="option1">만족도높은순</option>
-          <option value="option1">만족도낮은순</option>
-        </select>
-      </div>
-      <div class="black-line"></div>
-      <div class="review-container">
-        <div class="review-container-left-container">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="80"
-            height="80"
-            viewBox="0 0 80 80"
-            fill="none"
-          >
-            <circle cx="40" cy="40" r="40" fill="#D9D9D9" />
-          </svg>
-          <div class="review-container-first-col">
-            <span>닉네임</span>
-            <div>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="19"
-                viewBox="0 0 20 19"
-                fill="none"
-              >
-                <path
-                  d="M3.825 19L5.45 11.975L0 7.25L7.2 6.625L10 0L12.8 6.625L20 7.25L14.55 11.975L16.175 19L10 15.275L3.825 19Z"
-                  fill="black"
-                />
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="19"
-                viewBox="0 0 20 19"
-                fill="none"
-              >
-                <path
-                  d="M3.825 19L5.45 11.975L0 7.25L7.2 6.625L10 0L12.8 6.625L20 7.25L14.55 11.975L16.175 19L10 15.275L3.825 19Z"
-                  fill="black"
-                />
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="19"
-                viewBox="0 0 20 19"
-                fill="none"
-              >
-                <path
-                  d="M3.825 19L5.45 11.975L0 7.25L7.2 6.625L10 0L12.8 6.625L20 7.25L14.55 11.975L16.175 19L10 15.275L3.825 19Z"
-                  fill="black"
-                />
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="19"
-                viewBox="0 0 20 19"
-                fill="none"
-              >
-                <path
-                  d="M3.825 19L5.45 11.975L0 7.25L7.2 6.625L10 0L12.8 6.625L20 7.25L14.55 11.975L16.175 19L10 15.275L3.825 19Z"
-                  fill="black"
-                />
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="19"
-                viewBox="0 0 20 19"
-                fill="none"
-              >
-                <path
-                  d="M3.825 19L5.45 11.975L0 7.25L7.2 6.625L10 0L12.8 6.625L20 7.25L14.55 11.975L16.175 19L10 15.275L3.825 19Z"
-                  fill="#C6C6C6"
-                />
-              </svg>
-            </div>
-          </div>
-          <div class="review-container-second-col">
-            <div class="grey-box-wrapper">
-              <div class="grey-box">잘 맞아요</div>
-              <div class="grey-box">화면과 같아요</div>
-              <div class="grey-box">정사이즈</div>
-            </div>
-            <div class="review-prod-name-wrapper">
-              <h1>상품명 - 상품옵션</h1>
-              <h2>작성일</h2>
-            </div>
-            <h3>리뷰 내용</h3>
-          </div>
-        </div>
-        <div class="review-container-right-container">
-          <img src="@/assets/images/prod-img.png" alt="" />
-        </div>
-      </div>
-      <div class="line"></div>
-      <div class="review-container">
-        <div class="review-container-left-container">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="80"
-            height="80"
-            viewBox="0 0 80 80"
-            fill="none"
-          >
-            <circle cx="40" cy="40" r="40" fill="#D9D9D9" />
-          </svg>
-          <div class="review-container-first-col">
-            <span>닉네임</span>
-            <div>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="19"
-                viewBox="0 0 20 19"
-                fill="none"
-              >
-                <path
-                  d="M3.825 19L5.45 11.975L0 7.25L7.2 6.625L10 0L12.8 6.625L20 7.25L14.55 11.975L16.175 19L10 15.275L3.825 19Z"
-                  fill="black"
-                />
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="19"
-                viewBox="0 0 20 19"
-                fill="none"
-              >
-                <path
-                  d="M3.825 19L5.45 11.975L0 7.25L7.2 6.625L10 0L12.8 6.625L20 7.25L14.55 11.975L16.175 19L10 15.275L3.825 19Z"
-                  fill="black"
-                />
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="19"
-                viewBox="0 0 20 19"
-                fill="none"
-              >
-                <path
-                  d="M3.825 19L5.45 11.975L0 7.25L7.2 6.625L10 0L12.8 6.625L20 7.25L14.55 11.975L16.175 19L10 15.275L3.825 19Z"
-                  fill="black"
-                />
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="19"
-                viewBox="0 0 20 19"
-                fill="none"
-              >
-                <path
-                  d="M3.825 19L5.45 11.975L0 7.25L7.2 6.625L10 0L12.8 6.625L20 7.25L14.55 11.975L16.175 19L10 15.275L3.825 19Z"
-                  fill="black"
-                />
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="19"
-                viewBox="0 0 20 19"
-                fill="none"
-              >
-                <path
-                  d="M3.825 19L5.45 11.975L0 7.25L7.2 6.625L10 0L12.8 6.625L20 7.25L14.55 11.975L16.175 19L10 15.275L3.825 19Z"
-                  fill="#C6C6C6"
-                />
-              </svg>
-            </div>
-          </div>
-          <div class="review-container-second-col">
-            <div class="grey-box-wrapper">
-              <div class="grey-box">잘 맞아요</div>
-              <div class="grey-box">화면과 같아요</div>
-              <div class="grey-box">정사이즈</div>
-            </div>
-            <div class="review-prod-name-wrapper">
-              <h1>상품명 - 상품옵션</h1>
-              <h2>작성일</h2>
-            </div>
-            <h3>리뷰 내용</h3>
-          </div>
-        </div>
-        <div class="review-container-right-container">
-          <img src="@/assets/images/prod-img.png" alt="" />
-        </div>
-      </div>
-      <div class="line"></div>
-
       <div class="top4-ootd-wrapper">
         <div class="top4-ootd-title-wrapper">
           <div class="top4-ootd-title-text">TOP 4 OOTD</div>
