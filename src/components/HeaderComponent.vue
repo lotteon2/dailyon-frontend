@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
 import { onBeforeMount, onMounted, ref } from 'vue'
-import type { Category } from '@/apis/product/category/CategoryDto'
+import type { Category } from '@/apis/category/CategoryDto'
 import HeaderCategoryComponent from '@/components/HeaderCategoryComponent.vue'
-import { getChildCategories } from '@/apis/product/category/CategoryClient'
+import { getChildCategories } from '@/apis/category/CategoryClient'
 import type { AxiosResponse } from 'axios'
 import { useMemberStore } from '@/stores/member/MemberStore'
 
@@ -13,11 +13,11 @@ const isLoggedIn = () => {
   return isLoggedIn
 }
 
-const memberStore = useMemberStore()
-const memberInfo = memberStore.getMemberInfo()
-
 const showCategoryDropdown = ref<boolean>(true)
 const rootCategories = ref<Category[]>([])
+
+const memberStore = useMemberStore()
+const memberInfo = memberStore.getMemberInfo()
 
 onBeforeMount(() => {
   getChildCategories(null)
@@ -183,10 +183,4 @@ onBeforeMount(() => {
 
 <style scoped>
 @import '@/assets/header.css';
-.profile-image {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-right: 10px;
-}
 </style>
