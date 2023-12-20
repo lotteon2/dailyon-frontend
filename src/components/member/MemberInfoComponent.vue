@@ -1,11 +1,18 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed} from 'vue';
 import ModalView from './AddressModal.vue';
 import { authAxiosInstance } from '@/apis/utils';
 import { useMemberStore } from '@/stores/member/MemberStore';
+import { getMember, getMemberAddress } from '@/apis/member/member';
+
 
 const isModalVisible = ref(false);
 const addresses = ref([]);
+const currentPage = ref(0);
+const totalPages = ref(1);
+
+const memberStore = useMemberStore();
+const memberInfo = memberStore.getMemberInfo(); 
 
 const openModal = () => {
   isModalVisible.value = true;
@@ -15,18 +22,19 @@ const closeModal = () => {
   isModalVisible.value = false;
 };
 
-const getMemberAddress = async () => {
-  try {
-    const response = await authAxiosInstance.get('/member-service/addresses');
-    addresses.value = response.data;
-  } catch (error) {
-    console.error('API 호출 중 오류 발생:', error);
-  }
+const updatePage = async (page : any) => {
+  currentPage.value = page;
+  const response = await getMemberAddress(page - 1);
+  addresses.value = response.content;
+  totalPages.value = response.totalPages;
 };
 
-onMounted(() => {
-  getMemberAddress();
+
+onMounted(async () => {
+  await getMember();
+  await updatePage(currentPage.value);
 });
+
 
 const formattedAddresses = computed(() => {
   return (addresses.value as any[]).map((address) => {
@@ -52,26 +60,37 @@ const formattedAddresses = computed(() => {
       </div>
     </div>
     <div class="user-info-second-row">
-      <div class="user-info-second-row-first-col">
-        <svg
-          class="profile-circle"
-          xmlns="http://www.w3.org/2000/svg"
+    <div class="user-info-second-row-first-col">
+      <svg
+        class="profile-circle"
+        width="150"
+        height="150"
+        viewBox="0 0 150 150"
+        fill="none"
+      >
+        <circle cx="75" cy="75" r="75" fill="#D9D9D9" />
+        <mask id="circle-mask">
+          <circle cx="75" cy="75" r="75" fill="white" />
+        </mask>
+        <image
+          :href="memberInfo.profileImgUrl || undefined"
+          x="0"
+          y="0"
           width="150"
           height="150"
-          viewBox="0 0 150 150"
-          fill="none"
-        >
-          <circle cx="75" cy="75" r="75" fill="#D9D9D9" />
-        </svg>
-        <div class="profile-change-button">프로필 변경</div>
-      </div>
+          mask="url(#circle-mask)"
+          preserveAspectRatio="xMidYMid slice"
+        />
+      </svg>
+      <div class="profile-change-button">프로필 변경</div>
+    </div>
       <div class="user-info-second-row-second-col">
         <span>이메일</span>
         <span>닉네임</span>
         <span>기본 배송지</span>
       </div>
       <div class="user-info-second-row-third-col">
-        <span>이메일</span>
+        <span>{{ memberInfo.email }} </span>
         <span class="info-underline">닉네임</span>
         <span class="info-underline">기본 주소</span>
       </div>
@@ -79,8 +98,10 @@ const formattedAddresses = computed(() => {
         <div class="place-choice-button">배송지 선택</div>
       </div>
     </div>
+    <div class="place-add-button" @click="openModal"> 배송지 추가</div>
+          <ModalView v-if="isModalVisible" :closeModal="closeModal" />
     <div class="container-inner-title">배송지 관리</div>
-    <table>
+    <table v-if="formattedAddresses.length > 0">
     <col width="80px" />
     <col width="100px" />
     <col width="150px" />
@@ -89,10 +110,9 @@ const formattedAddresses = computed(() => {
     <tr class="place-font memberinfo-table-data1">
       <td class="padding-left-10">선택</td>
       <td>배송지명</td>
-      <td>이름</td>
+      <td>전화번호</td>
       <td>배송지 주소</td>
-      <div class="place-add-button" @click="openModal"> 배송지 추가</div>
-          <ModalView v-if="isModalVisible" :closeModal="closeModal" />
+      <td></td>
     </tr>
     <tr v-for="(address, index) in formattedAddresses" :key="index" class="place-font memberinfo-table-data1">
       <td class="padding-left-10">
@@ -120,11 +140,23 @@ const formattedAddresses = computed(() => {
       </td>
     </tr>
   </table>
-
+  <div v-else>
+      <p>배송지가 비어 있습니다. 배송지를 추가해주세요.</p>
+  </div>
+  <div class="pagination">
+    <button @click="currentPage > 1 && updatePage(currentPage - 1)" class="pagination-button">이전</button>
+    <button v-for="page in totalPages" :key="page" @click="updatePage(page)" class="pagination-button">
+      {{ page }}
+    </button>
+    <button @click="currentPage < totalPages && updatePage(currentPage + 1)" class="pagination-button">다음</button>
+  </div>
   </div>
 </template>
 
 <style scoped>
 @import "@/assets/css/member-info.css";
+div[hidden] {
+  display: none;
+}
 </style>
 
