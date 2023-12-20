@@ -1,4 +1,42 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref } from 'vue'
+const orderSheet = ref({
+  orderItems: [
+    {
+      productId: 1,
+      categoryId: 1,
+      sizeId: 1,
+      orderPrice: '1000',
+      quantity: 1,
+      couponInfoId: 1, //null 가능
+      referralCode: '9d81364e-8352-11ee-b962-0242ac120002'
+    },
+    {
+      productId: 1,
+      categoryId: 1,
+      sizeId: 1,
+      orderPrice: '1000',
+      quantity: 1,
+      couponInfoId: 1, //null 가능
+      referralCode: '9d81364e-8352-11ee-b962-0242ac120002'
+    }
+  ],
+  orderInfo: {
+    usedPoints: 1000,
+    type: 'SINGLE',
+    deliveryFee: 3000,
+    totalCouponDiscountPrice: 1000
+  },
+  deliveryInfo: {
+    receiver: '김선비',
+    postCode: '255-255',
+    roadAddress: '강남구 5길',
+    detailAddress: '52번지 비트교육센터',
+    phoneNumber: '010-2555-1021'
+  },
+  paymentType: 'KAKAOPAY'
+})
+</script>
 
 <template>
   <div class="main-container">
