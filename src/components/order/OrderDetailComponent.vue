@@ -10,7 +10,7 @@ const props = defineProps({
 })
 </script>
 <template v-if="props.orderDetails">
-  <div div v-for="(orderDetail, index) in orderDetails" :key="index" class="order-detail-container">
+  <div v-for="(orderDetail, index) in orderDetails" :key="index" class="order-detail-container">
     <div class="left-section">
       <div class="left-inner-status">
         <div class="product-status bold-text">{{ orderDetail.status }}</div>
