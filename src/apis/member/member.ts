@@ -30,8 +30,6 @@ export const getMember = async () => {
           size: 5,
         },
       });
-      console.log("페이지네이션 어드레스");
-      console.log(response.data);
       return response.data;
     } catch (error) {
       console.error('API 호출 중 오류 발생:', error);
