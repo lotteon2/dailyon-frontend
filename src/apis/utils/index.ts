@@ -6,8 +6,8 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL
 // 기본 API 요청 처리
 const axiosApi = (baseURL: string) => {
   return axios.create({
-    baseURL,
-    withCredentials: true
+    baseURL
+    // withCredentials: true
   })
 }
 

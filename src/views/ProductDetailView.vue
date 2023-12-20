@@ -91,8 +91,12 @@ const minusQuantity = () => {
   }
 }
 
-const toggleOption = () => {
-  isDescribeImages.value = !isDescribeImages.value
+const toggleOption = (option: boolean) => {
+  if (option) {
+    isDescribeImages.value = option
+  } else {
+    isDescribeImages.value = option
+  }
 }
 
 const addToCart = () => {
@@ -295,26 +299,26 @@ watch(selectedProductSize, () => {
       <div class="select-button-wrapper">
         <div
           :class="`${isDescribeImages === true ? 'selected-button' : 'non-selected-button'}`"
-          @click="toggleOption"
+          @click="toggleOption(true)"
         >
           상세 정보
         </div>
         <div
           :class="`${isDescribeImages === false ? 'selected-button' : 'non-selected-button'}`"
-          @click="toggleOption"
+          @click="toggleOption(false)"
         >
           상품 후기
         </div>
       </div>
       <div class="line"></div>
-      <DescribeImageComponent
-        v-if="isDescribeImages"
-        :is-describe-images="isDescribeImages"
-        :describe-img-urls="describeImgUrls"
-      />
-      <ReviewComponent v-if="!isDescribeImages" />
+      <div v-show="isDescribeImages">
+        <DescribeImageComponent :describe-img-urls="describeImgUrls" />
+      </div>
+      <div v-show="!isDescribeImages">
+        <ReviewComponent :productName="productName" />
+      </div>
     </div>
-    <div class="third-wrapper">
+    <!-- <div class="third-wrapper">
       <div class="line"></div>
       <div class="top4-ootd-wrapper">
         <div class="top4-ootd-title-wrapper">
@@ -329,7 +333,7 @@ watch(selectedProductSize, () => {
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
