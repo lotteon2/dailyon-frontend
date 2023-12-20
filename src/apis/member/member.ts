@@ -21,7 +21,7 @@ export const getMember = async () => {
 
   export const getMemberAddress = async (page : Number) => {
     try {
-      const response = await authAxiosInstance.get('${MEMBER_SERVICE_PREFIX}/addresses/test', {
+      const response = await authAxiosInstance.get(`${MEMBER_SERVICE_PREFIX}/addresses`, {
         params: {
           page: page,
           size: 5,
