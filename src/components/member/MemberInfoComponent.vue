@@ -3,7 +3,7 @@ import { ref, onMounted, computed} from 'vue';
 import ModalView from './AddressModal.vue';
 import { authAxiosInstance } from '@/apis/utils';
 import { useMemberStore } from '@/stores/member/MemberStore';
-import { getMember, getMemberAddressT } from '@/apis/member/member';
+import { getMember, getMemberAddress } from '@/apis/member/member';
 
 
 const isModalVisible = ref(false);
@@ -24,7 +24,7 @@ const closeModal = () => {
 
 const updatePage = async (page : any) => {
   currentPage.value = page;
-  const response = await getMemberAddressT(page - 1);
+  const response = await getMemberAddress(page - 1);
   addresses.value = response.content;
   totalPages.value = response.totalPages;
 };
