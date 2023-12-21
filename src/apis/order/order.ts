@@ -6,7 +6,7 @@ const ORDER_SERVICE_PREFIX_PATH = '/order-service'
 
 export const getOrders = async (page: number): Promise<OrderPageResponse<OrderResponse>> => {
   try {
-    const { data } = await authAxiosInstance.get(`/orders`, {
+    const { data } = await authAxiosInstance.get(`${ORDER_SERVICE_PREFIX_PATH}/orders`, {
       params: {
         page: page
       }
@@ -31,7 +31,7 @@ export const getOrders = async (page: number): Promise<OrderPageResponse<OrderRe
 
 export const getOrderDetails = async (orderNo: String): Promise<OrderDetailResponse[]> => {
   try {
-    const { data } = await authAxiosInstance.get(`/orders/${orderNo}`)
+    const { data } = await authAxiosInstance.get(`${ORDER_SERVICE_PREFIX_PATH}/orders/${orderNo}`)
     return data
   } catch (error) {
     if (error instanceof AxiosError) {
