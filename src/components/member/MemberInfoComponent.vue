@@ -3,7 +3,7 @@ import { ref, onMounted, computed} from 'vue';
 import ModalView from './AddressModal.vue';
 import { authAxiosInstance } from '@/apis/utils';
 import { useMemberStore } from '@/stores/member/MemberStore';
-import { getMember, getMemberAddress } from '@/apis/member/member';
+import { getMember, getMemberAddress, getDefaultAddress, setDefaultAddress } from '@/apis/member/member';
 
 
 const isModalVisible = ref(false);
@@ -13,6 +13,7 @@ const totalPages = ref(1);
 
 const memberStore = useMemberStore();
 const memberInfo = memberStore.getMemberInfo(); 
+const defaultAddress = ref();
 
 const openModal = () => {
   isModalVisible.value = true;
@@ -22,17 +23,25 @@ const closeModal = () => {
   isModalVisible.value = false;
 };
 
-const updatePage = async (page : any) => {
+const updatePage = async (page : number) => {
   currentPage.value = page;
   const response = await getMemberAddress(page - 1);
   addresses.value = response.content;
   totalPages.value = response.totalPages;
 };
 
+const setDefault = async (addressId : number) => {
+  setDefaultAddress( addressId )
+  alert("기본 배송지가 저장되었습니다.")
+  window.location.reload()
+};
+
 
 onMounted(async () => {
   await getMember();
   await updatePage(currentPage.value);
+  const addressData = await getDefaultAddress();
+  defaultAddress.value = await getDefaultAddress();
 });
 
 
@@ -87,40 +96,39 @@ const formattedAddresses = computed(() => {
       <div class="user-info-second-row-second-col">
         <span>이메일</span>
         <span>닉네임</span>
+        <span>성별</span>
+        <span>연령대</span>
         <span>기본 배송지</span>
       </div>
       <div class="user-info-second-row-third-col">
         <span>{{ memberInfo.email }} </span>
-        <span class="info-underline">닉네임</span>
-        <span class="info-underline">기본 주소</span>
-      </div>
-      <div class="user-info-second-row-fourth-col">
-        <div class="place-choice-button">배송지 선택</div>
+        <span class="info-underline">{{ memberInfo.nickname }}</span>
+        <span class="info-underline">{{ memberInfo.gender }}</span>
+        <span class="info-underline">{{ memberInfo.birth }}</span>
+        <span class="info-underline">{{ defaultAddress?.roadAddress + ' ' + defaultAddress?.detailAddress }}</span>
       </div>
     </div>
+    <div class="container-inner-title">배송지 관리</div>
     <div class="place-add-button" @click="openModal"> 배송지 추가</div>
           <ModalView v-if="isModalVisible" :closeModal="closeModal" />
-    <div class="container-inner-title">배송지 관리</div>
     <table v-if="formattedAddresses.length > 0">
-    <col width="80px" />
-    <col width="100px" />
     <col width="150px" />
+    <col width="200px" />
     <col width="400px" />
     <col width="80px" />
+    <col width="80px" />
     <tr class="place-font memberinfo-table-data1">
-      <td class="padding-left-10">선택</td>
-      <td>배송지명</td>
+      <td class="padding-left-10">배송지명</td>
       <td>전화번호</td>
       <td>배송지 주소</td>
       <td></td>
+      <td></td>
     </tr>
     <tr v-for="(address, index) in formattedAddresses" :key="index" class="place-font memberinfo-table-data1">
-      <td class="padding-left-10">
-        <input class="basket-checkbox" type="checkbox" />
-      </td>
       <td>{{ address.name }}</td>
       <td>{{ address.phoneNumber }}</td>
       <td>{{ address.roadAddress + ' ' + address.detailAddress + ' ' + address.postCode }}</td>
+      <td><div class="place-add-button" @click="setDefault( address.id )"> 기본 지정</div></td>
       <td>
         <div class="close-button-div">
           <svg
