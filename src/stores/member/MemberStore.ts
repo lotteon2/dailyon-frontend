@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 
 interface MemberInfo {
+  memberId: Number | null;
   birth: string | null;
   email: string | null;
   gender: string | null;
@@ -12,6 +13,7 @@ interface MemberInfo {
 export const useMemberStore = defineStore({
   id: 'member',
   state: (): MemberInfo => ({
+    memberId: null,
     birth: null,
     email: null,
     gender: null,
@@ -21,6 +23,7 @@ export const useMemberStore = defineStore({
   }),
   actions: {
     setMemberInfo(info: MemberInfo) {
+      this.memberId = info.memberId;
       this.birth = info.birth;
       this.email = info.email;
       this.gender = info.gender;
@@ -30,6 +33,7 @@ export const useMemberStore = defineStore({
     },
     getMemberInfo(): MemberInfo {
       return {
+        memberId: this.memberId,
         birth: this.birth,
         email: this.email,
         gender: this.gender,

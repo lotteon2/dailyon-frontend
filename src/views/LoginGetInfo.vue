@@ -8,6 +8,7 @@ import { useMemberStore } from '@/stores/member/MemberStore';
 const getMember = async () => {
   try {
     const response = await authAxiosInstance.get('/member-service/members');
+    console.log(response.data)
     return response.data;
   } catch (error) {
     console.error('API 호출 중 오류 발생:', error);
@@ -23,7 +24,10 @@ onMounted(async () => {
   const memberInfo = await getMember()
  
   memberStore.setMemberInfo(memberInfo);
-  redirectToMainPage();
+
+  console.log(memberInfo)
+
+  //redirectToMainPage();
 });
 
 const redirectToMainPage = () => {
