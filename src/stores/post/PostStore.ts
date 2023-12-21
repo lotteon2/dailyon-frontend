@@ -54,10 +54,20 @@ export const usePostStore
   }
 
   const getPostViews = async () => {
+    if(localStorage.getItem("postViews") === null) {
+      const newPostViews = {
+        value: [] as number[],
+        expiry: new Date(Date.now() + 24 * 60 * 60 * 1000)
+      }
+      localStorage.setItem("postViews", JSON.stringify(postViews))
+      postViews.value = newPostViews.value
+      return postViews
+    }
+
     const postViewsStorage
       = JSON.parse(localStorage.getItem("postViews")!) as {value: number[], expiry: Date}
     const expiryDate: Date = postViewsStorage.expiry
-    if(!postViewsStorage || expiryDate < new Date()) {
+    if(expiryDate < new Date()) {
       const newPostViews = {
         value: [] as number[],
         expiry: new Date(Date.now() + 24 * 60 * 60 * 1000)
