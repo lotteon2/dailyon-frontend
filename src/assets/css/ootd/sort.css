@@ -1,0 +1,29 @@
+.ootd-header-sort-wrapper {
+    display: flex;
+    align-items: flex-start;
+}
+
+.ootd-sort-wrapper {
+    display: flex;
+    padding: 0.625rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.ootd-sort-text {
+    color: var(--Grayscale7, #000);
+    text-align: right;
+    font-family: The Jamsil;
+    font-size: 1.2vw;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.ootd-sort-text:hover {
+    cursor: pointer;
+}
+
+.ootd-sort-text.selected {
+    color: var(--Dark-Red, #C22727);
+}

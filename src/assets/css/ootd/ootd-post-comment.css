@@ -1,0 +1,384 @@
+.ootd-detail-comment-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: 1.6875rem;
+}
+
+.ootd-detail-comment-header-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 95%;
+}
+
+.ootd-detail-comment-count-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.25rem;
+}
+
+.ootd-detail-comment-count-text-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ootd-detail-comment-count-text {
+    color: var(--Grayscale7, #000);
+    font-family: The Jamsil;
+    font-size: 0.8vw;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.875rem; /* 150% */
+}
+
+.ootd-detail-comment-count-real-text-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.ootd-detail-comment-count-real-text {
+    color: var(--Dark-Red, #C22727);
+    font-family: The Jamsil;
+    font-size: 0.8vw;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 1.875rem; /* 150% */
+}
+
+.ootd-detail-comment-input-box-wrapper {
+    display: flex;
+    padding: 0.3125rem;
+    width: 94%;
+    height: 2vh;
+
+    border-radius: 0.3125rem;
+    border: 1px solid #C6C6C6;
+}
+
+.ootd-detail-comment-input-wrapper {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 97%;
+
+    gap: 0.625rem;
+}
+
+.ootd-detail-comment-input {
+    font-family: The Jamsil;
+    font-size: 1.25rem;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+    width: 95%;
+
+    outline: none;
+    border: none;
+}
+
+.ootd-detail-comment-input-box-decoration-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
+}
+
+.ootd-detail-comment-input-box-decoration-text {
+    color: var(--Grayscale4, #C6C6C6);
+    font-family: The Jamsil;
+    font-size: 0.8vw;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+}
+
+.ootd-detail-comment-input-box-decoration-text.hover:hover {
+    cursor: pointer;
+}
+
+.ootd-detail-comment-body-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    width: 95%;
+}
+
+.ootd-detail-comment-box-wrapper {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+
+    gap: 0.5vw;
+}
+
+.ootd-detail-comment-profile-image {
+    width: 2vw;
+    height: 4vh;
+
+    border-radius: 2.5rem;
+}
+
+.ootd-detail-comment-box-wrapper-2 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    width: 100%;
+}
+
+.ootd-detail-comment-box-header-wrapper {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    position: relative;
+    width: 100%;
+}
+
+.ootd-detail-comment-box-header-left-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.ootd-detail-comment-box-header-nickname-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
+}
+
+.ootd-detail-comment-box-header-nickname-text {
+    color: var(--Grayscale7, #000);
+    font-family: The Jamsil;
+    font-size: 0.8vw;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.875rem; /* 150% */
+}
+
+.ootd-detail-comment-box-header-content-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
+}
+
+.ootd-detail-comment-box-header-content-text {
+    color: var(--Grayscale7, #000);
+    font-family: The Jamsil;
+    font-size: 0.8vw;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 1.875rem; /* 150% */
+}
+
+.ootd-detail-comment-box-header-content-metadata-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+.ootd-detail-comment-box-header-content-created-date-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
+}
+
+.ootd-detail-comment-box-header-content-created-date-text {
+    color: var(--Grayscale6, #4D4D4D);
+    font-family: The Jamsil;
+    font-size: 0.6vw;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 1.875rem; /* 250% */
+}
+
+.ootd-detail-comment-box-header-content-comment-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
+}
+
+.ootd-detail-comment-box-header-content-comment-wrapper:hover {
+    cursor: pointer;
+}
+
+.ootd-detail-comment-box-header-content-comment-button {
+    color: var(--Grayscale6, #4D4D4D);
+    font-family: The Jamsil;
+    font-size: 0.6vw;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 1.875rem; /* 250% */
+}
+
+.ootd-detail-comment-box-header-content-comment-button:hover {
+    cursor: pointer;
+}
+
+.ootd-detail-comment-box-header-right-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    position: absolute;
+    right: 0.5rem;
+}
+
+.ootd-detail-comment-box-header-right-wrapper:hover {
+    cursor: pointer;
+}
+
+.ootd-detail-comment-box-delete-text {
+    color: var(--Grayscale6, #4D4D4D);
+    font-family: The Jamsil;
+    font-size: 0.6vw;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 1.875rem; /* 250% */
+}
+
+.ootd-detail-reply-box-wrapper {
+    display: flex;
+    padding: 0.3125rem;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 99%;
+
+    margin-bottom: 1vh;
+
+    border-radius: 0.3125rem;
+    border: 1px solid #C6C6C6;
+}
+
+.ootd-detail-reply-input-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
+}
+
+.ootd-detail-reply-input {
+    font-family: The Jamsil;
+    font-size: 0.9rem;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+
+    outline: none;
+    border: none;
+}
+
+.ootd-detail-reply-input-hint-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
+}
+
+.ootd-detail-reply-input-hint-text {
+    color: var(--Grayscale4, #C6C6C6);
+    font-family: The Jamsil;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+}
+
+.ootd-detail-comment-pagination-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6875rem;
+}
+
+.ootd-detail-comment-back-button-wrapper {
+    display: flex;
+    width: 1.875rem;
+    height: 1.875rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
+
+    border-radius: 0.3125rem;
+    border: 1px solid #C6C6C6;
+    background: #F3F3F3;
+}
+
+.ootd-detail-comment-back-button {
+    width: 0.44725rem;
+    height: 0.8125rem;
+    flex-shrink: 0;
+
+    fill: #C6C6C6;
+}
+
+.ootd-detail-comment-front-button-wrapper {
+    display: flex;
+    width: 1.875rem;
+    height: 1.875rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
+
+    border-radius: 0.3125rem;
+    border: 1px solid #C6C6C6;
+    background: #FFF;
+}
+
+.ootd-detail-comment-front-button {
+    width: 0.44644rem;
+    height: 0.8125rem;
+    flex-shrink: 0;
+
+    fill: var(--Grayscale7, #000);
+}
+
+.ootd-detail-comment-page-button-wrapper {
+    display: flex;
+    width: 1.875rem;
+    height: 1.875rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
+
+    border-radius: 0.3125rem;
+    border: 1px solid #C6C6C6;
+    background: #FFF;
+}
+
+.ootd-detail-comment-page-button-wrapper:hover {
+    cursor: pointer;
+}
+
+.ootd-detail-comment-page-button-wrapper.selected {
+    border-radius: 0.3125rem;
+    background: #C22727;
+}
+
+.ootd-detail-comment-page-button {
+    color: #000;
+    font-family: The Jamsil;
+    font-size: 0.9375rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.ootd-detail-comment-page-button.selected {
+    color: #FFF;
+    font-family: The Jamsil;
+    font-size: 0.9375rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}

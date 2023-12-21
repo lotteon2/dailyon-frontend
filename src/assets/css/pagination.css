@@ -1,0 +1,110 @@
+
+.pagination-wrapper {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0.5vw;
+}
+
+.back-button-wrapper {
+    display: flex;
+    width: 1.8vw;
+    height: 3.5vh;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 0.3125rem;
+    border: 1px solid #C6C6C6;
+    background: #FFF;
+}
+
+.back-button-wrapper.disabled {
+    border-radius: 0.3125rem;
+    border: 1px solid #C6C6C6;
+    background: #F3F3F3;
+}
+
+.back-button-wrapper:hover:not(.disabled) {
+    cursor: pointer;
+}
+
+.back-button {
+    width: 1vw;
+
+    fill: var(--Grayscale7, #000);
+}
+
+.back-button.disabled {
+    fill: #C6C6C6;
+}
+
+.front-button-wrapper {
+    display: flex;
+    width: 1.8vw;
+    height: 3.5vh;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 0.3125rem;
+    border: 1px solid #C6C6C6;
+    background: #FFF;
+}
+
+.front-button-wrapper.disabled {
+    border-radius: 0.3125rem;
+    border: 1px solid #C6C6C6;
+    background: #F3F3F3;
+}
+
+.front-button-wrapper:hover:not(.disabled) {
+    cursor: pointer;
+}
+
+.front-button {
+    width: 1vw;
+
+    fill: var(--Grayscale7, #000);
+}
+
+.front-button.disabled {
+    fill: #C6C6C6;
+}
+
+.page-button-wrapper {
+    display: flex;
+    width: 1.8vw;
+    height: 3.5vh;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 0.3125rem;
+    border: 1px solid #C6C6C6;
+    background: #FFF;
+}
+
+.page-button-wrapper:hover {
+    cursor: pointer;
+}
+
+.page-button-wrapper.selected {
+    border-radius: 0.3125rem;
+    background: #C22727;
+}
+
+.page-button {
+    color: #000;
+    font-family: The Jamsil;
+    font-size: 0.9vw;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.page-button.selected {
+    color: #FFF;
+    font-family: The Jamsil;
+    font-size: 0.9vw;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}

@@ -1,0 +1,95 @@
+.container-title {
+    color: var(--Grayscale7, #000);
+    font-family: The Jamsil;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 50px; /* 166.667% */
+    margin-bottom: 10px;
+}
+
+.container-line {
+    width: 100%;
+    height: 2px;
+    background: #000;
+}
+
+.basket-top-button-container {
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+}
+
+.left-margin {
+    padding-left: 20px;
+}
+
+.top-button {
+    width: 66px;
+    height: 20px;
+    border: 1px solid var(--Grayscale5, #808080);
+    background: var(--Grayscale1, #fff);
+    padding-top: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--Grayscale5, #808080);
+    font-family: The Jamsil;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 30px; /* 250% */
+    margin-left: 7px;
+    margin-bottom: 8px;
+    margin-top: -28px;
+}
+
+.wish-table-data1 > td {
+    color: var(--Grayscale7, #202027);
+    font-family: The Jamsil;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 70px; /* 500% */
+    border-bottom: 1px solid #202027;
+}
+
+.wish-table-data2 > td {
+    color: var(--Grayscale7, #202027);
+    font-family: The Jamsil;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 70px; /* 500% */
+    border-bottom: 1px solid #808080;
+}
+
+.basket-checkbox {
+    width: 27px;
+    height: 27px;
+    flex-shrink: 0;
+    border: 1px solid #000;
+    background: var(--Grayscale1, #fff);
+    transform: translate(0, 7px);
+}
+
+.basket-img {
+    width: 161px;
+    height: 144px;
+    flex-shrink: 0;
+    margin: 20px 0;
+}
+
+td {
+    vertical-align: middle;
+}
+
+.center-text {
+    text-align: center;
+}
+
+.jjim-prod-container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 69px;
+}

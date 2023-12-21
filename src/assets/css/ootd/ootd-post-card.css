@@ -1,0 +1,114 @@
+.ootd-body-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    gap: 1.1875vw;
+}
+
+.ootd-post-card-line-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.375rem;
+}
+
+.ootd-post-card-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    width: 17vw;
+    gap: 0.1875rem;
+}
+
+.ootd-post-card-image-wrapper:hover {
+    cursor: pointer;
+}
+
+.ootd-post-card-image-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.ootd-post-card-image {
+    width: 17vw;
+    height: 45vh;
+
+    border-radius: 0.625rem;
+}
+
+.ootd-post-card-like-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    position: absolute;
+    right: 0.8rem;
+    bottom: 0.83125rem;
+}
+
+.ootd-post-card-like-icon {
+
+}
+
+.ootd-post-card-like-icon.selected {
+    fill: #F00;
+    fill-opacity: 100%;
+    stroke: none;
+}
+
+.ootd-post-card-like {
+    width: 1.5vw;
+    height: 3vh;
+
+    fill: rgba(218, 218, 218, 0.40);
+    stroke-width: 2px;
+    stroke: #FFF;
+}
+
+.ootd-post-card-view-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.25rem;
+}
+
+.ootd-post-card-like-view-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.25vw;
+}
+
+.ootd-post-card-like-view-count-text {
+    color: var(--Red, #F00);
+    text-align: center;
+    font-family: The Jamsil;
+    font-size: 0.7vw;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.ootd-post-card-count-view-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.25vw;
+}
+
+.ootd-post-card-count-view-count-text {
+    color: var(--Grayscale4, #C6C6C6);
+    text-align: center;
+    font-family: The Jamsil;
+    font-size: 0.7vw;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.ootd-post-card-like-count-icon,.ootd-post-card-view-count-icon {
+    width: 0.8vw;
+    height: 1.5vh;
+}

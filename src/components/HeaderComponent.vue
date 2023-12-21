@@ -1,5 +1,33 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
+import { onBeforeMount, onMounted, ref } from 'vue'
+import type { Category } from '@/apis/category/CategoryDto'
+import HeaderCategoryComponent from '@/components/HeaderCategoryComponent.vue'
+import { getChildCategories } from '@/apis/category/CategoryClient'
+import type { AxiosResponse } from 'axios'
+import { useMemberStore } from '@/stores/member/MemberStore';
+
+const isLoggedIn = () => {
+  const token = localStorage.getItem('accessToken')
+  const isLoggedIn = !!token
+  return isLoggedIn
+}
+
+const showCategoryDropdown = ref<boolean>(true)
+const rootCategories = ref<Category[]>([])
+
+const memberStore = useMemberStore();
+const memberInfo = memberStore.getMemberInfo(); 
+
+onBeforeMount(() => {
+  getChildCategories(null)
+    .then((axiosResponse: AxiosResponse) => {
+      rootCategories.value = axiosResponse.data.categoryResponses
+    })
+    .catch((error: any) => {
+      alert(error.response!.data!.message)
+    })
+})
 </script>
 
 <template>
@@ -32,8 +60,11 @@ import { RouterLink } from 'vue-router'
       </div>
     </div>
     <div class="auth-wrapper">
-      <RouterLink to="/login" class="login-text">LOGIN</RouterLink>
-      <div class="logout-text" hidden>LOGOUT</div>
+    <RouterLink v-if="!isLoggedIn()" to="/login" class="login-text">Login</RouterLink>
+    <div v-else class="login-text">
+      <img v-if="memberInfo.profileImgUrl" :src="memberInfo.profileImgUrl" alt="Profile Image" class="profile-image" />
+      <span v-if="memberInfo.email">{{ memberInfo.email }} 환영합니다!</span>
+    </div>
     </div>
   </div>
   <div class="header-divide-line-wrapper">
@@ -41,7 +72,11 @@ import { RouterLink } from 'vue-router'
   </div>
   <nav class="header-bottom">
     <div class="category-dropdown">
-      <div class="category-select-wrapper">
+      <div
+        class="category-select-wrapper"
+        @mouseover="showCategoryDropdown = true"
+        @mouseleave="showCategoryDropdown = false"
+      >
         <div class="category-select-line-wrapper">
           <div class="category-select-line"></div>
         </div>
@@ -52,10 +87,7 @@ import { RouterLink } from 'vue-router'
           <div class="category-select-line"></div>
         </div>
       </div>
-      <div class="category-dropdown-content">
-        <div class="">남성패션</div>
-        <div class="">여성패션</div>
-      </div>
+      <HeaderCategoryComponent :show-dropdown="showCategoryDropdown" :categories="rootCategories" />
     </div>
     <div class="nav-tab-wrapper">
       <RouterLink to="/luxury" class="nav-tab-text" :class="{ selected: $route.path === '/luxury' }"
@@ -71,10 +103,7 @@ import { RouterLink } from 'vue-router'
       >
     </div>
     <div class="nav-tab-wrapper">
-      <RouterLink
-        to="/ootds?sort=view"
-        class="nav-tab-text"
-        :class="{ selected: $route.path === '/ootds' }"
+      <RouterLink to="/ootds" class="nav-tab-text" :class="{ selected: $route.path === '/ootds' }"
         >OOTD</RouterLink
       >
     </div>
@@ -85,13 +114,7 @@ import { RouterLink } from 'vue-router'
     </div>
     <div class="nav-tab-wrapper">
       <RouterLink to="/notifications" class="nav-tab-icon">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 36 36"
-          fill="black"
-        >
+        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="black">
           <g clip-path="url(#clip0_197_30)">
             <path
               class="nav-tab-icon"
@@ -112,13 +135,7 @@ import { RouterLink } from 'vue-router'
     </div>
     <div class="nav-tab-wrapper">
       <RouterLink to="/carts" class="nav-tab-icon">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 21 24"
-          fill="black"
-        >
+        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21 24" fill="black">
           <path
             class="nav-tab-icon"
             d="M1.25954 10.1344L0.0147421 21.3344L1.60514 21.512L2.84994 10.3104L1.25954 10.1344ZM2.40034 24H18.0259V22.4H2.40034V24ZM20.4115 21.3344L19.1667 10.1344L17.5763 10.3104L18.8211 21.512L20.4115 21.3344ZM16.7795 8H3.64674V9.6H16.7827V8H16.7795ZM19.1667 10.1344C19.1014 9.54744 18.8219 9.00518 18.3818 8.61139C17.9416 8.2176 17.3701 7.99992 16.7795 8L16.7811 9.6C16.9781 9.59999 17.1681 9.67262 17.3148 9.804C17.4616 9.93537 17.5547 10.1163 17.5763 10.312L19.1667 10.1344ZM18.0259 24C18.3634 23.9998 18.6971 23.9285 19.0051 23.7906C19.3131 23.6528 19.5886 23.4515 19.8136 23.1999C20.0386 22.9484 20.208 22.6522 20.3107 22.3308C20.4135 22.0093 20.4489 21.6698 20.4115 21.3344L18.8211 21.512C18.8338 21.6239 18.8226 21.7357 18.7884 21.843C18.7542 21.9503 18.6977 22.0492 18.6226 22.1332C18.5476 22.2171 18.4556 22.2843 18.3528 22.3303C18.25 22.3763 18.1386 22.4 18.0259 22.4V24ZM0.0147421 21.3344C-0.0226202 21.6699 0.0112298 22.0096 0.114081 22.3311C0.216932 22.6527 0.38647 22.949 0.611618 23.2005C0.836766 23.4521 1.11246 23.6533 1.42068 23.7911C1.72891 23.9289 2.06273 24 2.40034 24V22.4C2.28786 22.4 2.17663 22.3763 2.07393 22.3304C1.97123 22.2845 1.87936 22.2175 1.80432 22.1337C1.72928 22.0499 1.67275 21.9512 1.63843 21.8441C1.60411 21.737 1.59277 21.6238 1.60514 21.512L0.0147421 21.336V21.3344ZM2.84994 10.3104C2.87197 10.1149 2.96524 9.93444 3.11193 9.8034C3.25862 9.67235 3.45004 9.59994 3.64674 9.6V8C3.05643 8.00031 2.48533 8.21817 2.04553 8.61192C1.60573 9.00568 1.32487 9.54771 1.25954 10.1344L2.84994 10.3104ZM6.21314 6.4V5.6H4.61314V6.4H6.21314ZM14.2131 5.6V6.4H15.8131V5.6H14.2131ZM10.2131 1.6C11.274 1.6 12.2914 2.02143 13.0416 2.77157C13.7917 3.52172 14.2131 4.53913 14.2131 5.6H15.8131C15.8131 4.11479 15.2231 2.69041 14.1729 1.6402C13.1227 0.589998 11.6984 0 10.2131 0V1.6ZM6.21314 5.6C6.21314 4.53913 6.63457 3.52172 7.38471 2.77157C8.13486 2.02143 9.15228 1.6 10.2131 1.6V0C8.72793 0 7.30355 0.589998 6.25334 1.6402C5.20314 2.69041 4.61314 4.11479 4.61314 5.6H6.21314Z"
@@ -127,11 +144,10 @@ import { RouterLink } from 'vue-router'
       </RouterLink>
     </div>
     <div class="nav-tab-wrapper">
-      <RouterLink to="/likes" class="nav-tab-like-icon">
+      <RouterLink to="/wishlist" class="nav-tab-like-icon">
         <svg
+          class="nav-icon"
           xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
           viewBox="0 0 20 19"
           fill="white"
           stroke="black"
@@ -146,13 +162,7 @@ import { RouterLink } from 'vue-router'
     </div>
     <div class="nav-tab-wrapper">
       <RouterLink to="/my-page" class="nav-tab-icon">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 25 24"
-          fill="black"
-        >
+        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 24" fill="black">
           <path
             class="nav-tab-icon"
             d="M12.5 10.7143C11.0262 10.7143 9.76488 10.1893 8.71607 9.13929C7.66726 8.08929 7.14286 6.82857 7.14286 5.35714C7.14286 3.88333 7.66726 2.62143 8.71607 1.57143C9.76488 0.523809 11.0262 0 12.5 0C13.9738 0 15.2351 0.523809 16.2839 1.57143C17.3327 2.62143 17.8571 3.88333 17.8571 5.35714C17.8571 6.82976 17.3327 8.09048 16.2839 9.13929C15.2351 10.1881 13.9738 10.7131 12.5 10.7143ZM0 23.625V20.6875C0 19.9506 0.214286 19.2613 0.642857 18.6196C1.07262 17.9768 1.65 17.478 2.375 17.1232C4.06071 16.3149 5.74702 15.7089 7.43393 15.3054C9.12202 14.9006 10.8107 14.6982 12.5 14.6982C14.1905 14.6982 15.8792 14.9006 17.5661 15.3054C19.253 15.7101 20.9387 16.3161 22.6232 17.1232C23.3494 17.478 23.9268 17.9768 24.3554 18.6196C24.7851 19.2613 25 19.9506 25 20.6875V23.6268L0 23.625ZM1.78571 21.8393H23.2143V20.6857C23.2143 20.2905 23.0869 19.9185 22.8321 19.5696C22.5762 19.222 22.2226 18.928 21.7714 18.6875C20.3024 17.9756 18.7869 17.4304 17.225 17.0518C15.6655 16.672 14.0905 16.4821 12.5 16.4821C10.9107 16.4821 9.33571 16.672 7.775 17.0518C6.2131 17.4304 4.69762 17.9756 3.22857 18.6875C2.77619 18.928 2.42262 19.222 2.16786 19.5696C1.9131 19.9185 1.78571 20.2911 1.78571 20.6875V21.8393ZM12.5 8.92857C13.4821 8.92857 14.3232 8.57857 15.0232 7.87857C15.7232 7.17857 16.0726 6.3381 16.0714 5.35714C16.0714 4.375 15.7214 3.53393 15.0214 2.83393C14.3214 2.13393 13.481 1.78452 12.5 1.78571C11.5179 1.78571 10.6768 2.13512 9.97679 2.83393C9.27679 3.53274 8.92738 4.37381 8.92857 5.35714C8.92857 6.33929 9.27857 7.17976 9.97857 7.87857C10.6786 8.57738 11.519 8.92738 12.5 8.92857Z"
@@ -168,4 +178,5 @@ import { RouterLink } from 'vue-router'
 
 <style scoped>
 @import '@/assets/header.css';
+
 </style>

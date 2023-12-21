@@ -1,0 +1,231 @@
+.user-container {
+  display: flex;
+  height: 15vh;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2vh;
+}
+
+.user-info-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5vw;
+}
+
+.user-profile-img {
+  width: 4vw;
+  height: 8vh;
+}
+
+.user-name-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5vh;
+}
+
+.user-name-container-first-line {
+  display: flex;
+  color: var(--Grayscale7, #000);
+  font-family: The Jamsil;
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 500;
+  flex-direction: row;
+}
+
+.user-name-container-first-line > h1 {
+  display: flex;
+  color: var(--Grayscale7, #000);
+  font-family: The Jamsil;
+  font-size: 1.1vw;
+  font-style: normal;
+  font-weight: 500;
+  flex-direction: row;
+}
+
+.user-name-container-first-line > h2 {
+  color: var(--Grayscale7, #000);
+  font-family: The Jamsil;
+  font-size: 1vw;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 50px;
+}
+
+.user-name-container > h3 {
+  color: var(--Grayscale5, #808080);
+  font-family: The Jamsil;
+  font-size: 0.9vw;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 30px;
+}
+
+.user-container-point-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.point-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  /* flex-direction: column; */
+  width: fit-content;
+  justify-content: center;
+  color: var(--Grayscale7, #000);
+  text-align: center;
+  font-family: The Jamsil;
+  font-size: 1vw;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 50px;
+
+  gap: 0.2vw
+}
+
+.point-wrapper > h1 {
+  color: var(--Dark-Red, #c22727);
+  font-family: The Jamsil;
+  font-size: 1.1vw;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 50px;
+}
+
+.user-info-change-btn-wrapper {
+  display: flex;
+  gap: 0.5vw;
+}
+
+.modify-button {
+  width: 5vw;
+  height: 4vh;
+  border: 1px solid #000;
+  background: var(--Grayscale1, #fff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--Grayscale7, #000);
+  font-family: The Jamsil;
+  font-size: 0.8vw;
+  font-style: normal;
+  font-weight: 300;
+}
+
+.logout-button {
+  width: 5vw;
+  height: 4vh;
+  border: 1px solid #000;
+  background: var(--Grayscale1, #000);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--Grayscale7, #fff);
+  font-family: The Jamsil;
+  font-size: 0.8vw;
+  font-style: normal;
+  font-weight: 300;
+}
+
+.payment-modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  padding: 20px;
+  width: 300px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  animation-name: modalOpen;
+  animation-duration: 0.5s;
+  /* position: relative; */
+}
+
+.modal-content p {
+  font-size: 0.9rem;
+}
+
+.modal-content select {
+  width: 300px;
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+  margin-bottom: 1rem;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.select option {
+  border-radius: 0;
+}
+
+.modal-content input {
+  width: 296px;
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+  margin-bottom: 1rem;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.modal-content button {
+  width: 100%;
+  padding: 0.5rem;
+  border: none;
+  background-color: var(--Grayscale7, #000);
+  color: #fff;
+  font-size: 1rem;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  margin-top: -23px;
+}
+
+.close:hover,
+.close:focus {
+  color: var(--Grayscale7, #000);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+@keyframes modalOpen {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.process-button,
+.payment-modal-button {
+  height: 4vh;
+  width: 5vw;
+  font-size: 0.8vw;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.payment-modal-button:active {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  transform: translateY(1px);
+}
