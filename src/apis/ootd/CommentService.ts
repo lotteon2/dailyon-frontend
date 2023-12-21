@@ -1,5 +1,5 @@
 import { AxiosError, type AxiosResponse } from 'axios'
-import { authAxiosInstance } from '@/apis/utils'
+import { authAxiosInstance, defaultAxiosInstance } from '@/apis/utils'
 import type {
   CommentPageResponse,
   CommentResponse,
@@ -12,7 +12,7 @@ const SNS_SERVICE_PREFIX_PATH = '/sns-service'
 export const getComments = async (postId: number, page: number, size: number, sort: string)
   : Promise<CommentPageResponse<CommentResponse>> => {
   try {
-    const response: AxiosResponse = await authAxiosInstance.get(`${SNS_SERVICE_PREFIX_PATH}/posts/${postId}/comments`, {
+    const response: AxiosResponse = await defaultAxiosInstance.get(`${SNS_SERVICE_PREFIX_PATH}/posts/${postId}/comments`, {
       params: {
         page: page,
         size: size,
