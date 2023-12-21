@@ -3,7 +3,7 @@ import { ref, onMounted, computed} from 'vue';
 import ModalView from './AddressModal.vue';
 import { authAxiosInstance } from '@/apis/utils';
 import { useMemberStore } from '@/stores/member/MemberStore';
-import { getMember, getMemberAddress } from '@/apis/member/member';
+import { getMember, getMemberAddress, getDefaultAddress } from '@/apis/member/member';
 
 
 const isModalVisible = ref(false);
@@ -13,6 +13,7 @@ const totalPages = ref(1);
 
 const memberStore = useMemberStore();
 const memberInfo = memberStore.getMemberInfo(); 
+const defaultAddress = ref();
 
 const openModal = () => {
   isModalVisible.value = true;
@@ -33,6 +34,8 @@ const updatePage = async (page : any) => {
 onMounted(async () => {
   await getMember();
   await updatePage(currentPage.value);
+  const addressData = await getDefaultAddress();
+  defaultAddress.value = await getDefaultAddress();
 });
 
 
@@ -87,12 +90,16 @@ const formattedAddresses = computed(() => {
       <div class="user-info-second-row-second-col">
         <span>이메일</span>
         <span>닉네임</span>
+        <span>성별</span>
+        <span>연령대</span>
         <span>기본 배송지</span>
       </div>
       <div class="user-info-second-row-third-col">
         <span>{{ memberInfo.email }} </span>
-        <span class="info-underline">닉네임</span>
-        <span class="info-underline">기본 주소</span>
+        <span class="info-underline">{{ memberInfo.nickname }}</span>
+        <span class="info-underline">{{ memberInfo.gender }}</span>
+        <span class="info-underline">{{ memberInfo.birth }}</span>
+        <span class="info-underline">{{ defaultAddress?.roadAddress + ' ' + defaultAddress?.detailAddress }}</span>
       </div>
       <div class="user-info-second-row-fourth-col">
         <div class="place-choice-button">배송지 선택</div>
