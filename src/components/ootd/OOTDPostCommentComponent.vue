@@ -9,13 +9,15 @@ import type {
 import { createComment, createReplyComment, deleteComment, getComments } from '@/apis/ootd/CommentService'
 import { useRoute } from 'vue-router'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
+import { useMemberStore } from '@/stores/member/MemberStore'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
 const route = useRoute()
 const postId = ref<number>(Number(route.params.id))
-// TODO: memberId 전역에서 불러오기
-const memberId = ref<number>(1)
+
+const memberStore = useMemberStore()
+const memberId = memberStore.getMemberInfo().memberId
 
 const requestPage = ref<number>(0)
 const requestSize = ref<number>(5)

@@ -11,11 +11,12 @@ import { togglePostLike } from '@/apis/ootd/PostLikeService'
 import { useFollowStore } from '@/stores/follow/FollowStore'
 import { toggleFollow } from '@/apis/ootd/FollowService'
 import { usePostStore } from '@/stores/post/PostStore'
+import { useMemberStore } from '@/stores/member/MemberStore'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
-// TODO: 내 아이디
-const memberId = ref<number>(1)
+const memberStore = useMemberStore()
+const memberId = memberStore.getMemberInfo().memberId
 const route = useRoute()
 const postId = ref<number>(Number(route.params.id))
 const post = ref<PostDetailResponse>({
@@ -77,7 +78,6 @@ const postLikes = postLikeStore.postLikes
 const likeButtonClickListener = (isLike: boolean | undefined) => {
   if (isLike === undefined) {
     alert('로그인이 필요합니다.')
-    router.push({ path: 'login' })
   } else {
     if (postLikes.has(postId.value)) {
       post.value.isLike ? post.value.likeCount += 1 : post.value.likeCount -= 1
