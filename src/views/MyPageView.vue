@@ -9,7 +9,6 @@ import EventComponent from '@/components/promotion/EventComponent.vue'
 import CartComponent from '@/components/wishcart/CartComponent.vue'
 import WishComponent from '@/components/wishcart/WishComponent.vue'
 import MemberInfoComponent from '@/components/member/MemberInfoComponent.vue'
-import ReviewComponent from '@/components/product/ReviewComponent.vue'
 import OOTDFollowComponent from '@/components/ootd/OOTDFollowComponent.vue'
 import OOTDPostLikeComponent from '@/components/ootd/OOTDPostLikeComponent.vue'
 import MyOOTDPostComponent from '@/components/ootd/MyOOTDPostComponent.vue'
@@ -28,7 +27,6 @@ import MyOOTDPostComponent from '@/components/ootd/MyOOTDPostComponent.vue'
       <CartComponent v-if="$route.name === 'carts'" />
       <WishComponent v-if="$route.name === 'wishlist'" />
       <MemberInfoComponent v-if="$route.name === 'memberInfo'" />
-      <ReviewComponent v-if="$route.name === 'reviews'" />
       <OOTDFollowComponent v-if="$route.name === 'follows'" />
       <MyOOTDPostComponent v-if="$route.name === 'myPosts'" />
       <OOTDPostLikeComponent v-if="$route.name === 'likePosts'" />
