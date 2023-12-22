@@ -1,19 +1,22 @@
 <script setup lang="ts">
-import { ref, onMounted, computed} from 'vue';
+import { ref, onMounted, computed, watch, onBeforeMount} from 'vue';
 import ModalView from './AddressModal.vue';
 import { authAxiosInstance } from '@/apis/utils';
 import { useMemberStore } from '@/stores/member/MemberStore';
 import { getMember, getMemberAddress, getDefaultAddress, setDefaultAddress } from '@/apis/member/member';
-
+import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 
 const isModalVisible = ref(false);
 const addresses = ref([]);
-const currentPage = ref(0);
-const totalPages = ref(1);
 
 const memberStore = useMemberStore();
 const memberInfo = memberStore.getMemberInfo(); 
 const defaultAddress = ref();
+
+
+const requestPage = ref<number>(0)
+const totalPages = ref<number>()
+const totalElements = ref<number>()
 
 const openModal = () => {
   isModalVisible.value = true;
@@ -23,23 +26,14 @@ const closeModal = () => {
   isModalVisible.value = false;
 };
 
-const updatePage = async (page : number) => {
-  currentPage.value = page;
-  const response = await getMemberAddress(page - 1);
-  addresses.value = response.content;
-  totalPages.value = response.totalPages;
-};
-
 const setDefault = async (addressId : number) => {
   setDefaultAddress( addressId )
   alert("기본 배송지가 저장되었습니다.")
   window.location.reload()
 };
 
-
 onMounted(async () => {
   await getMember();
-  await updatePage(currentPage.value);
   const addressData = await getDefaultAddress();
   defaultAddress.value = await getDefaultAddress();
 });
@@ -51,6 +45,31 @@ const formattedAddresses = computed(() => {
     return { ...address, deliveryName };
   });
 });
+
+const onChangePage = async (page: number) => {
+  if (page >= 0 && page < totalPages.value!) {
+    requestPage.value = page
+  }
+}
+
+onBeforeMount(async () => {
+  const response = await getMemberAddress(0)
+  addresses.value = response.content;
+  totalPages.value = response.totalPages
+  totalElements.value = response.totalElements
+})
+
+
+watch(requestPage, async (afterPage, beforePage) => {
+  if (afterPage < totalPages.value!) {
+    const response = await getMemberAddress(afterPage);
+    addresses.value = response.content;
+    totalPages.value = response.totalPages
+    totalElements.value = response.totalElements
+  }
+})
+
+
 
 </script>
 
@@ -152,11 +171,7 @@ const formattedAddresses = computed(() => {
       <p>배송지가 비어 있습니다. 배송지를 추가해주세요.</p>
   </div>
   <div class="pagination">
-    <button @click="currentPage > 1 && updatePage(currentPage - 1)" class="pagination-button">이전</button>
-    <button v-for="page in totalPages" :key="page" @click="updatePage(page)" class="pagination-button">
-      {{ page }}
-    </button>
-    <button @click="currentPage < totalPages && updatePage(currentPage + 1)" class="pagination-button">다음</button>
+    <PaginationComponent :onChangePage='onChangePage' :requestPage='requestPage' :totalPages='totalPages' />
   </div>
   </div>
 </template>
