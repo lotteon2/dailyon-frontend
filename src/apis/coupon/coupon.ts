@@ -36,6 +36,7 @@ export const downloadCoupon = async (couponInfoId: number): Promise<string> => {
     const response = await authAxiosInstance.post(
       `${PROMOTION_PREFIX_PATH}${COUPON_DOMAIN_PREFIX_PATH}/${couponInfoId}/download`
     )
+    alert('쿠폰을 다운로드 했습니다.')
     return response.data
   } catch (error) {
     if (error instanceof AxiosError) {

@@ -44,10 +44,10 @@ const props = defineProps({
 // 로컬로 복사해서 가지고 있음.
 const couponInfo = ref(props.couponInfoItemWithAvailabilityResponse)
 const isDownloadable = ref(couponInfo.value?.isDownloadable)
-watchEffect(() => {
-  // props이 업데이트될 때마다 로컬 상태도 업데이트.
-  isDownloadable.value = couponInfo.value?.isDownloadable
-})
+// watchEffect(() => {
+//   // props이 업데이트될 때마다 로컬 상태도 업데이트.
+//   isDownloadable.value = couponInfo.value?.isDownloadable
+// })
 
 const formattedDiscountValue = computed(() => {
   return couponInfo.value?.discountType === 'FIXED_AMOUNT'
@@ -86,7 +86,7 @@ const postDownloadCouponRequest = async () => {
   }
 
   try {
-    await downloadCoupon(couponInfo.value?.couponInfoId)
+    const res = await downloadCoupon(couponInfo.value?.couponInfoId)
     isDownloadable.value = false
   } catch (err) {
     //이미 downloadCoupon메소드 안에서 alert날리는 중. catch가 필요해서 빈 block으로 둠.
