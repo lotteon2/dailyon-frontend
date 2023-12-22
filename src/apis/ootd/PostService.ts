@@ -1,4 +1,4 @@
-import { authAxiosInstance } from '@/apis/utils'
+import { authAxiosInstance, defaultAxiosInstance } from '@/apis/utils'
 import type {
   OOTDPostPageResponse,
   OOTDPostResponse, PostCreateRequest, PostCreateResponse, PostDetailResponse, PostImageProductDetailCreateRequest,
@@ -13,7 +13,7 @@ const SNS_SERVICE_PREFIX_PATH = '/sns-service'
 
 export const getPosts = async (page: number, size: number, sort: string): Promise<PostPageResponse<PostResponse>> => {
   try {
-    const response: AxiosResponse = await authAxiosInstance.get(`${SNS_SERVICE_PREFIX_PATH}/posts`, {
+    const response: AxiosResponse = await defaultAxiosInstance.get(`${SNS_SERVICE_PREFIX_PATH}/posts`, {
       params: {
         page: page,
         size: size,
@@ -189,7 +189,7 @@ export const deletePost = async (postId: number)
 export const getPostDetail = async (postId: number)
   : Promise<PostDetailResponse> => {
   try {
-    const response: AxiosResponse = await authAxiosInstance.get(`${SNS_SERVICE_PREFIX_PATH}/posts/${postId}`)
+    const response: AxiosResponse = await defaultAxiosInstance.get(`${SNS_SERVICE_PREFIX_PATH}/posts/${postId}`)
     return response.data.post
   } catch (error) {
     if (error instanceof AxiosError) {
@@ -211,7 +211,7 @@ export const getPostDetail = async (postId: number)
 export const addViewCount = async (postId: number)
   : Promise<void> => {
   try {
-    await authAxiosInstance.put(`${SNS_SERVICE_PREFIX_PATH}/posts/${postId}/view-count`)
+    await defaultAxiosInstance.put(`${SNS_SERVICE_PREFIX_PATH}/posts/${postId}/view-count`)
   } catch (error) {
     if (error instanceof AxiosError) {
       if (error.response) {

@@ -21,7 +21,6 @@ const postLikes = postLikeStore.postLikes
 const likeButtonClickListener = (postId: number, isLike: boolean | undefined) => {
   if (isLike === undefined) {
     alert('로그인이 필요합니다.')
-    router.push({ path: 'login' })
   } else {
     const postIndex = props.posts.findIndex((post) => post.id === postId)
     if (postIndex !== -1) {

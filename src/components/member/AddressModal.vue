@@ -50,6 +50,8 @@ const submitForm = async () => {
     });
     props.closeModal();
     alert("배송지 저장이 완료되었습니다.");
+    window.location.reload()
+    
   } catch (error) {
     console.error('API 호출 중 오류 발생:', error);
   }

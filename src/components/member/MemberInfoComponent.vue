@@ -1,11 +1,22 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch, onBeforeMount} from 'vue';
 import ModalView from './AddressModal.vue';
 import { authAxiosInstance } from '@/apis/utils';
 import { useMemberStore } from '@/stores/member/MemberStore';
+import { getMember, getMemberAddress, getDefaultAddress, setDefaultAddress } from '@/apis/member/member';
+import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 
 const isModalVisible = ref(false);
 const addresses = ref([]);
+
+const memberStore = useMemberStore();
+const memberInfo = memberStore.getMemberInfo(); 
+const defaultAddress = ref();
+
+
+const requestPage = ref<number>(0)
+const totalPages = ref<number>()
+const totalElements = ref<number>()
 
 const openModal = () => {
   isModalVisible.value = true;
@@ -15,18 +26,18 @@ const closeModal = () => {
   isModalVisible.value = false;
 };
 
-const getMemberAddress = async () => {
-  try {
-    const response = await authAxiosInstance.get('/member-service/addresses');
-    addresses.value = response.data;
-  } catch (error) {
-    console.error('API 호출 중 오류 발생:', error);
-  }
+const setDefault = async (addressId : number) => {
+  setDefaultAddress( addressId )
+  alert("기본 배송지가 저장되었습니다.")
+  window.location.reload()
 };
 
-onMounted(() => {
-  getMemberAddress();
+onMounted(async () => {
+  await getMember();
+  const addressData = await getDefaultAddress();
+  defaultAddress.value = await getDefaultAddress();
 });
+
 
 const formattedAddresses = computed(() => {
   return (addresses.value as any[]).map((address) => {
@@ -34,6 +45,31 @@ const formattedAddresses = computed(() => {
     return { ...address, deliveryName };
   });
 });
+
+const onChangePage = async (page: number) => {
+  if (page >= 0 && page < totalPages.value!) {
+    requestPage.value = page
+  }
+}
+
+onBeforeMount(async () => {
+  const response = await getMemberAddress(0)
+  addresses.value = response.content;
+  totalPages.value = response.totalPages
+  totalElements.value = response.totalElements
+})
+
+
+watch(requestPage, async (afterPage, beforePage) => {
+  if (afterPage < totalPages.value!) {
+    const response = await getMemberAddress(afterPage);
+    addresses.value = response.content;
+    totalPages.value = response.totalPages
+    totalElements.value = response.totalElements
+  }
+})
+
+
 
 </script>
 
@@ -52,55 +88,66 @@ const formattedAddresses = computed(() => {
       </div>
     </div>
     <div class="user-info-second-row">
-      <div class="user-info-second-row-first-col">
-        <svg
-          class="profile-circle"
-          xmlns="http://www.w3.org/2000/svg"
+    <div class="user-info-second-row-first-col">
+      <svg
+        class="profile-circle"
+        width="150"
+        height="150"
+        viewBox="0 0 150 150"
+        fill="none"
+      >
+        <circle cx="75" cy="75" r="75" fill="#D9D9D9" />
+        <mask id="circle-mask">
+          <circle cx="75" cy="75" r="75" fill="white" />
+        </mask>
+        <image
+          :href="memberInfo.profileImgUrl || undefined"
+          x="0"
+          y="0"
           width="150"
           height="150"
-          viewBox="0 0 150 150"
-          fill="none"
-        >
-          <circle cx="75" cy="75" r="75" fill="#D9D9D9" />
-        </svg>
-        <div class="profile-change-button">프로필 변경</div>
-      </div>
+          mask="url(#circle-mask)"
+          preserveAspectRatio="xMidYMid slice"
+        />
+      </svg>
+      <div class="profile-change-button">프로필 변경</div>
+    </div>
       <div class="user-info-second-row-second-col">
         <span>이메일</span>
         <span>닉네임</span>
+        <span>성별</span>
+        <span>연령대</span>
         <span>기본 배송지</span>
       </div>
       <div class="user-info-second-row-third-col">
-        <span>이메일</span>
-        <span class="info-underline">닉네임</span>
-        <span class="info-underline">기본 주소</span>
-      </div>
-      <div class="user-info-second-row-fourth-col">
-        <div class="place-choice-button">배송지 선택</div>
+        <span>{{ memberInfo.email }} </span>
+        <span class="info-underline">{{ memberInfo.nickname }}</span>
+        <span class="info-underline">{{ memberInfo.gender }}</span>
+        <span class="info-underline">{{ memberInfo.birth }}</span>
+        <span class="info-underline">{{ defaultAddress?.roadAddress + ' ' + defaultAddress?.detailAddress }}</span>
       </div>
     </div>
     <div class="container-inner-title">배송지 관리</div>
-    <table>
-    <col width="80px" />
-    <col width="100px" />
+    <div class="place-add-button" @click="openModal"> 배송지 추가</div>
+          <ModalView v-if="isModalVisible" :closeModal="closeModal" />
+    <table v-if="formattedAddresses.length > 0">
     <col width="150px" />
+    <col width="200px" />
     <col width="400px" />
     <col width="80px" />
+    <col width="80px" />
     <tr class="place-font memberinfo-table-data1">
-      <td class="padding-left-10">선택</td>
-      <td>배송지명</td>
-      <td>이름</td>
+      <td class="padding-left-10">배송지명</td>
+      <td>전화번호</td>
       <td>배송지 주소</td>
-      <div class="place-add-button" @click="openModal"> 배송지 추가</div>
-          <ModalView v-if="isModalVisible" :closeModal="closeModal" />
+      <td></td>
+      <td></td>
     </tr>
     <tr v-for="(address, index) in formattedAddresses" :key="index" class="place-font memberinfo-table-data1">
-      <td class="padding-left-10">
-        <input class="basket-checkbox" type="checkbox" />
-      </td>
       <td>{{ address.name }}</td>
       <td>{{ address.phoneNumber }}</td>
       <td>{{ address.roadAddress + ' ' + address.detailAddress + ' ' + address.postCode }}</td>
+      <td><div class="place-add-button" @click="setDefault( address.id )"> 기본 지정</div></td>
       <td>
         <div class="close-button-div">
           <svg
@@ -120,11 +167,19 @@ const formattedAddresses = computed(() => {
       </td>
     </tr>
   </table>
-
+  <div v-else>
+      <p>배송지가 비어 있습니다. 배송지를 추가해주세요.</p>
+  </div>
+  <div class="pagination">
+    <PaginationComponent :onChangePage='onChangePage' :requestPage='requestPage' :totalPages='totalPages' />
+  </div>
   </div>
 </template>
 
 <style scoped>
 @import "@/assets/css/member-info.css";
+div[hidden] {
+  display: none;
+}
 </style>
 
