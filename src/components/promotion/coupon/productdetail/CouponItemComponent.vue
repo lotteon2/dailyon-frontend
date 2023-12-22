@@ -16,7 +16,7 @@
       <img
         class="active-button"
         @click="postDownloadCouponRequest"
-        v-if="couponInfo?.isDownloadable"
+        v-if="isDownloadable"
         :src="downloadButtonImage"
         alt="Download Coupon"
       />
