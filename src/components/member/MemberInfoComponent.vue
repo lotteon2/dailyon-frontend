@@ -124,7 +124,7 @@ watch(requestPage, async (afterPage, beforePage) => {
         <span class="info-underline">{{ memberInfo.nickname }}</span>
         <span class="info-underline">{{ memberInfo.gender }}</span>
         <span class="info-underline">{{ memberInfo.birth }}</span>
-        <span class="info-underline">{{ defaultAddress?.roadAddress + ' ' + defaultAddress?.detailAddress }}</span>
+        <span class="info-underline">{{ defaultAddress?.roadAddress && defaultAddress?.detailAddress ? defaultAddress.roadAddress + ' ' + defaultAddress.detailAddress : '기본 배송지가 없습니다.' }}</span>
       </div>
     </div>
     <div class="container-inner-title">배송지 관리</div>
@@ -170,6 +170,7 @@ watch(requestPage, async (afterPage, beforePage) => {
   <div v-else>
       <p>배송지가 비어 있습니다. 배송지를 추가해주세요.</p>
   </div>
+  <br/>
   <div class="pagination">
     <PaginationComponent :onChangePage='onChangePage' :requestPage='requestPage' :totalPages='totalPages' />
   </div>
