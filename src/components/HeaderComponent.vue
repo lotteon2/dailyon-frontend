@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
-import { onBeforeMount, onMounted, ref } from 'vue'
+import { onBeforeMount, onMounted, ref, computed } from 'vue'
 import type { Category } from '@/apis/category/CategoryDto'
 import HeaderCategoryComponent from '@/components/HeaderCategoryComponent.vue'
 import { getChildCategories } from '@/apis/category/CategoryClient'
@@ -17,7 +17,8 @@ const showCategoryDropdown = ref<boolean>(true)
 const rootCategories = ref<Category[]>([])
 
 const memberStore = useMemberStore();
-const memberInfo = memberStore.getMemberInfo(); 
+const memberInfo =  computed(() => memberStore.getMemberInfo()); 
+
 
 onBeforeMount(() => {
   getChildCategories(null)
