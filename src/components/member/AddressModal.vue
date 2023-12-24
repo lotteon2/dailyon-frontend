@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, defineProps} from 'vue';
+import { ref, defineProps, computed} from 'vue';
 import { VueDaumPostcode } from 'vue-daum-postcode';
 import { authAxiosInstance } from '@/apis/utils';
 
@@ -55,10 +55,15 @@ const submitForm = async () => {
   } catch (error) {
     console.error('API 호출 중 오류 발생:', error);
   }
+}
+
+const limitInput = () => {
+  let numericValue = phone.value.replace(/[^\d]/g, "");
+  if (numericValue.length > 11) {
+    numericValue = numericValue.slice(0, 11);
+  }
+  phone.value = numericValue;
 };
-
-  
-
 </script>
 
 <template>
@@ -73,7 +78,8 @@ const submitForm = async () => {
         <tr>
           <td class="label">배송지명:</td>
           <td>
-            <input type="text" class="input" name="userName" v-model="userName" />
+            <input type="text" class="input" name="userName" v-model="userName" :class="{ 'is-invalid': !userName }" />
+            <p v-if="!userName" class="alert-msg">필수로 입력해주세요.</p>
           </td>
         </tr>
         <tr>
@@ -108,18 +114,21 @@ const submitForm = async () => {
           <td class="label">우편번호</td>
           <td>
             <input type="text" class="input" name="postcode" v-model="postcode" style="background-color: #ccc;"  readonly />
+            <p v-if="!detailAddr" class="alert-msg">필수로 입력해주세요.</p>
           </td>
         </tr>
         <tr>
           <td class="label">상세 주소</td>
           <td>
-            <input type="text" class="input" name="detailAddr" v-model="detailAddr" />
+            <input type="text" class="input" name="detailAddr" v-model="detailAddr" :class="{ 'is-invalid': !detailAddr }" />
+            <p v-if="!detailAddr" class="alert-msg">필수로 입력해주세요.</p>
           </td>
         </tr>
         <tr>
           <td class="label">전화번호</td>
           <td>
-            <input type="text" class="input" name="phone" v-model="phone" />
+            <input type="text" class="input" name="phone" v-model="phone" @input="limitInput" :class="{ 'is-invalid': !phone }"/>
+            <p v-if="!phone" class="alert-msg">필수로 입력해주세요.</p>
           </td>
         </tr>
         <button @click="submitForm" class="submit-button">저장</button>
@@ -240,4 +249,13 @@ td {
   border-radius: 5px;
   margin-top: 1em;
 }
+
+.is-invalid {
+  border-color: red;
+}
+
+.alert-msg {
+  color: red;
+}
+
 </style>
