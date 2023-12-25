@@ -167,6 +167,16 @@ const router = createRouter({
       ]
     },
     {
+      path: '/order-result/:orderId',
+      name: 'OrderResult',
+      component: () => import('@/views/OrderResultView.vue')
+    },
+    {
+      path: '/order-success/:orderId',
+      name: 'orderSuccess',
+      component: () => import('@/views/OrderSuccessView.vue')
+    },
+    {
       path: '/logininfo',
       name: 'info',
       component: () => import('@/views/LoginGetInfo.vue')

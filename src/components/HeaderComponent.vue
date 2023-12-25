@@ -19,7 +19,6 @@ const rootCategories = ref<Category[]>([])
 const memberStore = useMemberStore();
 const memberInfo =  computed(() => memberStore.getMemberInfo()); 
 
-
 onBeforeMount(() => {
   getChildCategories(null)
     .then((axiosResponse: AxiosResponse) => {

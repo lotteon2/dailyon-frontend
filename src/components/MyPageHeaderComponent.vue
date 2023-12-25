@@ -80,7 +80,7 @@ const processPayment = async () => {
 
     newWindow.value = window.open(
       redirectUrl.value,
-      'payment',
+      'orders',
       `width=${width},height=${height},top=${top},left=${left}`
     )
   }

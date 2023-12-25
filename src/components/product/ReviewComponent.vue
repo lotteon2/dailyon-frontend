@@ -31,7 +31,6 @@ const totalPages = ref<number>()
 // })
 
 const fetchDefaultData = async (requestPage: any, productId: number): Promise<void> => {
-  console.log('aaa')
   const data = await getProductReviews(requestPage.value, productId)
   reviews.value = data.reviews
   totalElements.value = data.totalElements

@@ -1,0 +1,103 @@
+.container-title {
+  color: var(--Grayscale7, #202027);
+  font-family: TheJamsil;
+  width: 120px;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  margin-bottom: 10px;
+}
+
+.line {
+  height: 1px;
+  background: #000;
+  margin-bottom: 25px;
+}
+
+.black-button {
+  display: flex;
+  padding: 0 15px;
+  height: 40px;
+  background: var(--Grayscale7, #000);
+  color: var(--Grayscale1, #fff);
+  font-family: TheJamsil;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 300;
+}
+
+.black-button > span {
+  padding-top: 10px;
+}
+
+.black-button:hover {
+  cursor: pointer;
+}
+
+.user-info-wrapper {
+  display: flex;
+  margin-left: 43px;
+}
+
+.user-info-first-col {
+  padding-top: 10px;
+  display: flex;
+  flex-direction: column;
+  margin-right: 45px;
+  gap: 3vh;
+}
+
+.user-info-first-col > span {
+  color: var(--Grayscale7, #202027);
+  font-family: TheJamsil;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 300;
+}
+
+.user-info-second-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-info-second-col > input {
+  border: 1px solid var(--Grayscale2, #f3f3f3);
+  background: var(--Grayscale1, #fff);
+  width: 247px;
+  height: 3.75vh;
+  /* height: 36px; */
+  color: var(--Grayscale7, #202027);
+  font-family: TheJamsil;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 300;
+  margin-bottom: 10px;
+  padding-left: 5px;
+}
+
+.place-container {
+  display: flex;
+  margin-bottom: 52px;
+  flex-direction: column;
+}
+
+.place-first-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.place-button-wrapper {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.2vw;
+}
+
+.place-third-col {
+  display: flex;
+  flex-direction: column;
+  margin-left: 12px;
+}
+
+.place-third-col > span {
+  height: 52px;
+}

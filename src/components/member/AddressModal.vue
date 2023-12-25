@@ -239,7 +239,6 @@ td {
   margin-top: 1em;
 }
 
-
 .submit-button {
   padding: 0.5em 1em;
   cursor: pointer;
@@ -249,7 +248,6 @@ td {
   border-radius: 5px;
   margin-top: 1em;
 }
-
 .is-invalid {
   border-color: red;
 }

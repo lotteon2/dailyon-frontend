@@ -4,33 +4,24 @@ import ProductDetailCouponModal from '@/components/promotion/coupon/productdetai
 import BreadCrumbComponent from '@/components/product/BreadCrumbComponent.vue'
 import { useRoute } from 'vue-router'
 import { getProductDetail } from '@/apis/product/ProductClient'
-import type { AxiosResponse } from 'axios'
 import type { ReadProductDetailResponse, ReadProductStockResponse } from '@/apis/product/ProductDto'
+import type { ProductInfo } from '@/apis/product/ProductDto'
 import DescribeImageComponent from '@/components/product/DescribeImageComponent.vue'
 import ReviewComponent from '@/components/product/ReviewComponent.vue'
+import { useProductStore } from '@/stores/product/ProductStore'
+import router from '@/router'
+const productStore = useProductStore()
 import { upsertCart } from '@/apis/wishcart/CartClient'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
 const route = useRoute()
+const product = ref()
 
 const isDescribeImages = ref<boolean>(true)
-
-const productId = ref<number>(0)
-const categoryId = ref<number>(0)
+const productId = ref<number>(Number(route.params.id))
 const productPriceValue = ref<number>(0)
 const showCouponModal = ref<boolean>(false)
-
-const brandName = ref<string>('')
-const gender = ref<string>('')
-const productName = ref<string>('')
-const imgUrl = ref<string>('')
-const describeImgUrls = ref<String[]>([])
-
-const productStocks = ref<ReadProductStockResponse[]>([])
-
-const avgRating = ref<number>(0)
-const reviewCount = ref<number>(0)
 
 const isCartBtnEnabled = ref<boolean>(true)
 
@@ -42,28 +33,9 @@ const selectedProductSize = ref<ReadProductStockResponse>({
 const selectedQuantity = ref<number>(0)
 const selectedOriginalPrice = ref<number>(0)
 
-const initData = () => {
-  getProductDetail(Number(route.params.id))
-    .then((axiosResponse: AxiosResponse) => {
-      const response: ReadProductDetailResponse = axiosResponse.data
-
-      productId.value = Number(route.params.id)
-      categoryId.value = response.categoryId
-      productPriceValue.value = response.price
-      productName.value = response.name
-      brandName.value = response.brandName
-      gender.value = response.gender
-
-      imgUrl.value = response.imgUrl
-      describeImgUrls.value = response.describeImgUrls
-      productStocks.value = response.productStocks
-
-      avgRating.value = response.avgRating
-      reviewCount.value = response.reviewCount
-    })
-    .catch((error: any) => {
-      alert(error.response!.data!.message)
-    })
+const initData = async () => {
+  product.value = await getProductDetail(Number(route.params.id))
+  productPriceValue.value = product.value.price
 }
 
 const closeCouponModal = () => {
@@ -132,6 +104,34 @@ const addToCart = () => {
   }
 }
 
+const routeOrderSheet = async () => {
+  if (validation()) {
+    const productInfos: ProductInfo[] = [
+      {
+        productId: productId.value,
+        productName: product.value.name,
+        imgUrl: product.value.imgUrl,
+        categoryId: product.value.categoryId,
+        sizeId: selectedProductSize.value.productSizeId,
+        sizeName: selectedProductSize.value.productSizeName,
+        orderPrice: selectedOriginalPrice.value,
+        quantity: selectedQuantity.value,
+        referralCode: null
+      }
+    ]
+    productStore.setProducts(productInfos, 'SINGLE')
+    router.push('/orders')
+  }
+}
+
+const validation = (): boolean => {
+  if (selectedQuantity.value === 0 || selectedOriginalPrice.value === 0) {
+    alert('상품옵션과 수량을 선택해 주세요.')
+    return false
+  }
+  return true
+}
+
 onBeforeMount(initData)
 
 watch(selectedQuantity, () => {
@@ -143,26 +143,26 @@ watch(selectedProductSize, () => {
 })
 </script>
 
-<template>
+<template v-if="product">
   <ProductDetailCouponModal
     @close-coupon-modal="closeCouponModal"
     @total-price-updated="handleTotalPriceUpdated"
     :showModal="showCouponModal"
     :productId="productId"
-    :categoryId="categoryId"
+    :categoryId="product.categoryId"
     :productPriceValue="productPriceValue"
   ></ProductDetailCouponModal>
   <div class="main-container">
-    <BreadCrumbComponent v-if="categoryId !== 0" :category="categoryId" />
+    <BreadCrumbComponent v-if="product.categoryId !== 0" :category="product.categoryId" />
     <div class="first-wrapper">
       <div class="prod-first-col">
-        <img class="img-big" :src="`${VITE_STATIC_IMG_URL}${imgUrl}?w=200&h=200`" alt="" />
+        <img class="img-big" :src="`${VITE_STATIC_IMG_URL}${product.imgUrl}?w=200&h=200`" alt="" />
       </div>
       <div class="prod-second-col">
         <div class="second-col-first-row">
           <div class="brand-prod-name">
-            <h1>{{ brandName }}</h1>
-            <h2>{{ productName }}</h2>
+            <h1>{{ product.brandName }}</h1>
+            <h2>{{ product.name }}</h2>
           </div>
           <div v-if="selectedProductSize.quantity === 0" class="sold-out">품절</div>
           <svg
@@ -183,13 +183,13 @@ watch(selectedProductSize, () => {
           <div class="price-info-row">
             <h1>데일리온가</h1>
             <!-- TODO : 여기에 할인 적용된 금액 들어가나요? -->
-            <h2>{{ productPriceValue }}</h2>
+            <h2>{{ productPriceValue.toLocaleString() }}</h2>
             <!-- TODO : 여기에 최대 할인율? 할인 금액 나오는건가요? -->
             <h3>할인율</h3>
           </div>
           <div class="price-info-row">
             <h1>&nbsp;</h1>
-            <div class="dash">{{ productPriceValue }}</div>
+            <div class="dash">{{ productPriceValue.toLocaleString() }}</div>
           </div>
           <div class="price-info-row">
             <h1>프로모션</h1>
@@ -239,7 +239,7 @@ watch(selectedProductSize, () => {
             <span>상품 옵션</span>
             <select v-model.lazy.number="selectedProductSize">
               <option
-                v-for="(productStock, index) in productStocks"
+                v-for="(productStock, index) in product.productStocks"
                 :key="index"
                 :value="productStock"
               >
@@ -282,13 +282,13 @@ watch(selectedProductSize, () => {
                 </svg>
               </div>
             </div>
-            <h2>{{ selectedOriginalPrice }} 원</h2>
+            <h2>{{ selectedOriginalPrice.toLocaleString() }} 원</h2>
           </div>
           <div class="line"></div>
           <div class="price-wrapper">
             <h1>총 합계금액</h1>
             <!-- TODO : 할인률 적용된 금액 -->
-            <h2>{{ selectedOriginalPrice }} 원</h2>
+            <h2>{{ selectedOriginalPrice.toLocaleString() }} 원</h2>
           </div>
 
           <div class="buttons-wrapper">
@@ -309,7 +309,7 @@ watch(selectedProductSize, () => {
             <!-- TODO : 장바구니 개발 이후 추가 동작 개발 -->
             <div class="bucket-button" @click="addToCart">장바구니</div>
             <!-- TODO : 버튼 클릭 시 주문 페이지  (가주문 X) 생성 -->
-            <div class="purchase-button">바로 구매</div>
+            <div class="purchase-button" @click="routeOrderSheet">바로 구매</div>
           </div>
         </div>
       </div>
@@ -331,10 +331,10 @@ watch(selectedProductSize, () => {
       </div>
       <div class="line"></div>
       <div v-show="isDescribeImages">
-        <DescribeImageComponent :describe-img-urls="describeImgUrls" />
+        <DescribeImageComponent :describe-img-urls="product.describeImgUrls" />
       </div>
       <div v-show="!isDescribeImages">
-        <ReviewComponent :productName="productName" />
+        <ReviewComponent :productName="product.name" />
       </div>
     </div>
     <!-- <div class="third-wrapper">
