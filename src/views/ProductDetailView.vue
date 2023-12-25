@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeMount, ref, watch } from 'vue'
+import { onBeforeMount, ref, watch } from 'vue'
 import ProductDetailCouponModal from '@/components/promotion/coupon/productdetail/ProductDetailCouponModal.vue'
 import BreadCrumbComponent from '@/components/product/BreadCrumbComponent.vue'
 import { useRoute } from 'vue-router'
@@ -8,6 +8,7 @@ import type { AxiosResponse } from 'axios'
 import type { ReadProductDetailResponse, ReadProductStockResponse } from '@/apis/product/ProductDto'
 import DescribeImageComponent from '@/components/product/DescribeImageComponent.vue'
 import ReviewComponent from '@/components/product/ReviewComponent.vue'
+import { upsertCart } from '@/apis/wishcart/CartClient'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -30,6 +31,8 @@ const productStocks = ref<ReadProductStockResponse[]>([])
 
 const avgRating = ref<number>(0)
 const reviewCount = ref<number>(0)
+
+const isCartBtnEnabled = ref<boolean>(true)
 
 const selectedProductSize = ref<ReadProductStockResponse>({
   productSizeId: 0,
@@ -100,17 +103,33 @@ const toggleOption = (option: boolean) => {
 }
 
 const addToCart = () => {
-  if (selectedProductSize.value.productSizeId === 0) {
-    alert('옵션을 지정해주세요')
-    return
+  if (isCartBtnEnabled.value === true) {
+    isCartBtnEnabled.value = false
+
+    if (selectedProductSize.value.productSizeId === 0) {
+      alert('옵션을 지정해주세요')
+      return
+    }
+    if (selectedQuantity.value === 0) {
+      alert('개수를 추가해주세요')
+      return
+    }
+    upsertCart({
+      productId: productId.value,
+      productSizeId: selectedProductSize.value.productSizeId,
+      quantity: selectedQuantity.value,
+      lastMemberCode: '' // TODO : ootd에서 넘어올 때 url에 어떻게 남는지 물어봐야 함
+    })
+      .then(() => {
+        alert('장바구니에 상품이 담겼습니다')
+      })
+      .catch((error: any) => {
+        alert(error.response!.data!.message)
+      })
+      .finally(() => {
+        isCartBtnEnabled.value = true
+      })
   }
-  if (selectedQuantity.value === 0) {
-    alert('개수를 추가해주세요')
-    return
-  }
-  alert(
-    `장바구니 추가 : productId: ${productId.value}, productSizeId: ${selectedProductSize.value.productSizeId}, quantity: ${selectedQuantity.value}`
-  )
 }
 
 onBeforeMount(initData)
