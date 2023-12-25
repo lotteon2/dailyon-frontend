@@ -96,7 +96,7 @@ const onChangePage = async (page: number) => {
 
 watch(requestPage, async (afterPage: number, beforePage: number) => {
   if (afterPage < totalPages.value) {
-    readCart(afterPage)
+    readCart(afterPage, requestSize)
       .then((axiosResponse: AxiosResponse) => {
         const response: ReadCartPageResponse = axiosResponse.data
         totalPages.value = response.totalPages
