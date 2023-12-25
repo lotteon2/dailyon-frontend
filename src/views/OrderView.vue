@@ -64,7 +64,6 @@ const addDeliveryInfo = async (addressInfo: DeliveryInfo) => {
 const changeReceiver = async (input: string) => {
   deliveryInfo.value.receiver = input
 }
-
 const orderItems = [
   {
     productName: '나이키 에어포스1',

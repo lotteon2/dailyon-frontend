@@ -22,7 +22,6 @@ export const getProductSlice = async (
     params: params
   })
 }
-
 export const getProductDetail = async (productId: number): Promise<ReadProductDetailResponse> => {
   try {
     const { data } = await defaultAxiosInstance.get(

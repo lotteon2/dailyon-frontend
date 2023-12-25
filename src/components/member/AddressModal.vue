@@ -1,35 +1,36 @@
 <script setup lang="ts">
-import { ref, defineProps } from 'vue'
-import { VueDaumPostcode } from 'vue-daum-postcode'
-import { authAxiosInstance } from '@/apis/utils'
+import { ref, defineProps, computed} from 'vue';
+import { VueDaumPostcode } from 'vue-daum-postcode';
+import { authAxiosInstance } from '@/apis/utils';
 
-const props = defineProps(['closeModal'])
+const props = defineProps(['closeModal']);
 
-const postOpen = ref(false)
-const userName = ref('')
-const useDefaultAddr = ref(false)
-const postcode = ref('')
-const roadAddr = ref('')
-const detailAddr = ref('')
-const phone = ref('')
+const postOpen = ref(false);
+const userName = ref('');
+const useDefaultAddr = ref(false);
+const postcode = ref('');
+const roadAddr = ref('');
+const detailAddr = ref('');
+const phone = ref('');
 
 const search = () => {
-  postOpen.value = true
-}
+  postOpen.value = true;
+};
 
 const onComplete = (result: any) => {
   if (result.userSelectedType === 'R') {
-    roadAddr.value = result.roadAddress
+    roadAddr.value = result.roadAddress;
   } else {
-    roadAddr.value = result.jibunAddress
+    roadAddr.value = result.jibunAddress;
   }
-  postcode.value = result.zonecode
-  postOpen.value = false
-}
+  postcode.value = result.zonecode;
+  postOpen.value = false;
+  
+};
 const submitForm = async () => {
   if (!userName.value || !postcode.value || !detailAddr.value || !phone.value) {
-    alert('필수 입력 항목을 모두 입력하세요.')
-    return
+    alert('필수 입력 항목을 모두 입력하세요.');
+    return;
   }
 
   try {
@@ -39,36 +40,46 @@ const submitForm = async () => {
       detailAddress: detailAddr.value,
       roadAddress: roadAddr.value,
       postCode: postcode.value,
-      phoneNumber: phone.value
-    }
+      phoneNumber: phone.value,
+    };
 
     const response = await authAxiosInstance.post('/member-service/addresses', formData, {
       headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    props.closeModal()
-    alert('배송지 저장이 완료되었습니다.')
+        'Content-Type': 'application/json',
+      },
+    });
+    props.closeModal();
+    alert("배송지 저장이 완료되었습니다.");
     window.location.reload()
+    
   } catch (error) {
-    console.error('API 호출 중 오류 발생:', error)
+    console.error('API 호출 중 오류 발생:', error);
   }
 }
+
+const limitInput = () => {
+  let numericValue = phone.value.replace(/[^\d]/g, "");
+  if (numericValue.length > 11) {
+    numericValue = numericValue.slice(0, 11);
+  }
+  phone.value = numericValue;
+};
 </script>
 
 <template>
   <div class="modal">
-    <div class="overlay" @click="props.closeModal()"></div>
+    <div class="overlay" @click=props.closeModal()></div>
     <div class="modal-card">
       <div class="modal-header">
         <h2 class="headline">배송 정보 입력</h2>
-        <button class="close-btn" @click="props.closeModal()">X</button>
+        <button class="close-btn" @click=props.closeModal()>X</button>
       </div>
       <table>
         <tr>
           <td class="label">배송지명:</td>
           <td>
-            <input type="text" class="input" name="userName" v-model="userName" />
+            <input type="text" class="input" name="userName" v-model="userName" :class="{ 'is-invalid': !userName }" />
+            <p v-if="!userName" class="alert-msg">필수로 입력해주세요.</p>
           </td>
         </tr>
         <tr>
@@ -79,30 +90,21 @@ const submitForm = async () => {
                 type="radio"
                 name="useDefaultAddr"
                 v-model="useDefaultAddr"
-                value="true"
-              />기본</label
-            >
+                value=true
+              />기본</label>
             <label for="useDefaultAddr">
               <input
                 type="radio"
                 name="useDefaultAddr"
                 v-model="useDefaultAddr"
-                value="false"
-              />신규</label
-            >
+                value=false
+              />신규</label>
           </td>
         </tr>
         <tr>
           <td class="label">도로명 주소</td>
           <td>
-            <input
-              type="text"
-              class="input"
-              name="roadAddr"
-              v-model="roadAddr"
-              style="background-color: #ccc"
-              readonly
-            />
+            <input type="text" class="input" name="roadAddr" v-model="roadAddr" style="background-color: #ccc;"  readonly />
           </td>
           <td>
             <button @click="search" class="search-button">검색</button>
@@ -111,26 +113,22 @@ const submitForm = async () => {
         <tr>
           <td class="label">우편번호</td>
           <td>
-            <input
-              type="text"
-              class="input"
-              name="postcode"
-              v-model="postcode"
-              style="background-color: #ccc"
-              readonly
-            />
+            <input type="text" class="input" name="postcode" v-model="postcode" style="background-color: #ccc;"  readonly />
+            <p v-if="!detailAddr" class="alert-msg">필수로 입력해주세요.</p>
           </td>
         </tr>
         <tr>
           <td class="label">상세 주소</td>
           <td>
-            <input type="text" class="input" name="detailAddr" v-model="detailAddr" />
+            <input type="text" class="input" name="detailAddr" v-model="detailAddr" :class="{ 'is-invalid': !detailAddr }" />
+            <p v-if="!detailAddr" class="alert-msg">필수로 입력해주세요.</p>
           </td>
         </tr>
         <tr>
           <td class="label">전화번호</td>
           <td>
-            <input type="text" class="input" name="phone" v-model="phone" />
+            <input type="text" class="input" name="phone" v-model="phone" @input="limitInput" :class="{ 'is-invalid': !phone }"/>
+            <p v-if="!phone" class="alert-msg">필수로 입력해주세요.</p>
           </td>
         </tr>
         <button @click="submitForm" class="submit-button">저장</button>
@@ -250,4 +248,12 @@ td {
   border-radius: 5px;
   margin-top: 1em;
 }
+.is-invalid {
+  border-color: red;
+}
+
+.alert-msg {
+  color: red;
+}
+
 </style>

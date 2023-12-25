@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
-import { onBeforeMount, onMounted, ref } from 'vue'
+import { onBeforeMount, onMounted, ref, computed } from 'vue'
 import type { Category } from '@/apis/category/CategoryDto'
 import HeaderCategoryComponent from '@/components/HeaderCategoryComponent.vue'
 import { getChildCategories } from '@/apis/category/CategoryClient'
 import type { AxiosResponse } from 'axios'
-import { useMemberStore } from '@/stores/member/MemberStore'
+import { useMemberStore } from '@/stores/member/MemberStore';
 
 const isLoggedIn = () => {
   const token = localStorage.getItem('accessToken')
@@ -16,8 +16,8 @@ const isLoggedIn = () => {
 const showCategoryDropdown = ref<boolean>(true)
 const rootCategories = ref<Category[]>([])
 
-const memberStore = useMemberStore()
-const memberInfo = memberStore.getMemberInfo()
+const memberStore = useMemberStore();
+const memberInfo =  computed(() => memberStore.getMemberInfo()); 
 
 onBeforeMount(() => {
   getChildCategories(null)
@@ -60,18 +60,13 @@ onBeforeMount(() => {
       </div>
     </div>
     <div class="auth-wrapper">
-      <RouterLink v-if="!isLoggedIn()" to="/login" class="login-text">Login</RouterLink>
-      <div v-else class="login-text">
-        <RouterLink to="/member-info">
-          <img
-            v-if="memberInfo.profileImgUrl"
-            :src="memberInfo.profileImgUrl"
-            alt="Profile Image"
-            class="profile-image"
-          />
-          <span v-if="memberInfo.email">{{ memberInfo.nickname }}님 환영합니다!</span>
-        </RouterLink>
-      </div>
+    <RouterLink v-if="!isLoggedIn()" to="/login" class="login-text">Login</RouterLink>
+    <div v-else class="login-text" >
+      <RouterLink to="/member-info">
+        <img v-if="memberInfo.profileImgUrl" :src="memberInfo.profileImgUrl" alt="Profile Image" class="profile-image" />
+        <span v-if="memberInfo.email">{{ memberInfo.nickname }}님 환영합니다!</span>
+      </RouterLink>
+    </div>
     </div>
   </div>
   <div class="header-divide-line-wrapper">
@@ -185,4 +180,5 @@ onBeforeMount(() => {
 
 <style scoped>
 @import '@/assets/header.css';
+
 </style>

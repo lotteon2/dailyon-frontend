@@ -9,7 +9,6 @@ import type { ProductInfo } from '@/apis/product/ProductDto'
 import DescribeImageComponent from '@/components/product/DescribeImageComponent.vue'
 import ReviewComponent from '@/components/product/ReviewComponent.vue'
 import { useProductStore } from '@/stores/product/ProductStore'
-
 import router from '@/router'
 const productStore = useProductStore()
 
