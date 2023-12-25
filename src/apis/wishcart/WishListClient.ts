@@ -10,15 +10,10 @@ export const readWishListPage = async (
   page: number,
   size: number
 ): Promise<AxiosResponse> => {
-  let config: object = {
-    params: { page: page, size: size }
-  }
-
-  if (targetId !== null) {
-    config.headers = { targetId: targetId }
-  }
-
-  return authAxiosInstance.get(`${WISH_CART_SERVICE_PREFIX}${WISH_LIST_PREFIX}`, config)
+  return authAxiosInstance.get(`${WISH_CART_SERVICE_PREFIX}${WISH_LIST_PREFIX}`, {
+    params: { page: page, size: size },
+    headers: { targetId: targetId }
+  })
 }
 
 export const readWishListFromProduct = async (
