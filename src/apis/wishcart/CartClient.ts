@@ -9,9 +9,9 @@ import type {
 const WISH_CART_SERVICE_PREFIX: string = '/wish-cart-service'
 const CART_PREFIX: string = '/cart'
 
-export const readCart = async (page: number): Promise<AxiosResponse> => {
+export const readCart = async (page: number, size: number): Promise<AxiosResponse> => {
   return await authAxiosInstance.get(`${WISH_CART_SERVICE_PREFIX}${CART_PREFIX}`, {
-    params: { page: page }
+    params: { page: page, size: size }
   })
 }
 
