@@ -11,6 +11,8 @@ import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
+const requestSize: number = 5
+
 const totalPages = ref<number>(0)
 const totalElements = ref<number>(0)
 const requestPage = ref<number>(0)
@@ -37,7 +39,7 @@ const sumOfCartItemPrice = computed(() => {
 })
 
 const initData = () => {
-  readCart(requestPage.value)
+  readCart(requestPage.value, requestSize)
     .then((axiosResponse: AxiosResponse) => {
       const response: ReadCartPageResponse = axiosResponse.data
       totalPages.value = response.totalPages
@@ -293,7 +295,7 @@ const deleteAll = () => {
       <div class="grey-third-column">
         <div class="grey-small-text">총 결제 금액</div>
         <div class="grey-large-text">
-          {{ formatNumber(Math.max(0, sumOfCartItemPrice.sum - sumOfCartItemPrice.deliveryFee)) }}
+          {{ formatNumber(sumOfCartItemPrice.sum + sumOfCartItemPrice.deliveryFee) }}
         </div>
       </div>
     </div>
