@@ -11,6 +11,7 @@ import ReviewComponent from '@/components/product/ReviewComponent.vue'
 import { useProductStore } from '@/stores/product/ProductStore'
 import router from '@/router'
 const productStore = useProductStore()
+import { upsertCart } from '@/apis/wishcart/CartClient'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -21,6 +22,8 @@ const isDescribeImages = ref<boolean>(true)
 const productId = ref<number>(Number(route.params.id))
 const productPriceValue = ref<number>(0)
 const showCouponModal = ref<boolean>(false)
+
+const isCartBtnEnabled = ref<boolean>(true)
 
 const selectedProductSize = ref<ReadProductStockResponse>({
   productSizeId: 0,
@@ -72,17 +75,33 @@ const toggleOption = (option: boolean) => {
 }
 
 const addToCart = () => {
-  if (selectedProductSize.value.productSizeId === 0) {
-    alert('옵션을 지정해주세요')
-    return
+  if (isCartBtnEnabled.value === true) {
+    isCartBtnEnabled.value = false
+
+    if (selectedProductSize.value.productSizeId === 0) {
+      alert('옵션을 지정해주세요')
+      return
+    }
+    if (selectedQuantity.value === 0) {
+      alert('개수를 추가해주세요')
+      return
+    }
+    upsertCart({
+      productId: productId.value,
+      productSizeId: selectedProductSize.value.productSizeId,
+      quantity: selectedQuantity.value,
+      lastMemberCode: '' // TODO : ootd에서 넘어올 때 url에 어떻게 남는지 물어봐야 함
+    })
+      .then(() => {
+        alert('장바구니에 상품이 담겼습니다')
+      })
+      .catch((error: any) => {
+        alert(error.response!.data!.message)
+      })
+      .finally(() => {
+        isCartBtnEnabled.value = true
+      })
   }
-  if (selectedQuantity.value === 0) {
-    alert('개수를 추가해주세요')
-    return
-  }
-  alert(
-    `장바구니 추가 : productId: ${productId.value}, productSizeId: ${selectedProductSize.value.productSizeId}, quantity: ${selectedQuantity.value}`
-  )
 }
 
 const routeOrderSheet = async () => {
