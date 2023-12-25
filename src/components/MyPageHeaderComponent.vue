@@ -3,7 +3,7 @@ import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import { pointPaymentReady } from '@/apis/payment/payment'
 import type { PointPaymentDto } from '@/apis/payment/paymentDto'
-import { useMemberStore } from '@/stores/member/MemberStore';
+import { useMemberStore } from '@/stores/member/MemberStore'
 
 const router = useRouter()
 const redirectUrl = ref('')
@@ -80,7 +80,7 @@ const processPayment = async () => {
 
     newWindow.value = window.open(
       redirectUrl.value,
-      'payment',
+      'orders',
       `width=${width},height=${height},top=${top},left=${left}`
     )
   }
@@ -97,7 +97,7 @@ const handleMessage = (event: MessageEvent) => {
   }
 }
 
-const memberStore = useMemberStore();
+const memberStore = useMemberStore()
 
 onMounted(async () => {
   window.addEventListener('message', handleMessage)
@@ -115,7 +115,7 @@ onBeforeUnmount(() => {
       <div class="user-name-container">
         <div class="user-name-container-first-line">
           <h1>
-            {{memberStore.nickname }}&nbsp;
+            {{ memberStore.nickname }}&nbsp;
             <h2>님, 반갑습니다!</h2>
           </h1>
         </div>

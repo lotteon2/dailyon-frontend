@@ -8,9 +8,12 @@ export const getProductReviews = async (
   productId: Number
 ): Promise<ReviewPageResponse<ReviewResponse>> => {
   try {
-    const { data } = await defaultAxiosInstance.get(`/reviews/${productId}`, {
-      params: pageRequest
-    })
+    const { data } = await defaultAxiosInstance.get(
+      `${REVIEW_SERVICE_PREFIX}/reviews/${productId}`,
+      {
+        params: pageRequest
+      }
+    )
     return data
   } catch (error) {
     console.log(error)

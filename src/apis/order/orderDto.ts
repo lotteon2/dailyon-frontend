@@ -23,3 +23,35 @@ export interface OrderDetailResponse {
   couponDiscountPrice: number | undefined | null
   status: string
 }
+
+export interface OrderSheet {
+  orderItems: OrderItem[]
+  orderInfo: OrderInfo
+  deliveryInfo: DeliveryInfo
+  paymentType: String
+}
+
+export interface OrderItem {
+  productId: Number
+  categoryId: Number
+  sizeId: Number
+  orderPrice: Number
+  quantity: Number
+  couponInfoId: Number | null
+  referralCode: String | null
+}
+
+export interface OrderInfo {
+  usedPoints: Number | null
+  type: String
+  deliveryFee: Number | null
+  totalCouponDiscountPrice: Number | null
+}
+
+export interface DeliveryInfo {
+  receiver: string
+  postCode: string
+  roadAddress: string
+  detailAddress: string
+  phoneNumber: string | null
+}

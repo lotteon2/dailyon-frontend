@@ -33,3 +33,15 @@ export interface ReadProductStockResponse {
   productSizeName: string
   quantity: number
 }
+
+export interface ProductInfo {
+  productId: Number
+  productName: String
+  imgUrl: String
+  categoryId: Number
+  sizeId: Number
+  sizeName: String
+  orderPrice: number
+  quantity: number
+  referralCode: String | null
+}
