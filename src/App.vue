@@ -3,16 +3,17 @@ import { RouterLink, RouterView } from 'vue-router'
 import { provide, ref } from 'vue'
 import HeaderComponent from '@/components/HeaderComponent.vue'
 import FooterComponent from '@/components/FooterComponent.vue'
+import { debounce } from 'lodash'
 
 let isScrollEnd = ref<boolean>(false)
 
-const onScroll = async (event: any) => {
+const onScroll = debounce(async (event: any) => {
   const { scrollHeight, scrollTop, clientHeight } = event.target
   // 스크롤이 끝에 닿으면 데이터를 추가로 로드
   if (scrollHeight - 10 <= scrollTop + clientHeight) {
     isScrollEnd.value = !isScrollEnd.value
   }
-}
+}, 200)
 
 provide('isScrollEnd', isScrollEnd)
 </script>
