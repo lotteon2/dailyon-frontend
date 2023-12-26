@@ -1,6 +1,7 @@
 import type { AxiosResponse } from 'axios'
 import { authAxiosInstance } from '@/apis/utils'
-import type { ToggleWishListRequest } from '@/apis/wishcart/WishListDto'
+import type { ReadWishListsFromProduct, ToggleWishListRequest } from '@/apis/wishcart/WishListDto'
+import { AxiosError } from 'axios'
 
 const WISH_CART_SERVICE_PREFIX: string = '/wish-cart-service'
 const WISH_LIST_PREFIX: string = '/wish-list'
@@ -17,10 +18,27 @@ export const readWishListPage = async (
 }
 
 export const readWishListFromProduct = async (
-  memberId: number,
   productId: number
-): Promise<AxiosResponse> => {
-  return authAxiosInstance.get(`${WISH_CART_SERVICE_PREFIX}${WISH_LIST_PREFIX}/${productId}`)
+): Promise<ReadWishListsFromProduct> => {
+  try {
+    const { data } = await authAxiosInstance.get(
+      `${WISH_CART_SERVICE_PREFIX}${WISH_LIST_PREFIX}/${productId}`
+    )
+    return data
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      if (error.response) {
+        if (error.response.status >= 400) {
+          alert(error.response.data.message)
+          console.error(`Client Error=${error.response.data.message}`)
+        } else if (error.response.status < 500) {
+          alert('서버 내부 오류')
+          console.error('Internal Server Error')
+        }
+      }
+    }
+    throw error
+  }
 }
 
 export const toggleWishList = async (request: ToggleWishListRequest): Promise<AxiosResponse> => {
