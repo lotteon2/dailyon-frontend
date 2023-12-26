@@ -12,16 +12,69 @@ import { useProductStore } from '@/stores/product/ProductStore'
 import router from '@/router'
 const productStore = useProductStore()
 import { upsertCart } from '@/apis/wishcart/CartClient'
+import type { ReadWishListFromProduct } from '@/apis/wishcart/WishListDto'
+import { readWishListFromProduct, toggleWishList } from '@/apis/wishcart/WishListClient'
+import type { AxiosResponse } from 'axios'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
 const route = useRoute()
 const product = ref()
 
+const referralCode = ref()
+
 const isDescribeImages = ref<boolean>(true)
 const productId = ref<number>(Number(route.params.id))
 const productPriceValue = ref<number>(0)
 const showCouponModal = ref<boolean>(false)
+
+const isWishBtnEnabled = ref<boolean>(true)
+
+const wishLists = ref<ReadWishListFromProduct[]>([])
+const checkWishList = (): boolean => {
+  if (selectedProductSize.value.productSizeId === 0) return false
+  return !!wishLists.value.find(
+    (wishList) =>
+      wishList.productSizeId === selectedProductSize.value.productSizeId &&
+      wishList.productId === productId.value
+  )
+}
+
+const executeToggle = () => {
+  if (
+    selectedProductSize.value.productSizeId !== 0 &&
+    productId.value !== 0 &&
+    isWishBtnEnabled.value
+  ) {
+    isWishBtnEnabled.value = false
+    toggleWishList({
+      productId: productId.value,
+      productSizeId: selectedProductSize.value.productSizeId
+    })
+      .then((axiosResponse: AxiosResponse) => {
+        const toDelete = wishLists.value.findIndex(
+          (wishList) =>
+            wishList.productSizeId === selectedProductSize.value.productSizeId &&
+            wishList.productId === productId.value
+        )
+
+        if (toDelete !== -1) {
+          wishLists.value.splice(toDelete, 1)
+        } else {
+          wishLists.value.push({
+            productId: productId.value,
+            productSizeId: selectedProductSize.value.productSizeId
+          })
+        }
+      })
+      .catch((error: any) => {
+        alert(error.response!.data!.message)
+      })
+      .finally(() => {
+        isWishBtnEnabled.value = true
+      })
+  }
+}
 
 const isCartBtnEnabled = ref<boolean>(true)
 
@@ -36,6 +89,10 @@ const selectedOriginalPrice = ref<number>(0)
 const initData = async () => {
   product.value = await getProductDetail(Number(route.params.id))
   productPriceValue.value = product.value.price
+  referralCode.value = route.query.code === null ? null : route.query.code
+  if (localStorage.getItem('accessToken')) {
+    wishLists.value = (await readWishListFromProduct(Number(route.params.id))).responses
+  }
 }
 
 const closeCouponModal = () => {
@@ -80,17 +137,19 @@ const addToCart = () => {
 
     if (selectedProductSize.value.productSizeId === 0) {
       alert('옵션을 지정해주세요')
+      isCartBtnEnabled.value = true
       return
     }
     if (selectedQuantity.value === 0) {
       alert('개수를 추가해주세요')
+      isCartBtnEnabled.value = true
       return
     }
     upsertCart({
       productId: productId.value,
       productSizeId: selectedProductSize.value.productSizeId,
       quantity: selectedQuantity.value,
-      lastMemberCode: '' // TODO : ootd에서 넘어올 때 url에 어떻게 남는지 물어봐야 함
+      lastMemberCode: referralCode.value
     })
       .then(() => {
         alert('장바구니에 상품이 담겼습니다')
@@ -116,7 +175,7 @@ const routeOrderSheet = async () => {
         sizeName: selectedProductSize.value.productSizeName,
         orderPrice: selectedOriginalPrice.value,
         quantity: selectedQuantity.value,
-        referralCode: null
+        referralCode: referralCode.value
       }
     ]
     productStore.setProducts(productInfos, 'SINGLE')
@@ -173,8 +232,18 @@ watch(selectedProductSize, () => {
             fill="none"
           >
             <path
+              v-if="checkWishList()"
+              cursor="pointer"
+              d="M30 55.05L25.65 51.09C10.2 37.08 0 27.81 0 16.5C0 7.23 7.26 0 16.5 0C21.72 0 26.73 2.43 30 6.24C33.27 2.43 38.28 0 43.5 0C52.74 0 60 7.23 60 16.5C60 27.81 49.8 37.08 34.35 51.09L30 55.05Z"
+              fill="#C22727"
+              @click="executeToggle"
+            />
+            <path
+              v-else
+              cursor="pointer"
               d="M30 55.05L25.65 51.09C10.2 37.08 0 27.81 0 16.5C0 7.23 7.26 0 16.5 0C21.72 0 26.73 2.43 30 6.24C33.27 2.43 38.28 0 43.5 0C52.74 0 60 7.23 60 16.5C60 27.81 49.8 37.08 34.35 51.09L30 55.05Z"
               fill="#C6C6C6"
+              @click="executeToggle"
             />
           </svg>
         </div>
@@ -199,26 +268,6 @@ watch(selectedProductSize, () => {
             <h1>&nbsp;</h1>
             <div @click="openCouponModal" class="black-button">
               쿠폰 받기
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-              >
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M15.7069 11.293C15.8943 11.4805 15.9996 11.7348 15.9996 12C15.9996 12.2652 15.8943 12.5195 15.7069 12.707L10.0499 18.364C9.95761 18.4595 9.84726 18.5357 9.72526 18.5881C9.60326 18.6405 9.47204 18.6681 9.33926 18.6692C9.20648 18.6704 9.0748 18.6451 8.9519 18.5948C8.829 18.5445 8.71735 18.4703 8.62346 18.3764C8.52957 18.2825 8.45531 18.1708 8.40503 18.048C8.35475 17.9251 8.32945 17.7934 8.3306 17.6606C8.33176 17.5278 8.35934 17.3966 8.41175 17.2746C8.46416 17.1526 8.54034 17.0422 8.63585 16.95L13.5859 12L8.63585 7.05C8.4537 6.8614 8.3529 6.60879 8.35518 6.3466C8.35746 6.0844 8.46263 5.83359 8.64804 5.64818C8.83344 5.46277 9.08426 5.3576 9.34645 5.35532C9.60865 5.35305 9.86125 5.45384 10.0499 5.636L15.7069 11.293Z"
-                  fill="white"
-                />
-              </svg>
-            </div>
-          </div>
-          <div class="price-info-row">
-            <h1>&nbsp;</h1>
-            <div class="black-button">
-              이벤트 참여하기
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"

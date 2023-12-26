@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios'
 import { defaultAxiosInstance, authAxiosInstance } from '@/apis/utils'
 import type { ReviewPageResponse, ReviewResponse } from './reviewDto'
-const REVIEW_SERVICE_PREFIX: string = '/reivew-service'
+const REVIEW_SERVICE_PREFIX: string = '/review-service'
 
 export const getProductReviews = async (
   pageRequest: any,

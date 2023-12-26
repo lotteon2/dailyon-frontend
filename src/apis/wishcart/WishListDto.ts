@@ -4,7 +4,7 @@ export interface ToggleWishListRequest {
 }
 
 export interface ReadWishListPageResponse {
-  isMine: boolean
+  mine: boolean
   totalElements: number
   totalPages: number
   responses: Array<ReadWishListResponse>
@@ -19,4 +19,13 @@ export interface ReadWishListResponse {
   gender: 'MALE' | 'FEMALE' | 'COMMON'
   imgUrl: string
   productPrice: number
+}
+
+export interface ReadWishListsFromProduct {
+  responses: Array<ReadWishListFromProduct>
+}
+
+export interface ReadWishListFromProduct {
+  productId: number
+  productSizeId: number
 }
