@@ -1,6 +1,6 @@
 .container-title {
     color: var(--Grayscale7, #000);
-    font-family: The Jamsil;
+    font-family: TheJamsil;
     font-size: 30px;
     font-style: normal;
     font-weight: 700;
@@ -34,7 +34,7 @@
     justify-content: center;
     align-items: center;
     color: var(--Grayscale5, #808080);
-    font-family: The Jamsil;
+    font-family: TheJamsil;
     font-size: 12px;
     font-style: normal;
     font-weight: 400;
@@ -46,7 +46,7 @@
 
 .wish-table-data1 > td {
     color: var(--Grayscale7, #202027);
-    font-family: The Jamsil;
+    font-family: TheJamsil;
     font-size: 20px;
     font-style: normal;
     font-weight: 400;
@@ -56,7 +56,7 @@
 
 .wish-table-data2 > td {
     color: var(--Grayscale7, #202027);
-    font-family: The Jamsil;
+    font-family: TheJamsil;
     font-size: 20px;
     font-style: normal;
     font-weight: 400;
@@ -92,4 +92,21 @@ td {
     display: flex;
     flex-direction: column;
     margin-bottom: 69px;
+}
+
+.wishBtn {
+    width: 50px;
+    height: 30px;
+    background: var(--Grayscale7, #000);
+    color: var(--Grayscale1, #fff);
+    text-align: center;
+    font-family: TheJamsil;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 80px; /* 266.667% */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
 }
