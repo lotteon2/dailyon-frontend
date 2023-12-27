@@ -64,6 +64,7 @@ const addDeliveryInfo = async (addressInfo: DeliveryInfo) => {
 const changeReceiver = async (input: string) => {
   deliveryInfo.value.receiver = input
 }
+
 const orderItems = [
   {
     productName: '나이키 에어포스1',
@@ -110,16 +111,12 @@ const doOrder = async () => {
     orderItems.push(orderItem)
   })
 
-  const orderInfo: OrderInfo = {
+  const orderSheet: OrderSheet = {
     usedPoints: usedPoints.value,
     type: orderType.value,
     deliveryFee: null,
-    totalCouponDiscountPrice: null
-  }
-
-  const orderSheet: OrderSheet = {
+    totalCouponDiscountPrice: null,
     orderItems: orderItems,
-    orderInfo: orderInfo,
     deliveryInfo: deliveryInfo.value,
     paymentType: 'KAKAOPAY'
   }
@@ -152,7 +149,6 @@ const validation = (): boolean => {
 }
 
 const handleMessage = (event: MessageEvent) => {
-  console.log(event.data)
   const { routeName, params } = event.data
   window.scrollTo(0, 0)
   router.replace({ name: routeName, params: params })

@@ -25,8 +25,11 @@ export interface OrderDetailResponse {
 }
 
 export interface OrderSheet {
+  usedPoints: Number | null
+  type: String
+  deliveryFee: Number | null
+  totalCouponDiscountPrice: Number | null
   orderItems: OrderItem[]
-  orderInfo: OrderInfo
   deliveryInfo: DeliveryInfo
   paymentType: String
 }
@@ -39,13 +42,6 @@ export interface OrderItem {
   quantity: Number
   couponInfoId: Number | null
   referralCode: String | null
-}
-
-export interface OrderInfo {
-  usedPoints: Number | null
-  type: String
-  deliveryFee: Number | null
-  totalCouponDiscountPrice: Number | null
 }
 
 export interface DeliveryInfo {
