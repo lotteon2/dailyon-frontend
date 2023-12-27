@@ -32,6 +32,7 @@ const lastId = ref<number>(0)
 const clearProductData = async () => {
   products.value = new Array<ProductSearchResponse>()
   lastId.value = 0
+  query.value = ''
 }
 
 const searchProducts = async (): Promise<ProductSearchPageResponse<ProductSearchResponse>> => {
