@@ -180,9 +180,12 @@ const onUpdateBtnClick = async () => {
 }
 
 const onDeleteBtnClick = async () => {
-  await deletePost(postId.value)
-  alert('게시글이 삭제되었습니다.')
-  await router.push({ path: '/ootds' })
+  const isConfirmed = confirm("게시글을 삭제하시겠습니까?")
+  if(isConfirmed) {
+    await deletePost(postId.value)
+    alert('게시글이 삭제되었습니다.')
+    await router.push({ path: '/ootds' })
+  }
 }
 </script>
 
@@ -332,7 +335,7 @@ const onDeleteBtnClick = async () => {
         <div class='ootd-detail-content-image-container'>
           <div class='ootd-detail-content-image-wrapper'>
             <img class='ootd-detail-content-image' :src='`${VITE_STATIC_IMG_URL}${post.imgUrl}`'>
-            <div v-for='postImageProductDetail in post.postImageProductDetails' :key='postImageProductDetail.id'
+            <div v-for='(postImageProductDetail, index) in post.postImageProductDetails' :key='postImageProductDetail.id'
                  class='product-detail-tag-wrapper'
                  :style='{ left: `${postImageProductDetail.leftGapPercent}%`, top: `${postImageProductDetail.topGapPercent}%` }'>
               <svg class='product-detail-tag' xmlns='http://www.w3.org/2000/svg'
@@ -341,7 +344,8 @@ const onDeleteBtnClick = async () => {
                   d='M15 0C6.71573 0 0 6.71573 0 15C0 23.2843 6.71573 30 15 30C23.2843 30 30 23.2843 30 15C30 6.71573 23.2843 0 15 0ZM16.029 6.50025C20.0424 6.50025 23.2947 9.7544 23.2947 13.7677C23.2947 17.781 20.0424 21.0333 16.029 21.0333C14.8145 21.0333 13.6699 20.7362 12.6636 20.2094C12.6646 20.214 12.6662 20.2194 12.6672 20.224L9.38965 23.4998L6.70533 20.8136L9.86573 17.6514C9.87095 17.649 9.87698 17.6482 9.8822 17.6459C9.17253 16.5236 8.7616 15.1937 8.7616 13.7677C8.7616 9.75438 12.0157 6.50025 16.029 6.50025ZM16.029 9.7284C13.7987 9.7284 11.9898 11.5374 11.9898 13.7677C11.9898 15.998 13.7987 17.8052 16.029 17.8052C18.2594 17.8052 20.0665 15.998 20.0665 13.7677C20.0665 11.5374 18.2594 9.7284 16.029 9.7284Z'
                   fill='#C22727' />
               </svg>
-              <div class='product-detail-tag-dropdown-wrapper'>
+              <div class='product-detail-tag-dropdown-wrapper'
+                   :style='{ zIndex: 5 - index }'>
                 <svg class='product-detail-tag-dropdown-pointer' xmlns='http://www.w3.org/2000/svg' width='33'
                      height='36' viewBox='0 0 33 36' fill='none'>
                   <path d='M16.4974 0L32.0884 35.25H0.911499L16.4974 0Z' fill='white' />
@@ -378,12 +382,17 @@ const onDeleteBtnClick = async () => {
           <div class='ootd-detail-content-product-list-wrapper'>
             <div class='ootd-detail-content-product-list-image-wrapper'>
               <div v-for='postImageProductDetail in post.postImageProductDetails'>
-                <RouterLink v-if='postImageProductDetail.imgUrl !== undefined'
-                            class='ootd-detail-content-product-image-wrapper'
+                <RouterLink class='ootd-detail-content-product-image-wrapper'
+                            v-if='postImageProductDetail.imgUrl !== undefined'
                             :to='{ path: `/products/${postImageProductDetail.productId}`, query: { code: post.member.code }}'>
                   <img class='ootd-detail-content-product-image'
                        :src='`${VITE_STATIC_IMG_URL}${postImageProductDetail.imgUrl}`'>
                 </RouterLink>
+                <div class='ootd-detail-content-product-image-wrapper'
+                     v-else>
+                  <img class='ootd-detail-content-product-image'
+                       :src='`${VITE_STATIC_IMG_URL}${postImageProductDetail.imgUrl}`'>
+                </div>
               </div>
             </div>
           </div>
