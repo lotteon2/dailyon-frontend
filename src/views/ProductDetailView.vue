@@ -1,35 +1,82 @@
 <script setup lang="ts">
-import { computed, onBeforeMount, ref, watch } from 'vue'
+import { onBeforeMount, ref, watch } from 'vue'
 import ProductDetailCouponModal from '@/components/promotion/coupon/productdetail/ProductDetailCouponModal.vue'
 import BreadCrumbComponent from '@/components/product/BreadCrumbComponent.vue'
 import { useRoute } from 'vue-router'
 import { getProductDetail } from '@/apis/product/ProductClient'
-import type { AxiosResponse } from 'axios'
 import type { ReadProductDetailResponse, ReadProductStockResponse } from '@/apis/product/ProductDto'
+import type { ProductInfo } from '@/apis/product/ProductDto'
 import DescribeImageComponent from '@/components/product/DescribeImageComponent.vue'
 import ReviewComponent from '@/components/product/ReviewComponent.vue'
+import { useProductStore } from '@/stores/product/ProductStore'
+import router from '@/router'
+const productStore = useProductStore()
+import { upsertCart } from '@/apis/wishcart/CartClient'
+import type { ReadWishListFromProduct } from '@/apis/wishcart/WishListDto'
+import { readWishListFromProduct, toggleWishList } from '@/apis/wishcart/WishListClient'
+import type { AxiosResponse } from 'axios'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
 const route = useRoute()
+const product = ref()
+
+const referralCode = ref()
 
 const isDescribeImages = ref<boolean>(true)
-
-const productId = ref<number>(0)
-const categoryId = ref<number>(0)
+const productId = ref<number>(Number(route.params.id))
 const productPriceValue = ref<number>(0)
 const showCouponModal = ref<boolean>(false)
 
-const brandName = ref<string>('')
-const gender = ref<string>('')
-const productName = ref<string>('')
-const imgUrl = ref<string>('')
-const describeImgUrls = ref<String[]>([])
+const isWishBtnEnabled = ref<boolean>(true)
 
-const productStocks = ref<ReadProductStockResponse[]>([])
+const wishLists = ref<ReadWishListFromProduct[]>([])
+const checkWishList = (): boolean => {
+  if (selectedProductSize.value.productSizeId === 0) return false
+  return !!wishLists.value.find(
+    (wishList) =>
+      wishList.productSizeId === selectedProductSize.value.productSizeId &&
+      wishList.productId === productId.value
+  )
+}
 
-const avgRating = ref<number>(0)
-const reviewCount = ref<number>(0)
+const executeToggle = () => {
+  if (
+    selectedProductSize.value.productSizeId !== 0 &&
+    productId.value !== 0 &&
+    isWishBtnEnabled.value
+  ) {
+    isWishBtnEnabled.value = false
+    toggleWishList({
+      productId: productId.value,
+      productSizeId: selectedProductSize.value.productSizeId
+    })
+      .then((axiosResponse: AxiosResponse) => {
+        const toDelete = wishLists.value.findIndex(
+          (wishList) =>
+            wishList.productSizeId === selectedProductSize.value.productSizeId &&
+            wishList.productId === productId.value
+        )
+
+        if (toDelete !== -1) {
+          wishLists.value.splice(toDelete, 1)
+        } else {
+          wishLists.value.push({
+            productId: productId.value,
+            productSizeId: selectedProductSize.value.productSizeId
+          })
+        }
+      })
+      .catch((error: any) => {
+        alert(error.response!.data!.message)
+      })
+      .finally(() => {
+        isWishBtnEnabled.value = true
+      })
+  }
+}
+
+const isCartBtnEnabled = ref<boolean>(true)
 
 const selectedProductSize = ref<ReadProductStockResponse>({
   productSizeId: 0,
@@ -39,28 +86,13 @@ const selectedProductSize = ref<ReadProductStockResponse>({
 const selectedQuantity = ref<number>(0)
 const selectedOriginalPrice = ref<number>(0)
 
-const initData = () => {
-  getProductDetail(Number(route.params.id))
-    .then((axiosResponse: AxiosResponse) => {
-      const response: ReadProductDetailResponse = axiosResponse.data
-
-      productId.value = Number(route.params.id)
-      categoryId.value = response.categoryId
-      productPriceValue.value = response.price
-      productName.value = response.name
-      brandName.value = response.brandName
-      gender.value = response.gender
-
-      imgUrl.value = response.imgUrl
-      describeImgUrls.value = response.describeImgUrls
-      productStocks.value = response.productStocks
-
-      avgRating.value = response.avgRating
-      reviewCount.value = response.reviewCount
-    })
-    .catch((error: any) => {
-      alert(error.response!.data!.message)
-    })
+const initData = async () => {
+  product.value = await getProductDetail(Number(route.params.id))
+  productPriceValue.value = product.value.price
+  referralCode.value = route.query.code === null ? null : route.query.code
+  if (localStorage.getItem('accessToken')) {
+    wishLists.value = (await readWishListFromProduct(Number(route.params.id))).responses
+  }
 }
 
 const closeCouponModal = () => {
@@ -91,22 +123,72 @@ const minusQuantity = () => {
   }
 }
 
-const toggleOption = () => {
-  isDescribeImages.value = !isDescribeImages.value
+const toggleOption = (option: boolean) => {
+  if (option) {
+    isDescribeImages.value = option
+  } else {
+    isDescribeImages.value = option
+  }
 }
 
 const addToCart = () => {
-  if (selectedProductSize.value.productSizeId === 0) {
-    alert('옵션을 지정해주세요')
-    return
+  if (isCartBtnEnabled.value === true) {
+    isCartBtnEnabled.value = false
+
+    if (selectedProductSize.value.productSizeId === 0) {
+      alert('옵션을 지정해주세요')
+      isCartBtnEnabled.value = true
+      return
+    }
+    if (selectedQuantity.value === 0) {
+      alert('개수를 추가해주세요')
+      isCartBtnEnabled.value = true
+      return
+    }
+    upsertCart({
+      productId: productId.value,
+      productSizeId: selectedProductSize.value.productSizeId,
+      quantity: selectedQuantity.value,
+      lastMemberCode: referralCode.value
+    })
+      .then(() => {
+        alert('장바구니에 상품이 담겼습니다')
+      })
+      .catch((error: any) => {
+        alert(error.response!.data!.message)
+      })
+      .finally(() => {
+        isCartBtnEnabled.value = true
+      })
   }
-  if (selectedQuantity.value === 0) {
-    alert('개수를 추가해주세요')
-    return
+}
+
+const routeOrderSheet = async () => {
+  if (validation()) {
+    const productInfos: ProductInfo[] = [
+      {
+        productId: productId.value,
+        productName: product.value.name,
+        imgUrl: product.value.imgUrl,
+        categoryId: product.value.categoryId,
+        sizeId: selectedProductSize.value.productSizeId,
+        sizeName: selectedProductSize.value.productSizeName,
+        orderPrice: selectedOriginalPrice.value,
+        quantity: selectedQuantity.value,
+        referralCode: referralCode.value
+      }
+    ]
+    productStore.setProducts(productInfos, 'SINGLE')
+    router.push('/orders')
   }
-  alert(
-    `장바구니 추가 : productId: ${productId.value}, productSizeId: ${selectedProductSize.value.productSizeId}, quantity: ${selectedQuantity.value}`
-  )
+}
+
+const validation = (): boolean => {
+  if (selectedQuantity.value === 0 || selectedOriginalPrice.value === 0) {
+    alert('상품옵션과 수량을 선택해 주세요.')
+    return false
+  }
+  return true
 }
 
 onBeforeMount(initData)
@@ -120,26 +202,26 @@ watch(selectedProductSize, () => {
 })
 </script>
 
-<template>
+<template v-if="product">
   <ProductDetailCouponModal
     @close-coupon-modal="closeCouponModal"
     @total-price-updated="handleTotalPriceUpdated"
     :showModal="showCouponModal"
     :productId="productId"
-    :categoryId="categoryId"
+    :categoryId="product.categoryId"
     :productPriceValue="productPriceValue"
   ></ProductDetailCouponModal>
   <div class="main-container">
-    <BreadCrumbComponent v-if="categoryId !== 0" :category="categoryId" />
+    <BreadCrumbComponent v-if="product.categoryId !== 0" :category="product.categoryId" />
     <div class="first-wrapper">
       <div class="prod-first-col">
-        <img class="img-big" :src="`${VITE_STATIC_IMG_URL}${imgUrl}?w=200&h=200`" alt="" />
+        <img class="img-big" :src="`${VITE_STATIC_IMG_URL}${product.imgUrl}?w=200&h=200`" alt="" />
       </div>
       <div class="prod-second-col">
         <div class="second-col-first-row">
           <div class="brand-prod-name">
-            <h1>{{ brandName }}</h1>
-            <h2>{{ productName }}</h2>
+            <h1>{{ product.brandName }}</h1>
+            <h2>{{ product.name }}</h2>
           </div>
           <div v-if="selectedProductSize.quantity === 0" class="sold-out">품절</div>
           <svg
@@ -150,8 +232,18 @@ watch(selectedProductSize, () => {
             fill="none"
           >
             <path
+              v-if="checkWishList()"
+              cursor="pointer"
+              d="M30 55.05L25.65 51.09C10.2 37.08 0 27.81 0 16.5C0 7.23 7.26 0 16.5 0C21.72 0 26.73 2.43 30 6.24C33.27 2.43 38.28 0 43.5 0C52.74 0 60 7.23 60 16.5C60 27.81 49.8 37.08 34.35 51.09L30 55.05Z"
+              fill="#C22727"
+              @click="executeToggle"
+            />
+            <path
+              v-else
+              cursor="pointer"
               d="M30 55.05L25.65 51.09C10.2 37.08 0 27.81 0 16.5C0 7.23 7.26 0 16.5 0C21.72 0 26.73 2.43 30 6.24C33.27 2.43 38.28 0 43.5 0C52.74 0 60 7.23 60 16.5C60 27.81 49.8 37.08 34.35 51.09L30 55.05Z"
               fill="#C6C6C6"
+              @click="executeToggle"
             />
           </svg>
         </div>
@@ -160,13 +252,13 @@ watch(selectedProductSize, () => {
           <div class="price-info-row">
             <h1>데일리온가</h1>
             <!-- TODO : 여기에 할인 적용된 금액 들어가나요? -->
-            <h2>{{ productPriceValue }}</h2>
+            <h2>{{ productPriceValue.toLocaleString() }}</h2>
             <!-- TODO : 여기에 최대 할인율? 할인 금액 나오는건가요? -->
             <h3>할인율</h3>
           </div>
           <div class="price-info-row">
             <h1>&nbsp;</h1>
-            <div class="dash">{{ productPriceValue }}</div>
+            <div class="dash">{{ productPriceValue.toLocaleString() }}</div>
           </div>
           <div class="price-info-row">
             <h1>프로모션</h1>
@@ -193,30 +285,10 @@ watch(selectedProductSize, () => {
             </div>
           </div>
           <div class="price-info-row">
-            <h1>&nbsp;</h1>
-            <div class="black-button">
-              이벤트 참여하기
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-              >
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M15.7069 11.293C15.8943 11.4805 15.9996 11.7348 15.9996 12C15.9996 12.2652 15.8943 12.5195 15.7069 12.707L10.0499 18.364C9.95761 18.4595 9.84726 18.5357 9.72526 18.5881C9.60326 18.6405 9.47204 18.6681 9.33926 18.6692C9.20648 18.6704 9.0748 18.6451 8.9519 18.5948C8.829 18.5445 8.71735 18.4703 8.62346 18.3764C8.52957 18.2825 8.45531 18.1708 8.40503 18.048C8.35475 17.9251 8.32945 17.7934 8.3306 17.6606C8.33176 17.5278 8.35934 17.3966 8.41175 17.2746C8.46416 17.1526 8.54034 17.0422 8.63585 16.95L13.5859 12L8.63585 7.05C8.4537 6.8614 8.3529 6.60879 8.35518 6.3466C8.35746 6.0844 8.46263 5.83359 8.64804 5.64818C8.83344 5.46277 9.08426 5.3576 9.34645 5.35532C9.60865 5.35305 9.86125 5.45384 10.0499 5.636L15.7069 11.293Z"
-                  fill="white"
-                />
-              </svg>
-            </div>
-          </div>
-          <div class="price-info-row">
             <span>상품 옵션</span>
             <select v-model.lazy.number="selectedProductSize">
               <option
-                v-for="(productStock, index) in productStocks"
+                v-for="(productStock, index) in product.productStocks"
                 :key="index"
                 :value="productStock"
               >
@@ -259,13 +331,13 @@ watch(selectedProductSize, () => {
                 </svg>
               </div>
             </div>
-            <h2>{{ selectedOriginalPrice }} 원</h2>
+            <h2>{{ selectedOriginalPrice.toLocaleString() }} 원</h2>
           </div>
           <div class="line"></div>
           <div class="price-wrapper">
             <h1>총 합계금액</h1>
             <!-- TODO : 할인률 적용된 금액 -->
-            <h2>{{ selectedOriginalPrice }} 원</h2>
+            <h2>{{ selectedOriginalPrice.toLocaleString() }} 원</h2>
           </div>
 
           <div class="buttons-wrapper">
@@ -286,7 +358,7 @@ watch(selectedProductSize, () => {
             <!-- TODO : 장바구니 개발 이후 추가 동작 개발 -->
             <div class="bucket-button" @click="addToCart">장바구니</div>
             <!-- TODO : 버튼 클릭 시 주문 페이지  (가주문 X) 생성 -->
-            <div class="purchase-button">바로 구매</div>
+            <div class="purchase-button" @click="routeOrderSheet">바로 구매</div>
           </div>
         </div>
       </div>
@@ -295,26 +367,26 @@ watch(selectedProductSize, () => {
       <div class="select-button-wrapper">
         <div
           :class="`${isDescribeImages === true ? 'selected-button' : 'non-selected-button'}`"
-          @click="toggleOption"
+          @click="toggleOption(true)"
         >
           상세 정보
         </div>
         <div
           :class="`${isDescribeImages === false ? 'selected-button' : 'non-selected-button'}`"
-          @click="toggleOption"
+          @click="toggleOption(false)"
         >
           상품 후기
         </div>
       </div>
       <div class="line"></div>
-      <DescribeImageComponent
-        v-if="isDescribeImages"
-        :is-describe-images="isDescribeImages"
-        :describe-img-urls="describeImgUrls"
-      />
-      <ReviewComponent v-if="!isDescribeImages" />
+      <div v-show="isDescribeImages">
+        <DescribeImageComponent :describe-img-urls="product.describeImgUrls" />
+      </div>
+      <div v-show="!isDescribeImages">
+        <ReviewComponent :productName="product.name" />
+      </div>
     </div>
-    <div class="third-wrapper">
+    <!-- <div class="third-wrapper">
       <div class="line"></div>
       <div class="top4-ootd-wrapper">
         <div class="top4-ootd-title-wrapper">
@@ -329,7 +401,7 @@ watch(selectedProductSize, () => {
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 

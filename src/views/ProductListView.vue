@@ -11,9 +11,9 @@ const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 const route = useRoute()
 
 const categoryId = ref<number>(0)
-const brandId = ref<number>(0)
-const gender = ref<string>('')
-const type = ref<string>('')
+const brandId = ref<number | null>(null)
+const gender = ref<string | null>(null)
+const type = ref<string | null>(null)
 
 const hasNext = ref<boolean>(true)
 const lastId = ref<number>(0)

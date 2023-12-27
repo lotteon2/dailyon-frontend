@@ -28,19 +28,7 @@ const router = createRouter({
     {
       path: '/products/:id',
       name: 'productDetails',
-      component: () => import('@/views/ProductDetailView.vue'),
-      children: [
-        {
-          path: '/describe-images',
-          name: 'describeImages',
-          component: () => import('@/components/product/DescribeImageComponent.vue')
-        },
-        {
-          path: '/reviews',
-          name: 'reviews',
-          component: () => import('@/components/product/ReviewComponent.vue')
-        }
-      ]
+      component: () => import('@/views/ProductDetailView.vue')
     },
     {
       path: '/orders',
@@ -177,6 +165,16 @@ const router = createRouter({
           ]
         }
       ]
+    },
+    {
+      path: '/order-result/:orderId',
+      name: 'OrderResult',
+      component: () => import('@/views/OrderResultView.vue')
+    },
+    {
+      path: '/order-success/:orderId',
+      name: 'orderSuccess',
+      component: () => import('@/views/OrderSuccessView.vue')
     },
     {
       path: '/logininfo',

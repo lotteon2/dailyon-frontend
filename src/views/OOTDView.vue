@@ -5,6 +5,7 @@ import { getPosts } from '@/apis/ootd/PostService'
 import type { PostPageResponse, PostResponse } from '@/apis/ootd/PostDto'
 import OOTDPostCardComponent from '@/components/ootd/OOTDPostCardComponent.vue'
 import OOTDSortComponent from '@/components/ootd/OOTDSortComponent.vue'
+import { debounce } from 'lodash'
 
 const sortOptions = reactive([
   { label: '조회순', value: 'viewCount,desc' },
@@ -17,13 +18,13 @@ const requestSort = ref<string>(sortOptions[0].value)
 const posts = ref<Array<PostResponse>>()
 const hasNext = ref<boolean>()
 
-const fetchDefaultData = async (): Promise<PostPageResponse<PostResponse>> => {
+const fetchDefaultData = debounce(async (): Promise<PostPageResponse<PostResponse>> => {
   const postPageResponse = await getPosts(0, 8, sortOptions[0].value)
   posts.value = postPageResponse.posts
   hasNext.value = postPageResponse.hasNext
 
   return postPageResponse
-}
+}, 100)
 
 onBeforeMount(async () => {
   await fetchDefaultData()

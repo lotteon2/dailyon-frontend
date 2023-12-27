@@ -3,6 +3,8 @@ import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import { pointPaymentReady } from '@/apis/payment/payment'
 import type { PointPaymentDto } from '@/apis/payment/paymentDto'
+import { useMemberStore } from '@/stores/member/MemberStore';
+
 const router = useRouter()
 const redirectUrl = ref('')
 const displayModal = ref(false)
@@ -53,6 +55,7 @@ const inputClear = () => {
 
 const logout = () => {
   localStorage.removeItem('accessToken')
+  localStorage.removeItem('member')
   router.push({ name: 'home' })
   alert('로그아웃 완료')
 }
@@ -77,7 +80,7 @@ const processPayment = async () => {
 
     newWindow.value = window.open(
       redirectUrl.value,
-      'payment',
+      'orders',
       `width=${width},height=${height},top=${top},left=${left}`
     )
   }
@@ -94,6 +97,8 @@ const handleMessage = (event: MessageEvent) => {
   }
 }
 
+const memberStore = useMemberStore();
+
 onMounted(async () => {
   window.addEventListener('message', handleMessage)
 })
@@ -106,21 +111,41 @@ onBeforeUnmount(() => {
 <template>
   <div class="user-container">
     <div class="user-info-container">
-      <img class="user-profile-img" src="@/assets/images/default-profile-image.png" />
+      <svg
+        class="profile-circle"
+        width="50"
+        height="50"
+        viewBox="0 0 150 150"
+        fill="none"
+      >
+        <circle cx="75" cy="75" r="75" fill="#D9D9D9" />
+        <mask id="circle-mask">
+          <circle cx="75" cy="75" r="75" fill="white" />
+        </mask>
+        <image
+          :href="memberStore.profileImgUrl || undefined"
+          x="0"
+          y="0"
+          width="150"
+          height="150"
+          mask="url(#circle-mask)"
+          preserveAspectRatio="xMidYMid slice"
+        />
+      </svg>
       <div class="user-name-container">
         <div class="user-name-container-first-line">
           <h1>
-            닉네임&nbsp;
+            {{memberStore.nickname }}&nbsp;
             <h2>님, 반갑습니다!</h2>
           </h1>
         </div>
-        <h3>이메일 주소</h3>
+        <h3>{{ memberStore.email }}</h3>
       </div>
     </div>
     <div class="user-container-point-container">
       <div class="point-wrapper">
         포인트
-        <h1>0</h1>
+        <h1>{{ memberStore.point }}</h1>
         점
       </div>
       <button class="payment-modal-button" @click="open">결제하기</button>

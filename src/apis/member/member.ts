@@ -1,3 +1,4 @@
+
 import { type AxiosResponse } from "axios";
 import { authAxiosInstance } from "@/apis/utils";
 import { useMemberStore } from '@/stores/member/MemberStore';
@@ -31,4 +32,22 @@ export const getMember = async () => {
     } catch (error) {
       console.error('API 호출 중 오류 발생:', error);
     }
+  };
+
+  export const getDefaultAddress = async () => {
+    try {
+      const response = await authAxiosInstance.get(`${MEMBER_SERVICE_PREFIX}/addresses/default`);
+      return response.data;
+    } catch (error) {
+      console.error('API 호출 중 오류 발생:', error);
+    }
+  };
+
+    export const setDefaultAddress = async (addressId: number) => {
+      try {
+        const response = await authAxiosInstance.post(`${MEMBER_SERVICE_PREFIX}/addresses/default`, addressId);
+        return response.data;
+      } catch (error) {
+        console.error('API 호출 중 오류 발생:', error);
+      }
   };

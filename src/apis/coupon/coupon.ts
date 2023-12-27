@@ -33,9 +33,9 @@ export const getCouponsWithAvailibilityForProductDetail = async (
 
 export const downloadCoupon = async (couponInfoId: number): Promise<string> => {
   try {
-    const response = await authAxiosInstance.post(
-      `${PROMOTION_PREFIX_PATH}${COUPON_DOMAIN_PREFIX_PATH}/${couponInfoId}/download`
-    )
+    let url = `${PROMOTION_PREFIX_PATH}${COUPON_DOMAIN_PREFIX_PATH}/${couponInfoId}/download`
+    const response = await authAxiosInstance.post(url)
+    alert('쿠폰을 다운로드 했습니다.')
     return response.data
   } catch (error) {
     if (error instanceof AxiosError) {
@@ -44,8 +44,7 @@ export const downloadCoupon = async (couponInfoId: number): Promise<string> => {
           alert('쿠폰을 다운로드 하지 못했습니다.' + error.response.data.message)
           // alert(error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
-        }
-        if (error.response.status < 500) {
+        } else if (error.response.status < 500) {
           alert('서버 내부 오류')
           console.error('Internal Server Error')
         }
@@ -71,8 +70,7 @@ export const getCouponsForCheckout = async (
           alert('적용가능한 쿠폰을 가져오지 못했습니다.' + error.response.data.message)
           // alert(error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
-        }
-        if (error.response.status < 500) {
+        } else if (error.response.status < 500) {
           alert('서버 내부 오류')
           console.error('Internal Server Error')
         }

@@ -6,21 +6,19 @@ const props = defineProps({
   describeImgUrls: {
     type: Array<String>,
     required: false
-  },
-  isDescribeImages: {
-    type: Boolean,
-    required: true
   }
 })
 </script>
 
 <template>
-  <img
-    v-if="props.describeImgUrls && props.describeImgUrls.length > 0"
-    v-for="url in props.describeImgUrls"
-    :src="`${VITE_STATIC_IMG_URL}${url}`"
-    alt="describeImg"
-  />
+  <div>
+    <img
+      v-if="props.describeImgUrls && props.describeImgUrls.length > 0"
+      v-for="url in props.describeImgUrls"
+      :src="`${VITE_STATIC_IMG_URL}${url}`"
+      alt="describeImg"
+    />
+  </div>
 </template>
 
 <style scoped></style>

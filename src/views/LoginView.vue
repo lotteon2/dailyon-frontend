@@ -23,7 +23,7 @@
             <img class="oauth-kakao" src="@/assets/images/kakao-login.png" @click="redirectToKakaoLogin"/>
           </div>
           <div class="oauth-google-wrapper">
-            <img class="oauth-google" src="@/assets/images/google-login.png" />
+            <img class="oauth-google" src="@/assets/images/google-login.png" @click="redirectToGoogleLogin"/>
           </div>
         </div>
       </div>
@@ -406,8 +406,12 @@
 export default {
   methods: {
     redirectToKakaoLogin() {
-      const kakaoLoginUrl = import.meta.env.VITE_LOGIN_URL;
+      const kakaoLoginUrl = import.meta.env.VITE_KAKAO_LOGIN_URL;
       window.location.href = kakaoLoginUrl;
+    },
+    redirectToGoogleLogin() {
+      const googleLoginUrl = import.meta.env.VITE_GOOGLE_LOGIN_URL;
+      window.location.href = googleLoginUrl;
     },
   },
 };

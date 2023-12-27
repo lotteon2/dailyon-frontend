@@ -26,12 +26,20 @@ const validationMessage = reactive({
     number: {
       isValid: true,
       message: '키는 숫자로만 입력 가능합니다.'
+    },
+    size: {
+      isValid: true,
+      message: '키는 1부터 999까지 입력 가능합니다.'
     }
   },
   weight: {
     number: {
       isValid: true,
       message: '몸무게는 숫자로만 입력 가능합니다.'
+    },
+    size: {
+      isValid: true,
+      message: '몸무게는 1부터 999까지 입력 가능합니다.'
     }
   },
   hashTag: {
@@ -54,6 +62,12 @@ watch(postCreateRequest.value, async (afterPostCreateRequest, beforePostCreateRe
     validationMessage.stature.number.isValid = false
   } else if (stature !== undefined && !isNaN(Number(stature))) {
     validationMessage.stature.number.isValid = true
+    validationMessage.stature.size.isValid = true
+    if(Number(stature) > 999) {
+      validationMessage.stature.size.isValid = false
+    } else {
+      validationMessage.stature.size.isValid = true
+    }
   }
 
   const weight = afterPostCreateRequest.weight
@@ -62,6 +76,12 @@ watch(postCreateRequest.value, async (afterPostCreateRequest, beforePostCreateRe
     validationMessage.weight.number.isValid = false
   } else if (weight !== undefined && !isNaN(Number(weight))) {
     validationMessage.weight.number.isValid = true
+    validationMessage.weight.size.isValid = true
+    if(Number(weight) > 999) {
+      validationMessage.weight.size.isValid = false
+    } else {
+      validationMessage.weight.size.isValid = true
+    }
   }
 })
 
@@ -130,6 +150,8 @@ const removeHashTag = async () => {
 const isProductModalOpen = ref<boolean>(false)
 const productModalControl = async () => {
   isProductModalOpen.value = !isProductModalOpen.value
+
+
 }
 
 const currentLeftGapPercent = ref<number>(0)
@@ -268,18 +290,25 @@ const onCancel = async () => {
           <div class='div-4'>
             <div class='text-wrapper-4'>키</div>
             <input class='rectangle' type='text'
+                   maxlength='3'
                    v-model='postCreateRequest.stature' placeholder='키 입력(선택사항)'>
             <div v-if='!validationMessage.stature.number.isValid' class='validation-wrapper'>
               {{ validationMessage.stature.number.message }}
             </div>
-
+            <div v-if='!validationMessage.stature.size.isValid' class='validation-wrapper'>
+              {{ validationMessage.stature.size.message }}
+            </div>
           </div>
           <div class='div-5'>
             <div class='text-wrapper-4'>몸무게</div>
             <input class='rectangle' type='text'
+                   maxlength='3'
                    v-model='postCreateRequest.weight' placeholder='몸무게 입력(선택사항)'>
             <div v-if='!validationMessage.weight.number.isValid' class='validation-wrapper'>
               {{ validationMessage.weight.number.message }}
+            </div>
+            <div v-if='!validationMessage.weight.size.isValid' class='validation-wrapper'>
+              {{ validationMessage.weight.size.message }}
             </div>
           </div>
           <div class='div-6'>
@@ -328,8 +357,9 @@ const onCancel = async () => {
       </div>
       <div v-if='postCreateRequest.postImgName !== ""' class='post-img-wrapper'>
         <img class='post-img' :src='inputPostImg' @click='onPostImgClick' />
-        <div v-for='temporaryTagProduct in temporaryTagProducts'
+        <div v-for='(temporaryTagProduct, index) in temporaryTagProducts'
              class='product-detail-tag-wrapper'
+             :key='temporaryTagProduct.id'
              :style='{ left: `${temporaryTagProduct.leftGapPercent}%`, top: `${temporaryTagProduct.topGapPercent}%` }'>
           <svg class='product-detail-tag' xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'
                fill='none'>
@@ -337,7 +367,7 @@ const onCancel = async () => {
               d='M15 0C6.71573 0 0 6.71573 0 15C0 23.2843 6.71573 30 15 30C23.2843 30 30 23.2843 30 15C30 6.71573 23.2843 0 15 0ZM16.029 6.50025C20.0424 6.50025 23.2947 9.7544 23.2947 13.7677C23.2947 17.781 20.0424 21.0333 16.029 21.0333C14.8145 21.0333 13.6699 20.7362 12.6636 20.2094C12.6646 20.214 12.6662 20.2194 12.6672 20.224L9.38965 23.4998L6.70533 20.8136L9.86573 17.6514C9.87095 17.649 9.87698 17.6482 9.8822 17.6459C9.17253 16.5236 8.7616 15.1937 8.7616 13.7677C8.7616 9.75438 12.0157 6.50025 16.029 6.50025ZM16.029 9.7284C13.7987 9.7284 11.9898 11.5374 11.9898 13.7677C11.9898 15.998 13.7987 17.8052 16.029 17.8052C18.2594 17.8052 20.0665 15.998 20.0665 13.7677C20.0665 11.5374 18.2594 9.7284 16.029 9.7284Z'
               fill='#C22727' />
           </svg>
-          <div class='product-detail-tag-dropdown-wrapper'>
+          <div class='product-detail-tag-dropdown-wrapper' :style='{ zIndex: 5 - index }'>
             <svg class='product-detail-tag-dropdown-pointer' xmlns='http://www.w3.org/2000/svg' width='33' height='36'
                  viewBox='0 0 33 36' fill='none'>
               <path d='M16.4974 0L32.0884 35.25H0.911499L16.4974 0Z' fill='white' />

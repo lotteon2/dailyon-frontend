@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
-import { onBeforeMount, onMounted, ref } from 'vue'
+import { onBeforeMount, onMounted, ref, computed } from 'vue'
 import type { Category } from '@/apis/category/CategoryDto'
 import HeaderCategoryComponent from '@/components/HeaderCategoryComponent.vue'
 import { getChildCategories } from '@/apis/category/CategoryClient'
@@ -17,7 +17,7 @@ const showCategoryDropdown = ref<boolean>(true)
 const rootCategories = ref<Category[]>([])
 
 const memberStore = useMemberStore();
-const memberInfo = memberStore.getMemberInfo(); 
+const memberInfo =  computed(() => memberStore.getMemberInfo()); 
 
 onBeforeMount(() => {
   getChildCategories(null)
@@ -61,9 +61,11 @@ onBeforeMount(() => {
     </div>
     <div class="auth-wrapper">
     <RouterLink v-if="!isLoggedIn()" to="/login" class="login-text">Login</RouterLink>
-    <div v-else class="login-text">
-      <img v-if="memberInfo.profileImgUrl" :src="memberInfo.profileImgUrl" alt="Profile Image" class="profile-image" />
-      <span v-if="memberInfo.email">{{ memberInfo.email }} 환영합니다!</span>
+    <div v-else class="login-text" >
+      <RouterLink to="/member-info">
+        <img v-if="memberInfo.profileImgUrl" :src="memberInfo.profileImgUrl" alt="Profile Image" class="profile-image" />
+        <span v-if="memberInfo.email">{{ memberInfo.nickname }}님 환영합니다!</span>
+      </RouterLink>
     </div>
     </div>
   </div>

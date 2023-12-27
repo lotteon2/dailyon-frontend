@@ -1,6 +1,6 @@
 .container-title {
     color: var(--Grayscale7, #000);
-    font-family: The Jamsil;
+    font-family: TheJamsil;
     font-size: 30px;
     font-style: normal;
     font-weight: 700;
@@ -16,7 +16,7 @@
 
 .cart-table-data1 > td {
     color: var(--Grayscale7, #202027);
-    font-family: The Jamsil;
+    font-family: TheJamsil;
     font-size: 20px;
     font-style: normal;
     font-weight: 400;
@@ -26,7 +26,7 @@
 
 .cart-table-data2 > td {
     color: var(--Grayscale7, #202027);
-    font-family: The Jamsil;
+    font-family: TheJamsil;
     font-size: 20px;
     font-style: normal;
     font-weight: 400;
@@ -60,7 +60,7 @@
     justify-content: center;
     align-items: center;
     color: var(--Grayscale5, #808080);
-    font-family: The Jamsil;
+    font-family: TheJamsil;
     font-size: 12px;
     font-style: normal;
     font-weight: 400;
@@ -68,6 +68,7 @@
     margin-left: 7px;
     margin-bottom: 8px;
     margin-top: -28px;
+    cursor: pointer;
 }
 
 .basket-checkbox {
@@ -93,7 +94,7 @@
 
 .basket-column > h1 {
     color: var(--Grayscale7, #202027);
-    font-family: The Jamsil;
+    font-family: TheJamsil;
     font-size: 20px;
     font-style: normal;
     font-weight: 400;
@@ -102,7 +103,7 @@
 
 .basket-column > h2 {
     color: var(--Grayscale5, #808080);
-    font-family: The Jamsil;
+    font-family: TheJamsil;
     font-size: 15px;
     font-style: normal;
     font-weight: 400;
@@ -120,7 +121,7 @@
     justify-content: center;
     align-items: center;
     color: var(--Grayscale5, #808080);
-    font-family: The Jamsil;
+    font-family: TheJamsil;
     font-size: 12px;
     font-style: normal;
     font-weight: 400;
@@ -145,6 +146,7 @@ td {
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 }
 
 .count-white {
@@ -154,7 +156,7 @@ td {
     justify-content: center;
     align-items: center;
     color: var(--Grayscale7, #000);
-    font-family: The Jamsil;
+    font-family: TheJamsil;
     font-size: 20px;
     font-style: normal;
     font-weight: 300;
@@ -167,7 +169,7 @@ td {
 
 .total-pay {
     color: var(--Grayscale7, #202027);
-    font-family: The Jamsil;
+    font-family: TheJamsil;
     font-size: 25px;
     font-style: normal;
     font-weight: 800;
@@ -176,7 +178,7 @@ td {
 
 .prod-price {
     color: var(--Grayscale7, #202027);
-    font-family: The Jamsil;
+    font-family: TheJamsil;
     font-size: 20px;
     font-style: normal;
     font-weight: 700;
@@ -203,7 +205,7 @@ td {
 
 .grey-small-text {
     color: var(--Grayscale7, #202027);
-    font-family: The Jamsil;
+    font-family: TheJamsil;
     font-size: 20px;
     font-style: normal;
     font-weight: 400;
@@ -212,7 +214,7 @@ td {
 
 .grey-large-text {
     color: var(--Grayscale7, #202027);
-    font-family: The Jamsil;
+    font-family: TheJamsil;
     font-size: 25px;
     font-style: normal;
     font-weight: 700;
@@ -252,10 +254,11 @@ td {
     align-items: center;
     color: var(--Grayscale1, #fff);
     text-align: center;
-    font-family: The Jamsil;
+    font-family: TheJamsil;
     font-size: 30px;
     font-style: normal;
     font-weight: 400;
     line-height: 30px; /* 100% */
     align-self: flex-end;
+    cursor: pointer;
 }

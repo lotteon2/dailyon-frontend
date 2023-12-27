@@ -10,6 +10,7 @@ import { createComment, createReplyComment, deleteComment, getComments } from '@
 import { useRoute } from 'vue-router'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 import { useMemberStore } from '@/stores/member/MemberStore'
+import router from '@/router'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -39,6 +40,14 @@ onBeforeMount(async () => {
   await fetchDefaultData()
 })
 
+const isCommentRegistered = ref<boolean>(false)
+watch(isCommentRegistered, async (afterIsCommentRegistered, beforeIsCommentRegistered) => {
+  if(afterIsCommentRegistered) {
+    await fetchDefaultData()
+    isCommentRegistered.value = false
+  }
+})
+
 const onChangePage = async (page: number) => {
   if (page >= 0 && page < totalPages.value!) {
     requestPage.value = page
@@ -55,17 +64,20 @@ watch(requestPage, async (afterPage, beforePage) => {
 })
 
 const createCommentRequest = ref<CreateCommentRequest>({
-  description: ""
+  description: ''
 })
 
 const onSubmitComment = async () => {
-  if (createCommentRequest.value.description === ""
+  if (createCommentRequest.value.description === ''
     || createCommentRequest.value.description.length < 5 || createCommentRequest.value.description.length > 140) {
-    alert("댓글은 최소 5자 최대 140자까지 등록할 수 있습니다.")
+    alert('댓글은 최소 5자 최대 140자까지 등록할 수 있습니다.')
   } else {
-    await createComment(postId.value, createCommentRequest.value)
-    alert("댓글을 성공적으로 등록하였습니다.")
-    window.location.reload()
+    if(!isCommentRegistered.value) {
+      await createComment(postId.value, createCommentRequest.value)
+      alert('댓글을 성공적으로 등록하였습니다.')
+      createCommentRequest.value.description = ''
+      isCommentRegistered.value = true
+    }
   }
 }
 
@@ -76,30 +88,39 @@ const onOpenReplyCommentInput = async (commentId: number) => {
 }
 
 const createReplyCommentRequest = ref<CreateReplyCommentRequest>({
-  description: ""
+  description: ''
 })
 
 const onSubmitReplyComment = async (commentId: number) => {
-  if (createReplyCommentRequest.value.description === ""
+  if (createReplyCommentRequest.value.description === ''
     || createReplyCommentRequest.value.description.length < 5 || createReplyCommentRequest.value.description.length > 140) {
-    alert("답글은 최소 5자 최대 140자까지 등록할 수 있습니다.")
+    alert('답글은 최소 5자 최대 140자까지 등록할 수 있습니다.')
   } else {
-    await createReplyComment(postId.value, commentId, createReplyCommentRequest.value)
-    alert("답글을 성공적으로 등록하였습니다.")
-    window.location.reload()
+    if(!isCommentRegistered.value) {
+      await createReplyComment(postId.value, commentId, createReplyCommentRequest.value)
+      alert('답글을 성공적으로 등록하였습니다.')
+      createReplyCommentRequest.value.description = ''
+      isCommentRegistered.value = true
+    }
   }
 }
 
 const onDeleteComment = async (commentId: number) => {
-  await deleteComment(postId.value, commentId)
-  alert("댓글을 성공적으로 삭제하였습니다.")
-  window.location.reload()
+  const isConfirm = confirm("댓글을 삭제하시겠습니까?")
+  if(isConfirm) {
+    await deleteComment(postId.value, commentId)
+    alert('댓글을 성공적으로 삭제하였습니다.')
+    await fetchDefaultData()
+  }
 }
 
 const onDeleteReplyComment = async (commentId: number) => {
-  await deleteComment(postId.value, commentId)
-  alert("답글을 성공적으로 삭제하였습니다.")
-  window.location.reload()
+  const isConfirm = confirm("답글을 삭제하시겠습니까?")
+  if(isConfirm) {
+    await deleteComment(postId.value, commentId)
+    alert('답글을 성공적으로 삭제하였습니다.')
+    await fetchDefaultData()
+  }
 }
 
 </script>
@@ -173,7 +194,8 @@ const onDeleteReplyComment = async (commentId: number) => {
               </div>
             </div>
             <div class='ootd-detail-comment-box-header-right-wrapper'>
-              <div v-if='comment.member.id === memberId && !comment.isDeleted' class='ootd-detail-comment-box-delete-text'
+              <div v-if='comment.member.id === memberId && !comment.isDeleted'
+                   class='ootd-detail-comment-box-delete-text'
                    @click='onDeleteComment(comment.id)'>
                 삭제
               </div>
@@ -188,10 +210,12 @@ const onDeleteReplyComment = async (commentId: number) => {
             <div class='ootd-detail-reply-input-hint-wrapper'>
               <div class='ootd-detail-reply-input-hint-text'
                    :class='{"hover": createReplyCommentRequest.description !== ""}'
-                   @click='onSubmitReplyComment(comment.id)'>입력</div>
+                   @click='onSubmitReplyComment(comment.id)'>입력
+              </div>
             </div>
           </div>
-          <div v-for='replyComment in comment.replyComments' :key='replyComment.id' class='ootd-detail-comment-box-wrapper'>
+          <div v-for='replyComment in comment.replyComments' :key='replyComment.id'
+               class='ootd-detail-comment-box-wrapper'>
             <RouterLink :to='`/ootds/profile/${replyComment.member.id}`'>
               <img class='ootd-detail-comment-profile-image'
                    :src='`${VITE_STATIC_IMG_URL}${replyComment.member.profileImgUrl}`'>
