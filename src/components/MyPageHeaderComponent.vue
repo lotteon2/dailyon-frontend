@@ -60,6 +60,11 @@ const logout = () => {
   alert('로그아웃 완료')
 }
 
+
+const modify = () => {
+  router.push({ name: 'memberInfo' })
+}
+
 const processPayment = async () => {
   const amount = Number(selectedAmount.value || inputAmount.value)
   if (!amount) {
@@ -171,7 +176,7 @@ onBeforeUnmount(() => {
       </div>
     </div>
     <div class="user-info-change-btn-wrapper">
-      <div class="modify-button">정보 수정</div>
+      <div class="modify-button" @click="modify()">정보 수정</div>
       <div class="logout-button" @click="logout()">로그아웃</div>
     </div>
   </div>
