@@ -1,11 +1,9 @@
 <script setup lang='ts'>
 
-import { inject, onBeforeMount, type PropType, type Ref, ref, watch } from 'vue'
-import type { ProductSearchResponse } from '@/apis/ootd/PostDto'
-import { PostPageResponse, PostResponse, ProductSearchPageResponse } from '@/apis/ootd/PostDto'
-import { getPosts } from '@/apis/ootd/PostService'
+import { type PropType, ref, watch } from 'vue'
+import type { ProductSearchPageResponse, ProductSearchResponse } from '@/apis/ootd/PostDto'
 import { searchProductFromOOTD } from '@/apis/ootd/ProductSearchService'
-import { debounce, last } from 'lodash'
+import { debounce } from 'lodash'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -59,7 +57,7 @@ const onScroll = debounce(async (event: any) => {
 
 watch(isScrollEnd, async (afterScrollEnd, beforeScrollEnd) => {
   if (afterScrollEnd !== beforeScrollEnd) {
-    if(hasNext.value) {
+    if (hasNext.value) {
       await onChangePage()
     }
   }
@@ -78,7 +76,7 @@ watch(() => props.isProductModalOpen, (afterIsProductModalOpen, beforeIsProductM
   if (afterIsProductModalOpen !== beforeIsProductModalOpen) {
     clearProductData()
   }
-});
+})
 
 const onChangePage = async () => {
   lastId.value = products.value[products.value.length - 1].id
@@ -107,7 +105,8 @@ const onChangePage = async () => {
             </div>
             <div class='select-btn'>
               <div class='select-btn-text' @click='onSelectBtnClick(
-                product.id, product.imgUrl, product.name, product.brandName, sizeName)'>선택</div>
+                product.id, product.imgUrl, product.name, product.brandName, sizeName)'>선택
+              </div>
             </div>
           </li>
         </ul>
