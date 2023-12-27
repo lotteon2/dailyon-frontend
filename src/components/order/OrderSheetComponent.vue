@@ -1,6 +1,10 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useProductStore } from '@/stores/product/ProductStore'
+
+const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
+
 const productStore = useProductStore()
 const { products } = storeToRefs(productStore)
 
