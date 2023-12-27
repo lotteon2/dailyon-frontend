@@ -4,7 +4,7 @@ import { authAxiosInstance } from '@/apis/utils'
 
 const PRODUCT_SERVICE_PREFIX_PATH = '/product-service'
 
-export const searchProductFromOOTD = async (lastId: number, query: string)
+export const searchProductFromOOTD = async (query: string, lastId?: number)
   : Promise<ProductSearchPageResponse<ProductSearchResponse>> => {
   try {
     const response: AxiosResponse = await authAxiosInstance.get(`${PRODUCT_SERVICE_PREFIX_PATH}/products/search/ootd`, {

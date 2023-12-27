@@ -1,7 +1,11 @@
 <script setup lang='ts'>
 
-import { inject, type PropType, type Ref, ref, watch } from 'vue'
+import { inject, onBeforeMount, type PropType, type Ref, ref, watch } from 'vue'
 import type { ProductSearchResponse } from '@/apis/ootd/PostDto'
+import { PostPageResponse, PostResponse, ProductSearchPageResponse } from '@/apis/ootd/PostDto'
+import { getPosts } from '@/apis/ootd/PostService'
+import { searchProductFromOOTD } from '@/apis/ootd/ProductSearchService'
+import { debounce, last } from 'lodash'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -21,55 +25,76 @@ const props = defineProps({
   }
 })
 
-// TODO: 상품 검색 API 필요 -> API Gateway 필터 나오면 적용 예정
-const products = ref<Array<ProductSearchResponse>>([
-  {
-    id: 1,
-    imgUrl: "/product-img/default-product-img.png",
-    name: "상품명1",
-    brandName: "BRAND1",
-    sizeNames: ["사이즈1", "사이즈2", "사이즈3"]
-  },
-  {
-    id: 2,
-    imgUrl: "/product-img/default-product-img.png",
-    name: "상품명2",
-    brandName: "BRAND2",
-    sizeNames: ["사이즈1", "사이즈2", "사이즈3"]
-  },
-  {
-    id: 3,
-    imgUrl: "/product-img/default-product-img.png",
-    name: "상품명3",
-    brandName: "BRAND3",
-    sizeNames: ["사이즈1", "사이즈2", "사이즈3"]
-  }
-])
+const products = ref<Array<ProductSearchResponse>>(new Array<ProductSearchResponse>())
 const hasNext = ref<boolean>(false)
 
-const isScrollEnd = inject<Ref<boolean | undefined>>('isScrollEnd') as Ref<boolean | undefined>
+const query = ref<string>('')
+const lastId = ref<number>(0)
+
+const clearProductData = async () => {
+  products.value = new Array<ProductSearchResponse>()
+  lastId.value = 0
+}
+
+const searchProducts = async (): Promise<ProductSearchPageResponse<ProductSearchResponse>> => {
+  await clearProductData()
+
+  const productSearchPageResponse = await searchProductFromOOTD(query.value, lastId.value)
+  products.value = productSearchPageResponse.products
+  hasNext.value = productSearchPageResponse.hasNext
+
+  query.value = ''
+
+  return productSearchPageResponse
+}
+
+const isScrollEnd = ref<boolean>(false)
+const onScroll = debounce(async (event: any) => {
+  const { scrollHeight, scrollTop, clientHeight } = event.target
+  // 스크롤이 끝에 닿으면 데이터를 추가로 로드
+  if (scrollHeight - 10 <= scrollTop + clientHeight) {
+    isScrollEnd.value = !isScrollEnd.value
+  }
+}, 200)
+
 watch(isScrollEnd, async (afterScrollEnd, beforeScrollEnd) => {
   if (afterScrollEnd !== beforeScrollEnd) {
     if(hasNext.value) {
-
+      await onChangePage()
     }
-    // const currentPage = requestPage.value
-    // if (hasNext.value) {
-    //   await onChangePage(currentPage + 1)
-    // }
   }
 })
 
+watch(lastId, async (afterLastId, beforeLastId) => {
+  if (afterLastId !== 0 && beforeLastId !== afterLastId && hasNext.value) {
+    const productSearchPageResponse = await searchProductFromOOTD(query.value, lastId.value)
+    productSearchPageResponse.products.forEach((product) => {
+      products.value?.push(product)
+    })
+  }
+})
+
+watch(() => props.isProductModalOpen, (afterIsProductModalOpen, beforeIsProductModalOpen) => {
+  if (afterIsProductModalOpen !== beforeIsProductModalOpen) {
+    clearProductData()
+  }
+});
+
+const onChangePage = async () => {
+  lastId.value = products.value[products.value.length - 1].id
+}
 </script>
 
 <template>
   <div class='product-search-modal-wrapper' v-show='isProductModalOpen'>
     <div class='search-container'>
       <div class='header-container'>
-        <input class='search-input' type='text' placeholder='상품명, 상품코드로 검색'>
+        <input class='search-input' type='text' v-model='query'
+               @keyup.enter='searchProducts'
+               placeholder='상품명, 상품코드로 검색'>
         <div class='cancel-button' @click='productModalControl'>취소</div>
       </div>
-      <div class='content-container'>
+      <div class='content-container' @scroll='onScroll'>
         <ul v-for='product in products' :key='product.id' class='content-list'>
           <li v-for='sizeName in product.sizeNames' :key='sizeName' class='content-wrapper'>
             <div class='product-wrapper'>

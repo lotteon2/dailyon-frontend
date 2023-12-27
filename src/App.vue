@@ -36,5 +36,7 @@ provide('isScrollEnd', isScrollEnd)
 @import '@/assets/main.css';
 .main {
   width: 72vw;
+  display: flex;
+  justify-content: center;
 }
 </style>
