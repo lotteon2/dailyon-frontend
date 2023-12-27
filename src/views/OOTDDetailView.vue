@@ -227,7 +227,8 @@ const onDeleteBtnClick = async () => {
                   </div>
                 </RouterLink>
                 <div class='ootd-detail-header-follow-wrapper'>
-                  <div v-if='!post.member.isFollowing'
+                  <div v-if='post.member.id === memberId'></div>
+                  <div v-else-if='!post.member.isFollowing'
                        @click='followButtonClickListener(post.member.id, post.member.isFollowing)'
                        class='ootd-detail-header-follow'>
                     <div class='ootd-detail-header-follow-text'>

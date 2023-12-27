@@ -6,6 +6,10 @@ import type { OOTDMemberProfileResponse, OOTDMemberProfileResponseWrapper } from
 import { useFollowStore } from '@/stores/follow/FollowStore'
 import { toggleFollow } from '@/apis/ootd/FollowService'
 import { onBeforeRouteLeave } from 'vue-router'
+import { useMemberStore } from '@/stores/member/MemberStore'
+
+const memberStore = useMemberStore()
+const memberId = memberStore.getMemberInfo().memberId
 
 const followStore = useFollowStore()
 const follows = followStore.follows
@@ -112,7 +116,8 @@ const handleImageLoad = async () => {
       |
       팔로우 <span class='follow-count'>{{ member.followingCount }}</span>
     </div>
-    <div v-if='member.isFollowing' class='follow-inactive-btn'
+    <div v-if='member.id === memberId'></div>
+    <div v-else-if='member.isFollowing' class='follow-inactive-btn'
          @click='followButtonClickListener(member.id, member.isFollowing)'>
       <svg class='follow-inactive-check-icon' xmlns='http://www.w3.org/2000/svg' width='13' height='9'
            viewBox='0 0 13 9' fill='none'>
