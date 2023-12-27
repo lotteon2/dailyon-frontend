@@ -5,11 +5,14 @@ import { authAxiosInstance } from '@/apis/utils'
 import { useMemberStore } from '@/stores/member/MemberStore'
 import {
   getMember,
+  setMember,
   getMemberAddress,
   getDefaultAddress,
   setDefaultAddress
 } from '@/apis/member/member'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
+import type { MemberInfoDto } from '@/apis/member/MemberDto'
+
 
 const isModalVisible = ref(false)
 const addresses = ref([])
@@ -92,6 +95,19 @@ watch(requestPage, async (afterPage, beforePage) => {
     totalElements.value = response.totalElements
   }
 })
+
+
+const setMemberInfo = () => {
+  const memberDto: MemberInfoDto = {
+    nickname: memberInfo.nickname ?? "",
+    birth: memberInfo.birth ?? "",
+    gender: memberInfo.gender ?? "",
+  }
+  console.log(memberDto);
+  setMember(memberDto);
+}
+
+
 </script>
 
 <template>
@@ -102,7 +118,7 @@ watch(requestPage, async (afterPage, beforePage) => {
       <div class="container-inner-title">기본 정보</div>
       <div class="modify-button-wrapper">
         <div class="modify-white">초기화</div>
-        <div class="modify-white modify-black">수정 완료</div>
+        <div class="modify-white modify-black" @click="setMemberInfo">수정 완료</div>
       </div>
     </div>
     <div class="user-info-second-row">
@@ -133,9 +149,22 @@ watch(requestPage, async (afterPage, beforePage) => {
       </div>
       <div class="user-info-second-row-third-col">
         <span>{{ memberInfo.email }} </span>
-        <span class="info-underline">{{ memberInfo.nickname }}</span>
-        <span class="info-underline">{{ memberInfo.gender }}</span>
-        <span class="info-underline">{{ memberInfo.birth }}</span>
+        <input type="text" v-model="memberInfo.nickname" class="info-underline" />
+        <select v-model="memberInfo.gender" class="info-underline">
+            <option value="" disabled hidden>{{memberInfo.gender ? memberInfo.gender : "선택해주세요"}}</option>
+            <option value="male">남성</option>
+            <option value="female">여성</option>
+        </select>
+        <select v-model="memberInfo.birth" class="info-underline">
+            <option value="" disabled hidden>{{memberInfo.birth ? memberInfo.birth : "선택해주세요"}}</option>
+            <option value="0~9">0~9</option>
+            <option value="10~19">10~19</option>
+            <option value="20~29">20~29</option>
+            <option value="30~39">30~39</option>
+            <option value="40~49">40~49</option>
+            <option value="50~59">50~59</option>
+            <option value="60+">60+</option>
+        </select>
         <span class="info-underline">{{
           defaultAddress?.roadAddress && defaultAddress?.detailAddress
             ? defaultAddress.roadAddress + ' ' + defaultAddress.detailAddress

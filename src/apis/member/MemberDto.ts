@@ -1,10 +1,7 @@
 export interface MemberInfoDto {
     birth : string
-    email : string
     gender : string
     nickname : string
-    point : number
-    profileImgUrl : string
 
   }
   
