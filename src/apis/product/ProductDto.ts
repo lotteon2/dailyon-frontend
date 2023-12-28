@@ -13,6 +13,17 @@ export interface ReadProductResponse {
   imgUrl: string
   avgRating: number
   reviewCount: number
+  coupons: CouponInfoItemResponse[]
+}
+
+export interface CouponInfoItemResponse {
+  couponInfoId: number
+  appliesToType: string
+  appliedToId: number
+  discountType: string
+  discountValue: number
+  maxPurchaseAmount: number | null
+  minPurchaseAmount: number
 }
 
 export interface ReadProductDetailResponse {
