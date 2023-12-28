@@ -152,7 +152,7 @@
 }
 
 .user-info-second-row-third-col > input {
-    color: var(--Grayscale5, #808080);
+    color: var(--Grayscale5, #000);
     font-family: The Jamsil;
     font-size: 20px;
     font-style: normal;
@@ -162,7 +162,7 @@
 }
 
 .user-info-second-row-third-col > select {
-    color: var(--Grayscale5, #808080);
+    color: var(--Grayscale5, #000);
     font-family: The Jamsil;
     font-size: 20px;
     font-style: normal;

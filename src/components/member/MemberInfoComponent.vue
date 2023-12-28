@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, watch, onBeforeMount } from 'vue'
 import ModalView from './AddressModal.vue'
-import { authAxiosInstance } from '@/apis/utils'
 import { useMemberStore } from '@/stores/member/MemberStore'
 import {
   getMember,
@@ -80,22 +79,6 @@ onMounted(async () => {
   defaultAddress.value = await getDefaultAddress()
 })
 
-onBeforeMount(async () => {
-  const response = await getMemberAddress(0)
-  addresses.value = response.content
-  totalPages.value = response.totalPages
-  totalElements.value = response.totalElements
-})
-
-watch(requestPage, async (afterPage, beforePage) => {
-  if (afterPage < totalPages.value!) {
-    const response = await getMemberAddress(afterPage)
-    addresses.value = response.content
-    totalPages.value = response.totalPages
-    totalElements.value = response.totalElements
-  }
-})
-
 
 const setMemberInfo = () => {
   const memberDto: MemberInfoDto = {
@@ -103,7 +86,6 @@ const setMemberInfo = () => {
     birth: memberInfo.birth ?? "",
     gender: memberInfo.gender ?? "",
   }
-  console.log(memberDto);
   setMember(memberDto);
 }
 
