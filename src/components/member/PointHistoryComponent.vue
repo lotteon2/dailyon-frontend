@@ -2,7 +2,7 @@
 import { getMemberPoints } from '@/apis/member/member';
 import { ref, onMounted, watch, onBeforeMount } from 'vue';
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue';
-import { Point } from '@/apis/member/MemberDto';
+import type { Point } from '@/apis/member/MemberDto';
 
 const points = ref<Point[]>([]);
 const requestPage = ref<number>(0);
