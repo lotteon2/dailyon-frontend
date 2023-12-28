@@ -114,7 +114,7 @@ const limitInput = () => {
           <td class="label">우편번호</td>
           <td>
             <input type="text" class="input" name="postcode" v-model="postcode" style="background-color: #ccc;"  readonly />
-            <p v-if="!detailAddr" class="alert-msg">필수로 입력해주세요.</p>
+            <p v-if="!postcode" class="alert-msg">필수로 입력해주세요.</p>
           </td>
         </tr>
         <tr>
@@ -151,7 +151,7 @@ const limitInput = () => {
 }
 .overlay {
   opacity: 0.7;
-  background-color: #333;
+  background-color: var(--Grayscale7, #000);
 }
 .modal-card {
   position: relative;
@@ -172,7 +172,7 @@ const limitInput = () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #333;
+  background-color: var(--Grayscale7, #000);
   color: white;
   padding: 1em;
   border-radius: 15px 15px 0 0;
@@ -224,7 +224,7 @@ td {
 .search-button {
   padding: 0.5em 1em;
   cursor: pointer;
-  background-color: #333;
+  background-color: var(--Grayscale7, #000);
   color: white;
   border: none;
   border-radius: 5px;
@@ -242,7 +242,7 @@ td {
 .submit-button {
   padding: 0.5em 1em;
   cursor: pointer;
-  background-color: #333;
+  background-color: var(--Grayscale7, #000);
   color: white;
   border: none;
   border-radius: 5px;
