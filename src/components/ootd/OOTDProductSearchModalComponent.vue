@@ -32,19 +32,18 @@ const lastId = ref<number>(0)
 const clearProductData = async () => {
   products.value = new Array<ProductSearchResponse>()
   lastId.value = 0
-  query.value = ''
 }
 
-const searchProducts = async (): Promise<ProductSearchPageResponse<ProductSearchResponse>> => {
-  await clearProductData()
+const searchProducts = async () => {
+  if(query.value !== '') {
+    await clearProductData()
 
-  const productSearchPageResponse = await searchProductFromOOTD(query.value, lastId.value)
-  products.value = productSearchPageResponse.products
-  hasNext.value = productSearchPageResponse.hasNext
+    const productSearchPageResponse = await searchProductFromOOTD(query.value, lastId.value)
+    products.value = productSearchPageResponse.products
+    hasNext.value = productSearchPageResponse.hasNext
 
-  query.value = ''
-
-  return productSearchPageResponse
+    query.value = ''
+  }
 }
 
 const isScrollEnd = ref<boolean>(false)
@@ -76,6 +75,7 @@ watch(lastId, async (afterLastId, beforeLastId) => {
 watch(() => props.isProductModalOpen, (afterIsProductModalOpen, beforeIsProductModalOpen) => {
   if (afterIsProductModalOpen !== beforeIsProductModalOpen) {
     clearProductData()
+    query.value = ''
   }
 })
 
