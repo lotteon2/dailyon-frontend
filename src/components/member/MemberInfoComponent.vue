@@ -11,7 +11,7 @@ import {
 } from '@/apis/member/member'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 import type { MemberInfoDto } from '@/apis/member/MemberDto'
-
+import { deleteAddress } from '@/apis/member/member'
 
 const isModalVisible = ref(false)
 const addresses = ref([])
@@ -35,6 +35,12 @@ const closeModal = () => {
 const setDefault = async (addressId: number) => {
   setDefaultAddress(addressId)
   alert('기본 배송지가 저장되었습니다.')
+  window.location.reload()
+}
+
+const deleteAdd = async (addressId: number) => {
+  deleteAddress(addressId)
+  alert('배송지가 삭제되었습니다.')
   window.location.reload()
 }
 
@@ -180,7 +186,7 @@ const setMemberInfo = () => {
         <td>{{ address.roadAddress + ' ' + address.detailAddress + ' ' + address.postCode }}</td>
         <td><div class="place-add-button" @click="setDefault(address.id)">기본 지정</div></td>
         <td>
-          <div class="close-button-div">
+          <div class="close-button-div" @click="deleteAdd(address.id)">
             <svg
               class="margin-right-10"
               xmlns="http://www.w3.org/2000/svg"

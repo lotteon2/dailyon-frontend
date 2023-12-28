@@ -54,17 +54,20 @@ onBeforeMount(() => {
     </div>
     <div class="auth-wrapper">
       <RouterLink v-if="!isLoggedIn()" to="/login" class="login-text">Login</RouterLink>
-      <div v-else class="login-text">
-        <RouterLink to="/member-info">
-          <img
-            v-if="memberInfo.profileImgUrl"
-            :src="memberInfo.profileImgUrl"
-            alt="Profile Image"
-            class="profile-image"
-          />
-          <span v-if="memberInfo.email">{{ memberInfo.nickname }}님 환영합니다!</span>
-        </RouterLink>
-      </div>
+        <div v-else class="profile-wrapper">
+          <RouterLink to="/member-info" class="profile-link">
+            <img
+              v-if="memberInfo.profileImgUrl"
+              :src="memberInfo.profileImgUrl"
+              alt="Profile Image"
+              class="profile-image"
+            />
+            <div class="profile-text">
+              <span v-if="memberInfo.nickname" class="nickname">{{ memberInfo.nickname }}님</span>
+              <span class="welcome">환영합니다!</span>
+            </div>
+          </RouterLink>
+        </div>
     </div>
   </div>
   <div class="header-divide-line-wrapper">
