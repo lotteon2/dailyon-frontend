@@ -113,6 +113,7 @@
   font-size: 0.8vw;
   font-style: normal;
   font-weight: 300;
+  cursor: pointer;
 }
 
 .logout-button {
@@ -128,6 +129,7 @@
   font-size: 0.8vw;
   font-style: normal;
   font-weight: 300;
+  cursor: pointer;
 }
 
 .payment-modal {

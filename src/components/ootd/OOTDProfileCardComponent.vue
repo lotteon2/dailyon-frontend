@@ -68,16 +68,13 @@ onBeforeRouteLeave(async (to, from) => {
 
 // 새로고침 or 브라우저 창 닫을 때 이벤트
 window.addEventListener('beforeunload', async (event) => {
-  try {
-    event.returnValue = ''
-    flushFollowStore().then((res) => {
-      window.location.reload()
-    })
-  } catch(error: any) {
+  flushFollowStore().then((res) => {
+    window.location.reload()
+  }).catch((error) => {
     console.error(error)
     event.preventDefault()
     event.returnValue = ''
-  }
+  })
 })
 
 const img = ref<HTMLImageElement | null>(null)

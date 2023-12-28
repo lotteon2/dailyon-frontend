@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import type { OrderDetailResponse } from '@/apis/order/orderDto'
+const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 const props = defineProps({
   orderDetails: {
     type: Array as () => Array<OrderDetailResponse>,
@@ -17,7 +18,7 @@ const props = defineProps({
       </div>
       <div class="left-inner-contents">
         <div class="product-thumbnail">
-          <img class="image" :src="orderDetail.thumbnail" />
+          <img class="image" :src="`${VITE_STATIC_IMG_URL}${orderDetail.thumbnail}`" />
         </div>
         <div class="text-contents">
           <div class="product-name">상품명 : {{ orderDetail.productName }}</div>

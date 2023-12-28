@@ -52,6 +52,11 @@ onMounted(initData)
   width: 100%;
 }
 
+.breadcrumb-container > a {
+  color: inherit;
+  text-decoration: none;
+}
+
 .breadcrumbs {
   display: flex;
   align-items: flex-start;
