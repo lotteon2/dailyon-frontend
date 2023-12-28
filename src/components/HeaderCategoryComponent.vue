@@ -79,6 +79,10 @@ const toProductList = (id: number) => {
   padding: 12px 16px;
   z-index: 1;
 
+  position: absolute;
+  top: 100%;
+  left: 0;
+
   width: 200px;
   height: 600px;
 }
