@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
 import { onBeforeMount, onMounted, ref, computed } from 'vue'
-import type { Category } from '@/apis/category/CategoryDto'
 import HeaderCategoryComponent from '@/components/HeaderCategoryComponent.vue'
-import { getChildCategories } from '@/apis/category/CategoryClient'
-import type { AxiosResponse } from 'axios'
-import { useMemberStore } from '@/stores/member/MemberStore';
+import { useMemberStore } from '@/stores/member/MemberStore'
+import { useCategoryStore } from '@/stores/category/CategoryStore'
 
 const isLoggedIn = () => {
   const token = localStorage.getItem('accessToken')
@@ -14,19 +12,14 @@ const isLoggedIn = () => {
 }
 
 const showCategoryDropdown = ref<boolean>(true)
-const rootCategories = ref<Category[]>([])
 
-const memberStore = useMemberStore();
-const memberInfo =  computed(() => memberStore.getMemberInfo()); 
+const memberStore = useMemberStore()
+const memberInfo = computed(() => memberStore.getMemberInfo())
+
+const categoryStore = useCategoryStore()
 
 onBeforeMount(() => {
-  getChildCategories(null)
-    .then((axiosResponse: AxiosResponse) => {
-      rootCategories.value = axiosResponse.data.categoryResponses
-    })
-    .catch((error: any) => {
-      alert(error.response!.data!.message)
-    })
+  categoryStore.setCategoryTree(null)
 })
 </script>
 
@@ -60,13 +53,21 @@ onBeforeMount(() => {
       </div>
     </div>
     <div class="auth-wrapper">
-    <RouterLink v-if="!isLoggedIn()" to="/login" class="login-text">Login</RouterLink>
-    <div v-else class="login-text" >
-      <RouterLink to="/member-info">
-        <img v-if="memberInfo.profileImgUrl" :src="memberInfo.profileImgUrl" alt="Profile Image" class="profile-image" />
-        <span v-if="memberInfo.email">{{ memberInfo.nickname }}님 환영합니다!</span>
-      </RouterLink>
-    </div>
+      <RouterLink v-if="!isLoggedIn()" to="/login" class="login-text">Login</RouterLink>
+        <div v-else class="profile-wrapper">
+          <RouterLink to="/member-info" class="profile-link">
+            <img
+              v-if="memberInfo.profileImgUrl"
+              :src="memberInfo.profileImgUrl"
+              alt="Profile Image"
+              class="profile-image"
+            />
+            <div class="profile-text">
+              <span v-if="memberInfo.nickname" class="nickname">{{ memberInfo.nickname }}님</span>
+              <span class="welcome">환영합니다!</span>
+            </div>
+          </RouterLink>
+        </div>
     </div>
   </div>
   <div class="header-divide-line-wrapper">
@@ -89,7 +90,10 @@ onBeforeMount(() => {
           <div class="category-select-line"></div>
         </div>
       </div>
-      <HeaderCategoryComponent :show-dropdown="showCategoryDropdown" :categories="rootCategories" />
+      <HeaderCategoryComponent
+        :show-dropdown="showCategoryDropdown"
+        :categories="categoryStore.findCategoryTree(null)?.categories"
+      />
     </div>
     <div class="nav-tab-wrapper">
       <RouterLink to="/luxury" class="nav-tab-text" :class="{ selected: $route.path === '/luxury' }"
@@ -180,5 +184,4 @@ onBeforeMount(() => {
 
 <style scoped>
 @import '@/assets/header.css';
-
 </style>

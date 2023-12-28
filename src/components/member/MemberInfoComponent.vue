@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, watch, onBeforeMount } from 'vue'
 import ModalView from './AddressModal.vue'
-import { authAxiosInstance } from '@/apis/utils'
 import { useMemberStore } from '@/stores/member/MemberStore'
 import {
   getMember,
@@ -12,7 +11,7 @@ import {
 } from '@/apis/member/member'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 import type { MemberInfoDto } from '@/apis/member/MemberDto'
-
+import { deleteAddress } from '@/apis/member/member'
 
 const isModalVisible = ref(false)
 const addresses = ref([])
@@ -37,6 +36,15 @@ const setDefault = async (addressId: number) => {
   setDefaultAddress(addressId)
   alert('기본 배송지가 저장되었습니다.')
   window.location.reload()
+}
+
+const deleteAdd = async (addressId: number) => {
+  if (confirm("정말로 삭제하시겠습니까?")) {
+    deleteAddress(addressId)
+    alert('배송지가 삭제되었습니다.')
+    window.location.reload()
+    }
+ 
 }
 
 onMounted(async () => {
@@ -80,22 +88,6 @@ onMounted(async () => {
   defaultAddress.value = await getDefaultAddress()
 })
 
-onBeforeMount(async () => {
-  const response = await getMemberAddress(0)
-  addresses.value = response.content
-  totalPages.value = response.totalPages
-  totalElements.value = response.totalElements
-})
-
-watch(requestPage, async (afterPage, beforePage) => {
-  if (afterPage < totalPages.value!) {
-    const response = await getMemberAddress(afterPage)
-    addresses.value = response.content
-    totalPages.value = response.totalPages
-    totalElements.value = response.totalElements
-  }
-})
-
 
 const setMemberInfo = () => {
   const memberDto: MemberInfoDto = {
@@ -103,7 +95,6 @@ const setMemberInfo = () => {
     birth: memberInfo.birth ?? "",
     gender: memberInfo.gender ?? "",
   }
-  console.log(memberDto);
   setMember(memberDto);
 }
 
@@ -198,7 +189,7 @@ const setMemberInfo = () => {
         <td>{{ address.roadAddress + ' ' + address.detailAddress + ' ' + address.postCode }}</td>
         <td><div class="place-add-button" @click="setDefault(address.id)">기본 지정</div></td>
         <td>
-          <div class="close-button-div">
+          <div class="close-button-div" @click="deleteAdd(address.id)">
             <svg
               class="margin-right-10"
               xmlns="http://www.w3.org/2000/svg"

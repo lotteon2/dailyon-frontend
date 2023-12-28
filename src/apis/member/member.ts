@@ -62,3 +62,29 @@ export const getMember = async () => {
         console.error('API 호출 중 오류 발생:', error);
       }
   };
+
+  export const getMemberPoints = async (page : Number) => {
+    try {
+      const response = await authAxiosInstance.get(`${MEMBER_SERVICE_PREFIX}/points`, {
+        params: {
+          page: page,
+          size: 6,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('API 호출 중 오류 발생:', error);
+    }
+  };
+
+  export const deleteAddress = async (addressId: number) => {
+    try {
+      const response = await authAxiosInstance.delete(`${MEMBER_SERVICE_PREFIX}/addresses/${addressId}`);
+      const accessToken = localStorage.getItem('accessToken')
+      console.log(addressId);
+      console.log(`Bearer ${accessToken}`)
+      return response.data;
+    } catch (error) {
+      console.error('API 호출 중 오류 발생:', error);
+    }
+};

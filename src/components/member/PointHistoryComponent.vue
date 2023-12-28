@@ -1,48 +1,85 @@
-<script setup lang='ts'>
+<script setup lang="ts">
+import { getMemberPoints } from '@/apis/member/member';
+import { ref, onMounted, watch, onBeforeMount } from 'vue';
+import PaginationComponent from '@/components/ootd/PaginationComponent.vue';
+import type { Point } from '@/apis/member/MemberDto';
 
+const points = ref<Point[]>([]);
+const requestPage = ref<number>(0);
+const totalPages = ref<number>();
+const totalElements = ref<number>();
+
+const onChangePage = async (page: number) => {
+  if (page >= 0 && page < totalPages.value!) {
+    requestPage.value = page;
+  }
+};
+
+onBeforeMount(async () => {
+  const response = await getMemberPoints(0);
+  updatePoints(response);
+});
+
+watch(requestPage, async (afterPage, beforePage) => {
+  if (afterPage < totalPages.value!) {
+    const response = await getMemberPoints(afterPage);
+    updatePoints(response);
+  }
+});
+
+const updatePoints = (response: any) => {
+  points.value.push(...response.content);
+  totalPages.value = response.totalPages;
+  totalElements.value = response.totalElements;
+};
 </script>
+
 
 <template>
   <div class="point-container">
     <div class="container-title">포인트 사용 내역</div>
     <div class="container-line"></div>
-    <table>
-      <col width="400px" />
-      <col width="150px" />
-      <col width="150px" />
-      <col width="150px" />
-      <col width="100px" />
-      <tr class="point-table-data1">
-        <td class="left-margin">상품명</td>
-        <td>결제금액</td>
-        <td>사용금액</td>
-        <td>사용일시</td>
-        <td>총 적립금</td>
-      </tr>
-      <tr class="point-table-data1">
-        <td class="left-margin">상품명</td>
-        <td>결제금액</td>
-        <td>사용금액</td>
-        <td>사용일시</td>
-        <td>총 적립금</td>
-      </tr>
-      <tr class="point-table-data2">
-        <td class="left-margin">상품명</td>
-        <td>결제금액</td>
-        <td>사용금액</td>
-        <td>사용일시</td>
-        <td>총 적립금</td>
-      </tr>
-      <tr class="point-table-data2">
-        <td class="left-margin">상품명</td>
-        <td>결제금액</td>
-        <td>사용금액</td>
-        <td>사용일시</td>
-        <td>총 적립금</td>
-      </tr>
-    </table>
+
+    <template v-if="points.length > 0">
+      <table>
+        <col width="400px" />
+        <col width="150px" />
+        <col width="150px" />
+        <col width="150px" />
+        <col width="100px" />
+        <tr class="point-table-data1">
+          <td class="left-margin">일시</td>
+          <td>출저</td>
+          <td>사용처</td>
+          <td>금액</td>
+          <td>상태</td>
+        </tr>
+        <tr v-for="(point, index) in points" :key="index" class="point-table-data2">
+          <td>{{ point.createdAt }}</td>
+          <td>{{ point.source }}</td>
+          <td>{{ point.utilize }}</td>
+          <td>{{ point.amount }}</td>
+          <td>{{ point.status ? '사용' : '적립' }}</td>
+        </tr>
+      </table>
+    </template>
+
+    <template v-else>
+      <br>
+      <p>포인트 내역이 없습니다.</p>
+    </template>
   </div>
+
+  <div class="pagination">
+      <PaginationComponent
+        :onChangePage="onChangePage"
+        :requestPage="requestPage"
+        :totalPages="totalPages"
+      />
+    </div>
+
 </template>
+
 
 <style scoped>
 @import "@/assets/css/point-history.css";

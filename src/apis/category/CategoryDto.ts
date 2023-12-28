@@ -1,8 +1,13 @@
 export interface Category {
-    id: number
-    name: string
+  id: number
+  name: string
 }
 
 export interface ReadChildrenCategoryResponse {
-    categoryResponses: Array<Category>
+  categoryResponses: Array<Category>
+}
+
+export interface CategoryTree {
+  id: number
+  categories: Array<Category>
 }
