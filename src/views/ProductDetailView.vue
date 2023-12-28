@@ -4,7 +4,7 @@ import ProductDetailCouponModal from '@/components/promotion/coupon/productdetai
 import BreadCrumbComponent from '@/components/product/BreadCrumbComponent.vue'
 import { useRoute } from 'vue-router'
 import { getProductDetail } from '@/apis/product/ProductClient'
-import type { ReadProductDetailResponse, ReadProductStockResponse } from '@/apis/product/ProductDto'
+import type { ReadProductStockResponse } from '@/apis/product/ProductDto'
 import type { ProductInfo } from '@/apis/product/ProductDto'
 import DescribeImageComponent from '@/components/product/DescribeImageComponent.vue'
 import ReviewComponent from '@/components/product/ReviewComponent.vue'
@@ -15,6 +15,7 @@ import { upsertCart } from '@/apis/wishcart/CartClient'
 import type { ReadWishListFromProduct } from '@/apis/wishcart/WishListDto'
 import { readWishListFromProduct, toggleWishList } from '@/apis/wishcart/WishListClient'
 import type { AxiosResponse } from 'axios'
+import TOP4OOTDComponent from '@/components/ootd/TOP4OOTDComponent.vue'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -41,11 +42,12 @@ const checkWishList = (): boolean => {
 }
 
 const executeToggle = () => {
-  if (
-    selectedProductSize.value.productSizeId !== 0 &&
-    productId.value !== 0 &&
-    isWishBtnEnabled.value
-  ) {
+  if (selectedProductSize.value.productSizeId === 0 || productId.value === 0) {
+    alert('치수를 선택해주세요')
+    return
+  }
+
+  if (isWishBtnEnabled.value) {
     isWishBtnEnabled.value = false
     toggleWishList({
       productId: productId.value,
@@ -366,13 +368,13 @@ watch(selectedProductSize, () => {
     <div class="second-wrapper">
       <div class="select-button-wrapper">
         <div
-          :class="`${isDescribeImages === true ? 'selected-button' : 'non-selected-button'}`"
+          :class="`${isDescribeImages ? 'selected-button' : 'non-selected-button'}`"
           @click="toggleOption(true)"
         >
           상세 정보
         </div>
         <div
-          :class="`${isDescribeImages === false ? 'selected-button' : 'non-selected-button'}`"
+          :class="`${!isDescribeImages ? 'selected-button' : 'non-selected-button'}`"
           @click="toggleOption(false)"
         >
           상품 후기
@@ -386,22 +388,10 @@ watch(selectedProductSize, () => {
         <ReviewComponent :productName="product.name" />
       </div>
     </div>
-    <!-- <div class="third-wrapper">
+    <div class="third-wrapper">
       <div class="line"></div>
-      <div class="top4-ootd-wrapper">
-        <div class="top4-ootd-title-wrapper">
-          <div class="top4-ootd-title-text">TOP 4 OOTD</div>
-        </div>
-        <div class="top4-ootd-list-wrapper">
-          <div v-for="n in 4" class="top4-ootd-post-card-image-wrapper">
-            <img
-              class="top4-ootd-post-card-image"
-              src="@/assets/images/ootd-detail-image-example.png"
-            />
-          </div>
-        </div>
-      </div>
-    </div> -->
+      <TOP4OOTDComponent :product-id="productId" />
+    </div>
   </div>
 </template>
 

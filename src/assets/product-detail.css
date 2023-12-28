@@ -248,6 +248,7 @@ table {
 
 .price-info-row {
   display: flex;
+  justify-content: space-between;
   align-items: center;
 }
 
@@ -258,8 +259,6 @@ table {
   font-size: 30px;
   font-style: normal;
   font-weight: 500;
-  /* line-height: 80px; */
-  margin-left: 25px;
 }
 
 .price-info-row > span {
@@ -270,7 +269,6 @@ table {
   font-style: normal;
   font-weight: 500;
   line-height: 80px;
-  margin-left: 25px;
 }
 
 .price-info-row > h2 {
@@ -280,7 +278,6 @@ table {
   font-style: normal;
   font-weight: 700;
   /* line-height: 80px; */
-  margin-right: 80px;
 }
 
 .price-info-row > h3 {
@@ -552,7 +549,7 @@ table {
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin-bottom: 256px;
+  /*margin-bottom: 256px;*/
 }
 
 .third-wrapper > h1 {
