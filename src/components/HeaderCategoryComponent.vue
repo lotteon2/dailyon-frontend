@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { getChildCategories } from '@/apis/category/CategoryClient'
-import type { Category } from '@/apis/category/CategoryDto'
-import type { AxiosResponse } from 'axios'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useCategoryStore } from '@/stores/category/CategoryStore'
+import type { Category } from '@/apis/category/CategoryDto'
 
 const props = defineProps({
   showDropdown: {
@@ -17,24 +16,15 @@ const props = defineProps({
   }
 })
 
-const childCategories = ref<Category[]>([])
 const showChildDropdown = ref<boolean>(false)
-
+const categoryStore = useCategoryStore()
+const childCategories = ref<Category[]>([])
 const router = useRouter()
-
-const setChildCategories = (id: number) => {
-  getChildCategories(id)
-    .then((axiosResponse: AxiosResponse) => {
-      childCategories.value = axiosResponse.data.categoryResponses
-    })
-    .catch((error: any) => {
-      alert(error.response!.data!.message)
-    })
-}
 
 const mouseOver = (id: number) => {
   showChildDropdown.value = true
-  setChildCategories(id)
+  categoryStore.setCategoryTree(id)
+  childCategories.value = categoryStore.findCategoryTree(id)!.categories
 }
 
 const toProductList = (id: number) => {
@@ -43,7 +33,7 @@ const toProductList = (id: number) => {
 </script>
 
 <template>
-  <div v-if="categories.length > 0" class="category-dropdown-content">
+  <div v-if="props.categories.length > 0" class="category-dropdown-content">
     <div
       class="category-content"
       v-for="category in props.categories"
