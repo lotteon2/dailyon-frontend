@@ -4,7 +4,7 @@ import ProductDetailCouponModal from '@/components/promotion/coupon/productdetai
 import BreadCrumbComponent from '@/components/product/BreadCrumbComponent.vue'
 import { useRoute } from 'vue-router'
 import { getProductDetail } from '@/apis/product/ProductClient'
-import type { ReadProductDetailResponse, ReadProductStockResponse } from '@/apis/product/ProductDto'
+import type { ReadProductStockResponse } from '@/apis/product/ProductDto'
 import type { ProductInfo } from '@/apis/product/ProductDto'
 import DescribeImageComponent from '@/components/product/DescribeImageComponent.vue'
 import ReviewComponent from '@/components/product/ReviewComponent.vue'

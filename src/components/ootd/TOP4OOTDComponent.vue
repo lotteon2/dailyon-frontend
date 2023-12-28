@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { getTOP4OOTD } from '@/apis/ootd/PostService'
-import { ref } from 'vue'
-import { TOP4OOTDResponse } from '@/apis/ootd/PostDto'
+import { onMounted, ref } from 'vue'
+import type { TOP4OOTDResponse } from '@/apis/ootd/PostDto'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -12,7 +12,11 @@ const props = defineProps({
   }
 })
 
-const top4 = ref<TOP4OOTDResponse[]>(getTOP4OOTD(props.productId))
+const top4 = ref<TOP4OOTDResponse[]>([])
+
+onMounted(async () => {
+  top4.value = await getTOP4OOTD(props.productId)
+})
 </script>
 
 <template>
@@ -21,18 +25,18 @@ const top4 = ref<TOP4OOTDResponse[]>(getTOP4OOTD(props.productId))
       <div class="top4-ootd-title-text">TOP 4 OOTD</div>
     </div>
     <div class="top4-ootd-list-wrapper">
-      <a
-        :href="`/ootds/${ootd.id}`"
+      <RouterLink
         class="top4-ootd-post-card-image-wrapper"
         v-for="(ootd, index) in top4"
+        :to="`/ootds/${ootd.id}`"
         :key="index"
       >
         <img
-          alt="top4-ootd"
+          alt="top4-ootd-img"
           class="top4-ootd-post-card-image"
           :src="`${VITE_STATIC_IMG_URL}${ootd.thumbnailImgUrl}`"
         />
-      </a>
+      </RouterLink>
     </div>
   </div>
 </template>
@@ -52,6 +56,7 @@ const top4 = ref<TOP4OOTDResponse[]>(getTOP4OOTD(props.productId))
   display: flex;
   align-items: flex-start;
   gap: 0.625rem;
+  padding-bottom: 2rem;
 }
 
 .top4-ootd-title-text {
