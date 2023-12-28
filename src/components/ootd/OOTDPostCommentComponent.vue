@@ -203,7 +203,7 @@ const onDeleteReplyComment = async (commentId: number) => {
           </div>
           <div v-if='isOpenReplyCommentInput.has(comment.id)' class='ootd-detail-reply-box-wrapper'>
             <div class='ootd-detail-reply-input-wrapper'>
-              <input class='ootd-detail-reply-input' placeholder='@답글 닉네임'
+              <input class='ootd-detail-reply-input'
                      v-model='createReplyCommentRequest.description'
                      @keyup.enter='onSubmitReplyComment(comment.id)'>
             </div>
