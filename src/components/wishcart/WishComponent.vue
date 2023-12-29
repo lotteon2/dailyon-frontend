@@ -4,6 +4,7 @@ import { onBeforeMount, ref, watch } from 'vue'
 import type { AxiosResponse } from 'axios'
 import type { ReadWishListPageResponse, ReadWishListResponse } from '@/apis/wishcart/WishListDto'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
+import WhitePageComponent from '@/components/wishcart/WhitePageComponent.vue'
 
 const props = defineProps({
   targetId: {
@@ -126,9 +127,7 @@ watch(requestPage, async (afterPage: number, beforePage: number) => {
       :request-page="requestPage"
     />
   </div>
-  <div v-else class="white-page">
-    <h1>찜한 상품이 없습니다</h1>
-  </div>
+  <WhitePageComponent v-else message="찜한 상품이 없습니다" />
 </template>
 
 <style scoped>
