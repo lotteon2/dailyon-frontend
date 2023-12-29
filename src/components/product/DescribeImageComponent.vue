@@ -11,7 +11,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <div>
+  <div class="describe-image-container">
     <img
       v-if="props.describeImgUrls && props.describeImgUrls.length > 0"
       v-for="url in props.describeImgUrls"
@@ -21,4 +21,11 @@ const props = defineProps({
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.describe-image-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: center;
+}
+</style>
