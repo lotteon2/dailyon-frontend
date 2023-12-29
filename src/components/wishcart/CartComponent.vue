@@ -179,26 +179,34 @@ const deleteAll = () => {
     <table>
       <tr class="cart-table-data1">
         <td class="left-margin">선택</td>
-        <td class="left-align"></td>
-        <td class="left-align">상품명</td>
+        <td class="left-margin"></td>
+        <td class="center-text">상품명</td>
         <td class="center-text">수량</td>
         <td class="center-text">상품 가격</td>
-        <td>총금액</td>
+        <td class="center-text">총금액</td>
       </tr>
-      <tr v-for="(cartItem, idx) in cartItems" :key="idx" class="cart-table-data1">
+      <tr v-for="(cartItem, idx) in cartItems" :key="idx" class="cart-table-data2">
         <td class="left-margin">
-          <input
-            class="basket-checkbox"
-            type="checkbox"
-            :id="`checkbox-${idx}`"
-            :value="cartItem"
-            v-model="checkedCartItems"
-          />
+          <div class="align-center">
+            <input
+              class="basket-checkbox"
+              type="checkbox"
+              :id="`checkbox-${idx}`"
+              :value="cartItem"
+              v-model="checkedCartItems"
+            />
+          </div>
         </td>
-        <td class="left-align">
-          <img class="basket-img" :src="`${VITE_STATIC_IMG_URL}${cartItem.imgUrl}`" alt="" />
+        <td class="left-margin">
+          <div class="align-center">
+            <img
+              class="basket-img"
+              :src="`${VITE_STATIC_IMG_URL}${cartItem.imgUrl}?w=100&h=100`"
+              alt=""
+            />
+          </div>
         </td>
-        <td class="left-align">
+        <td class="center-text">
           <div class="basket-column">
             <h1>{{ cartItem.productName }}</h1>
             <h2>{{ cartItem.productSizeName }}</h2>
@@ -242,18 +250,20 @@ const deleteAll = () => {
         <td class="center-text">
           <span class="prod-price">{{ formatNumber(cartItem.productPrice) }}</span>
         </td>
-        <td>
+        <td class="center-text">
           <span class="total-pay">{{
             formatNumber(cartItem.productPrice * cartItem.quantity)
           }}</span>
         </td>
       </tr>
     </table>
+    <div style="padding-top: 10px" />
     <PaginationComponent
       :on-change-page="onChangePage"
       :request-page="requestPage"
       :total-pages="totalPages"
     />
+    <div style="padding-top: 10px" />
     <div class="basket-grey-container">
       <div class="grey-first-column">
         <div class="grey-small-text">총 주문 금액</div>
