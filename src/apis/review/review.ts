@@ -3,7 +3,7 @@ import { defaultAxiosInstance, authAxiosInstance } from '@/apis/utils'
 import type { ReviewPageResponse, ReviewResponse, ReviewCreateRequest } from './reviewDto'
 const REVIEW_SERVICE_PREFIX: string = '/review-service'
 
-export const createReview = async (reviewDto: ReviewCreateRequest): Promise<String> => {
+export const createReview = async (reviewDto: ReviewCreateRequest): Promise<string> => {
   try {
     const { data } = await authAxiosInstance.post(`${REVIEW_SERVICE_PREFIX}/reviews/`, reviewDto)
     return data
