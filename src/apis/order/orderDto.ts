@@ -15,6 +15,9 @@ export interface OrderPageResponse<T extends OrderResponse> {
 export interface OrderDetailResponse {
   id: number
   orderNo: string
+  orderDetailNo: string
+  productId: number
+  productSize: string
   productName: string
   productQuantity: number
   thumbnail: string
@@ -22,6 +25,7 @@ export interface OrderDetailResponse {
   couponName: string | undefined | null
   couponDiscountPrice: number | undefined | null
   status: string
+  reviewCheck: boolean
 }
 
 export interface OrderSheet {

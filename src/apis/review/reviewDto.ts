@@ -15,3 +15,14 @@ export interface ReviewPageResponse<T extends ReviewResponse> {
   totalPages: number
   totalElements: number
 }
+
+export interface ReviewCreateRequest {
+  productId: number
+  orderDetailNo: string
+  description: string
+  productSize: string
+  imgUrl: string | null
+  nickname: string | null
+  rating: number
+  profileImgUrl: string | null
+}
