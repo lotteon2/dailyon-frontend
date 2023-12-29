@@ -1,4 +1,8 @@
 @import url('https://webfontworld.github.io/TheJamsil/TheJamsil.css');
+* {
+  font-family: TheJamsil;
+}
+
 .order-detail-container {
   border: 1.5px solid var(--Grayscale4, #c6c6c6);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -46,7 +50,7 @@
 .text-contents {
   top: 38px;
   position: absolute;
-  left: 220px;
+  left: 250px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -62,7 +66,7 @@
 }
 
 .right-inner-button {
-  padding-top: 7px;
+  /* padding-top: px; */
   padding-bottom: 7px;
   text-align: center;
 }
@@ -88,7 +92,7 @@
   width: 100%;
   height: 40px;
   border: none;
-  border-radius: 5px;
+  border-radius: 2.5px;
   font-size: 16px;
   font-weight: 400;
   line-height: normal;
@@ -99,13 +103,26 @@
   cursor: pointer;
 }
 
+.black-button {
+  width: 100%;
+  height: 40px;
+  border: none;
+  border-radius: 2.5px;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: normal;
+  color: #fff;
+  background-color: var(--Grayscale7, #000);
+  cursor: pointer;
+}
+
 .red-button {
   width: 170px;
   height: 60px;
   border: none;
   border-radius: 3px;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 400;
   line-height: normal;
   color: #fff;
   background-color: #c22727;
@@ -113,6 +130,43 @@
   cursor: pointer;
 }
 
-* {
-  font-family: TheJamsil;
+.gray-button {
+  width: 100%;
+  height: 40px;
+  border: none;
+  border-radius: 2.5px;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: normal;
+  color: #fff;
+  background-color: gray;
+  cursor: pointer;
+}
+
+/* ant */
+.ant-rate {
+  color: var(--Grayscale7, #000);
+}
+
+.ant-upload-select-picture-card i {
+  font-size: 32px;
+  color: #999;
+}
+
+.ant-upload-select-picture-card .ant-upload-text {
+  margin-top: 8px;
+  color: #666;
+}
+
+.rate-span {
+  display: flex;
+}
+
+.clearfix {
+  padding-top: 10px;
+  flex: 1;
+}
+
+.review-text {
+  flex: 1.7;
 }

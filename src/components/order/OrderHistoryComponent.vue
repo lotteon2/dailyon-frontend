@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { ref, onBeforeMount, watchEffect } from 'vue'
 import { getOrders, getOrderDetails } from '@/apis/order/order'
-import type { OrderPageResponse, OrderResponse, OrderDetailResponse } from '@/apis/order/orderDto'
+import type { OrderPageResponse, OrderResponse } from '@/apis/order/orderDto'
 import PaginationComponent from '../ootd/PaginationComponent.vue'
 import OrderComponent from './OrderComponent.vue'
-import OrderDetailComponent from './OrderDetailComponent.vue'
+import OrderDetailComponent from '@/components/order/orderDetail/OrderDetailComponent.vue'
 
 const requestPage = ref<number>(0)
 const totalElements = ref<Number | null>(0)
 const totalPages = ref<number>()
 const orders = ref<Array<OrderResponse>>([])
-const orderDetails = ref<Array<OrderDetailResponse>>([])
+const orderNo = ref<string>('')
 const showModal = ref<boolean>(false)
 
 onBeforeMount(async () => {
@@ -24,10 +24,8 @@ const fetchDefaultData = async (requestPage: number): Promise<void> => {
   totalPages.value = data.totalPages
 }
 
-const open = async (orderNo: string) => {
-  console.log(orderNo)
-  const data = await getOrderDetails(orderNo)
-  orderDetails.value = data
+const open = async (index: string) => {
+  orderNo.value = index
   showModal.value = true
 }
 
@@ -124,7 +122,6 @@ watchEffect(() => {
       <div class="container-inner-title">주문 내역&nbsp;&nbsp;</div>
       <div class="container-inner-title3">주문내역입니다.</div>
     </div>
-    <!-- v-model="selectedOrderType" @change="filterOrders" -->
     <div class="order-type-select-wrapper">
       <select class="order-type-select">
         <option disabled value="">주문 타입을 선택해주세요</option>
@@ -149,9 +146,9 @@ watchEffect(() => {
       <OrderComponent :orders="orders" @showModal="(index) => open(index)" />
     </table>
     <div v-if="showModal" class="modal" @click="closeModal">
-      <div v-if="orderDetails.length" class="modal-content" @click.stop>
+      <div class="modal-content" @click.stop>
         <span class="close" @click="closeModal">&times;</span>
-        <OrderDetailComponent :orderDetails="orderDetails" />
+        <OrderDetailComponent :orderNo="orderNo" />
       </div>
     </div>
     <PaginationComponent

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import OrderDetailComponent from './OrderDetailComponent.vue'
+import OrderDetailComponent from '@/components/order/orderDetail/OrderDetailComponent.vue'
 import type { OrderDetailResponse } from '@/apis/order/orderDto'
 
 const emit = defineEmits(['showModal'])
@@ -11,7 +11,6 @@ const props = defineProps({
     required: true
   }
 })
-const orderDetails = ref<Array<OrderDetailResponse>>([])
 
 const selectedRowIndex = ref<any>(null)
 
@@ -33,7 +32,7 @@ const toggleCard = async (orderNo: string) => {
     <tr v-if="selectedRowIndex === order.orderNo" :key="'card-' + index">
       <td colspan="6">
         <div class="order-history">
-          <OrderDetailComponent :orderDetails="orderDetails" />
+          <OrderDetailComponent :orderNo="order.orderNo" />
         </div>
       </td>
     </tr>
