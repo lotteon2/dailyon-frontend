@@ -50,8 +50,9 @@
     font-size: 20px;
     font-style: normal;
     font-weight: 400;
-    line-height: 70px; /* 500% */
     border-bottom: 1px solid #202027;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .wish-table-data2 > td {
@@ -60,24 +61,17 @@
     font-size: 20px;
     font-style: normal;
     font-weight: 400;
-    line-height: 70px; /* 500% */
     border-bottom: 1px solid #808080;
 }
 
-.basket-checkbox {
-    width: 27px;
-    height: 27px;
-    flex-shrink: 0;
-    border: 1px solid #000;
-    background: var(--Grayscale1, #fff);
-    transform: translate(0, 7px);
-}
-
 .basket-img {
-    width: 161px;
-    height: 144px;
     flex-shrink: 0;
     margin: 20px 0;
+}
+
+.basket-column {
+    display: flex;
+    flex-direction: column;
 }
 
 td {
@@ -86,12 +80,13 @@ td {
 
 .center-text {
     text-align: center;
+    width: 20%;
 }
 
 .jjim-prod-container {
     display: flex;
     flex-direction: column;
-    margin-bottom: 69px;
+    width: 100%;
 }
 
 .wishBtn {
@@ -109,4 +104,24 @@ td {
     justify-content: center;
     align-items: center;
     cursor: pointer;
+}
+
+.white-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 50%;
+
+    border: #808080 solid 1px;
+    border-radius: 5px;
+}
+
+.white-page > h1 {
+    font-family: TheJamsil;
+    font-size: 50px;
+    font-style: normal;
+    font-weight: 400;
+    color: #808080;
 }
