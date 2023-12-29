@@ -110,10 +110,6 @@ watch(requestPage, async (afterPage: number, beforePage: number) => {
   }
 })
 
-const formatNumber = (value: number): string => {
-  return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-}
-
 const toggleAll = () => {
   if (allChecked.value) {
     checkedCartItems.value = []
@@ -137,6 +133,7 @@ const deleteChecked = () => {
 
     deleteCart({ requests: requests })
       .then(() => {
+        checkedCartItems.value = []
         alert('삭제 완료')
       })
       .then(initData)
@@ -230,7 +227,7 @@ const deleteAll = () => {
                 />
               </svg>
             </div>
-            <div class="count-white">{{ cartItem.quantity }}</div>
+            <div class="count-white">{{ cartItem.quantity.toLocaleString() }}</div>
             <div class="count-black" @click="executeUpdate(idx, true)">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -248,11 +245,11 @@ const deleteAll = () => {
           </div>
         </td>
         <td class="center-text">
-          <span class="prod-price">{{ formatNumber(cartItem.productPrice) }}</span>
+          <span class="prod-price">{{ cartItem.productPrice.toLocaleString() }}</span>
         </td>
         <td class="center-text">
           <span class="total-pay">{{
-            formatNumber(cartItem.productPrice * cartItem.quantity)
+            (cartItem.productPrice * cartItem.quantity).toLocaleString()
           }}</span>
         </td>
       </tr>
@@ -267,7 +264,7 @@ const deleteAll = () => {
     <div class="basket-grey-container">
       <div class="grey-first-column">
         <div class="grey-small-text">총 주문 금액</div>
-        <div class="grey-large-text">{{ formatNumber(sumOfCartItemPrice.sum) }}</div>
+        <div class="grey-large-text">{{ sumOfCartItemPrice.sum.toLocaleString() }}</div>
       </div>
       <svg
         class="plus-icon"
@@ -286,7 +283,7 @@ const deleteAll = () => {
       </svg>
       <div class="grey-second-column">
         <div class="grey-small-text">배송비</div>
-        <div class="grey-large-text">{{ formatNumber(sumOfCartItemPrice.deliveryFee) }}</div>
+        <div class="grey-large-text">{{ sumOfCartItemPrice.deliveryFee.toLocaleString() }}</div>
       </div>
       <svg
         class="equal-icon"
@@ -306,7 +303,7 @@ const deleteAll = () => {
       <div class="grey-third-column">
         <div class="grey-small-text">총 결제 금액</div>
         <div class="grey-large-text">
-          {{ formatNumber(sumOfCartItemPrice.sum + sumOfCartItemPrice.deliveryFee) }}
+          {{ (sumOfCartItemPrice.sum + sumOfCartItemPrice.deliveryFee).toLocaleString() }}
         </div>
       </div>
     </div>
