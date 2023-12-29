@@ -74,6 +74,24 @@
     flex-direction: column;
 }
 
+.basket-column > h1 {
+    color: var(--Grayscale7, #202027);
+    font-family: TheJamsil;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 40px; /* 500% */
+}
+
+.basket-column > h2 {
+    color: var(--Grayscale5, #808080);
+    font-family: TheJamsil;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 40px; /* 666.667% */
+}
+
 td {
     vertical-align: middle;
 }
