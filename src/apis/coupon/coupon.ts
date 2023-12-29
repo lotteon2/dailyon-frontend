@@ -60,7 +60,7 @@ export const getCouponsForCheckout = async (
   try {
     const response = await authAxiosInstance.post(
       `${PROMOTION_PREFIX_PATH}${COUPON_DOMAIN_PREFIX_PATH}/retrieve-applicable`,
-      productCategoryPairs
+      { products: productCategoryPairs }
     )
     return response.data
   } catch (error) {
