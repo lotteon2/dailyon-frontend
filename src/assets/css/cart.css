@@ -20,7 +20,8 @@
     font-size: 20px;
     font-style: normal;
     font-weight: 400;
-    line-height: 70px; /* 500% */
+    padding-top: 10px;
+    padding-bottom: 10px;
     border-bottom: 1px solid #202027;
 }
 
@@ -30,12 +31,16 @@
     font-size: 20px;
     font-style: normal;
     font-weight: 400;
-    line-height: 70px; /* 500% */
     border-bottom: 1px solid #808080;
 }
 
 .left-margin {
     padding-left: 20px;
+}
+
+.align-center {
+    display: flex;
+    align-items: center;
 }
 
 .basket-container {
@@ -81,8 +86,6 @@
 }
 
 .basket-img {
-    width: 161px;
-    height: 144px;
     flex-shrink: 0;
     margin: 20px 0;
 }
@@ -108,7 +111,6 @@
     font-style: normal;
     font-weight: 400;
     line-height: 40px; /* 666.667% */
-    margin-bottom: 60px;
 }
 
 .basket-column > h3 {
