@@ -25,6 +25,7 @@ const totalPages = ref<number>()
 const totalElements = ref<number>()
 
 const openModal = () => {
+  selectedAddress.value = {isDefault: false};
   isModalVisible.value = true
 }
 
@@ -88,6 +89,16 @@ onMounted(async () => {
   defaultAddress.value = await getDefaultAddress()
 })
 
+const selectedAddress = ref({});
+
+
+
+const openModalWithAddress = (address: any) => {
+  selectedAddress.value = address;
+  isModalVisible.value = true;
+}
+
+
 
 const setMemberInfo = () => {
   const memberDto: MemberInfoDto = {
@@ -97,6 +108,7 @@ const setMemberInfo = () => {
   }
   setMember(memberDto);
 }
+
 
 
 </script>
@@ -165,14 +177,15 @@ const setMemberInfo = () => {
     </div>
     <div class="container-inner-title">배송지 관리</div>
     <div class="place-add-button" @click="openModal">배송지 추가</div>
-    <ModalView v-if="isModalVisible" :closeModal="closeModal" />
+    <ModalView v-if="isModalVisible" :closeModal="closeModal" :selectedAddress="selectedAddress" />
     <table v-if="formattedAddresses.length > 0">
+      <col width="80px" />
       <col width="150px" />
       <col width="200px" />
       <col width="400px" />
       <col width="80px" />
-      <col width="80px" />
       <tr class="place-font memberinfo-table-data1">
+        <td></td>
         <td class="padding-left-10">배송지명</td>
         <td>전화번호</td>
         <td>배송지 주소</td>
@@ -184,10 +197,12 @@ const setMemberInfo = () => {
         :key="index"
         class="place-font memberinfo-table-data1"
       >
+        <td><div class="place-add-button" @click="setDefault(address.id)">기본 지정</div></td>
         <td>{{ address.name }}</td>
         <td>{{ address.phoneNumber }}</td>
         <td>{{ address.roadAddress + ' ' + address.detailAddress + ' ' + address.postCode }}</td>
-        <td><div class="place-add-button" @click="setDefault(address.id)">기본 지정</div></td>
+        <td><div class="place-add-button" @click="openModalWithAddress(address)" >수정</div></td>
+        
         <td>
           <div class="close-button-div" @click="deleteAdd(address.id)">
             <svg

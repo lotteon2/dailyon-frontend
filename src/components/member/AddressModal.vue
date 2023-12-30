@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { ref, defineProps, computed} from 'vue';
+import { ref, defineProps, computed, watch} from 'vue';
 import { VueDaumPostcode } from 'vue-daum-postcode';
 import { authAxiosInstance } from '@/apis/utils';
 
-const props = defineProps(['closeModal']);
+const props = defineProps(['closeModal', 'selectedAddress']);
+
 
 const postOpen = ref(false);
 const userName = ref('');
@@ -17,6 +18,8 @@ const search = () => {
   postOpen.value = true;
 };
 
+
+
 const onComplete = (result: any) => {
   if (result.userSelectedType === 'R') {
     roadAddr.value = result.roadAddress;
@@ -27,6 +30,7 @@ const onComplete = (result: any) => {
   postOpen.value = false;
   
 };
+
 const submitForm = async () => {
   if (!userName.value || !postcode.value || !detailAddr.value || !phone.value) {
     alert('필수 입력 항목을 모두 입력하세요.');
@@ -34,28 +38,45 @@ const submitForm = async () => {
   }
 
   try {
-    const formData = {
-      isDefault: useDefaultAddr.value,
-      name: userName.value,
-      detailAddress: detailAddr.value,
-      roadAddress: roadAddr.value,
-      postCode: postcode.value,
-      phoneNumber: phone.value,
-    };
+    if (props.selectedAddress.id) {
+      const formData = {
+        addressId: props.selectedAddress.id,
+        isDefault: useDefaultAddr.value,
+        name: userName.value,
+        detailAddress: detailAddr.value,
+        roadAddress: roadAddr.value,
+        postCode: postcode.value,
+        phoneNumber: phone.value,
+      };
+      const response = await authAxiosInstance.put('/member-service/addresses', formData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    } else {
+      const formData = {
+        isDefault: useDefaultAddr.value,
+        name: userName.value,
+        detailAddress: detailAddr.value,
+        roadAddress: roadAddr.value,
+        postCode: postcode.value,
+        phoneNumber: phone.value,
+      };
+      const response = await authAxiosInstance.post('/member-service/addresses', formData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    }
 
-    const response = await authAxiosInstance.post('/member-service/addresses', formData, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
     props.closeModal();
     alert("배송지 저장이 완료되었습니다.");
-    window.location.reload()
-    
+    window.location.reload();
   } catch (error) {
     console.error('API 호출 중 오류 발생:', error);
   }
-}
+};
+
 
 const limitInput = () => {
   let numericValue = phone.value.replace(/[^\d]/g, "");
@@ -64,6 +85,15 @@ const limitInput = () => {
   }
   phone.value = numericValue;
 };
+
+watch(() => props.selectedAddress, (newValue: any) => {
+  userName.value = newValue.name;
+    useDefaultAddr.value = newValue.isDefault;
+    postcode.value = newValue.postCode;
+    roadAddr.value = newValue.roadAddress;
+    detailAddr.value = newValue.detailAddress;
+    phone.value = newValue.phoneNumber;
+}, { immediate: true });
 </script>
 
 <template>

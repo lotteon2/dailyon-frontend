@@ -52,8 +52,9 @@ const fetchDefaultData = async (): Promise<PostDetailResponse> => {
 const formattedCreatedAt = ref<string>('')
 const formatDate = async () => {
   const date: Date = new Date(post.value.createdAt)
+  const month = date.getMonth() + 1
   formattedCreatedAt.value = date.getFullYear() + '-' +
-    (date.getMonth() < 10 ? '0' + date.getMonth() : date.getMonth()) + '-' +
+    (month < 10 ? '0' + month : month) + '-' +
     (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) + ' ' +
     (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':' +
     (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes())

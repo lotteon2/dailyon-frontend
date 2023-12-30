@@ -24,7 +24,6 @@ const productId = ref<number>(Number(route.params.id))
 const reviews = ref<ReviewResponse[]>()
 const totalElements = ref<number>()
 const totalPages = ref<number>()
-
 // onBeforeMount(async () => {
 //   productId.value = Number(route.params.id)
 //   await fetchDefaultData(requestPage.value, productId.value)
@@ -80,7 +79,7 @@ watchEffect(() => {
         </div>
       </div>
       <div class="review-row-right">
-        <img class="review-prod-img" src="@/assets/images/prod-img.png" alt="" />
+        <img class="review-prod-img" :src="`${VITE_STATIC_IMG_URL}${review.imgUrl}`" alt="" />
         <div class="review-last-column">
           <span>삭제</span>
         </div>

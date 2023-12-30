@@ -8,6 +8,7 @@ import type {
   ReadCartResponse
 } from '@/apis/wishcart/CartDto'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
+import WhitePageComponent from '@/components/wishcart/WhitePageComponent.vue'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -109,10 +110,6 @@ watch(requestPage, async (afterPage: number, beforePage: number) => {
   }
 })
 
-const formatNumber = (value: number): string => {
-  return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-}
-
 const toggleAll = () => {
   if (allChecked.value) {
     checkedCartItems.value = []
@@ -136,6 +133,7 @@ const deleteChecked = () => {
 
     deleteCart({ requests: requests })
       .then(() => {
+        checkedCartItems.value = []
         alert('삭제 완료')
       })
       .then(initData)
@@ -165,7 +163,7 @@ const deleteAll = () => {
 </script>
 
 <template>
-  <div class="basket-container">
+  <div class="basket-container" v-if="cartItems.length > 0">
     <div class="container-title">장바구니</div>
     <div class="basket-top-button-container">
       <div class="top-button" @click="toggleAll">
@@ -178,26 +176,34 @@ const deleteAll = () => {
     <table>
       <tr class="cart-table-data1">
         <td class="left-margin">선택</td>
-        <td class="left-align"></td>
-        <td class="left-align">상품명</td>
+        <td class="left-margin"></td>
+        <td class="center-text">상품명</td>
         <td class="center-text">수량</td>
         <td class="center-text">상품 가격</td>
-        <td>총금액</td>
+        <td class="center-text">총금액</td>
       </tr>
-      <tr v-for="(cartItem, idx) in cartItems" :key="idx" class="cart-table-data1">
+      <tr v-for="(cartItem, idx) in cartItems" :key="idx" class="cart-table-data2">
         <td class="left-margin">
-          <input
-            class="basket-checkbox"
-            type="checkbox"
-            :id="`checkbox-${idx}`"
-            :value="cartItem"
-            v-model="checkedCartItems"
-          />
+          <div class="align-center">
+            <input
+              class="basket-checkbox"
+              type="checkbox"
+              :id="`checkbox-${idx}`"
+              :value="cartItem"
+              v-model="checkedCartItems"
+            />
+          </div>
         </td>
-        <td class="left-align">
-          <img class="basket-img" :src="`${VITE_STATIC_IMG_URL}${cartItem.imgUrl}`" alt="" />
+        <td class="left-margin">
+          <div class="align-center">
+            <img
+              class="basket-img"
+              :src="`${VITE_STATIC_IMG_URL}${cartItem.imgUrl}?w=100&h=100`"
+              alt=""
+            />
+          </div>
         </td>
-        <td class="left-align">
+        <td class="center-text">
           <div class="basket-column">
             <h1>{{ cartItem.productName }}</h1>
             <h2>{{ cartItem.productSizeName }}</h2>
@@ -221,7 +227,7 @@ const deleteAll = () => {
                 />
               </svg>
             </div>
-            <div class="count-white">{{ cartItem.quantity }}</div>
+            <div class="count-white">{{ cartItem.quantity.toLocaleString() }}</div>
             <div class="count-black" @click="executeUpdate(idx, true)">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -239,24 +245,26 @@ const deleteAll = () => {
           </div>
         </td>
         <td class="center-text">
-          <span class="prod-price">{{ formatNumber(cartItem.productPrice) }}</span>
+          <span class="prod-price">{{ cartItem.productPrice.toLocaleString() }}</span>
         </td>
-        <td>
+        <td class="center-text">
           <span class="total-pay">{{
-            formatNumber(cartItem.productPrice * cartItem.quantity)
+            (cartItem.productPrice * cartItem.quantity).toLocaleString()
           }}</span>
         </td>
       </tr>
     </table>
+    <div style="padding-top: 10px" />
     <PaginationComponent
       :on-change-page="onChangePage"
       :request-page="requestPage"
       :total-pages="totalPages"
     />
+    <div style="padding-top: 10px" />
     <div class="basket-grey-container">
       <div class="grey-first-column">
         <div class="grey-small-text">총 주문 금액</div>
-        <div class="grey-large-text">{{ formatNumber(sumOfCartItemPrice.sum) }}</div>
+        <div class="grey-large-text">{{ sumOfCartItemPrice.sum.toLocaleString() }}</div>
       </div>
       <svg
         class="plus-icon"
@@ -275,7 +283,7 @@ const deleteAll = () => {
       </svg>
       <div class="grey-second-column">
         <div class="grey-small-text">배송비</div>
-        <div class="grey-large-text">{{ formatNumber(sumOfCartItemPrice.deliveryFee) }}</div>
+        <div class="grey-large-text">{{ sumOfCartItemPrice.deliveryFee.toLocaleString() }}</div>
       </div>
       <svg
         class="equal-icon"
@@ -295,13 +303,14 @@ const deleteAll = () => {
       <div class="grey-third-column">
         <div class="grey-small-text">총 결제 금액</div>
         <div class="grey-large-text">
-          {{ formatNumber(sumOfCartItemPrice.sum + sumOfCartItemPrice.deliveryFee) }}
+          {{ (sumOfCartItemPrice.sum + sumOfCartItemPrice.deliveryFee).toLocaleString() }}
         </div>
       </div>
     </div>
     <!-- TODO : pinia-persist로 구매창 넘어가기 -->
     <div class="purchase-button">구매하기</div>
   </div>
+  <WhitePageComponent message="장바구니가 비었습니다" v-else />
 </template>
 
 <style scoped>
