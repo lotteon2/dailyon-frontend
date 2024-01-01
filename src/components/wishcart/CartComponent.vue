@@ -7,9 +7,13 @@ import type {
   ReadCartPageResponse,
   ReadCartResponse
 } from '@/apis/wishcart/CartDto'
+import type { ProductInfo } from '@/apis/product/ProductDto'
+import { useProductStore } from '@/stores/product/ProductStore'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 import WhitePageComponent from '@/components/wishcart/WhitePageComponent.vue'
+import router from '@/router'
 
+const productStore = useProductStore()
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
 const requestSize: number = 5
@@ -160,6 +164,32 @@ const deleteAll = () => {
       })
   }
 }
+
+const routeOrderSheet = () => {
+  if (!checkedCartItems.value.length) {
+    alert('주문 할 상품을 선택해주세요.')
+    return
+  }
+  const productInfos: ProductInfo[] = []
+  checkedCartItems.value.forEach((cartItem) => {
+    const info: ProductInfo = {
+      productId: cartItem.productId,
+      productName: cartItem.productName,
+      imgUrl: cartItem.imgUrl,
+      categoryId: cartItem.categoryId,
+      sizeId: cartItem.productSizeId,
+      sizeName: cartItem.productSizeName,
+      orderPrice: cartItem.productPrice * cartItem.quantity,
+      quantity: cartItem.quantity,
+      couponInfoId: null,
+      discountAmount: 0,
+      referralCode: null
+    }
+    productInfos.push(info)
+  })
+  productStore.setProducts(productInfos, 'CART')
+  router.push('/orders')
+}
 </script>
 
 <template>
@@ -308,7 +338,7 @@ const deleteAll = () => {
       </div>
     </div>
     <!-- TODO : pinia-persist로 구매창 넘어가기 -->
-    <div class="purchase-button">구매하기</div>
+    <div class="purchase-button" @click="routeOrderSheet">구매하기</div>
   </div>
   <WhitePageComponent message="장바구니가 비었습니다" v-else />
 </template>

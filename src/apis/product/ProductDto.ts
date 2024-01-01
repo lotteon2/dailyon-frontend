@@ -54,5 +54,7 @@ export interface ProductInfo {
   sizeName: String
   orderPrice: number
   quantity: number
+  couponInfoId: number | null
+  discountAmount: number | null
   referralCode: String | null
 }
