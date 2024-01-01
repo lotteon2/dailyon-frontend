@@ -2,10 +2,10 @@
   <div class="order-item-list">
     <OrderItem
       v-for="(orderItem, index) in orderItems"
-      :key="orderItem.productId"
+      :key="(orderItem.productId as number)"
       :orderItem="orderItem"
       :coupons="nestedCoupons[index]"
-      :selectedCouponId="selectedCouponIds[index]"
+      :selectedCouponId="selectedCoupons[index]?.couponInfoId ?? null"
       :orderItemIndex="index"
       @apply-coupon="handleApplyCoupon"
     />
@@ -21,27 +21,28 @@ import type {
   CouponInfoItemResponse,
   CouponInfoItemCheckoutResponse
 } from '@/apis/coupon/CouponItemDto'
+import type { ProductInfo } from '@/apis/product/ProductDto'
 
 const props = defineProps<{
-  orderItems: OrderItemDto[]
+  orderItems: ProductInfo[]
   nestedCoupons: CouponInfoItemCheckoutResponse[][]
 }>()
 
 const emit = defineEmits(['update-coupons'])
 
-// OrderItem개수만큼의 array. couponId선택되었으면 해당 index는 couponId, 선택안되었으면 null을 갖게 됨.
-const selectedCouponIds = ref<(number | null)[]>(new Array(props.orderItems.length).fill(null))
+// OrderItem개수만큼의 array. couponId선택되었으면 해당 index는 CouponInfoItemCheckoutResponse, 선택안되었으면 null을 갖게 됨. 😀 여기서 관리
+const selectedCoupons = ref<(CouponInfoItemCheckoutResponse | null)[]>(new Array(props.orderItems.length).fill(null))
 
-const handleApplyCoupon = (orderItemIndex: number, couponId: number | null) => {
+const handleApplyCoupon = (orderItemIndex: number, couponItem: CouponInfoItemCheckoutResponse | null) => {
   // 다른 orderItem에 현재 선택하려는 couponId가 선택되어 있는 경우, 해당 index의 값을 null로.(deselect)
-  for (let i = 0; i < selectedCouponIds.value.length; i++) {
-    if (selectedCouponIds.value[i] === couponId && i !== orderItemIndex) {
-      selectedCouponIds.value[i] = null
+  for (let i = 0; i < selectedCoupons.value.length; i++) {
+    if (selectedCoupons.value[i] === couponItem && i !== orderItemIndex) {
+      selectedCoupons.value[i] = null
     }
   }
   // 선택하고 있는 orderItem의 값을 바꿈. (couponId, null 들어올 수 있음.)
-  selectedCouponIds.value[orderItemIndex] = couponId
-  emit('update-coupons', selectedCouponIds.value) // 바꾼 뒤 전달. 계속 동기화시켜줌.
+  selectedCoupons.value[orderItemIndex] = couponItem ? couponItem : null
+  emit('update-coupons', selectedCoupons.value) // 바꾼 뒤 전달. 계속 동기화시켜줌.
 }
 </script>
 
