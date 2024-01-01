@@ -177,6 +177,8 @@ const routeOrderSheet = async () => {
         sizeName: selectedProductSize.value.productSizeName,
         orderPrice: selectedOriginalPrice.value,
         quantity: selectedQuantity.value,
+        couponInfoId: null,
+        discountAmount: 0,
         referralCode: referralCode.value
       }
     ]
