@@ -4,16 +4,16 @@ import OrderSheetComponent from '@/components/order/OrderSheetComponent.vue'
 import OrderPlaceComponent from '@/components/order/OrderPlaceComponent.vue'
 import OrderPaymentComponent from '@/components/order/OrderPaymentComponent.vue'
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
-import { order } from '@/apis/order/order'
+import { order, gifts } from '@/apis/order/order'
 import type { OrderItemDto, OrderItemWithCouponInfoIdDto } from '@/types/coupon'
 import type { ProductInfo } from '@/apis/product/ProductDto'
-import type { DeliveryInfo, OrderSheet, OrderItem } from '@/apis/order/orderDto'
+import type { DeliveryInfo, OrderSheet, OrderItem, GiftInfo } from '@/apis/order/orderDto'
 import { storeToRefs } from 'pinia'
 import { useProductStore } from '@/stores/product/ProductStore'
 import { useMemberStore } from '@/stores/member/MemberStore'
 import router from '@/router'
 const productStore = useProductStore()
-const { products, orderType } = storeToRefs(productStore)
+const { products, orderType, giftInfo } = storeToRefs(productStore)
 const { point } = storeToRefs(useMemberStore())
 
 const redirectUrl = ref('')
@@ -93,7 +93,7 @@ const orderItems = [
 ]
 
 const doOrder = async () => {
-  if (!validation()) {
+  if (orderType.value !== 'GIFT' && !validation()) {
     alert('배송지 정보는 필수 입니다.')
     return
   }
@@ -112,14 +112,18 @@ const doOrder = async () => {
   })
 
   const orderSheet: OrderSheet = {
+    receiverId: giftInfo.value ? giftInfo.value.receiverId : null,
+    receiverName: giftInfo.value ? giftInfo.value.receiverName : null,
+    senderName: giftInfo.value ? giftInfo.value.senderName : null,
     usedPoints: usedPoints.value,
     type: orderType.value,
     deliveryFee: null,
     totalCouponDiscountPrice: null,
     orderItems: orderItems,
-    deliveryInfo: deliveryInfo.value,
+    deliveryInfo: orderType.value === 'GIFT' ? null : deliveryInfo.value,
     paymentType: 'KAKAOPAY'
   }
+
   redirectUrl.value = await order(orderSheet)
 
   if (redirectUrl.value) {
@@ -171,11 +175,13 @@ onBeforeUnmount(() => {
     @apply-coupons="applyCoupons"
   ></CheckoutCouponModal>
   <div class="main-container">
-    <h1>주문/결제</h1>
+    <h1 v-if="orderType !== 'GIFT'">주문/결제</h1>
+    <h1 v-else>선물하기</h1>
     <div class="center-container">
       <div class="center-left-container">
         <OrderSheetComponent v-if="products.length" />
         <OrderPlaceComponent
+          v-if="orderType !== 'GIFT'"
           @submit="(deliveryInfo) => addDeliveryInfo(deliveryInfo)"
           @changeReceiver="(input) => changeReceiver(input)"
         />

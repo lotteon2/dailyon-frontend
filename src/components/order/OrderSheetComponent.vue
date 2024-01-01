@@ -6,7 +6,7 @@ import { useProductStore } from '@/stores/product/ProductStore'
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
 const productStore = useProductStore()
-const { products } = storeToRefs(productStore)
+const { products, orderType, giftInfo } = storeToRefs(productStore)
 
 const deleteItem = async (index: number) => {}
 </script>
@@ -16,7 +16,7 @@ const deleteItem = async (index: number) => {}
     <div class="line"></div>
     <div class="shop-wrapper" v-for="(product, index) in products" :key="index">
       <div class="shop-name-div">
-        <span></span>
+        <span v-if="orderType === 'GIFT'">받는 사람 : {{ giftInfo.receiverName }}</span>
         <span>배송: 배송비</span>
       </div>
       <div class="shop-prod-div">

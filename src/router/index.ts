@@ -92,6 +92,11 @@ const router = createRouter({
           component: () => import('@/components/payment/PointPaymentHistoryComponent.vue')
         },
         {
+          path: '/gifts',
+          name: 'gifts',
+          component: () => import('@/components/gifts/GiftComponent.vue')
+        },
+        {
           path: '/point-history',
           name: 'pointHistory',
           component: () => import('@/components/member/PointHistoryComponent.vue')

@@ -1,16 +1,25 @@
 <script setup lang="ts">
 import { readWishListPage, toggleWishList } from '@/apis/wishcart/WishListClient'
 import { onBeforeMount, ref, watch } from 'vue'
+import { useProductStore } from '@/stores/product/ProductStore'
+import { message } from 'ant-design-vue'
 import type { AxiosResponse } from 'axios'
 import type { ReadWishListPageResponse, ReadWishListResponse } from '@/apis/wishcart/WishListDto'
+import type { ProductInfo } from '@/apis/product/ProductDto'
+import type { GiftInfo } from '@/apis/order/orderDto'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 import WhitePageComponent from '@/components/wishcart/WhitePageComponent.vue'
-
+import router from '@/router'
+const productStore = useProductStore()
 const props = defineProps({
   targetId: {
     type: Number,
     required: false,
     default: null
+  },
+  receiver: {
+    type: Object,
+    required: true
   }
 })
 
@@ -56,6 +65,38 @@ const executeDelete = (index: number) => {
       .finally(() => {
         isBtnEnabled.value = true
       })
+  }
+}
+
+const routeOrder = async (idx: number) => {
+  if (!props.receiver) {
+    message.error('새로고침 해주세요')
+    return
+  }
+  if (confirm(`${props.receiver.receiverName} 님에게 선물하기를 하시겠습니까?`)) {
+    const productInfo: ProductInfo[] = [
+      {
+        productId: wishLists.value[idx].productId,
+        productName: wishLists.value[idx].productName,
+        categoryId: wishLists.value[idx].categoryId,
+        imgUrl: wishLists.value[idx].imgUrl,
+        sizeId: wishLists.value[idx].productSizeId,
+        sizeName: wishLists.value[idx].productSizeName,
+        orderPrice: wishLists.value[idx].productPrice,
+        quantity: 1,
+        couponInfoId: null,
+        discountAmount: 0,
+        referralCode: null
+      }
+    ]
+    const giftInfo: GiftInfo = {
+      receiverId: props.receiver.receiverId,
+      receiverName: props.receiver.receiverName,
+      senderName: props.receiver.senderName
+    }
+    productStore.setProducts(productInfo, 'GIFT')
+    productStore.setReceiver(giftInfo)
+    router.push('/orders')
   }
 }
 
@@ -116,7 +157,7 @@ watch(requestPage, async (afterPage: number, beforePage: number) => {
         </td>
         <td>
           <button class="wishBtn" v-if="isMine" @click="executeDelete(idx)">삭제</button
-          ><button class="wishBtn" v-else>선물</button>
+          ><button class="wishBtn" v-else @click="routeOrder(idx)">선물</button>
         </td>
       </tr>
     </table>
