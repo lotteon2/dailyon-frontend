@@ -166,7 +166,7 @@ onBeforeUnmount(() => {
 <template>
   <CheckoutCouponModal
     :isCheckoutCouponModalOpen="isCheckoutCouponModalOpen"
-    :orderItems="orderItems"
+    :orderItems="products"
     @close-checkout-coupon-modal="closeCheckoutCouponModal"
     @apply-coupons="applyCoupons"
   ></CheckoutCouponModal>
