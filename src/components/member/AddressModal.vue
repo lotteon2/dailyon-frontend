@@ -31,51 +31,52 @@ const onComplete = (result: any) => {
   
 };
 
+const submitInProgress = ref(false);
+
 const submitForm = async () => {
-  if (!userName.value || !postcode.value || !detailAddr.value || !phone.value) {
-    alert('필수 입력 항목을 모두 입력하세요.');
+  if (submitInProgress.value) {
     return;
   }
 
   try {
-    if (props.selectedAddress.id) {
-      const formData = {
-        addressId: props.selectedAddress.id,
-        isDefault: useDefaultAddr.value,
-        name: userName.value,
-        detailAddress: detailAddr.value,
-        roadAddress: roadAddr.value,
-        postCode: postcode.value,
-        phoneNumber: phone.value,
-      };
-      const response = await authAxiosInstance.put('/member-service/addresses', formData, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-    } else {
-      const formData = {
-        isDefault: useDefaultAddr.value,
-        name: userName.value,
-        detailAddress: detailAddr.value,
-        roadAddress: roadAddr.value,
-        postCode: postcode.value,
-        phoneNumber: phone.value,
-      };
-      const response = await authAxiosInstance.post('/member-service/addresses', formData, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+    submitInProgress.value = true;
+
+    if (!userName.value || !postcode.value || !detailAddr.value || !phone.value) {
+      alert('필수 입력 항목을 모두 입력하세요.');
+      return;
     }
+
+    const endpoint = props.selectedAddress.id
+      ? '/member-service/addresses'
+      : '/member-service/addresses';
+
+    const formData = {
+      addressId: props.selectedAddress.id,
+      isDefault: useDefaultAddr.value,
+      name: userName.value,
+      detailAddress: detailAddr.value,
+      roadAddress: roadAddr.value,
+      postCode: postcode.value,
+      phoneNumber: phone.value,
+    };
+
+    const response = await authAxiosInstance.post(endpoint, formData, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
     props.closeModal();
     alert("배송지 저장이 완료되었습니다.");
     window.location.reload();
   } catch (error) {
     console.error('API 호출 중 오류 발생:', error);
+  } finally {
+    submitInProgress.value = false;
   }
 };
+
+
 
 
 const limitInput = () => {
