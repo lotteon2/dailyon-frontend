@@ -22,6 +22,7 @@ export const getMember = async () => {
   export const setMember = async (memberStore : any) => {
     try {
       const response = await authAxiosInstance.put(`${MEMBER_SERVICE_PREFIX}/members`, memberStore);
+      memberStore.setMemberInfo(response.data);
       return response.data;
     } catch (error) {
       console.error('API 호출 중 오류 발생:', error);

@@ -110,7 +110,6 @@ const setMemberInfo = () => {
   if (confirm("수정된 정보를 저장하시겠습니까?")) {
     setMember(memberDto);
     alert("수정이 완료되었습니다!")
-    window.location.reload()
     }
 }
 
