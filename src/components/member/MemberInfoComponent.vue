@@ -106,7 +106,12 @@ const setMemberInfo = () => {
     birth: memberInfo.birth ?? "",
     gender: memberInfo.gender ?? "",
   }
-  setMember(memberDto);
+
+  if (confirm("수정된 정보를 저장하시겠습니까?")) {
+    setMember(memberDto);
+    alert("수정이 완료되었습니다!")
+    window.location.reload()
+    }
 }
 
 
@@ -120,7 +125,6 @@ const setMemberInfo = () => {
     <div class="user-info-first-row">
       <div class="container-inner-title">기본 정보</div>
       <div class="modify-button-wrapper">
-        <div class="modify-white">초기화</div>
         <div class="modify-white modify-black" @click="setMemberInfo">수정 완료</div>
       </div>
     </div>

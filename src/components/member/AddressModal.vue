@@ -188,14 +188,14 @@ watch(() => props.selectedAddress, (newValue: any) => {
   max-width: 30%;
   max-height: 90%;
   margin: auto;
-  margin-top: 5%;
+  margin-top: 1%;
   padding: 2em;
   background-color: #f5f5f5;
   border-radius: 15px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 10;
   color: #333;
-  overflow-y: auto;
+  overflow-y: scroll;
 }
 
 .modal-header {
@@ -267,6 +267,7 @@ td {
   border: 1px solid #ccc;
   border-radius: 5px;
   margin-top: 1em;
+  overflow-y: auto;
 }
 
 .submit-button {
