@@ -70,6 +70,7 @@ const onChangePage = async (page: number) => {
 onBeforeMount(async () => {
   const response = await getMemberAddress(0)
   addresses.value = response.content
+  console.log(addresses.value)
   totalPages.value = response.totalPages
   totalElements.value = response.totalElements
 })
@@ -182,16 +183,17 @@ const setMemberInfo = () => {
     <div class="place-add-button" @click="openModal">배송지 추가</div>
     <ModalView v-if="isModalVisible" :closeModal="closeModal" :selectedAddress="selectedAddress" />
     <table v-if="formattedAddresses.length > 0">
-      <col width="80px" />
       <col width="150px" />
       <col width="200px" />
       <col width="400px" />
-      <col width="80px" />
+      <col width="50px" />
+      <col width="50px" />
+      <col width="50px" />
       <tr class="place-font memberinfo-table-data1">
-        <td></td>
         <td class="padding-left-10">배송지명</td>
         <td>전화번호</td>
         <td>배송지 주소</td>
+        <td></td>
         <td></td>
         <td></td>
       </tr>
@@ -200,11 +202,39 @@ const setMemberInfo = () => {
         :key="index"
         class="place-font memberinfo-table-data1"
       >
-        <td><div class="place-add-button" @click="setDefault(address.id)">기본 지정</div></td>
-        <td>{{ address.name }}</td>
+        <td class="padding-left-10">{{ address.name }}</td>
         <td>{{ address.phoneNumber }}</td>
         <td>{{ address.roadAddress + ' ' + address.detailAddress + ' ' + address.postCode }}</td>
-        <td><div class="place-add-button" @click="openModalWithAddress(address)" >수정</div></td>
+        <td>
+          <div
+            class="place-add-button"
+            @click="!address.isDefault && setDefault(address.id)"
+            :class="{ 'default-button': address.isDefault }"
+          >
+            {{ address.isDefault ? '기본' : '기본 지정' }}
+          </div>
+        </td>
+        <td>
+          <div class="close-button-div" @click="openModalWithAddress(address)" >
+            <svg
+              class="margin-right-10"
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+            >
+              <path
+                d="M7.29289 12.2929L1.70711 17.8787C1.31658 18.2692 0.683417 18.2692 0.292893 17.8787C-0.0976308 17.4882 -0.0976308 16.855 0.292893 16.4645L5.87868 10.8787L15.7071 1.05025C16.0976 0.659728 16.7308 0.659728 17.1213 1.05025C17.5118 1.44077 17.5118 2.07393 17.1213 2.46446L7.29289 12.2929Z"
+                fill="black"
+              />
+              <path
+                d="M6.41421 13.1716L7.17157 12.4142L8.82843 14.0711L8.07107 14.8284L6.41421 13.1716Z"
+                fill="black"
+              />
+            </svg>
+          </div>
+        </td>
         
         <td>
           <div class="close-button-div" @click="deleteAdd(address.id)">
@@ -241,7 +271,4 @@ const setMemberInfo = () => {
 
 <style scoped>
 @import '@/assets/css/member-info.css';
-div[hidden] {
-  display: none;
-}
 </style>
