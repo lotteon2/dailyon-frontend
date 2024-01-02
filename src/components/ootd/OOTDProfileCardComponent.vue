@@ -14,7 +14,7 @@ import type { GiftInfo } from '@/apis/order/orderDto'
 const emit = defineEmits(['fetchData'])
 const memberStore = useMemberStore()
 const memberId = memberStore.getMemberInfo().memberId
-
+const nickname = memberStore.nickname ? memberStore.nickname : ''
 const followStore = useFollowStore()
 const follows = followStore.follows
 
@@ -44,7 +44,7 @@ const fetchDefaultData = async (): Promise<
   const giftInfo: GiftInfo = {
     receiverId: member.value.id,
     receiverName: member.value.nickname,
-    senderName: useMemberStore.name
+    senderName: nickname
   }
   emit('fetchData', giftInfo)
   return memberResponse
@@ -99,7 +99,6 @@ const imageSize = ref({
 })
 
 const getImageSize = async () => {
-  console.log(img.value)
   if (img.value) {
     await handleImageLoad()
   } else {

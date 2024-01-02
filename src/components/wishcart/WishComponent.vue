@@ -19,7 +19,7 @@ const props = defineProps({
   },
   receiver: {
     type: Object,
-    required: true
+    required: false
   }
 })
 

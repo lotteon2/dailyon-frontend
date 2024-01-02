@@ -64,3 +64,18 @@ export interface GiftInfo {
   receiverName: string
   senderName: string
 }
+
+export interface GiftResponse {
+  orderNo: string
+  senderName: string
+  receiverName: string
+  status: string
+  productName: string
+  imgUrl: string
+}
+
+export interface GiftPageResponse<T extends GiftResponse> {
+  gifts: Array<T>
+  totalPages: number
+  totalElements: number
+}

@@ -5,10 +5,60 @@ import type {
   OrderPageResponse,
   OrderResponse,
   OrderSheet,
-  GiftInfo
+  GiftInfo,
+  GiftResponse,
+  GiftPageResponse
 } from './orderDto'
 
 const ORDER_SERVICE_PREFIX_PATH = '/order-service'
+
+export const getReceiverGifts = async (page: number): Promise<GiftPageResponse<GiftResponse>> => {
+  try {
+    const { data } = await authAxiosInstance.get(`${ORDER_SERVICE_PREFIX_PATH}/gifts/receiver`, {
+      params: {
+        page: page
+      }
+    })
+    return data
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      if (error.response) {
+        if (error.response.status >= 400) {
+          alert(error.response.data.message)
+          console.error(`Client Error=${error.response.data.message}`)
+        } else if (error.response.status < 500) {
+          alert('서버 내부 오류')
+          console.error('Internal Server Error')
+        }
+      }
+    }
+    throw error
+  }
+}
+
+export const getSenderGifts = async (page: number): Promise<GiftPageResponse<GiftResponse>> => {
+  try {
+    const { data } = await authAxiosInstance.get(`${ORDER_SERVICE_PREFIX_PATH}/gifts/sender`, {
+      params: {
+        page: page
+      }
+    })
+    return data
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      if (error.response) {
+        if (error.response.status >= 400) {
+          alert(error.response.data.message)
+          console.error(`Client Error=${error.response.data.message}`)
+        } else if (error.response.status < 500) {
+          alert('서버 내부 오류')
+          console.error('Internal Server Error')
+        }
+      }
+    }
+    throw error
+  }
+}
 
 export const order = async (orderSheet: OrderSheet): Promise<string> => {
   try {

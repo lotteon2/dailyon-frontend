@@ -1,25 +1,22 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+import { Tabs, TabPane } from 'ant-design-vue'
+import ReceiverGiftListComponent from './ReceiverGiftListComponent.vue'
+import SenderGiftListComponent from './SenderGiftListComponent.vue'
+const activeKey = ref('1')
+</script>
 <template>
   <div class="card-container">
     <Tabs v-model:activeKey="activeKey" type="card">
       <TabPane key="1" tab="내가 보낸 선물함">
-        <p>Content of Tab Pane 1</p>
-        <p>Content of Tab Pane 1</p>
-        <p>Content of Tab Pane 1</p>
+        <SenderGiftListComponent />
       </TabPane>
       <TabPane key="2" tab="내가 받은 선물함">
-        <p>Content of Tab Pane 2</p>
-        <p>Content of Tab Pane 2</p>
-        <p>Content of Tab Pane 2</p>
+        <ReceiverGiftListComponent />
       </TabPane>
     </Tabs>
   </div>
 </template>
-
-<script setup lang="ts">
-import { ref } from 'vue'
-import { Tabs, TabPane } from 'ant-design-vue'
-const activeKey = ref('2')
-</script>
 
 <style scoped>
 .card-container p {
