@@ -13,19 +13,36 @@ const headerOptions = reactive([
 ])
 const requestHeaderOption = ref<string>(headerOptions[0].value)
 
+const receiverInfo = ref({
+  receiverId: null,
+  receiverName: null,
+  senderName: null
+})
+
 const onChangeContent = async (headerOption: string) => {
   requestHeaderOption.value = headerOption
+}
+
+const fetchReceiverData = async (data: any) => {
+  receiverInfo.value = data
 }
 </script>
 
 <template>
   <div class="main-container">
     <div class="left-container">
-      <OOTDProfileCardComponent :postMemberId="postMemberId" />
+      <OOTDProfileCardComponent
+        :postMemberId="postMemberId"
+        @fetchData="(data) => fetchReceiverData(data)"
+      />
     </div>
     <div class="right-container">
       <div class="content-header-wrapper">
-        <div v-for="headerOption in headerOptions" class="content-nav-wrapper">
+        <div
+          v-for="(headerOption, index) in headerOptions"
+          :key="index"
+          class="content-nav-wrapper"
+        >
           <span
             class="content-nav-text"
             :class="{ selected: requestHeaderOption === headerOption.value }"
@@ -42,6 +59,7 @@ const onChangeContent = async (headerOption: string) => {
       <WishComponent
         v-if="requestHeaderOption === headerOptions[1].value"
         :target-id="postMemberId"
+        :receiver="receiverInfo"
       />
     </div>
   </div>

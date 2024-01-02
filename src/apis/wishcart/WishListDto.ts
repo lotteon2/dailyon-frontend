@@ -13,6 +13,7 @@ export interface ReadWishListPageResponse {
 export interface ReadWishListResponse {
   productId: number
   productSizeId: number
+  categoryId: number
   productName: string
   productSizeName: string
   brandName: string
