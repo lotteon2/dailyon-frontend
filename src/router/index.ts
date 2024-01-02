@@ -195,10 +195,10 @@ router.beforeEach((to, from, next) => {
     next('/login')
   } else if (to.name === 'login' && isLoggedIn()) {
     alert('이미 로그인한 상태입니다.')
-    next('/main')
+    next('/')
   }  else if (to.name === 'not-found') {
     alert('페이지를 찾을 수 없습니다.');
-    next('/main');
+    next('/');
   } else {
     next();
   }
