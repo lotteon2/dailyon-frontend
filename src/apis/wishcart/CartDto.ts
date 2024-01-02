@@ -6,6 +6,7 @@ export interface ReadCartPageResponse {
 
 export interface ReadCartResponse {
   productId: number
+  categoryId: number
   productSizeId: number
   quantity: number
   lastMemberCode: string

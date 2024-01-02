@@ -26,9 +26,11 @@
 import OrderDetailList from './OrderDetailList.vue'
 import CheckoutModalFooter from './CheckoutModalFooter.vue'
 import { ref, defineProps, defineEmits, onMounted } from 'vue'
+import { useProductStore } from '@/stores/product/ProductStore'
 import { getCouponsForCheckout } from '@/apis/coupon/coupon'
 
-import type { OrderItemDto, OrderItemWithCouponInfoIdDto } from '@/types/coupon'
+import type { OrderItemDto, OrderItemWithCouponInfoDto, OrderItemWithCouponInfoIdDto } from '@/types/coupon'
+import type { ProductInfo } from '@/apis/product/ProductDto'
 
 import type {
   ProductCategoryPair,
@@ -37,20 +39,22 @@ import type {
   CouponInfoItemCheckoutResponse
 } from '@/apis/coupon/CouponItemDto'
 
+const productStore = useProductStore()
 const { isCheckoutCouponModalOpen, orderItems } = defineProps<{
   isCheckoutCouponModalOpen: boolean
-  orderItems: OrderItemDto[]
+  orderItems: ProductInfo[]
 }>()
 
 const emit = defineEmits(['close-checkout-coupon-modal', 'apply-coupons'])
 // , {event: 'apply-coupons', null}: void
 const computedNestedCoupons = ref<CouponInfoItemCheckoutResponse[][]>([])
-const couponSelections = ref<OrderItemWithCouponInfoIdDto[]>([])
+const orderItemsWithCouponSelections = ref<OrderItemWithCouponInfoDto[]>([]) // 중간객체
 
 const fetchCouponsForCheckout = async () => {
-  const productCategoryPairs: ProductCategoryPair[] = orderItems.map((item: OrderItemDto) => ({
-    productId: item.productId,
-    categoryId: item.categoryId
+  // 😀 side effect 우려되서 이렇게 둠.
+  const productCategoryPairs: ProductCategoryPair[] = orderItems.map((item: ProductInfo) => ({
+    productId: item.productId as number,
+    categoryId: item.categoryId as number
   }))
   computedNestedCoupons.value = (
     await getCouponsForCheckout(productCategoryPairs)
@@ -62,19 +66,60 @@ const closeModal = () => {
 }
 
 const applyCouponsAndClose = () => {
-  // 쿠폰 선택 정보를 checkout 페이지로 전달
-  emit('apply-coupons', couponSelections) // 어떤 아이템에 어떤 쿠폰을 쓰는지 넘겨줌. 매핑된 객체 리스트
+  // 😀 여기서 pinia update
+  applyCouponDatas() // discountAmount 계산 후 pinia 저장
   emit('close-checkout-coupon-modal')
 }
 
-const handleUpdateCoupons = (selectedIds: (number | null)[]) => {
-  // 이벤트에 포함될 데이터를 정리하는 로직
-  couponSelections.value = orderItems.map((item: OrderItemDto, index: number) => ({
-    productId: item.productId,
-    categoryId: item.categoryId,
-    couponInfoId: selectedIds[index] // number | null
-  }))
-}
+
+// 이벤트에 포함될 데이터를 정리하는 로직. 중간객체인 OrderItemWithCouponInfoDto[]를 두고,
+// 😀 side effect 방지 위해 중간격 객체 두고 적용시에 pinia update
+const handleUpdateCoupons = (selectedCoupons: (CouponInfoItemCheckoutResponse | null)[]) => {
+  orderItemsWithCouponSelections.value = orderItems.map((item: ProductInfo, index: number): OrderItemWithCouponInfoDto => {
+    const coupon = selectedCoupons[index]; // Get the selected coupon
+
+    return {
+      ...item,  // ProductInfo fields들을 Spread
+      
+      couponInfoId: coupon ? coupon.couponInfoId : null, // 따로 할당
+      couponInfoName: coupon ? coupon.couponInfoName : null,
+      appliesToType: coupon ? coupon.appliesToType : null,
+      appliedToId: coupon ? coupon.appliedToId : null,
+      discountType: coupon ? coupon.discountType : null,
+      discountValue: coupon ? coupon.discountValue : null,
+      endAt: coupon ? coupon.endAt : null,
+      minPurchaseAmount: coupon ? coupon.minPurchaseAmount : null,
+      maxDiscountAmount: coupon ? coupon.maxDiscountAmount : null,
+    };
+  });
+};
+
+const applyCouponDatas = () => {
+  const updatedProducts = orderItemsWithCouponSelections.value.map((item) => {
+    let discount = 0;
+
+    if (item.couponInfoId !== null && item.discountValue !== null) {
+      const totalPrice = item.orderPrice * item.quantity;
+
+      if (item.discountType === 'PERCENTAGE') {
+        discount = totalPrice * (item.discountValue / 100);
+        const maxDiscountAmount = item.maxDiscountAmount ?? Number.MAX_VALUE;
+        discount = Math.min(discount, maxDiscountAmount);
+      } else if (item.discountType === 'FIXED_AMOUNT') {
+        discount = item.discountValue;
+      }
+    }
+
+    return {
+      ...item,
+      discountAmount: discount,
+      couponInfoId: item.couponInfoId
+    };
+  });
+
+  productStore.setProducts(updatedProducts, productStore.orderType);
+};
+
 
 onMounted(fetchCouponsForCheckout)
 </script>
