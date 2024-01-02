@@ -153,10 +153,11 @@
 
 .user-info-second-row-third-col > input {
     color: var(--Grayscale5, #000);
+    width: 97%; 
     font-family: The Jamsil;
     font-size: 20px;
     font-style: normal;
-    font-weight: 300;
+    font-weight: 200;
     line-height: 30px; /* 250% */
     margin-bottom: 24px;
 }
@@ -283,4 +284,15 @@
     padding: 8px 16px;
     margin: 0 4px;
     cursor: pointer;
+  }
+
+
+ .default-button {
+    background-color: #e0e0e0;
+    color: #777777;
+    cursor: not-allowed;
+ }
+
+ div[hidden] {
+    display: none;
   }

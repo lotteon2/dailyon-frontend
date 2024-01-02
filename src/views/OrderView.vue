@@ -19,11 +19,17 @@ const { point } = storeToRefs(useMemberStore())
 const redirectUrl = ref('')
 const newWindow = ref<any>()
 const isCheckoutCouponModalOpen = ref(false)
-const orderItemWithCouponInfoIdList = ref<OrderItemWithCouponInfoIdDto[]>([])
+const availableCouponsCount = ref(0)
 
 const totalOrderPrice = computed((): number => {
   return products.value.reduce((prev: number, current: ProductInfo): number => {
     return prev + current.orderPrice
+  }, 0)
+})
+
+const totalDiscountAmount = computed((): number => {
+  return products.value.reduce((prev: number, current: ProductInfo): number => {
+    return prev + (current.discountAmount ? current.discountAmount : 0)
   }, 0)
 })
 
@@ -53,9 +59,6 @@ const openCheckoutCouponModal = () => {
 const closeCheckoutCouponModal = () => {
   isCheckoutCouponModalOpen.value = false
 }
-const applyCoupons = (couponSelections: OrderItemWithCouponInfoIdDto[]) => {
-  orderItemWithCouponInfoIdList.value = couponSelections
-}
 
 const addDeliveryInfo = async (addressInfo: DeliveryInfo) => {
   deliveryInfo.value = addressInfo
@@ -64,33 +67,6 @@ const addDeliveryInfo = async (addressInfo: DeliveryInfo) => {
 const changeReceiver = async (input: string) => {
   deliveryInfo.value.receiver = input
 }
-
-const orderItems = [
-  {
-    productName: '나이키 에어포스1',
-    imgUrl: '',
-    productId: 1,
-    categoryId: 1,
-    count: 1,
-    originalPrice: 10000
-  },
-  {
-    productName: '준지 189',
-    imgUrl: 'https://blog.kakaocdn.net/dn/bvusF3/btqDn1mPRqa/lk6VdECDc10kixNhnBHxL1/img.jpg',
-    productId: 2,
-    categoryId: 1,
-    count: 2,
-    originalPrice: 20000
-  },
-  {
-    productName: 'IAB Studio',
-    imgUrl: 'https://iab-studio.com/media/pages/about/aa600c7d43-1694580757/aboutus.jpg',
-    productId: 3,
-    categoryId: 2,
-    count: 1,
-    originalPrice: 15000
-  }
-]
 
 const doOrder = async () => {
   if (orderType.value !== 'GIFT' && !validation()) {
@@ -170,9 +146,8 @@ onBeforeUnmount(() => {
 <template>
   <CheckoutCouponModal
     :isCheckoutCouponModalOpen="isCheckoutCouponModalOpen"
-    :orderItems="orderItems"
+    :orderItems="products"
     @close-checkout-coupon-modal="closeCheckoutCouponModal"
-    @apply-coupons="applyCoupons"
   ></CheckoutCouponModal>
   <div class="main-container">
     <h1 v-if="orderType !== 'GIFT'">주문/결제</h1>
@@ -195,9 +170,9 @@ onBeforeUnmount(() => {
             </div>
             <div class="discount-container-second-col">
               <div class="discount-container-row">
-                N원
-                <div class="white-button">쿠폰사용</div>
-                <span>(보유 N장)</span>
+                {{ totalDiscountAmount }}원
+                <div class="white-button" @click="openCheckoutCouponModal">쿠폰사용</div>
+                <span>(보유 {{ availableCouponsCount }}장)</span>
               </div>
               <div class="discount-container-row">
                 {{ usedPoints?.toLocaleString() }}원
