@@ -7,6 +7,7 @@
       <h1>나의 구매</h1>
       <h2><RouterLink to="/order-history">주문/배송 조회</RouterLink></h2>
       <h2><RouterLink to="/point-payment-history">포인트 결제 내역</RouterLink></h2>
+      <h2><RouterLink to="/gifts">선물함 조회</RouterLink></h2>
       <div class="left-inner-line"></div>
       <h1>나의 혜택</h1>
       <h2><RouterLink to="/point-history">포인트 사용 내역</RouterLink></h2>

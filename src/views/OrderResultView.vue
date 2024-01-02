@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import { Result, Button } from 'ant-design-vue'
 import { useRoute } from 'vue-router'
-import { ref } from 'vue'
-
+import { ref, onMounted } from 'vue'
+import { useProductStore } from '@/stores/product/ProductStore'
+const productStore = useProductStore()
 const route = useRoute()
 const orderId = ref(route.params.orderId)
+onMounted(() => {
+  productStore.deletePinia()
+})
 </script>
 <template>
   <Result

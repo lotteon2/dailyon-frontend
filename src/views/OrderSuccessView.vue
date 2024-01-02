@@ -5,10 +5,9 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
-
 const route = useRoute()
 const orderId = ref(route.params.orderId)
-
+const VITE_SUCCESS_REDIRECT_URL = ref<string>(import.meta.env.VITE_SUCCESS_REDIRECT_URL)
 onMounted(async () => {
   await window.opener.postMessage(
     {
@@ -17,7 +16,7 @@ onMounted(async () => {
         orderId: orderId.value
       }
     },
-    'http://localhost:5173'
+    VITE_SUCCESS_REDIRECT_URL
   )
   window.close()
 })

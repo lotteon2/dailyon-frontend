@@ -49,7 +49,9 @@ const { isCheckoutCouponModalOpen, orderItems } = defineProps<{
   orderItems: ProductInfo[]
 }>()
 
-const emit = defineEmits(['close-checkout-coupon-modal', 'apply-coupons'])
+
+const emit = defineEmits(['close-checkout-coupon-modal'])
+// , {event: 'apply-coupons', null}: void
 
 const computedNestedCoupons = ref<CouponInfoItemCheckoutResponse[][]>([])
 const orderItemsWithCouponSelections = ref<OrderItemWithCouponInfoDto[]>([]) // 중간객체

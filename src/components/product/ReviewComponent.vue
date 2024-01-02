@@ -24,10 +24,6 @@ const productId = ref<number>(Number(route.params.id))
 const reviews = ref<ReviewResponse[]>()
 const totalElements = ref<number>()
 const totalPages = ref<number>()
-// onBeforeMount(async () => {
-//   productId.value = Number(route.params.id)
-//   await fetchDefaultData(requestPage.value, productId.value)
-// })
 
 const fetchDefaultData = async (requestPage: any, productId: number): Promise<void> => {
   const data = await getProductReviews(requestPage.value, productId)
