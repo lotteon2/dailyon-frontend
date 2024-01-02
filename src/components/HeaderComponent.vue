@@ -1,14 +1,45 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
-import { onBeforeMount, onMounted, ref, computed } from 'vue'
+import { onBeforeMount, onMounted, onBeforeUnmount, ref, computed, watch } from 'vue'
 import HeaderCategoryComponent from '@/components/HeaderCategoryComponent.vue'
+import NotificationComponent from '@/components/notification/NotificationComponent.vue'
 import { useMemberStore } from '@/stores/member/MemberStore'
 import { useCategoryStore } from '@/stores/category/CategoryStore'
+import { useNotificationStore } from '@/stores/notification/NotificationStore'
 
 const isLoggedIn = () => {
   const token = localStorage.getItem('accessToken')
   const isLoggedIn = !!token
   return isLoggedIn
+}
+
+/**
+ * 알림 구독관련
+ */
+let unsubscribe: (() => void) | null = null // 구독 해지 함수를 저장하기 위한 변수
+const notificationStore = useNotificationStore()
+
+watch(
+  isLoggedIn,
+  (loggedIn) => {
+    if (loggedIn && !unsubscribe) {
+      unsubscribe = notificationStore.subscribeToNotifications()
+    } else if (!loggedIn && unsubscribe) {
+      unsubscribe()
+      unsubscribe = null
+    }
+  },
+  { immediate: true } // watch가 처음 실행될 때 로직을 실행
+)
+
+onBeforeUnmount(() => {
+  if (unsubscribe) {
+    unsubscribe()
+  }
+})
+const showNotificationDropdown = ref<boolean>(false)
+const toggleShowNotificationDropdown = () => {
+  showNotificationDropdown.value = !showNotificationDropdown.value
 }
 
 const showCategoryDropdown = ref<boolean>(true)
@@ -54,20 +85,20 @@ onBeforeMount(() => {
     </div>
     <div class="auth-wrapper">
       <RouterLink v-if="!isLoggedIn()" to="/login" class="login-text">Login</RouterLink>
-        <div v-else class="profile-wrapper">
-          <RouterLink to="/member-info" class="profile-link">
-            <img
-              v-if="memberInfo.profileImgUrl"
-              :src="memberInfo.profileImgUrl"
-              alt="Profile Image"
-              class="profile-image"
-            />
-            <div class="profile-text">
-              <span v-if="memberInfo.nickname" class="nickname">{{ memberInfo.nickname }}님</span>
-              <span class="welcome">환영합니다!</span>
-            </div>
-          </RouterLink>
-        </div>
+      <div v-else class="profile-wrapper">
+        <RouterLink to="/member-info" class="profile-link">
+          <img
+            v-if="memberInfo.profileImgUrl"
+            :src="memberInfo.profileImgUrl"
+            alt="Profile Image"
+            class="profile-image"
+          />
+          <div class="profile-text">
+            <span v-if="memberInfo.nickname" class="nickname">{{ memberInfo.nickname }}님</span>
+            <span class="welcome">환영합니다!</span>
+          </div>
+        </RouterLink>
+      </div>
     </div>
   </div>
   <div class="header-divide-line-wrapper">
@@ -119,7 +150,8 @@ onBeforeMount(() => {
       >
     </div>
     <div class="nav-tab-wrapper">
-      <RouterLink to="/notifications" class="nav-tab-icon">
+      <NotificationComponent v-show="showNotificationDropdown" />
+      <div @click="toggleShowNotificationDropdown" class="nav-tab-icon cursor-on-hover">
         <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="black">
           <g clip-path="url(#clip0_197_30)">
             <path
@@ -137,7 +169,7 @@ onBeforeMount(() => {
             </clipPath>
           </defs>
         </svg>
-      </RouterLink>
+      </div>
     </div>
     <div class="nav-tab-wrapper">
       <RouterLink to="/carts" class="nav-tab-icon">
