@@ -3,7 +3,7 @@
     <div class="order-item">
       <div class="product-name-block">
         <div class="image-container">
-          <img :src="orderItem.imgUrl" alt="상품이미지" />
+          <img :src="(orderItem.imgUrl as string)" alt="상품이미지" />
         </div>
         <div class="product-name">{{ orderItem.productName }}</div>
       </div>
@@ -11,19 +11,19 @@
       <div class="price-block">
         <div>
           <div class="price-desc">상품 가격</div>
-          <div class="price-value">{{ formatPrice(orderItem.originalPrice) }}원</div>
+          <div class="price-value">{{ formatPrice(orderItem.orderPrice) }}원</div>
         </div>
         <div class="price-operator">x</div>
         <div>
           <div class="price-desc">개수</div>
-          <div class="price-value bold">{{ orderItem.count }}개</div>
+          <div class="price-value bold">{{ orderItem.quantity }}개</div>
         </div>
 
         <div class="price-operator">=</div>
         <div>
           <div class="price-desc">총 가격</div>
           <div class="price-value bold">
-            {{ formatPrice(orderItem.originalPrice * orderItem.count) }}원
+            {{ formatPrice(orderItem.orderPrice * orderItem.quantity) }}원
           </div>
         </div>
       </div>
@@ -86,13 +86,15 @@ import type {
   CouponInfoItemCheckoutResponse
 } from '@/apis/coupon/CouponItemDto'
 import type { OrderItemDto } from '@/types/coupon'
+import type { ProductInfo } from '@/apis/product/ProductDto'
 
 const emit = defineEmits<{
-  (event: 'apply-coupon', orderItemIndex: number, couponInfoId: number | null): void
+  // (event: 'apply-coupon', orderItemIndex: number, couponInfoId: number | null): void
+  (event: 'apply-coupon', orderItemIndex: number, couponInfoItem: CouponInfoItemCheckoutResponse |null): void
 }>()
 
 const props = defineProps<{
-  orderItem: OrderItemDto
+  orderItem: ProductInfo
   coupons: CouponInfoItemCheckoutResponse[]
   selectedCouponId: number | null
   orderItemIndex: number
@@ -101,61 +103,7 @@ const props = defineProps<{
 const selectedDiscount = ref<number>(0)
 
 //😀//////////////////////////////////////////////
-const mockCoupons: CouponInfoItemCheckoutResponse[] = [
-  {
-    couponInfoId: 1,
-    couponInfoName: '[특가할인] 나이키 에어포스1 20% 할인',
-    appliesToType: 'PRODUCT',
-    appliedToId: 1,
-    discountType: 'PERCENTAGE',
-    discountValue: 20,
-    endAt: new Date().toISOString(), // converting current date-time to ISO string
-    minPurchaseAmount: 15000,
-    maxDiscountAmount: 2000
-  },
-  // Add more coupon mock objects here
-  {
-    couponInfoId: 2,
-    couponInfoName: '나이키 에어포스1 5000원 할인',
-    appliesToType: 'PRODUCT',
-    appliedToId: 1,
-    discountType: 'FIXED_AMOUNT',
-    discountValue: 5000,
-    endAt: new Date(Date.now() + 86400000).toISOString(), // One day later
-    minPurchaseAmount: 10000,
-    maxDiscountAmount: undefined
-  },
-  {
-    couponInfoId: 3,
-    couponInfoName: '[특가할인] 신발 카테고리 15% 할인',
-    appliesToType: 'CATEGORY',
-    appliedToId: 2,
-    discountType: 'PERCENTAGE',
-    discountValue: 15,
-    endAt: new Date(Date.now() + 2 * 86400000).toISOString(), // Two days later
-    minPurchaseAmount: 0,
-    maxDiscountAmount: 15000
-  },
-  {
-    couponInfoId: 4,
-    couponInfoName: '남성 의류 1000원 할인',
-    appliesToType: 'CATEGORY',
-    appliedToId: 1,
-    discountType: 'FIXED_AMOUNT',
-    discountValue: 1000,
-    endAt: new Date(Date.now() + 3 * 86400000).toISOString(), // Three days later
-    minPurchaseAmount: 8000,
-    maxDiscountAmount: 5000
-  }
-  // You can add as many as needed following the pattern above
-]
 
-// Use ref to create a reactive object for coupons, initially assign mock data
-const coupons = ref<CouponInfoItemResponse[]>([])
-
-onMounted(() => {
-  coupons.value = mockCoupons
-})
 ///////////////////////////////////////////////////////////
 const formatPrice = (price: number): string => {
   return new Intl.NumberFormat('ko-KR').format(price)
@@ -166,14 +114,14 @@ const displayAmount = (amount?: number | null): string => {
 }
 
 const onCouponSelected = (couponId: number | null) => {
-  const coupon = coupons.value.find((c) => c.couponInfoId === couponId)
+  const coupon = props.coupons.find((c) => c.couponInfoId === couponId)
   calculateDiscount(coupon)
-  emit('apply-coupon', props.orderItemIndex, couponId)
+  emit('apply-coupon', props.orderItemIndex, coupon?? null)
 }
 
 const calculateDiscount = (coupon?: CouponInfoItemResponse | null): void => {
   if (coupon && props.orderItem) {
-    const totalPrice = props.orderItem.originalPrice * props.orderItem.count
+    const totalPrice = props.orderItem.orderPrice * props.orderItem.quantity
     let discount = 0
     if (coupon.discountType === 'PERCENTAGE') {
       discount = totalPrice * (coupon.discountValue / 100)
@@ -193,13 +141,13 @@ const calculateDiscount = (coupon?: CouponInfoItemResponse | null): void => {
   }
 }
 const isCouponDisabled = (coupon: CouponInfoItemCheckoutResponse): boolean => {
-  return props.orderItem.originalPrice * props.orderItem.count < (coupon.minPurchaseAmount || 0)
+  return props.orderItem.orderPrice * props.orderItem.quantity < (coupon.minPurchaseAmount || 0)
 }
 
 watch(
   () => props.selectedCouponId,
   (newCouponId: number | null) => {
-    const coupon = coupons.value.find((c: CouponInfoItemResponse) => c.couponInfoId === newCouponId)
+    const coupon = props.coupons.find((c: CouponInfoItemResponse) => c.couponInfoId === newCouponId)
     calculateDiscount(coupon)
   },
   {
@@ -207,14 +155,6 @@ watch(
   }
 )
 
-// const onCouponChange = (event: Event) => {
-//   const target = event.target as HTMLInputElement
-//   if (target.checked) {
-//     emit('coupon-change', parseInt(target.value)) //emit selection
-//   } else {
-//     emit('coupon-change', null) //emit deselection
-//   }
-// }
 </script>
 
 <style scoped>
