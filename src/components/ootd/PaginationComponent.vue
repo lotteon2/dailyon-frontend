@@ -22,12 +22,13 @@ const props = defineProps({
 const getPageRange = computed(() => {
   let rangeStart = ref<number>(0)
   if (props.totalPages < 5 || props.requestPage + 5 < props.totalPages) {
-    rangeStart.value = props.requestPage
+    if(rangeStart.value >= 5) {
+      rangeStart.value = props.requestPage
+    }
   } else {
     rangeStart.value = props.totalPages - 5
   }
   const rangeEnd = Math.min(rangeStart.value + 5, props.totalPages)
-
   return Array.from(
     { length: rangeEnd - rangeStart.value },
     (_, index) => rangeStart.value + index + 1
