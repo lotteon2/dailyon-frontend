@@ -3,7 +3,7 @@
     <div class="order-item">
       <div class="product-name-block">
         <div class="image-container">
-          <img :src="(orderItem.imgUrl as string)" alt="상품이미지" />
+          <img :src="orderItem.imgUrl as string" alt="상품이미지" />
         </div>
         <div class="product-name">{{ orderItem.productName }}</div>
       </div>
@@ -90,7 +90,11 @@ import type { ProductInfo } from '@/apis/product/ProductDto'
 
 const emit = defineEmits<{
   // (event: 'apply-coupon', orderItemIndex: number, couponInfoId: number | null): void
-  (event: 'apply-coupon', orderItemIndex: number, couponInfoItem: CouponInfoItemCheckoutResponse |null): void
+  (
+    event: 'apply-coupon',
+    orderItemIndex: number,
+    couponInfoItem: CouponInfoItemCheckoutResponse | null
+  ): void
 }>()
 
 const props = defineProps<{
@@ -116,7 +120,7 @@ const displayAmount = (amount?: number | null): string => {
 const onCouponSelected = (couponId: number | null) => {
   const coupon = props.coupons.find((c) => c.couponInfoId === couponId)
   calculateDiscount(coupon)
-  emit('apply-coupon', props.orderItemIndex, coupon?? null)
+  emit('apply-coupon', props.orderItemIndex, coupon ?? null)
 }
 
 const calculateDiscount = (coupon?: CouponInfoItemResponse | null): void => {
@@ -147,14 +151,18 @@ const isCouponDisabled = (coupon: CouponInfoItemCheckoutResponse): boolean => {
 watch(
   () => props.selectedCouponId,
   (newCouponId: number | null) => {
-    const coupon = props.coupons.find((c: CouponInfoItemResponse) => c.couponInfoId === newCouponId)
-    calculateDiscount(coupon)
+    console.log(props.coupons)
+    if (props.coupons !== undefined && props.coupons.length) {
+      const coupon = props.coupons.find(
+        (c: CouponInfoItemResponse) => c.couponInfoId === newCouponId
+      )
+      calculateDiscount(coupon)
+    }
   },
   {
     immediate: true // This ensures the watcher is triggered immediately after the component is mounted
   }
 )
-
 </script>
 
 <style scoped>
