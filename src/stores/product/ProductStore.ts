@@ -11,8 +11,10 @@ export const useProductStore = defineStore(
     const orderType = ref()
 
     const setProducts = (productInfos: ProductInfo[], type: String) => {
+      console.log('Pinia Before setting products:', products.value)
       products.value = productInfos
       orderType.value = type
+      console.log('Pinia After setting products:', products.value)
     }
 
     const setReceiver = (data: GiftInfo) => {

@@ -49,7 +49,6 @@ const { isCheckoutCouponModalOpen, orderItems } = defineProps<{
   orderItems: ProductInfo[]
 }>()
 
-
 const emit = defineEmits(['close-checkout-coupon-modal'])
 // , {event: 'apply-coupons', null}: void
 
@@ -65,6 +64,8 @@ const fetchCouponsForCheckout = async () => {
   computedNestedCoupons.value = (
     await getCouponsForCheckout(productCategoryPairs)
   ).nestedCouponInfoItemResponses
+
+  // TODO: 2차원배열의 computedNestedCoupons.value의 원소들을 set으로 만들어서 개수 emit
 }
 
 const closeModal = () => {
@@ -80,6 +81,8 @@ const applyCouponsAndClose = () => {
 // 이벤트에 포함될 데이터를 정리하는 로직. 중간객체인 OrderItemWithCouponInfoDto[]를 두고,
 // 😀 side effect 방지 위해 중간격 객체 두고 적용시에 pinia update
 const handleUpdateCoupons = (selectedCoupons: (CouponInfoItemCheckoutResponse | null)[]) => {
+  console.log('handleUpdateCoupons - selectedCoupons:', selectedCoupons)
+
   orderItemsWithCouponSelections.value = orderItems.map(
     (item: ProductInfo, index: number): OrderItemWithCouponInfoDto => {
       const coupon = selectedCoupons[index] // Get the selected coupon
@@ -102,10 +105,14 @@ const handleUpdateCoupons = (selectedCoupons: (CouponInfoItemCheckoutResponse | 
 }
 
 const applyCouponDatas = () => {
-  const updatedProducts = orderItemsWithCouponSelections.value.map((item) => {
+  console.log('1. Before updating products:', productStore.products.value)
+
+  const updatedProducts: ProductInfo[] = orderItemsWithCouponSelections.value.map((item) => {
     let discount = 0
 
     if (item.couponInfoId !== null && item.discountValue !== null) {
+      console.log(`2. Calculating discount for product ${item.productId}`)
+
       const totalPrice = item.orderPrice * item.quantity
 
       if (item.discountType === 'PERCENTAGE') {
@@ -115,6 +122,8 @@ const applyCouponDatas = () => {
       } else if (item.discountType === 'FIXED_AMOUNT') {
         discount = item.discountValue
       }
+    } else {
+      console.log(`2. No discount for product ${item.productId}`)
     }
 
     return {
@@ -124,6 +133,7 @@ const applyCouponDatas = () => {
     }
   })
 
+  console.log('1. After updating products:', updatedProducts)
   productStore.setProducts(updatedProducts, productStore.orderType)
 }
 
