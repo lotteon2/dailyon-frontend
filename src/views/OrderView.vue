@@ -189,6 +189,7 @@ onBeforeUnmount(() => {
           :totalOrderPrice="totalOrderPrice"
           :usedPoints="usedPoints"
           :totalPaymentPrice="totalPaymentPrice"
+          :totalDiscountAmount="totalDiscountAmount"
           @doOrder="doOrder"
         />
       </div>
