@@ -151,7 +151,6 @@ const isCouponDisabled = (coupon: CouponInfoItemCheckoutResponse): boolean => {
 watch(
   () => props.selectedCouponId,
   (newCouponId: number | null) => {
-    console.log(props.coupons)
     if (props.coupons !== undefined && props.coupons.length) {
       const coupon = props.coupons.find(
         (c: CouponInfoItemResponse) => c.couponInfoId === newCouponId
