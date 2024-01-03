@@ -49,12 +49,24 @@ const { isCheckoutCouponModalOpen, orderItems } = defineProps<{
   orderItems: ProductInfo[]
 }>()
 
-
 const emit = defineEmits(['close-checkout-coupon-modal'])
 // , {event: 'apply-coupons', null}: void
 
 const computedNestedCoupons = ref<CouponInfoItemCheckoutResponse[][]>([])
-const orderItemsWithCouponSelections = ref<OrderItemWithCouponInfoDto[]>([]) // 중간객체
+const orderItemsWithCouponSelections = ref<OrderItemWithCouponInfoDto[]>(
+  orderItems.map((item) => ({
+    ...item,
+    couponInfoId: null,
+    couponInfoName: null,
+    appliesToType: null,
+    appliedToId: null,
+    discountType: null,
+    discountValue: null,
+    endAt: null,
+    minPurchaseAmount: null,
+    maxDiscountAmount: null
+  }))
+) // 중간객체
 
 const fetchCouponsForCheckout = async () => {
   // 😀 side effect 우려되서 이렇게 둠.
