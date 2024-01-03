@@ -15,6 +15,11 @@ const props = defineProps({
     type: Number,
     required: true,
     default: 0
+  },
+  totalDiscountAmount: {
+    type: Number,
+    required: true,
+    default: 0
   }
 })
 const emit = defineEmits(['doOrder'])
@@ -37,14 +42,22 @@ const doOrder = () => {
         <div class="pay-second-col">
           <span>{{ props.totalOrderPrice?.toLocaleString() }} 원</span>
           <span>총 배송비</span>
-          <span>- 총 할인</span>
+          <span>- {{ props.totalDiscountAmount?.toLocaleString() }} 원</span>
           <span>- {{ props.usedPoints?.toLocaleString() }} 원</span>
         </div>
       </div>
       <div class="inner-line"></div>
       <div class="pay-inner-second-block">
         <span>총 결제금액</span>
-        <span>{{ props.totalPaymentPrice.toLocaleString() }} 원</span>
+        <span
+          >{{
+            (
+              props.totalPaymentPrice -
+              (props.totalDiscountAmount - props.usedPoints)
+            ).toLocaleString()
+          }}
+          원</span
+        >
       </div>
     </div>
   </div>

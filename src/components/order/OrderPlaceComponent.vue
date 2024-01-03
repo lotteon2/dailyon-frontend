@@ -18,12 +18,29 @@ const closeModal = () => {
 const address = ref({
   postCode: '',
   roadAddress: '',
-  detailAddress: ''
+  detailAddress: '',
+  phoneNumber: ''
 })
 
 const fill = (addressInfo: any) => {
   address.value = addressInfo
   emit('submit', addressInfo)
+}
+
+const limitInput = () => {
+  let numericValue = address.value.phoneNumber.replace(/[^\d]/g, '')
+  if (numericValue.length > 11) {
+    numericValue = numericValue.slice(0, 11)
+  }
+  address.value.phoneNumber = numericValue
+}
+
+const limitReceiver = () => {
+  let temp = receiver.value
+  if (temp.length > 7) {
+    temp = temp.slice(0, 7)
+  }
+  receiver.value = temp
 }
 </script>
 
@@ -56,11 +73,12 @@ const fill = (addressInfo: any) => {
           v-model="receiver"
           @change="emit('changeReceiver', receiver)"
           placeholder="성함"
+          @input="limitReceiver"
         />
         <input type="text" :value="address.postCode" placeholder="우편번호" disabled />
         <input type="text" :value="address.roadAddress" placeholder="주소" disabled />
         <input type="text" :value="address.detailAddress" placeholder="상세주소" disabled />
-        <input type="text" placeholder="휴대폰" />
+        <input type="text" v-model="address.phoneNumber" @input="limitInput" placeholder="휴대폰" />
       </div>
       <div class="place-third-col">
         <span>&nbsp;</span>
