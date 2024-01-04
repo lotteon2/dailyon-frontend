@@ -16,6 +16,7 @@ const closeModal = () => {
 }
 
 const address = ref({
+  receiver: '',
   postCode: '',
   roadAddress: '',
   detailAddress: '',
@@ -23,7 +24,9 @@ const address = ref({
 })
 
 const fill = (addressInfo: any) => {
-  address.value = addressInfo
+  address.value.postCode = addressInfo.postCode
+  address.value.roadAddress = addressInfo.roadAddress
+  address.value.detailAddress = addressInfo.detailAddress
   emit('submit', addressInfo)
 }
 
@@ -36,11 +39,11 @@ const limitInput = () => {
 }
 
 const limitReceiver = () => {
-  let temp = receiver.value
+  let temp = address.value.receiver
   if (temp.length > 7) {
     temp = temp.slice(0, 7)
   }
-  receiver.value = temp
+  address.value.receiver = temp
 }
 </script>
 
@@ -70,7 +73,7 @@ const limitReceiver = () => {
       <div class="user-info-second-col">
         <input
           type="text"
-          v-model="receiver"
+          v-model="address.receiver"
           @change="emit('changeReceiver', receiver)"
           placeholder="성함"
           @input="limitReceiver"
