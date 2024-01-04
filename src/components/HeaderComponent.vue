@@ -5,6 +5,8 @@ import HeaderCategoryComponent from '@/components/HeaderCategoryComponent.vue'
 import { useMemberStore } from '@/stores/member/MemberStore'
 import { useCategoryStore } from '@/stores/category/CategoryStore'
 
+const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
+
 const isLoggedIn = () => {
   const token = localStorage.getItem('accessToken')
   const isLoggedIn = !!token
@@ -57,8 +59,8 @@ onBeforeMount(() => {
         <div v-else class="profile-wrapper">
           <RouterLink to="/member-info" class="profile-link">
             <img
-              v-if="memberInfo.profileImgUrl"
-              :src="memberInfo.profileImgUrl"
+              v-if="`${VITE_STATIC_IMG_URL}${memberInfo.profileImgUrl}`"
+              :src="`${VITE_STATIC_IMG_URL}${memberInfo.profileImgUrl}`"
               alt="Profile Image"
               class="profile-image"
             />
