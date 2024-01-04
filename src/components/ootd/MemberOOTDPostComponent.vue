@@ -1,5 +1,4 @@
-<script setup lang='ts'>
-
+<script setup lang="ts">
 import { onBeforeMount, reactive, ref, watch } from 'vue'
 import type { OOTDPostPageResponse, OOTDPostResponse } from '@/apis/ootd/PostDto'
 import { getMemberPosts } from '@/apis/ootd/PostService'
@@ -49,7 +48,12 @@ const onChangeSort = async (sort: string) => {
 watch(requestSort, async (afterSort, beforeSort) => {
   requestPage.value = 0
   if (beforeSort !== afterSort) {
-    const postPageResponse = await getMemberPosts(props.postMemberId!, requestPage.value, requestSize.value, afterSort)
+    const postPageResponse = await getMemberPosts(
+      props.postMemberId!,
+      requestPage.value,
+      requestSize.value,
+      afterSort
+    )
     posts.value = postPageResponse.posts
   }
 })
@@ -62,28 +66,40 @@ const onChangePage = async (page: number) => {
 
 watch(requestPage, async (afterPage, beforePage) => {
   if (afterPage < totalPages.value!) {
-    const postPageResponse = await getMemberPosts(props.postMemberId!, afterPage, requestSize.value, requestSort.value)
+    const postPageResponse = await getMemberPosts(
+      props.postMemberId!,
+      afterPage,
+      requestSize.value,
+      requestSort.value
+    )
     posts.value = postPageResponse.posts
     totalPages.value = postPageResponse.totalPages
     totalElements.value = postPageResponse.totalElements
   }
 })
-
 </script>
 
 <template>
-  <div class='ootd-container'>
-    <div class='ootd-header-container'>
-      <div class='ootd-header-bar-wrapper'>
-        <OOTDSortComponent :onChangeSort='onChangeSort' :requestSort='requestSort' :sortOptions='sortOptions' />
-        <div class='blank-gap'></div>
+  <div class="ootd-container">
+    <div class="ootd-header-container">
+      <div class="ootd-header-bar-wrapper">
+        <OOTDSortComponent
+          :onChangeSort="onChangeSort"
+          :requestSort="requestSort"
+          :sortOptions="sortOptions"
+        />
+        <div class="blank-gap"></div>
       </div>
     </div>
-    <OOTDPostCardComponent :posts='posts' />
-    <PaginationComponent :requestPage='requestPage' :totalPages='totalPages' :onChangePage='onChangePage' />
+    <OOTDPostCardComponent :posts="posts" />
+    <PaginationComponent
+      :requestPage="requestPage"
+      :totalPages="totalPages"
+      :onChangePage="onChangePage"
+    />
   </div>
 </template>
 
 <style scoped>
-@import "@/assets/css/ootd/member-ootd-post.css";
+@import '@/assets/css/ootd/member-ootd-post.css';
 </style>

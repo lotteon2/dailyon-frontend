@@ -6,7 +6,7 @@ import { useProductStore } from '@/stores/product/ProductStore'
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
 const productStore = useProductStore()
-const { products } = storeToRefs(productStore)
+const { products, orderType, giftInfo } = storeToRefs(productStore)
 
 const deleteItem = async (index: number) => {}
 </script>
@@ -16,7 +16,7 @@ const deleteItem = async (index: number) => {}
     <div class="line"></div>
     <div class="shop-wrapper" v-for="(product, index) in products" :key="index">
       <div class="shop-name-div">
-        <span></span>
+        <span v-if="orderType === 'GIFT'">받는 사람 : {{ giftInfo.receiverName }}</span>
         <span>배송: 배송비</span>
       </div>
       <div class="shop-prod-div">
@@ -49,7 +49,6 @@ const deleteItem = async (index: number) => {}
                 <div class="button1">수량</div>
                 {{ product.quantity }}
               </div>
-              <div class="button2"><span>옵션/수량 변경</span></div>
             </div>
             <div class="info-second-col">
               <span>상품금액</span>
@@ -58,8 +57,16 @@ const deleteItem = async (index: number) => {}
             </div>
             <div class="info-third-col">
               <span>{{ product.orderPrice.toLocaleString() }} 원</span>
-              <span><div class="highlight1">{{}}</div></span>
-              <span> <div class="highlight2">{{}}</div></span>
+              <span
+                ><div class="highlight1">
+                  {{ product.discountAmount.toLocaleString() }} 원
+                </div></span
+              >
+              <span>
+                <div class="highlight2">
+                  {{ (product.orderPrice - product.discountAmount).toLocaleString() }} 원
+                </div></span
+              >
             </div>
           </div>
         </div>

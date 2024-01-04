@@ -81,12 +81,12 @@ const handleOk = async () => {
     profileImgUrl: profileImgUrl.value
   }
   const url = await createReview(reviewCreateDto)
+  confirmLoading.value = true
   uploadImageToS3(url, imageFile.value as any).catch((error: any) => {
     message.error('이미지 등록 중 에러 발생')
     return
   })
 
-  confirmLoading.value = true
   setTimeout(() => {
     message.success('등록되었습니다.')
     open.value = false

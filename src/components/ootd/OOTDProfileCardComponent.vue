@@ -1,16 +1,20 @@
-<script setup lang='ts'>
-
-import { onBeforeMount, ref } from 'vue'
+<script setup lang="ts">
+import { onBeforeMount, ref, defineEmits } from 'vue'
 import { getOOTDMemberProfile } from '@/apis/ootd/MemberService'
-import type { OOTDMemberProfileResponse, OOTDMemberProfileResponseWrapper } from '@/apis/ootd/MemberDto'
+import type {
+  OOTDMemberProfileResponse,
+  OOTDMemberProfileResponseWrapper
+} from '@/apis/ootd/MemberDto'
 import { useFollowStore } from '@/stores/follow/FollowStore'
 import { toggleFollow } from '@/apis/ootd/FollowService'
 import { onBeforeRouteLeave } from 'vue-router'
 import { useMemberStore } from '@/stores/member/MemberStore'
+import type { GiftInfo } from '@/apis/order/orderDto'
 
+const emit = defineEmits(['fetchData'])
 const memberStore = useMemberStore()
 const memberId = memberStore.getMemberInfo().memberId
-
+const nickname = memberStore.nickname ? memberStore.nickname : ''
 const followStore = useFollowStore()
 const follows = followStore.follows
 
@@ -32,10 +36,17 @@ const member = ref<OOTDMemberProfileResponse>({
   isFollowing: false
 })
 
-const fetchDefaultData = async (): Promise<OOTDMemberProfileResponseWrapper<OOTDMemberProfileResponse>> => {
+const fetchDefaultData = async (): Promise<
+  OOTDMemberProfileResponseWrapper<OOTDMemberProfileResponse>
+> => {
   const memberResponse = await getOOTDMemberProfile(props.postMemberId!)
   member.value = memberResponse.member
-
+  const giftInfo: GiftInfo = {
+    receiverId: member.value.id,
+    receiverName: member.value.nickname,
+    senderName: nickname
+  }
+  emit('fetchData', giftInfo)
   return memberResponse
 }
 
@@ -44,7 +55,9 @@ onBeforeMount(async () => {
 })
 
 const followButtonClickListener = (followingId: number, isFollowing: boolean | undefined) => {
-  member.value!.isFollowing ? member.value!.followerCount -= 1 : member.value!.followerCount += 1
+  member.value!.isFollowing
+    ? (member.value!.followerCount -= 1)
+    : (member.value!.followerCount += 1)
   member.value!.isFollowing = !isFollowing
   follows.has(followingId) ? follows.delete(followingId) : follows.add(followingId)
 }
@@ -68,13 +81,15 @@ onBeforeRouteLeave(async (to, from) => {
 
 // 새로고침 or 브라우저 창 닫을 때 이벤트
 window.addEventListener('beforeunload', async (event) => {
-  flushFollowStore().then((res) => {
-    window.location.reload()
-  }).catch((error) => {
-    console.error(error)
-    event.preventDefault()
-    event.returnValue = ''
-  })
+  flushFollowStore()
+    .then((res) => {
+      window.location.reload()
+    })
+    .catch((error) => {
+      console.error(error)
+      event.preventDefault()
+      event.returnValue = ''
+    })
 })
 
 const img = ref<HTMLImageElement | null>(null)
@@ -84,8 +99,6 @@ const imageSize = ref({
 })
 
 const getImageSize = async () => {
-
-  console.log(img.value)
   if (img.value) {
     await handleImageLoad()
   } else {
@@ -97,44 +110,64 @@ const handleImageLoad = async () => {
   if (img.value) {
     imageSize.value = {
       width: img.value.width,
-      height: img.value.height,
+      height: img.value.height
     }
   }
 }
 </script>
 
 <template>
-  <div class='profile-card'>
-    <img v-if='imageSize.width === 0 || imageSize.height === 0' class='profile-img' ref='img' @load='getImageSize'
-         src='@/assets/images/loading.gif' />
-    <img v-else class='profile-img' ref='img' @load='getImageSize'
-         :src='`${VITE_STATIC_IMG_URL}${member.profileImgUrl}?w=${imageSize.width}&h=${imageSize.height}`' />
-    <div class='nickname'>{{ member.nickname }}</div>
-    <div class='follow-wrapper'>
-      팔로워 <span class='follow-count'>{{ member.followerCount }}</span>
-      |
-      팔로우 <span class='follow-count'>{{ member.followingCount }}</span>
+  <div class="profile-card">
+    <img
+      v-if="imageSize.width === 0 || imageSize.height === 0"
+      class="profile-img"
+      ref="img"
+      @load="getImageSize"
+      src="@/assets/images/loading.gif"
+    />
+    <img
+      v-else
+      class="profile-img"
+      ref="img"
+      @load="getImageSize"
+      :src="`${VITE_STATIC_IMG_URL}${member.profileImgUrl}?w=${imageSize.width}&h=${imageSize.height}`"
+    />
+    <div class="nickname">{{ member.nickname }}</div>
+    <div class="follow-wrapper">
+      팔로워 <span class="follow-count">{{ member.followerCount }}</span> | 팔로우
+      <span class="follow-count">{{ member.followingCount }}</span>
     </div>
-    <div v-if='member.id === memberId'></div>
-    <div v-else-if='member.isFollowing' class='follow-inactive-btn'
-         @click='followButtonClickListener(member.id, member.isFollowing)'>
-      <svg class='follow-inactive-check-icon' xmlns='http://www.w3.org/2000/svg' width='13' height='9'
-           viewBox='0 0 13 9' fill='none'>
-        <path d='M4.22659 9L0 4.77341L0.6072 4.16706L4.22659 7.78645L12.013 0L12.6194 0.60635L4.22659 9Z'
-              fill='#C6C6C6' />
+    <div v-if="member.id === memberId"></div>
+    <div
+      v-else-if="member.isFollowing"
+      class="follow-inactive-btn"
+      @click="followButtonClickListener(member.id, member.isFollowing)"
+    >
+      <svg
+        class="follow-inactive-check-icon"
+        xmlns="http://www.w3.org/2000/svg"
+        width="13"
+        height="9"
+        viewBox="0 0 13 9"
+        fill="none"
+      >
+        <path
+          d="M4.22659 9L0 4.77341L0.6072 4.16706L4.22659 7.78645L12.013 0L12.6194 0.60635L4.22659 9Z"
+          fill="#C6C6C6"
+        />
       </svg>
-      <div class='follow-inactive-btn-text'>
-        팔로우
-      </div>
+      <div class="follow-inactive-btn-text">팔로우</div>
     </div>
-    <div v-else class='follow-active-btn' @click='followButtonClickListener(member.id, member.isFollowing)'>
-      <div class='follow-active-btn-text'>
-        +팔로우
-      </div>
+    <div
+      v-else
+      class="follow-active-btn"
+      @click="followButtonClickListener(member.id, member.isFollowing)"
+    >
+      <div class="follow-active-btn-text">+팔로우</div>
     </div>
   </div>
 </template>
 
 <style scoped>
-@import "@/assets/css/ootd/ootd-profile-card.css";
+@import '@/assets/css/ootd/ootd-profile-card.css';
 </style>

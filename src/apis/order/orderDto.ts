@@ -29,12 +29,15 @@ export interface OrderDetailResponse {
 }
 
 export interface OrderSheet {
+  receiverId: number | null
+  receiverName: string | null
+  senderName: string | null
   usedPoints: Number | null
   type: String
   deliveryFee: Number | null
   totalCouponDiscountPrice: Number | null
   orderItems: OrderItem[]
-  deliveryInfo: DeliveryInfo
+  deliveryInfo: DeliveryInfo | null
   paymentType: String
 }
 
@@ -54,4 +57,25 @@ export interface DeliveryInfo {
   roadAddress: string
   detailAddress: string
   phoneNumber: string | null
+}
+
+export interface GiftInfo {
+  receiverId: number
+  receiverName: string
+  senderName: string
+}
+
+export interface GiftResponse {
+  orderNo: string
+  senderName: string
+  receiverName: string
+  status: string
+  productName: string
+  imgUrl: string
+}
+
+export interface GiftPageResponse<T extends GiftResponse> {
+  gifts: Array<T>
+  totalPages: number
+  totalElements: number
 }
