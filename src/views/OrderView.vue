@@ -78,7 +78,7 @@ const doOrder = async () => {
     const orderItem: OrderItem = {
       productId: product.productId,
       categoryId: product.categoryId,
-      couponInfoId: null,
+      couponInfoId: product.couponInfoId,
       sizeId: product.sizeId,
       orderPrice: product.orderPrice,
       quantity: product.quantity,
