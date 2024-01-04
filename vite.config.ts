@@ -7,14 +7,22 @@ import {
   ElementPlusResolver,
   VantResolver
 } from 'unplugin-vue-components/resolvers'
+
+import { Buffer } from 'buffer'
+
 Components({
   resolvers: [AntDesignVueResolver(), ElementPlusResolver(), VantResolver()]
 } as any)
 export default defineConfig({
   plugins: [vue()],
+  define: {
+    global: {},
+    Buffer: Buffer
+  },
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+      process: 'process/browser'
     }
   }
 })
