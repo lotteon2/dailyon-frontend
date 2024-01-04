@@ -7,6 +7,8 @@ import { useMemberStore } from '@/stores/member/MemberStore'
 import { useCategoryStore } from '@/stores/category/CategoryStore'
 import { useNotificationStore } from '@/stores/notification/NotificationStore'
 
+const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
+
 const isLoggedIn = () => {
   const token = localStorage.getItem('accessToken')
   const isLoggedIn = !!token
@@ -85,20 +87,20 @@ onBeforeMount(() => {
     </div>
     <div class="auth-wrapper">
       <RouterLink v-if="!isLoggedIn()" to="/login" class="login-text">Login</RouterLink>
-      <div v-else class="profile-wrapper">
-        <RouterLink to="/member-info" class="profile-link">
-          <img
-            v-if="memberInfo.profileImgUrl"
-            :src="memberInfo.profileImgUrl"
-            alt="Profile Image"
-            class="profile-image"
-          />
-          <div class="profile-text">
-            <span v-if="memberInfo.nickname" class="nickname">{{ memberInfo.nickname }}님</span>
-            <span class="welcome">환영합니다!</span>
-          </div>
-        </RouterLink>
-      </div>
+ <div v-else class="profile-wrapper">
+          <RouterLink to="/member-info" class="profile-link">
+            <img
+              v-if="`${VITE_STATIC_IMG_URL}${memberInfo.profileImgUrl}`"
+              :src="`${VITE_STATIC_IMG_URL}${memberInfo.profileImgUrl}`"
+              alt="Profile Image"
+              class="profile-image"
+            />
+            <div class="profile-text">
+              <span v-if="memberInfo.nickname" class="nickname">{{ memberInfo.nickname }}님</span>
+              <span class="welcome">환영합니다!</span>
+            </div>
+          </RouterLink>
+        </div>
     </div>
   </div>
   <div class="header-divide-line-wrapper">

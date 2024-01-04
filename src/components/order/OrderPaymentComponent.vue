@@ -35,13 +35,11 @@ const doOrder = () => {
       <div class="pay-inner-first-block">
         <div class="pay-first-col">
           <span>총 주문금액</span>
-          <span>총 배송비</span>
           <span>쿠폰 할인</span>
           <span>포인트</span>
         </div>
         <div class="pay-second-col">
           <span>{{ props.totalOrderPrice?.toLocaleString() }} 원</span>
-          <span>총 배송비</span>
           <span>- {{ props.totalDiscountAmount?.toLocaleString() }} 원</span>
           <span>- {{ props.usedPoints?.toLocaleString() }} 원</span>
         </div>
@@ -49,15 +47,7 @@ const doOrder = () => {
       <div class="inner-line"></div>
       <div class="pay-inner-second-block">
         <span>총 결제금액</span>
-        <span
-          >{{
-            (
-              props.totalPaymentPrice -
-              (props.totalDiscountAmount - props.usedPoints)
-            ).toLocaleString()
-          }}
-          원</span
-        >
+        <span>{{ (props.totalPaymentPrice - props.totalDiscountAmount).toLocaleString() }} 원</span>
       </div>
     </div>
   </div>

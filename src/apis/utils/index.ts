@@ -39,6 +39,7 @@ const axiosAuthApi = (baseURL: string) => {
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`
     }
+    
 
     return config
   })
