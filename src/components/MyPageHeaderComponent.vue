@@ -5,6 +5,8 @@ import { pointPaymentReady } from '@/apis/payment/payment'
 import type { PointPaymentDto } from '@/apis/payment/paymentDto'
 import { useMemberStore } from '@/stores/member/MemberStore';
 
+const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
+
 const router = useRouter()
 const redirectUrl = ref('')
 const displayModal = ref(false)
@@ -124,7 +126,7 @@ onBeforeUnmount(() => {
           <circle cx="75" cy="75" r="75" fill="white" />
         </mask>
         <image
-          :href="memberStore.profileImgUrl || undefined"
+        :href="`${VITE_STATIC_IMG_URL}${memberStore.profileImgUrl}` || undefined"
           x="0"
           y="0"
           width="150"

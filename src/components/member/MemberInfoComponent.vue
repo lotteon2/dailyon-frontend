@@ -7,11 +7,13 @@ import {
   setMember,
   getMemberAddress,
   getDefaultAddress,
-  setDefaultAddress
+  setDefaultAddress,
+  getImgUrl
 } from '@/apis/member/member'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 import type { MemberInfoDto } from '@/apis/member/MemberDto'
 import { deleteAddress } from '@/apis/member/member'
+import { uploadImageToS3 } from '@/apis/s3/S3Client'
 
 const isModalVisible = ref(false)
 const addresses = ref([])
@@ -23,6 +25,8 @@ const defaultAddress = ref()
 const requestPage = ref<number>(0)
 const totalPages = ref<number>()
 const totalElements = ref<number>()
+
+const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
 const openModal = () => {
   selectedAddress.value = {isDefault: false};
@@ -36,6 +40,7 @@ const closeModal = () => {
 const setDefault = async (addressId: number) => {
   setDefaultAddress(addressId)
   alert('기본 배송지가 저장되었습니다.')
+
   window.location.reload()
 }
 
@@ -70,7 +75,6 @@ const onChangePage = async (page: number) => {
 onBeforeMount(async () => {
   const response = await getMemberAddress(0)
   addresses.value = response.content
-  console.log(addresses.value)
   totalPages.value = response.totalPages
   totalElements.value = response.totalElements
 })
@@ -101,7 +105,7 @@ const openModalWithAddress = (address: any) => {
 
 
 
-const setMemberInfo = () => {
+const setMemberInfo = async () => {
   const memberDto: MemberInfoDto = {
     nickname: memberInfo.nickname ?? "",
     birth: memberInfo.birth ?? "",
@@ -110,7 +114,36 @@ const setMemberInfo = () => {
 
   if (confirm("수정된 정보를 저장하시겠습니까?")) {
     setMember(memberDto);
+    await getMember()
+    window.location.reload();
     alert("수정이 완료되었습니다!")
+
+    }
+}
+
+
+const fileInput = ref<HTMLInputElement | null>(null);
+const inputPostImgFile = ref<File>()
+const formData = new FormData();
+
+const openFileInput = () => {
+  if (fileInput.value) {
+    fileInput.value.click()
+  }
+}
+
+
+const handleFileChange = async (event: Event) => {
+  const imgPreSignedUrl = await getImgUrl();
+
+    const fileInput = event.target as HTMLInputElement
+    if (fileInput.files && fileInput.files.length > 0) {
+      const file: File = fileInput.files[0]
+      inputPostImgFile.value = file
+      
+      await uploadImageToS3(imgPreSignedUrl, inputPostImgFile.value)
+      await getMember()
+      window.location.reload();
     }
 }
 
@@ -136,7 +169,7 @@ const setMemberInfo = () => {
             <circle cx="75" cy="75" r="75" fill="white" />
           </mask>
           <image
-            :href="memberInfo.profileImgUrl || undefined"
+            :href="`${VITE_STATIC_IMG_URL}${memberInfo.profileImgUrl}` || undefined"
             x="0"
             y="0"
             width="150"
@@ -145,7 +178,8 @@ const setMemberInfo = () => {
             preserveAspectRatio="xMidYMid slice"
           />
         </svg>
-        <div class="profile-change-button">프로필 변경</div>
+        <div class="profile-change-button" @click="openFileInput">프로필 변경</div>
+        <input ref="fileInput" type="file" style="display: none" @change="handleFileChange">
       </div>
       <div class="user-info-second-row-second-col">
         <span>이메일</span>
