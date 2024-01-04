@@ -17,7 +17,7 @@ const deleteItem = async (index: number) => {}
     <div class="shop-wrapper" v-for="(product, index) in products" :key="index">
       <div class="shop-name-div">
         <span v-if="orderType === 'GIFT'">받는 사람 : {{ giftInfo.receiverName }}</span>
-        <span>배송: 배송비</span>
+        <span></span>
       </div>
       <div class="shop-prod-div">
         <svg
