@@ -44,9 +44,6 @@ const post = ref<PostDetailResponse>({
 
 const fetchDefaultData = async (): Promise<PostDetailResponse> => {
   const postDetailResponse = await getPostDetail(postId.value)
-  if(postDetailResponse.postImageProductDetails.length === 1 && postDetailResponse.postImageProductDetails[0].id === null) {
-    postDetailResponse.postImageProductDetails = new Array<PostImageProductDetailResponse>()
-  }
   post.value = postDetailResponse
 
   return postDetailResponse
