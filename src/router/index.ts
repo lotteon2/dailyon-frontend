@@ -61,7 +61,8 @@ const router = createRouter({
     {
       path: '/ootds/profile/:id',
       name: 'ootdProfile',
-      component: () => import('@/views/OOTDProfileView.vue')
+      component: () => import('@/views/OOTDProfileView.vue'),
+      meta: { requiresAuth: true }
     },
     {
       path: '/events',
