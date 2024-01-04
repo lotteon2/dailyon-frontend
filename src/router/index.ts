@@ -61,7 +61,8 @@ const router = createRouter({
     {
       path: '/ootds/profile/:id',
       name: 'ootdProfile',
-      component: () => import('@/views/OOTDProfileView.vue')
+      component: () => import('@/views/OOTDProfileView.vue'),
+      meta: { requiresAuth: true }
     },
     {
       path: '/events',
@@ -90,6 +91,11 @@ const router = createRouter({
           path: '/point-payment-history',
           name: 'pointPaymentHistory',
           component: () => import('@/components/payment/PointPaymentHistoryComponent.vue')
+        },
+        {
+          path: '/gifts',
+          name: 'gifts',
+          component: () => import('@/components/gifts/GiftComponent.vue')
         },
         {
           path: '/point-history',

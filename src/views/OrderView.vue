@@ -4,26 +4,32 @@ import OrderSheetComponent from '@/components/order/OrderSheetComponent.vue'
 import OrderPlaceComponent from '@/components/order/OrderPlaceComponent.vue'
 import OrderPaymentComponent from '@/components/order/OrderPaymentComponent.vue'
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
-import { order } from '@/apis/order/order'
+import { order, gifts } from '@/apis/order/order'
 import type { OrderItemDto, OrderItemWithCouponInfoIdDto } from '@/types/coupon'
 import type { ProductInfo } from '@/apis/product/ProductDto'
-import type { DeliveryInfo, OrderSheet, OrderItem } from '@/apis/order/orderDto'
+import type { DeliveryInfo, OrderSheet, OrderItem, GiftInfo } from '@/apis/order/orderDto'
 import { storeToRefs } from 'pinia'
 import { useProductStore } from '@/stores/product/ProductStore'
 import { useMemberStore } from '@/stores/member/MemberStore'
 import router from '@/router'
 const productStore = useProductStore()
-const { products, orderType } = storeToRefs(productStore)
+const { products, orderType, giftInfo } = storeToRefs(productStore)
 const { point } = storeToRefs(useMemberStore())
 
 const redirectUrl = ref('')
 const newWindow = ref<any>()
 const isCheckoutCouponModalOpen = ref(false)
-const orderItemWithCouponInfoIdList = ref<OrderItemWithCouponInfoIdDto[]>([])
+const availableCouponsCount = ref(0)
 
 const totalOrderPrice = computed((): number => {
   return products.value.reduce((prev: number, current: ProductInfo): number => {
     return prev + current.orderPrice
+  }, 0)
+})
+
+const totalDiscountAmount = computed((): number => {
+  return products.value.reduce((prev: number, current: ProductInfo): number => {
+    return prev + (current.discountAmount ? current.discountAmount : 0)
   }, 0)
 })
 
@@ -53,9 +59,6 @@ const openCheckoutCouponModal = () => {
 const closeCheckoutCouponModal = () => {
   isCheckoutCouponModalOpen.value = false
 }
-const applyCoupons = (couponSelections: OrderItemWithCouponInfoIdDto[]) => {
-  orderItemWithCouponInfoIdList.value = couponSelections
-}
 
 const addDeliveryInfo = async (addressInfo: DeliveryInfo) => {
   deliveryInfo.value = addressInfo
@@ -65,35 +68,8 @@ const changeReceiver = async (input: string) => {
   deliveryInfo.value.receiver = input
 }
 
-const orderItems = [
-  {
-    productName: '나이키 에어포스1',
-    imgUrl: '',
-    productId: 1,
-    categoryId: 1,
-    count: 1,
-    originalPrice: 10000
-  },
-  {
-    productName: '준지 189',
-    imgUrl: 'https://blog.kakaocdn.net/dn/bvusF3/btqDn1mPRqa/lk6VdECDc10kixNhnBHxL1/img.jpg',
-    productId: 2,
-    categoryId: 1,
-    count: 2,
-    originalPrice: 20000
-  },
-  {
-    productName: 'IAB Studio',
-    imgUrl: 'https://iab-studio.com/media/pages/about/aa600c7d43-1694580757/aboutus.jpg',
-    productId: 3,
-    categoryId: 2,
-    count: 1,
-    originalPrice: 15000
-  }
-]
-
 const doOrder = async () => {
-  if (!validation()) {
+  if (orderType.value !== 'GIFT' && !validation()) {
     alert('배송지 정보는 필수 입니다.')
     return
   }
@@ -102,7 +78,7 @@ const doOrder = async () => {
     const orderItem: OrderItem = {
       productId: product.productId,
       categoryId: product.categoryId,
-      couponInfoId: null,
+      couponInfoId: product.couponInfoId,
       sizeId: product.sizeId,
       orderPrice: product.orderPrice,
       quantity: product.quantity,
@@ -112,14 +88,18 @@ const doOrder = async () => {
   })
 
   const orderSheet: OrderSheet = {
+    receiverId: giftInfo.value ? giftInfo.value.receiverId : null,
+    receiverName: giftInfo.value ? giftInfo.value.receiverName : null,
+    senderName: giftInfo.value ? giftInfo.value.senderName : null,
     usedPoints: usedPoints.value,
     type: orderType.value,
     deliveryFee: null,
     totalCouponDiscountPrice: null,
     orderItems: orderItems,
-    deliveryInfo: deliveryInfo.value,
+    deliveryInfo: orderType.value === 'GIFT' ? null : deliveryInfo.value,
     paymentType: 'KAKAOPAY'
   }
+
   redirectUrl.value = await order(orderSheet)
 
   if (redirectUrl.value) {
@@ -168,14 +148,15 @@ onBeforeUnmount(() => {
     :isCheckoutCouponModalOpen="isCheckoutCouponModalOpen"
     :orderItems="products"
     @close-checkout-coupon-modal="closeCheckoutCouponModal"
-    @apply-coupons="applyCoupons"
   ></CheckoutCouponModal>
   <div class="main-container">
-    <h1>주문/결제</h1>
+    <h1 v-if="orderType !== 'GIFT'">주문/결제</h1>
+    <h1 v-else>선물하기</h1>
     <div class="center-container">
       <div class="center-left-container">
         <OrderSheetComponent v-if="products.length" />
         <OrderPlaceComponent
+          v-if="orderType !== 'GIFT'"
           @submit="(deliveryInfo) => addDeliveryInfo(deliveryInfo)"
           @changeReceiver="(input) => changeReceiver(input)"
         />
@@ -189,9 +170,9 @@ onBeforeUnmount(() => {
             </div>
             <div class="discount-container-second-col">
               <div class="discount-container-row">
-                N원
-                <div class="white-button">쿠폰사용</div>
-                <span>(보유 N장)</span>
+                {{ totalDiscountAmount }}원
+                <div class="white-button" @click="openCheckoutCouponModal">쿠폰사용</div>
+                <span>(보유 {{ availableCouponsCount }}장)</span>
               </div>
               <div class="discount-container-row">
                 {{ usedPoints?.toLocaleString() }}원
@@ -208,6 +189,7 @@ onBeforeUnmount(() => {
           :totalOrderPrice="totalOrderPrice"
           :usedPoints="usedPoints"
           :totalPaymentPrice="totalPaymentPrice"
+          :totalDiscountAmount="totalDiscountAmount"
           @doOrder="doOrder"
         />
       </div>

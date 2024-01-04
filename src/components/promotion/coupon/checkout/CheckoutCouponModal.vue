@@ -29,7 +29,11 @@ import { ref, defineProps, defineEmits, onMounted } from 'vue'
 import { useProductStore } from '@/stores/product/ProductStore'
 import { getCouponsForCheckout } from '@/apis/coupon/coupon'
 
-import type { OrderItemDto, OrderItemWithCouponInfoDto, OrderItemWithCouponInfoIdDto } from '@/types/coupon'
+import type {
+  OrderItemDto,
+  OrderItemWithCouponInfoDto,
+  OrderItemWithCouponInfoIdDto
+} from '@/types/coupon'
 import type { ProductInfo } from '@/apis/product/ProductDto'
 
 import type {
@@ -45,10 +49,24 @@ const { isCheckoutCouponModalOpen, orderItems } = defineProps<{
   orderItems: ProductInfo[]
 }>()
 
-const emit = defineEmits(['close-checkout-coupon-modal', 'apply-coupons'])
+const emit = defineEmits(['close-checkout-coupon-modal'])
 // , {event: 'apply-coupons', null}: void
+
 const computedNestedCoupons = ref<CouponInfoItemCheckoutResponse[][]>([])
-const orderItemsWithCouponSelections = ref<OrderItemWithCouponInfoDto[]>([]) // 중간객체
+const orderItemsWithCouponSelections = ref<OrderItemWithCouponInfoDto[]>(
+  orderItems.map((item) => ({
+    ...item,
+    couponInfoId: null,
+    couponInfoName: null,
+    appliesToType: null,
+    appliedToId: null,
+    discountType: null,
+    discountValue: null,
+    endAt: null,
+    minPurchaseAmount: null,
+    maxDiscountAmount: null
+  }))
+) // 중간객체
 
 const fetchCouponsForCheckout = async () => {
   // 😀 side effect 우려되서 이렇게 둠.
@@ -71,42 +89,43 @@ const applyCouponsAndClose = () => {
   emit('close-checkout-coupon-modal')
 }
 
-
 // 이벤트에 포함될 데이터를 정리하는 로직. 중간객체인 OrderItemWithCouponInfoDto[]를 두고,
 // 😀 side effect 방지 위해 중간격 객체 두고 적용시에 pinia update
 const handleUpdateCoupons = (selectedCoupons: (CouponInfoItemCheckoutResponse | null)[]) => {
-  orderItemsWithCouponSelections.value = orderItems.map((item: ProductInfo, index: number): OrderItemWithCouponInfoDto => {
-    const coupon = selectedCoupons[index]; // Get the selected coupon
+  orderItemsWithCouponSelections.value = orderItems.map(
+    (item: ProductInfo, index: number): OrderItemWithCouponInfoDto => {
+      const coupon = selectedCoupons[index] // Get the selected coupon
 
-    return {
-      ...item,  // ProductInfo fields들을 Spread
-      
-      couponInfoId: coupon ? coupon.couponInfoId : null, // 따로 할당
-      couponInfoName: coupon ? coupon.couponInfoName : null,
-      appliesToType: coupon ? coupon.appliesToType : null,
-      appliedToId: coupon ? coupon.appliedToId : null,
-      discountType: coupon ? coupon.discountType : null,
-      discountValue: coupon ? coupon.discountValue : null,
-      endAt: coupon ? coupon.endAt : null,
-      minPurchaseAmount: coupon ? coupon.minPurchaseAmount : null,
-      maxDiscountAmount: coupon ? coupon.maxDiscountAmount : null,
-    };
-  });
-};
+      return {
+        ...item, // ProductInfo fields들을 Spread
+
+        couponInfoId: coupon ? coupon.couponInfoId : null, // 따로 할당
+        couponInfoName: coupon ? coupon.couponInfoName : null,
+        appliesToType: coupon ? coupon.appliesToType : null,
+        appliedToId: coupon ? coupon.appliedToId : null,
+        discountType: coupon ? coupon.discountType : null,
+        discountValue: coupon ? coupon.discountValue : null,
+        endAt: coupon ? coupon.endAt : null,
+        minPurchaseAmount: coupon ? coupon.minPurchaseAmount : null,
+        maxDiscountAmount: coupon ? coupon.maxDiscountAmount : null
+      }
+    }
+  )
+}
 
 const applyCouponDatas = () => {
   const updatedProducts = orderItemsWithCouponSelections.value.map((item) => {
-    let discount = 0;
+    let discount = 0
 
     if (item.couponInfoId !== null && item.discountValue !== null) {
-      const totalPrice = item.orderPrice * item.quantity;
+      const totalPrice = item.orderPrice * item.quantity
 
       if (item.discountType === 'PERCENTAGE') {
-        discount = totalPrice * (item.discountValue / 100);
-        const maxDiscountAmount = item.maxDiscountAmount ?? Number.MAX_VALUE;
-        discount = Math.min(discount, maxDiscountAmount);
+        discount = totalPrice * (item.discountValue / 100)
+        const maxDiscountAmount = item.maxDiscountAmount ?? Number.MAX_VALUE
+        discount = Math.min(discount, maxDiscountAmount)
       } else if (item.discountType === 'FIXED_AMOUNT') {
-        discount = item.discountValue;
+        discount = item.discountValue
       }
     }
 
@@ -114,12 +133,11 @@ const applyCouponDatas = () => {
       ...item,
       discountAmount: discount,
       couponInfoId: item.couponInfoId
-    };
-  });
+    }
+  })
 
-  productStore.setProducts(updatedProducts, productStore.orderType);
-};
-
+  productStore.setProducts(updatedProducts, productStore.orderType)
+}
 
 onMounted(fetchCouponsForCheckout)
 </script>

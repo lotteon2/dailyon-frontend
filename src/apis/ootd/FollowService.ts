@@ -22,11 +22,11 @@ export const getFollowers = async (page: number, size: number, sort: string): Pr
   } catch (error) {
     if (error instanceof AxiosError) {
       if (error.response) {
-        if (error.response.status >= 400) {
+        if (error.response.status >= 400 && error.response.status < 500) {
           alert(error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
         }
-        if (error.response.status < 500) {
+        if (error.response.status >= 500) {
           alert('서버 내부 오류')
           console.error('Internal Server Error')
         }
@@ -49,11 +49,11 @@ export const getFollowings = async (page: number, size: number, sort: string): P
   } catch (error) {
     if (error instanceof AxiosError) {
       if (error.response) {
-        if (error.response.status >= 400) {
+        if (error.response.status >= 400 && error.response.status < 500) {
           alert(error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
         }
-        if (error.response.status < 500) {
+        if (error.response.status >= 500) {
           alert('서버 내부 오류')
           console.error('Internal Server Error')
         }
@@ -73,11 +73,11 @@ export const toggleFollow = async (followingIds: Array<number>): Promise<void> =
   } catch (error) {
     if (error instanceof AxiosError) {
       if (error.response) {
-        if (error.response.status >= 400) {
+        if (error.response.status >= 400 && error.response.status < 500) {
           alert(error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
         }
-        if (error.response.status < 500) {
+        if (error.response.status >= 500) {
           alert('서버 내부 오류')
           console.error('Internal Server Error')
         }
