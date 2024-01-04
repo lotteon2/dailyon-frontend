@@ -13,7 +13,6 @@ export const getMember = async () => {
     try {
       const response = await authAxiosInstance.get(`${MEMBER_SERVICE_PREFIX}/members`);
       memberStore.setMemberInfo(response.data);
-      console.log(memberStore);
       return response.data;
     } catch (error) {
       console.error('API 호출 중 오류 발생:', error);
@@ -83,8 +82,6 @@ export const getMember = async () => {
     try {
       const response = await authAxiosInstance.delete(`${MEMBER_SERVICE_PREFIX}/addresses/${addressId}`);
       const accessToken = localStorage.getItem('accessToken')
-      console.log(addressId);
-      console.log(`Bearer ${accessToken}`)
       return response.data;
     } catch (error) {
       console.error('API 호출 중 오류 발생:', error);

@@ -40,6 +40,7 @@ const closeModal = () => {
 const setDefault = async (addressId: number) => {
   setDefaultAddress(addressId)
   alert('기본 배송지가 저장되었습니다.')
+
   window.location.reload()
 }
 
@@ -74,7 +75,6 @@ const onChangePage = async (page: number) => {
 onBeforeMount(async () => {
   const response = await getMemberAddress(0)
   addresses.value = response.content
-  console.log(addresses.value)
   totalPages.value = response.totalPages
   totalElements.value = response.totalElements
 })
@@ -140,9 +140,7 @@ const handleFileChange = async (event: Event) => {
     if (fileInput.files && fileInput.files.length > 0) {
       const file: File = fileInput.files[0]
       inputPostImgFile.value = file
-      console.log(imgPreSignedUrl)
-      console.log(inputPostImgFile.value)
-
+      
       await uploadImageToS3(imgPreSignedUrl, inputPostImgFile.value)
       await getMember()
       window.location.reload();
