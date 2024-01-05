@@ -3,7 +3,7 @@ import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import { pointPaymentReady } from '@/apis/payment/payment'
 import type { PointPaymentDto } from '@/apis/payment/paymentDto'
-import { useMemberStore } from '@/stores/member/MemberStore';
+import { useMemberStore } from '@/stores/member/MemberStore'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -34,9 +34,7 @@ const validateInput = () => {
     alert('숫자만 입력 가능합니다.')
     inputAmount.value = ''
     return
-  }
-
-  else if (inputAmount.value.length > 9) {
+  } else if (inputAmount.value.length > 9) {
     inputAmount.value = inputAmount.value.slice(0, 9)
   }
 }
@@ -57,7 +55,6 @@ const logout = () => {
   router.push({ name: 'home' })
   alert('로그아웃 완료')
 }
-
 
 const modify = () => {
   router.push({ name: 'memberInfo' })
@@ -93,14 +90,14 @@ const processPayment = async () => {
 const handleMessage = (event: MessageEvent) => {
   const { routeName } = event.data
   window.scrollTo(0, 0)
-  if (router.currentRoute.value.name == 'pointPaymentHistory') {
+  if (routeName == 'pointPaymentHistory') {
     window.location.reload()
   } else {
     router.replace({ name: routeName })
   }
 }
 
-const memberStore = useMemberStore();
+const memberStore = useMemberStore()
 
 onMounted(async () => {
   window.addEventListener('message', handleMessage)
@@ -114,19 +111,13 @@ onBeforeUnmount(() => {
 <template>
   <div class="user-container">
     <div class="user-info-container">
-      <svg
-        class="profile-circle"
-        width="50"
-        height="50"
-        viewBox="0 0 150 150"
-        fill="none"
-      >
+      <svg class="profile-circle" width="50" height="50" viewBox="0 0 150 150" fill="none">
         <circle cx="75" cy="75" r="75" fill="#D9D9D9" />
         <mask id="circle-mask">
           <circle cx="75" cy="75" r="75" fill="white" />
         </mask>
         <image
-        :href="`${VITE_STATIC_IMG_URL}${memberStore.profileImgUrl}` || undefined"
+          :href="`${VITE_STATIC_IMG_URL}${memberStore.profileImgUrl}` || undefined"
           x="0"
           y="0"
           width="150"
@@ -138,7 +129,7 @@ onBeforeUnmount(() => {
       <div class="user-name-container">
         <div class="user-name-container-first-line">
           <h1>
-            {{memberStore.nickname }}&nbsp;
+            {{ memberStore.nickname }}&nbsp;
             <h2>님, 반갑습니다!</h2>
           </h1>
         </div>
