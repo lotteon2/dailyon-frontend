@@ -115,8 +115,8 @@ const setMemberInfo = async () => {
   if (confirm("수정된 정보를 저장하시겠습니까?")) {
     setMember(memberDto);
     await getMember()
-    window.location.reload();
     alert("수정이 완료되었습니다!")
+    window.location.reload();
 
     }
 }
@@ -140,7 +140,7 @@ const handleFileChange = async (event: Event) => {
     if (fileInput.files && fileInput.files.length > 0) {
       const file: File = fileInput.files[0]
       inputPostImgFile.value = file
-      
+
       await uploadImageToS3(imgPreSignedUrl, inputPostImgFile.value)
       await getMember()
       window.location.reload();
