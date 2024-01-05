@@ -2,11 +2,8 @@
 import { ref, defineEmits } from 'vue'
 import AddressModal from '@/components/order/OrderAddressModal.vue'
 
-const emit = defineEmits(['submit', 'changeReceiver'])
+const emit = defineEmits(['submit2', 'changeReceiver', 'changePhoneNumber'])
 const isModalVisible = ref(false)
-
-const receiver = ref<string>('')
-
 const openModal = () => {
   isModalVisible.value = true
 }
@@ -27,7 +24,7 @@ const fill = (addressInfo: any) => {
   address.value.postCode = addressInfo.postCode
   address.value.roadAddress = addressInfo.roadAddress
   address.value.detailAddress = addressInfo.detailAddress
-  emit('submit', addressInfo)
+  emit('submit2', addressInfo)
 }
 
 const limitInput = () => {
@@ -36,6 +33,7 @@ const limitInput = () => {
     numericValue = numericValue.slice(0, 11)
   }
   address.value.phoneNumber = numericValue
+  emit('changePhoneNumber', address.value.phoneNumber)
 }
 
 const limitReceiver = () => {
@@ -73,9 +71,9 @@ const limitReceiver = () => {
       </div>
       <div class="user-info-second-col">
         <input type="text" v-model="address.receiver" placeholder="성함" @input="limitReceiver" />
-        <input type="text" :value="address.postCode" placeholder="우편번호" disabled />
-        <input type="text" :value="address.roadAddress" placeholder="주소" disabled />
-        <input type="text" :value="address.detailAddress" placeholder="상세주소" disabled />
+        <input type="text" v-model="address.postCode" placeholder="우편번호" disabled />
+        <input type="text" v-model="address.roadAddress" placeholder="주소" disabled />
+        <input type="text" v-model="address.detailAddress" placeholder="상세주소" disabled />
         <input type="text" v-model="address.phoneNumber" @input="limitInput" placeholder="휴대폰" />
       </div>
       <div class="place-third-col">

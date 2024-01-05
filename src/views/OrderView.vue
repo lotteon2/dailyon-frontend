@@ -61,7 +61,9 @@ const closeCheckoutCouponModal = () => {
 }
 
 const addDeliveryInfo = async (addressInfo: DeliveryInfo) => {
-  deliveryInfo.value = addressInfo
+  deliveryInfo.value.postCode = addressInfo.postCode
+  deliveryInfo.value.roadAddress = addressInfo.roadAddress
+  deliveryInfo.value.detailAddress = addressInfo.detailAddress
 }
 
 const changeReceiver = async (input: string) => {
@@ -99,8 +101,6 @@ const doOrder = async () => {
     deliveryInfo: orderType.value === 'GIFT' ? null : deliveryInfo.value,
     paymentType: 'KAKAOPAY'
   }
-  console.log(orderSheet)
-
   redirectUrl.value = await order(orderSheet)
 
   if (redirectUrl.value) {
@@ -118,7 +118,6 @@ const doOrder = async () => {
 }
 
 const validation = (): boolean => {
-  console.log(deliveryInfo.value.receiver)
   if (
     !deliveryInfo.value.postCode ||
     !deliveryInfo.value.roadAddress ||
@@ -159,8 +158,9 @@ onBeforeUnmount(() => {
         <OrderSheetComponent v-if="products.length" />
         <OrderPlaceComponent
           v-if="orderType !== 'GIFT'"
-          @submit="(deliveryInfo) => addDeliveryInfo(deliveryInfo)"
+          @submit2="(deliveryInfo) => addDeliveryInfo(deliveryInfo)"
           @changeReceiver="(input) => changeReceiver(input)"
+          @changePhoneNumber="(phone) => (deliveryInfo.phoneNumber = phone)"
         />
         <div class="discount-container">
           <div class="container-title">할인</div>
