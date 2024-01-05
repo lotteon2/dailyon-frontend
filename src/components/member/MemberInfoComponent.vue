@@ -135,12 +135,12 @@ const openFileInput = () => {
 
 const handleFileChange = async (event: Event) => {
   const imgPreSignedUrl = await getImgUrl();
-
+  
     const fileInput = event.target as HTMLInputElement
     if (fileInput.files && fileInput.files.length > 0) {
       const file: File = fileInput.files[0]
       inputPostImgFile.value = file
-
+      
       await uploadImageToS3(imgPreSignedUrl, inputPostImgFile.value)
       await getMember()
       window.location.reload();
