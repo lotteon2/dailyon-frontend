@@ -60,11 +60,20 @@ const submitForm = async () => {
       phoneNumber: phone.value,
     };
 
-    const response = await authAxiosInstance.post(endpoint, formData, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+
+    if (props.selectedAddress.id) {
+      const response = await authAxiosInstance.put(endpoint, formData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    } else {
+      const response = await authAxiosInstance.post(endpoint, formData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    }
 
     props.closeModal();
     alert("배송지 저장이 완료되었습니다.");
@@ -105,65 +114,67 @@ watch(() => props.selectedAddress, (newValue: any) => {
         <h2 class="headline">배송 정보 입력</h2>
         <button class="close-btn" @click=props.closeModal()>X</button>
       </div>
-      <table>
-        <tr>
-          <td class="label">배송지명:</td>
-          <td>
-            <input type="text" class="input" name="userName" v-model="userName" :class="{ 'is-invalid': !userName }" />
-            <p v-if="!userName" class="alert-msg">필수로 입력해주세요.</p>
-          </td>
-        </tr>
-        <tr>
-          <td class="label">배송지</td>
-          <td>
-            <label for="useDefaultAddr">
-              <input
-                type="radio"
-                name="useDefaultAddr"
-                v-model="useDefaultAddr"
-                value=true
-              />기본</label>
-            <label for="useDefaultAddr">
-              <input
-                type="radio"
-                name="useDefaultAddr"
-                v-model="useDefaultAddr"
-                value=false
-              />신규</label>
-          </td>
-        </tr>
-        <tr>
-          <td class="label">도로명 주소</td>
-          <td>
-            <input type="text" class="input" name="roadAddr" v-model="roadAddr" style="background-color: #ccc;"  readonly />
-          </td>
-          <td>
-            <button @click="search" class="search-button">검색</button>
-          </td>
-        </tr>
-        <tr>
-          <td class="label">우편번호</td>
-          <td>
-            <input type="text" class="input" name="postcode" v-model="postcode" style="background-color: #ccc;"  readonly />
-            <p v-if="!postcode" class="alert-msg">필수로 입력해주세요.</p>
-          </td>
-        </tr>
-        <tr>
-          <td class="label">상세 주소</td>
-          <td>
-            <input type="text" class="input" name="detailAddr" v-model="detailAddr" :class="{ 'is-invalid': !detailAddr }" />
-            <p v-if="!detailAddr" class="alert-msg">필수로 입력해주세요.</p>
-          </td>
-        </tr>
-        <tr>
-          <td class="label">전화번호</td>
-          <td>
-            <input type="text" class="input" name="phone" v-model="phone" @input="limitInput" :class="{ 'is-invalid': !phone }"/>
-            <p v-if="!phone" class="alert-msg">필수로 입력해주세요.</p>
-          </td>
-        </tr>
-        <button @click="submitForm" class="submit-button">저장</button>
-      </table>
+      <div class="modal-body">
+        <table>
+          <tr>
+            <td class="label">배송지명:</td>
+            <td>
+              <input type="text" class="input" name="userName" v-model="userName" :class="{ 'is-invalid': !userName }" />
+              <p v-if="!userName" class="alert-msg">필수로 입력해주세요.</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="label">배송지</td>
+            <td>
+              <label for="useDefaultAddr">
+                <input
+                  type="radio"
+                  name="useDefaultAddr"
+                  v-model="useDefaultAddr"
+                  value=true
+                />기본</label>
+              <label for="useDefaultAddr">
+                <input
+                  type="radio"
+                  name="useDefaultAddr"
+                  v-model="useDefaultAddr"
+                  value=false
+                />신규</label>
+            </td>
+          </tr>
+          <tr>
+            <td class="label">도로명 주소</td>
+            <td>
+              <input type="text" class="input" name="roadAddr" v-model="roadAddr" style="background-color: #ccc;"  readonly />
+            </td>
+            <td>
+              <button @click="search" class="search-button">검색</button>
+            </td>
+          </tr>
+          <tr>
+            <td class="label">우편번호</td>
+            <td>
+              <input type="text" class="input" name="postcode" v-model="postcode" style="background-color: #ccc;"  readonly />
+              <p v-if="!postcode" class="alert-msg">필수로 입력해주세요.</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="label">상세 주소</td>
+            <td>
+              <input type="text" class="input" name="detailAddr" v-model="detailAddr" :class="{ 'is-invalid': !detailAddr }" />
+              <p v-if="!detailAddr" class="alert-msg">필수로 입력해주세요.</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="label">전화번호</td>
+            <td>
+              <input type="text" class="input" name="phone" v-model="phone" @input="limitInput" :class="{ 'is-invalid': !phone }"/>
+              <p v-if="!phone" class="alert-msg">필수로 입력해주세요.</p>
+            </td>
+          </tr>
+          <button @click="submitForm" class="submit-button">저장</button>
+        </table>
+      </div>
       <div class="post-box" v-if="postOpen">
         <VueDaumPostcode @complete="onComplete" />
       </div>
@@ -184,13 +195,16 @@ watch(() => props.selectedAddress, (newValue: any) => {
   opacity: 0.7;
   background-color: var(--Grayscale7, #000);
 }
+.modal-body {
+  padding: 2em;
+}
+
 .modal-card {
   position: relative;
   max-width: 30%;
   max-height: 90%;
   margin: auto;
   margin-top: 1%;
-  padding: 2em;
   background-color: #f5f5f5;
   border-radius: 15px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
@@ -199,13 +213,14 @@ watch(() => props.selectedAddress, (newValue: any) => {
   overflow-y: scroll;
 }
 
+
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: var(--Grayscale7, #000);
   color: white;
-  padding: 1em;
+  padding: 1.5em;
   border-radius: 15px 15px 0 0;
 }
 
@@ -249,7 +264,7 @@ td {
 
 .headline {
   color: white;
-  font-size: 1.5em;
+  font-size: 2em;
 }
 
 .search-button {

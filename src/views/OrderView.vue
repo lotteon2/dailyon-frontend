@@ -61,7 +61,9 @@ const closeCheckoutCouponModal = () => {
 }
 
 const addDeliveryInfo = async (addressInfo: DeliveryInfo) => {
-  deliveryInfo.value = addressInfo
+  deliveryInfo.value.postCode = addressInfo.postCode
+  deliveryInfo.value.roadAddress = addressInfo.roadAddress
+  deliveryInfo.value.detailAddress = addressInfo.detailAddress
 }
 
 const changeReceiver = async (input: string) => {
@@ -99,7 +101,6 @@ const doOrder = async () => {
     deliveryInfo: orderType.value === 'GIFT' ? null : deliveryInfo.value,
     paymentType: 'KAKAOPAY'
   }
-
   redirectUrl.value = await order(orderSheet)
 
   if (redirectUrl.value) {
@@ -157,8 +158,9 @@ onBeforeUnmount(() => {
         <OrderSheetComponent v-if="products.length" />
         <OrderPlaceComponent
           v-if="orderType !== 'GIFT'"
-          @submit="(deliveryInfo) => addDeliveryInfo(deliveryInfo)"
+          @submit2="(deliveryInfo) => addDeliveryInfo(deliveryInfo)"
           @changeReceiver="(input) => changeReceiver(input)"
+          @changePhoneNumber="(phone) => (deliveryInfo.phoneNumber = phone)"
         />
         <div class="discount-container">
           <div class="container-title">할인</div>
@@ -170,7 +172,7 @@ onBeforeUnmount(() => {
             </div>
             <div class="discount-container-second-col">
               <div class="discount-container-row">
-                {{ totalDiscountAmount }}원
+                {{ totalDiscountAmount.toLocaleString() }}원
                 <div class="white-button" @click="openCheckoutCouponModal">쿠폰사용</div>
                 <span>(보유 {{ availableCouponsCount }}장)</span>
               </div>
