@@ -34,7 +34,7 @@ interface User {
   id: number
   nickname: string
 }
-
+const requester = ref()
 const newMessage = ref<string>('')
 const messages = ref<Message[]>([])
 const message = ref<Message>()
@@ -57,16 +57,16 @@ onMounted(async () => {
       }
     },
     transport: new WebsocketClientTransport({
-      url: 'ws://localhost:6661/rs',
-      wsCreator: (url) => new WebSocket(url) as any
+      url: 'ws://localhost:6777/rs'
+      // wsCreator: (url) => new WebSocket(url) as any
     })
   })
-  rsocket.value = await connector.value.connect()
 
-  const requester = rsocket.value.requestChannel(
+  rsocket.value = await connector.value.connect()
+  requester.value = rsocket.value.requestChannel(
     {
       data: null,
-      metadata: Buffer.from(String.fromCharCode('client.receive'.length) + 'client.receive')
+      metadata: Buffer.from(String.fromCharCode('send'.length) + 'send')
     },
     1,
     false,
@@ -75,21 +75,46 @@ onMounted(async () => {
         console.log(e)
       },
       onNext: (payload, isComplete) => {
-        console.log('여기라고?')
-        console.log(`payload[data: ${payload.data}; metadata: ${payload.metadata}]|${isComplete}`)
-        newMessage.value = ''
+        if (isComplete) {
+          console.log(`payload[data: ${payload.data}; metadata: ${payload.metadata}]|${isComplete}`)
+        }
       },
       onComplete: () => {},
       onExtension: () => {},
       request: (n) => {
         console.log(`request(${n})`)
-        requester.onNext(
+        requester.value.onNext(
           {
             data: Buffer.from(JSON.stringify(message)),
-            metadata: Buffer.from(String.fromCharCode('abc'.length) + 'abc')
+            metadata: Buffer.from(String.fromCharCode('send'.length) + 'send')
           },
           true
         )
+      },
+      cancel: () => {}
+    }
+  )
+
+  rsocket.value.requestChannel(
+    {
+      data: null,
+      metadata: Buffer.from(String.fromCharCode('send'.length) + 'send')
+    },
+    1,
+    false,
+    {
+      onError: (e: any) => {
+        console.log(e)
+      },
+      onNext: (payload, isComplete) => {
+        if (isComplete) {
+          console.log(`payload[data: ${payload.data}; metadata: ${payload.metadata}]|${isComplete}`)
+        }
+      },
+      onComplete: () => {},
+      onExtension: () => {},
+      request: (n) => {
+        console.log(`request(${n})`)
       },
       cancel: () => {}
     }
@@ -110,52 +135,86 @@ const send = () => {
     }
     messages.value.push(message)
 
-    rsocket.value.fireAndForget(
+    rsocket.value.requestChannel(
       {
         data: Buffer.from(JSON.stringify(message)),
-        metadata: Buffer.from(String.fromCharCode('message'.length) + 'message')
+        metadata: Buffer.from(String.fromCharCode('send'.length) + 'send')
       },
+      100000,
+      false,
       {
+        onError: (e: any) => {
+          console.log(e)
+        },
+        onNext: (payload, isComplete) => {
+          console.log(`payload[data: ${payload.data}; metadata: ${payload.metadata}]|${isComplete}`)
+          newMessage.value = ''
+        },
         onComplete: () => {},
-        onError(error) {
-          console.log(error)
-        }
+        onExtension: () => {},
+        request: (n) => {
+          console.log(`request(${n})`)
+          // requester.value.onNext(
+          //   {
+          //     data: Buffer.from(JSON.stringify(message)),
+          //     metadata: Buffer.from(String.fromCharCode('receive'.length) + 'receive')
+          //   },
+          //   true
+          // )
+        },
+        cancel: () => {}
       }
     )
-
-    // const requester = rsocket.value.requestChannel(
-    //   {
-    //     data: Buffer.from(JSON.stringify(message)),
-    //     metadata: Buffer.from(String.fromCharCode('message'.length) + 'message')
-    //   },
-    //   1,
-    //   false,
-    //   {
-    //     onError: (e: any) => {
-    //       console.log(e)
-    //     },
-    //     onNext: (payload, isComplete) => {
-    //       console.log(`payload[data: ${payload.data}; metadata: ${payload.metadata}]|${isComplete}`)
-    //       requester.request(1)
-    //       newMessage.value = ''
-    //     },
-    //     onComplete: () => {},
-    //     onExtension: () => {},
-    //     request: (n) => {
-    //       console.log(`request(${n})`)
-    //       requester.onNext(
-    //         {
-    //           data: Buffer.from(JSON.stringify(message)),
-    //           metadata: Buffer.from(String.fromCharCode('message'.length) + 'message')
-    //         },
-    //         true
-    //       )
-    //     },
-    //     cancel: () => {}
-    //   }
-    // )
+    newMessage.value = ''
   }
 }
+
+// const send = () => {
+//   if (!newMessage.value.trim()) {
+//     alert('메세지를 입력해주세요')
+//     return
+//   }
+//   if (rsocket.value) {
+//     const timestamp = new Date().toLocaleTimeString()
+//     const message: Message = {
+//       user: user.value,
+//       content: newMessage.value,
+//       timestamp: timestamp
+//     }
+//     messages.value.push(message)
+//     const requester = rsocket.value.requestChannel(
+//       {
+//         data: Buffer.from(JSON.stringify(message)),
+//         metadata: Buffer.from(String.fromCharCode('client.receive'.length) + 'client.receive')
+//       },
+//       1,
+//       false,
+//       {
+//         onError: (e: any) => {
+//           console.log(e)
+//         },
+//         onNext: (payload, isComplete) => {
+//           console.log(`payload[data: ${payload.data}; metadata: ${payload.metadata}]|${isComplete}`)
+//           requester.request(1)
+//           newMessage.value = ''
+//         },
+//         onComplete: () => {},
+//         onExtension: () => {},
+//         request: (n) => {
+//           console.log(`request(${n})`)
+//           requester.onNext(
+//             {
+//               data: Buffer.from(JSON.stringify(message)),
+//               metadata: Buffer.from(String.fromCharCode('client.receive'.length) + 'client.receive')
+//             },
+//             true
+//           )
+//         },
+//         cancel: () => {}
+//       }
+//     )
+//   }
+// }
 </script>
 
 <style scoped>
