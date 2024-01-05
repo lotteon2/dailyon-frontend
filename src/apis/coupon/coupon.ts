@@ -79,3 +79,18 @@ export const getCouponsForCheckout = async (
     throw error
   }
 }
+
+
+export const getMyCoupons = async (page : Number) => {
+  try {
+    const response = await authAxiosInstance.get(`${PROMOTION_PREFIX_PATH}${COUPON_DOMAIN_PREFIX_PATH}/my-coupons`, {
+      params: {
+        page: page,
+        size: 10,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('API 호출 중 오류 발생:', error);
+  }
+};
