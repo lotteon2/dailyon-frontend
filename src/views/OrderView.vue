@@ -99,6 +99,7 @@ const doOrder = async () => {
     deliveryInfo: orderType.value === 'GIFT' ? null : deliveryInfo.value,
     paymentType: 'KAKAOPAY'
   }
+  console.log(orderSheet)
 
   redirectUrl.value = await order(orderSheet)
 
@@ -117,6 +118,7 @@ const doOrder = async () => {
 }
 
 const validation = (): boolean => {
+  console.log(deliveryInfo.value.receiver)
   if (
     !deliveryInfo.value.postCode ||
     !deliveryInfo.value.roadAddress ||
@@ -170,7 +172,7 @@ onBeforeUnmount(() => {
             </div>
             <div class="discount-container-second-col">
               <div class="discount-container-row">
-                {{ totalDiscountAmount }}원
+                {{ totalDiscountAmount.toLocaleString() }}원
                 <div class="white-button" @click="openCheckoutCouponModal">쿠폰사용</div>
                 <span>(보유 {{ availableCouponsCount }}장)</span>
               </div>

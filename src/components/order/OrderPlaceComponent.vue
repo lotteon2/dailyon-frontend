@@ -44,6 +44,7 @@ const limitReceiver = () => {
     temp = temp.slice(0, 7)
   }
   address.value.receiver = temp
+  emit('changeReceiver', address.value.receiver)
 }
 </script>
 
@@ -71,13 +72,7 @@ const limitReceiver = () => {
         <span>받는분 휴대폰</span>
       </div>
       <div class="user-info-second-col">
-        <input
-          type="text"
-          v-model="address.receiver"
-          @change="emit('changeReceiver', receiver)"
-          placeholder="성함"
-          @input="limitReceiver"
-        />
+        <input type="text" v-model="address.receiver" placeholder="성함" @input="limitReceiver" />
         <input type="text" :value="address.postCode" placeholder="우편번호" disabled />
         <input type="text" :value="address.roadAddress" placeholder="주소" disabled />
         <input type="text" :value="address.detailAddress" placeholder="상세주소" disabled />
