@@ -41,3 +41,19 @@ export interface CouponInfoItemCheckoutResponse {
   minPurchaseAmount?: number
   maxDiscountAmount?: number
 }
+
+export interface Coupon {
+  id: number,
+  name: string,
+  discountType: string,
+  discountValue: number,
+  startAt: string
+}
+
+export interface Coupons {
+  memberId: number,
+  memberCouponInfoReadItemResponse: Coupon[],
+  totalCounts: number
+}
+
+
