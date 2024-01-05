@@ -60,11 +60,20 @@ const submitForm = async () => {
       phoneNumber: phone.value,
     };
 
-    const response = await authAxiosInstance.post(endpoint, formData, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+
+    if (props.selectedAddress.id) {
+      const response = await authAxiosInstance.put(endpoint, formData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    } else {
+      const response = await authAxiosInstance.post(endpoint, formData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    }
 
     props.closeModal();
     alert("배송지 저장이 완료되었습니다.");

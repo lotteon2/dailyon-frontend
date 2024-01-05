@@ -135,12 +135,12 @@ const openFileInput = () => {
 
 const handleFileChange = async (event: Event) => {
   const imgPreSignedUrl = await getImgUrl();
-
+  
     const fileInput = event.target as HTMLInputElement
     if (fileInput.files && fileInput.files.length > 0) {
       const file: File = fileInput.files[0]
       inputPostImgFile.value = file
-
+      
       await uploadImageToS3(imgPreSignedUrl, inputPostImgFile.value)
       await getMember()
       window.location.reload();
@@ -169,7 +169,7 @@ const handleFileChange = async (event: Event) => {
             <circle cx="75" cy="75" r="75" fill="white" />
           </mask>
           <image
-            :href="`${VITE_STATIC_IMG_URL}${memberInfo.profileImgUrl}` || undefined"
+            :href="`${VITE_STATIC_IMG_URL}${memberInfo.profileImgUrl}?ver=1` || undefined"
             x="0"
             y="0"
             width="150"
