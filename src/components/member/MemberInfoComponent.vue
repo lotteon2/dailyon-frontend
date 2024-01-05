@@ -169,7 +169,7 @@ const handleFileChange = async (event: Event) => {
             <circle cx="75" cy="75" r="75" fill="white" />
           </mask>
           <image
-            :href="`${VITE_STATIC_IMG_URL}${memberInfo.profileImgUrl}?ver=1` || undefined"
+            :href="`${VITE_STATIC_IMG_URL}${memberInfo.profileImgUrl}` || undefined"
             x="0"
             y="0"
             width="150"
