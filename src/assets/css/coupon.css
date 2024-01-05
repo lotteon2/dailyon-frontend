@@ -24,6 +24,16 @@
     border-bottom: 1px solid #202027;
 }
 
+.coupon-table-data1 > th {
+    color: var(--Grayscale7, #202027);
+    font-family: The Jamsil;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 70px; /* 500% */
+    border-bottom: 1px solid #202027;
+}
+
 .coupon-table-data2 > td {
     color: var(--Grayscale7, #202027);
     font-family: The Jamsil;
