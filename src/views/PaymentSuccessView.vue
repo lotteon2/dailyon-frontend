@@ -12,6 +12,7 @@ import { getMember } from '@/apis/member/member'
 const route = useRoute()
 const orderId = ref(route.params.orderId)
 const countdown = ref<number>(3)
+const VITE_SUCCESS_REDIRECT_URL = ref<string>(import.meta.env.VITE_SUCCESS_REDIRECT_URL)
 
 onMounted(async () => {
   await getMember()
@@ -23,7 +24,7 @@ onMounted(async () => {
           orderId: orderId.value
         }
       },
-      'http://localhost:5173'
+      VITE_SUCCESS_REDIRECT_URL
     )
   }, 3000)
 
