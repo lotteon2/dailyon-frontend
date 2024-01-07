@@ -77,7 +77,7 @@ watchEffect(() => {
     <div v-if="showModal" class="modal" @click="closeModal">
       <div class="modal-content" @click.stop>
         <span class="close" @click="closeModal">&times;</span>
-        <OrderDetailComponent :orderNo="orderNo" />
+        <OrderDetailComponent :orderNo="orderNo" @closeModal="closeModal" />
       </div>
     </div>
     <PaginationComponent

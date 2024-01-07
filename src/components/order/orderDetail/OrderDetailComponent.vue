@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, onBeforeMount } from 'vue'
+import { ref, onBeforeMount, defineEmits } from 'vue'
 import { storeToRefs } from 'pinia'
-import { getOrderDetails } from '@/apis/order/order'
+import { getOrderDetails, cancelOrderDetail } from '@/apis/order/order'
 import { createReview } from '@/apis/review/review'
 import { uploadImageToS3 } from '@/apis/s3/S3Client'
 import { PlusOutlined } from '@ant-design/icons-vue'
@@ -12,7 +12,7 @@ import type { ReviewCreateRequest } from '@/apis/review/reviewDto'
 import type { UploadProps, UploadChangeParam, UploadFile } from 'ant-design-vue'
 const { nickname, profileImgUrl } = storeToRefs(useMemberStore())
 const orderDetails = ref<Array<OrderDetailResponse>>([])
-
+const emits = defineEmits(['closeModal'])
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 const props = defineProps({
   orderNo: {
@@ -124,6 +124,15 @@ const beforeUpload = (file: UploadFile) => {
   }
   return false
 }
+
+const cancel = async (orderDetailNo: string) => {
+  if (confirm('정말로 취소하시겠습니까?')) {
+    await cancelOrderDetail(orderDetailNo)
+    alert('취소 요청이 접수되었습니다.')
+    emits('closeModal')
+    return
+  }
+}
 </script>
 <template v-if="orderDetails.length">
   <div v-for="(orderDetail, index) in orderDetails" :key="index" class="order-detail-container">
@@ -151,7 +160,7 @@ const beforeUpload = (file: UploadFile) => {
     <div class="right-section">
       <div v-if="orderDetail.reviewCheck === false">
         <div class="right-section-buttons">
-          <div class="right-inner-button">
+          <div v-if="orderDetail.status !== '취소완료'" class="right-inner-button">
             <button class="black-button" @click="showModal(index)">리뷰 쓰기</button>
           </div>
         </div>
@@ -166,7 +175,18 @@ const beforeUpload = (file: UploadFile) => {
       <div v-if="orderDetail.status == '배송전'">
         <div class="right-section-buttons">
           <div class="right-inner-button">
-            <button class="white-button">주문 취소</button>
+            <button class="white-button" @click="cancel(orderDetail.orderDetailNo)">
+              주문 취소
+            </button>
+          </div>
+        </div>
+      </div>
+      <div v-if="orderDetail.status == '취소완료'">
+        <div class="right-section-buttons">
+          <div class="right-inner-button">
+            <button class="gray-cancel-button" disabled>
+              {{ orderDetail.status }}
+            </button>
           </div>
         </div>
       </div>
