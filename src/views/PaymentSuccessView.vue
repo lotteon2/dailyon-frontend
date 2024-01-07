@@ -8,12 +8,13 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-
+import { getMember } from '@/apis/member/member'
 const route = useRoute()
 const orderId = ref(route.params.orderId)
 const countdown = ref<number>(3)
 
-onMounted(() => {
+onMounted(async () => {
+  await getMember()
   setTimeout(() => {
     window.opener.postMessage(
       {

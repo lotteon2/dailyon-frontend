@@ -135,6 +135,13 @@ const handleMessage = (event: MessageEvent) => {
   router.replace({ name: routeName, params: params })
 }
 
+const fetchDefaultAddress = (address: any) => {
+  deliveryInfo.value.postCode = address.postCode
+  deliveryInfo.value.roadAddress = address.roadAddress
+  deliveryInfo.value.detailAddress = address.detailAddress
+  deliveryInfo.value.phoneNumber = address.phoneNumber
+}
+
 onMounted(async () => {
   window.addEventListener('message', handleMessage)
 })
@@ -161,6 +168,7 @@ onBeforeUnmount(() => {
           @submit2="(deliveryInfo) => addDeliveryInfo(deliveryInfo)"
           @changeReceiver="(input) => changeReceiver(input)"
           @changePhoneNumber="(phone) => (deliveryInfo.phoneNumber = phone)"
+          @fetchDefaultAddress="(address) => fetchDefaultAddress(address)"
         />
         <div class="discount-container">
           <div class="container-title">할인</div>
