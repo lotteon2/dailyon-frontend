@@ -10,7 +10,6 @@ import { createComment, createReplyComment, deleteComment, getComments } from '@
 import { useRoute } from 'vue-router'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 import { useMemberStore } from '@/stores/member/MemberStore'
-import router from '@/router'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -42,7 +41,7 @@ onBeforeMount(async () => {
 
 const isCommentRegistered = ref<boolean>(false)
 watch(isCommentRegistered, async (afterIsCommentRegistered, beforeIsCommentRegistered) => {
-  if(afterIsCommentRegistered) {
+  if (afterIsCommentRegistered) {
     await fetchDefaultData()
     isCommentRegistered.value = false
   }
@@ -68,16 +67,20 @@ const createCommentRequest = ref<CreateCommentRequest>({
 })
 
 const onSubmitComment = async () => {
-  if (createCommentRequest.value.description === ''
-    || createCommentRequest.value.description.length < 5 || createCommentRequest.value.description.length > 140) {
-    alert('댓글은 최소 5자 최대 140자까지 등록할 수 있습니다.')
-  } else {
-    if(!isCommentRegistered.value) {
-      await createComment(postId.value, createCommentRequest.value)
-      alert('댓글을 성공적으로 등록하였습니다.')
-      createCommentRequest.value.description = ''
-      isCommentRegistered.value = true
+  if (!isCommentRegistered.value) {
+    if(memberId === null) {
+      alert("로그인이 필요합니다.")
+    } else if (createCommentRequest.value.description === ''
+      || createCommentRequest.value.description.length < 5 || createCommentRequest.value.description.length > 140) {
+      alert('댓글은 최소 5자 최대 140자까지 등록할 수 있습니다.')
+    } else {
+      if (!isCommentRegistered.value) {
+        await createComment(postId.value, createCommentRequest.value)
+        alert('댓글을 성공적으로 등록하였습니다.')
+        createCommentRequest.value.description = ''
+      }
     }
+    isCommentRegistered.value = true
   }
 }
 
@@ -92,22 +95,26 @@ const createReplyCommentRequest = ref<CreateReplyCommentRequest>({
 })
 
 const onSubmitReplyComment = async (commentId: number) => {
-  if (createReplyCommentRequest.value.description === ''
-    || createReplyCommentRequest.value.description.length < 5 || createReplyCommentRequest.value.description.length > 140) {
-    alert('답글은 최소 5자 최대 140자까지 등록할 수 있습니다.')
-  } else {
-    if(!isCommentRegistered.value) {
-      await createReplyComment(postId.value, commentId, createReplyCommentRequest.value)
-      alert('답글을 성공적으로 등록하였습니다.')
-      createReplyCommentRequest.value.description = ''
-      isCommentRegistered.value = true
+  if (!isCommentRegistered.value) {
+    if(memberId === null) {
+      alert('로그인이 필요합니다.')
+    } else if (createReplyCommentRequest.value.description === ''
+      || createReplyCommentRequest.value.description.length < 5 || createReplyCommentRequest.value.description.length > 140) {
+      alert('답글은 최소 5자 최대 140자까지 등록할 수 있습니다.')
+    } else {
+      if (!isCommentRegistered.value) {
+        await createReplyComment(postId.value, commentId, createReplyCommentRequest.value)
+        alert('답글을 성공적으로 등록하였습니다.')
+        createReplyCommentRequest.value.description = ''
+      }
     }
+    isCommentRegistered.value = true
   }
 }
 
 const onDeleteComment = async (commentId: number) => {
-  const isConfirm = confirm("댓글을 삭제하시겠습니까?")
-  if(isConfirm) {
+  const isConfirm = confirm('댓글을 삭제하시겠습니까?')
+  if (isConfirm) {
     await deleteComment(postId.value, commentId)
     alert('댓글을 성공적으로 삭제하였습니다.')
     await fetchDefaultData()
@@ -115,8 +122,8 @@ const onDeleteComment = async (commentId: number) => {
 }
 
 const onDeleteReplyComment = async (commentId: number) => {
-  const isConfirm = confirm("답글을 삭제하시겠습니까?")
-  if(isConfirm) {
+  const isConfirm = confirm('답글을 삭제하시겠습니까?')
+  if (isConfirm) {
     await deleteComment(postId.value, commentId)
     alert('답글을 성공적으로 삭제하였습니다.')
     await fetchDefaultData()

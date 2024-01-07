@@ -33,7 +33,7 @@ const member = ref<OOTDMemberProfileResponse>({
   profileImgUrl: '/member-img/default-profile-img.png',
   followingCount: 0,
   followerCount: 0,
-  isFollowing: false
+  isFollowing: undefined
 })
 
 const fetchDefaultData = async (): Promise<
@@ -55,11 +55,16 @@ onBeforeMount(async () => {
 })
 
 const followButtonClickListener = (followingId: number, isFollowing: boolean | undefined) => {
-  member.value!.isFollowing
-    ? (member.value!.followerCount -= 1)
-    : (member.value!.followerCount += 1)
-  member.value!.isFollowing = !isFollowing
-  follows.has(followingId) ? follows.delete(followingId) : follows.add(followingId)
+  if(isFollowing === undefined) {
+    alert('로그인이 필요합니다.')
+  } else {
+    member.value!.isFollowing
+      ? (member.value!.followerCount -= 1)
+      : (member.value!.followerCount += 1)
+    member.value!.isFollowing = !isFollowing
+    follows.has(followingId) ? follows.delete(followingId) : follows.add(followingId)
+  }
+
 }
 
 const flushFollowStore = async () => {
