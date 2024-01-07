@@ -3,7 +3,7 @@ import { ref, onBeforeMount, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 import { getProductReviews } from '@/apis/review/review'
 import type { ReviewResponse } from '@/apis/review/reviewDto'
-import { Rate } from 'ant-design-vue'
+import { Rate, Avatar } from 'ant-design-vue'
 import PaginationComponent from '../ootd/PaginationComponent.vue'
 const props = defineProps({
   productName: {
@@ -50,16 +50,7 @@ watchEffect(() => {
     <div v-for="(review, index) in reviews" :key="index" class="review-row">
       <div class="review-row-left">
         <div class="review-row-left-col"></div>
-        <svg
-          class="review-profile"
-          xmlns="http://www.w3.org/2000/svg"
-          width="80"
-          height="80"
-          viewBox="0 0 80 80"
-          fill="none"
-        >
-          <circle cx="40" cy="40" r="40" fill="#D9D9D9" />
-        </svg>
+        <Avatar :src="`${VITE_STATIC_IMG_URL}${review.profileImgUrl}`" :size="85"></Avatar>
         <div class="review-first-column">
           <span>{{ review.nickname }}</span>
           <div class="review-star-container">
@@ -88,4 +79,7 @@ watchEffect(() => {
 
 <style scoped>
 @import '@/assets/css/review.css';
+.ant-avatar {
+  margin-right: 10px;
+}
 </style>
