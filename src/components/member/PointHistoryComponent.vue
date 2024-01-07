@@ -1,39 +1,38 @@
 <script setup lang="ts">
-import { getMemberPoints } from '@/apis/member/member';
-import { ref, onMounted, watch, onBeforeMount } from 'vue';
-import PaginationComponent from '@/components/ootd/PaginationComponent.vue';
-import type { Point } from '@/apis/member/MemberDto';
+import { getMemberPoints } from '@/apis/member/member'
+import { ref, onMounted, watch, onBeforeMount } from 'vue'
+import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
+import type { Point } from '@/apis/member/MemberDto'
 
-const points = ref<Point[]>([]);
-const requestPage = ref<number>(0);
-const totalPages = ref<number>();
-const totalElements = ref<number>();
+const points = ref<Point[]>([])
+const requestPage = ref<number>(0)
+const totalPages = ref<number>()
+const totalElements = ref<number>()
 
 const onChangePage = async (page: number) => {
   if (page >= 0 && page < totalPages.value!) {
-    requestPage.value = page;
+    requestPage.value = page
   }
-};
+}
 
 onBeforeMount(async () => {
-  const response = await getMemberPoints(0);
-  updatePoints(response);
-});
+  const response = await getMemberPoints(0)
+  updatePoints(response)
+})
 
 watch(requestPage, async (afterPage, beforePage) => {
   if (afterPage < totalPages.value!) {
-    const response = await getMemberPoints(afterPage);
-    updatePoints(response);
+    const response = await getMemberPoints(afterPage)
+    updatePoints(response)
   }
-});
+})
 
 const updatePoints = (response: any) => {
-  points.value.push(...response.content);
-  totalPages.value = response.totalPages;
-  totalElements.value = response.totalElements;
-};
+  points.value.push(...response.content)
+  totalPages.value = response.totalPages
+  totalElements.value = response.totalElements
+}
 </script>
-
 
 <template>
   <div class="point-container">
@@ -49,7 +48,7 @@ const updatePoints = (response: any) => {
         <col width="100px" />
         <tr class="point-table-data1">
           <td class="left-margin">일시</td>
-          <td>출저</td>
+          <td>출처</td>
           <td>사용처</td>
           <td>금액</td>
           <td>상태</td>
@@ -65,22 +64,20 @@ const updatePoints = (response: any) => {
     </template>
 
     <template v-else>
-      <br>
+      <br />
       <p>포인트 내역이 없습니다.</p>
     </template>
   </div>
 
   <div class="pagination">
-      <PaginationComponent
-        :onChangePage="onChangePage"
-        :requestPage="requestPage"
-        :totalPages="totalPages"
-      />
-    </div>
-
+    <PaginationComponent
+      :onChangePage="onChangePage"
+      :requestPage="requestPage"
+      :totalPages="totalPages"
+    />
+  </div>
 </template>
 
-
 <style scoped>
-@import "@/assets/css/point-history.css";
+@import '@/assets/css/point-history.css';
 </style>
