@@ -69,16 +69,13 @@ watchEffect(() => {
         <div class="review-second-column">
           <div class="review-text-container1">
             <h1>상품 명 : {{ props.productName }} - 상품 옵션 : {{ review.productSize }}</h1>
-            <h2>작성일</h2>
+            <h2>작성일 : {{ review.createdAt }}</h2>
           </div>
           <span>{{ review.description }}</span>
         </div>
       </div>
       <div class="review-row-right">
         <img class="review-prod-img" :src="`${VITE_STATIC_IMG_URL}${review.imgUrl}`" alt="" />
-        <div class="review-last-column">
-          <span>삭제</span>
-        </div>
       </div>
     </div>
   </div>
