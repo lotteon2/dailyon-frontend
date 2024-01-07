@@ -214,56 +214,62 @@ const removeTagProduct = async (productId: number, sizeName: string) => {
 }
 
 const onSubmit = async () => {
-  const hashTagNames = postCreateRequest.value.hashTagNames
-  const title = postCreateRequest.value.title
-  const description = postCreateRequest.value.description
-  const postImgName = postCreateRequest.value.postImgName
-  const postThumbnailImgName = postCreateRequest.value.postThumbnailImgName
+  const isConfirmed = confirm("작성을 완료하시겠습니까?")
+  if(isConfirmed) {
+    const hashTagNames = postCreateRequest.value.hashTagNames
+    const title = postCreateRequest.value.title
+    const description = postCreateRequest.value.description
+    const postImgName = postCreateRequest.value.postImgName
+    const postThumbnailImgName = postCreateRequest.value.postThumbnailImgName
 
-  if (hashTagNames.length < 1 || hashTagNames.length > 3) {
-    alert('해시태그는 최소 1개 최대 3개까지 입력 가능합니다.')
-    return
-  }
+    if (hashTagNames.length < 1 || hashTagNames.length > 3) {
+      alert('해시태그는 최소 1개 최대 3개까지 입력 가능합니다.')
+      return
+    }
 
-  if (title.length < 5 || title.length > 50) {
-    alert('게시글 제목은 최소 5글자에서 최대 50글자 사이로 입력할 수 있습니다.')
-    return
-  }
+    if (title.length < 5 || title.length > 50) {
+      alert('게시글 제목은 최소 5글자에서 최대 50글자 사이로 입력할 수 있습니다.')
+      return
+    }
 
-  if (description.length > 300) {
-    alert('게시글 본문은 최대 300글자 까지 입력할 수 있습니다.')
-    return
-  }
+    if (description.length > 300) {
+      alert('게시글 본문은 최대 300글자 까지 입력할 수 있습니다.')
+      return
+    }
 
-  if (postImgName === '' || postThumbnailImgName === '' || inputPostImgFile.value === undefined) {
-    alert('게시글 이미지를 등록해주세요.')
-    return
-  }
+    if (postImgName === '' || postThumbnailImgName === '' || inputPostImgFile.value === undefined) {
+      alert('게시글 이미지를 등록해주세요.')
+      return
+    }
 
-  temporaryTagProducts.value.forEach((temporaryTagProduct) => {
-    postCreateRequest.value.postImageProductDetails.push({
-      productId: temporaryTagProduct.id,
-      productSize: temporaryTagProduct.sizeName,
-      leftGapPercent: temporaryTagProduct.leftGapPercent,
-      topGapPercent: temporaryTagProduct.topGapPercent
+    temporaryTagProducts.value.forEach((temporaryTagProduct) => {
+      postCreateRequest.value.postImageProductDetails.push({
+        productId: temporaryTagProduct.id,
+        productSize: temporaryTagProduct.sizeName,
+        leftGapPercent: temporaryTagProduct.leftGapPercent,
+        topGapPercent: temporaryTagProduct.topGapPercent
+      })
     })
-  })
 
-  const postCreateResponse = await createPost(postCreateRequest.value)
-  try {
-    await uploadImageToS3(postCreateResponse.imgPreSignedUrl, inputPostImgFile.value)
-    await uploadImageToS3(postCreateResponse.thumbnailImgPreSignedUrl, inputPostImgFile.value)
-    alert('게시글 등록이 성공하였습니다.')
-    await router.push({ path: `/ootds/${postCreateResponse.id}` })
-  } catch (error: any) {
-    alert('게시글 이미지 업로드중 오류가 발생했습니다.')
-    console.error(error)
-    throw error
+    const postCreateResponse = await createPost(postCreateRequest.value)
+    try {
+      await uploadImageToS3(postCreateResponse.imgPreSignedUrl, inputPostImgFile.value)
+      await uploadImageToS3(postCreateResponse.thumbnailImgPreSignedUrl, inputPostImgFile.value)
+      alert('게시글 등록이 성공하였습니다.')
+      await router.push({ path: `/ootds/${postCreateResponse.id}` })
+    } catch (error: any) {
+      alert('게시글 이미지 업로드중 오류가 발생했습니다.')
+      console.error(error)
+      throw error
+    }
   }
 }
 
 const onCancel = async () => {
-  router.go(-1)
+  const isConfirmed = confirm("작성을 취소하시겠습니까?")
+  if(isConfirmed) {
+    router.go(-1)
+  }
 }
 </script>
 

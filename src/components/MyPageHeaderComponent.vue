@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router'
 import { pointPaymentReady } from '@/apis/payment/payment'
 import type { PointPaymentDto } from '@/apis/payment/paymentDto'
 import { useMemberStore } from '@/stores/member/MemberStore'
-
+import { getMember } from '@/apis/member/member'
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
 const router = useRouter()
@@ -87,14 +87,11 @@ const processPayment = async () => {
   displayModal.value = false
 }
 
-const handleMessage = (event: MessageEvent) => {
+const handleMessage = async (event: MessageEvent) => {
+  await getMember()
   const { routeName } = event.data
   window.scrollTo(0, 0)
-  if (routeName == 'pointPaymentHistory') {
-    window.location.reload()
-  } else {
-    router.replace({ name: routeName })
-  }
+  router.replace({ name: routeName })
 }
 
 const memberStore = useMemberStore()

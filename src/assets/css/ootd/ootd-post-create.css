@@ -122,6 +122,13 @@
 
     border: 1px solid var(--Grayscale3, #E9E9E9);
     background: var(--Grayscale1, #FFF);
+
+    color: #000;
+    text-align: start;
+    font-family: The Jamsil;
+    font-size: 0.7vw;
+    font-style: normal;
+    font-weight: 300;
 }
 
 .rectangle::placeholder {
