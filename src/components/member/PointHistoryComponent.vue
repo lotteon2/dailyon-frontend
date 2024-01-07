@@ -28,7 +28,7 @@ watch(requestPage, async (afterPage, beforePage) => {
 })
 
 const updatePoints = (response: any) => {
-  points.value.push(...response.content)
+  points.value = response.content
   totalPages.value = response.totalPages
   totalElements.value = response.totalElements
 }

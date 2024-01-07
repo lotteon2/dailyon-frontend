@@ -19,6 +19,7 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   width: 30%; /* Adjust to your preference, maybe keeping consistent with category-modal.css width */
   min-height: 60%;
+  max-height: 70%;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -50,8 +51,17 @@
 
 .coupon-body-content-wrapper {
   min-height: 42vh;
+  max-height: 52vh;
   display: flex;
   flex-direction: column;
+
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.coupon-body-content-wrapper::-webkit-scrollbar {
+  display: none; /* Webkit browsers (Safari, Chrome) */
 }
 
 .discount-highlight {

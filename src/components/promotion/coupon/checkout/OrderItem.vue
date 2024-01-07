@@ -11,7 +11,9 @@
       <div class="price-block">
         <div>
           <div class="price-desc">상품 가격</div>
-          <div class="price-value">{{ formatPrice(orderItem.orderPrice) }}원</div>
+          <div class="price-value">
+            {{ formatPrice(orderItem.orderPrice / orderItem.quantity) }}원
+          </div>
         </div>
         <div class="price-operator">x</div>
         <div>
@@ -22,9 +24,7 @@
         <div class="price-operator">=</div>
         <div>
           <div class="price-desc">총 가격</div>
-          <div class="price-value bold">
-            {{ formatPrice(orderItem.orderPrice * orderItem.quantity) }}원
-          </div>
+          <div class="price-value bold">{{ formatPrice(orderItem.orderPrice) }}원</div>
         </div>
       </div>
 
@@ -125,11 +125,12 @@ const onCouponSelected = (couponId: number | null) => {
 
 const calculateDiscount = (coupon?: CouponInfoItemResponse | null): void => {
   if (coupon && props.orderItem) {
-    const totalPrice = props.orderItem.orderPrice * props.orderItem.quantity
+    const totalPrice = props.orderItem.orderPrice
     let discount = 0
     if (coupon.discountType === 'PERCENTAGE') {
       discount = totalPrice * (coupon.discountValue / 100)
       if (
+        // 최대 할인 금액 설정시, 계산된 할인 금액이 제한치 초과하는지 검사
         coupon.maxDiscountAmount !== null &&
         coupon.maxDiscountAmount !== undefined &&
         discount > coupon.maxDiscountAmount
@@ -139,11 +140,12 @@ const calculateDiscount = (coupon?: CouponInfoItemResponse | null): void => {
     } else {
       discount = coupon.discountValue
     }
-    selectedDiscount.value = discount
+    selectedDiscount.value = Math.floor(discount) // 정수 내림
   } else {
     selectedDiscount.value = 0
   }
 }
+
 const isCouponDisabled = (coupon: CouponInfoItemCheckoutResponse): boolean => {
   return props.orderItem.orderPrice * props.orderItem.quantity < (coupon.minPurchaseAmount || 0)
 }
