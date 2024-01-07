@@ -10,6 +10,7 @@ import { createComment, createReplyComment, deleteComment, getComments } from '@
 import { useRoute } from 'vue-router'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 import { useMemberStore } from '@/stores/member/MemberStore'
+import { debounce } from 'lodash'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -66,7 +67,7 @@ const createCommentRequest = ref<CreateCommentRequest>({
   description: ''
 })
 
-const onSubmitComment = async () => {
+const onSubmitComment = debounce(async () => {
   if (!isCommentRegistered.value) {
     if(memberId === null) {
       alert("로그인이 필요합니다.")
@@ -82,7 +83,7 @@ const onSubmitComment = async () => {
     }
     isCommentRegistered.value = true
   }
-}
+}, 500)
 
 const isOpenReplyCommentInput = ref<Set<number>>(new Set<number>())
 const onOpenReplyCommentInput = async (commentId: number) => {
@@ -94,7 +95,7 @@ const createReplyCommentRequest = ref<CreateReplyCommentRequest>({
   description: ''
 })
 
-const onSubmitReplyComment = async (commentId: number) => {
+const onSubmitReplyComment = debounce(async (commentId: number) => {
   if (!isCommentRegistered.value) {
     if(memberId === null) {
       alert('로그인이 필요합니다.')
@@ -110,7 +111,7 @@ const onSubmitReplyComment = async (commentId: number) => {
     }
     isCommentRegistered.value = true
   }
-}
+}, 500)
 
 const onDeleteComment = async (commentId: number) => {
   const isConfirm = confirm('댓글을 삭제하시겠습니까?')
