@@ -198,6 +198,15 @@ const onDeleteBtnClick = async () => {
     await router.push({ path: '/ootds' })
   }
 }
+
+const isTagedProductMouseOver = ref<Set<number>>(new Set<number>())
+const onTagedProductMouseOver = async (productId: number) => {
+  isTagedProductMouseOver.value.add(productId)
+}
+
+const onTagedProductMouseLeave = async (productId: number) => {
+  isTagedProductMouseOver.value.delete(productId)
+}
 </script>
 
 <template>
@@ -357,6 +366,7 @@ const onDeleteBtnClick = async () => {
                   fill='#C22727' />
               </svg>
               <div class='product-detail-tag-dropdown-wrapper'
+                   :class='{ isActive: isTagedProductMouseOver.has(postImageProductDetail.productId) }'
                    :style='{ zIndex: 5 - index }'>
                 <svg class='product-detail-tag-dropdown-pointer' xmlns='http://www.w3.org/2000/svg' width='33'
                      height='36' viewBox='0 0 33 36' fill='none'>
@@ -398,7 +408,9 @@ const onDeleteBtnClick = async () => {
                             v-if='postImageProductDetail.imgUrl !== undefined'
                             :to='{ path: `/products/${postImageProductDetail.productId}`, query: { code: post.member.code }}'>
                   <img class='ootd-detail-content-product-image'
-                       :src='`${VITE_STATIC_IMG_URL}${postImageProductDetail.imgUrl}`'>
+                       :src='`${VITE_STATIC_IMG_URL}${postImageProductDetail.imgUrl}`'
+                       @mouseover='onTagedProductMouseOver(postImageProductDetail.productId)'
+                       @mouseleave='onTagedProductMouseLeave(postImageProductDetail.productId)'>
                 </RouterLink>
                 <div class='ootd-detail-content-product-image-wrapper'
                      v-else>

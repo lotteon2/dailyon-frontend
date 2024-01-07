@@ -141,44 +141,50 @@ const updateTagProduct = async (id: number) => {
 }
 
 const onSubmit = async () => {
-  const title = postUpdateRequest.value.title
-  const description = postUpdateRequest.value.description
+  const isConfirmed = confirm("작성을 완료하시겠습니까?")
+  if(isConfirmed) {
+    const title = postUpdateRequest.value.title
+    const description = postUpdateRequest.value.description
 
-  if(isHashTagInputOpen.value.size !== 0) {
-    alert("해시태그 작성을 완성해주세요.")
-    return
-  }
+    if(isHashTagInputOpen.value.size !== 0) {
+      alert("해시태그 작성을 완성해주세요.")
+      return
+    }
 
-  if (title.length < 5 || title.length > 50) {
-    alert('게시글 제목은 최소 5글자에서 최대 50글자 사이로 입력할 수 있습니다.')
-    return
-  }
+    if (title.length < 5 || title.length > 50) {
+      alert('게시글 제목은 최소 5글자에서 최대 50글자 사이로 입력할 수 있습니다.')
+      return
+    }
 
-  if (description.length > 300) {
-    alert('게시글 본문은 최대 300글자 까지 입력할 수 있습니다.')
-    return
-  }
+    if (description.length > 300) {
+      alert('게시글 본문은 최대 300글자 까지 입력할 수 있습니다.')
+      return
+    }
 
-  temporaryTagProducts.value.forEach((temporaryTagProduct) => {
-    postUpdateRequest.value.postImageProductDetails.forEach((postImageProductDetail) => {
-      if (temporaryTagProduct.id === postImageProductDetail.id) {
-        postImageProductDetail.productId = temporaryTagProduct.productId
-        postImageProductDetail.productSize = temporaryTagProduct.sizeName
-        postImageProductDetail.leftGapPercent = temporaryTagProduct.leftGapPercent
-        postImageProductDetail.topGapPercent = temporaryTagProduct.topGapPercent
-      }
+    temporaryTagProducts.value.forEach((temporaryTagProduct) => {
+      postUpdateRequest.value.postImageProductDetails.forEach((postImageProductDetail) => {
+        if (temporaryTagProduct.id === postImageProductDetail.id) {
+          postImageProductDetail.productId = temporaryTagProduct.productId
+          postImageProductDetail.productSize = temporaryTagProduct.sizeName
+          postImageProductDetail.leftGapPercent = temporaryTagProduct.leftGapPercent
+          postImageProductDetail.topGapPercent = temporaryTagProduct.topGapPercent
+        }
+      })
     })
-  })
 
-  const postUpdateResponse = await updatePost(postId.value, postUpdateRequest.value)
-  alert('게시글 수정이 성공하였습니다.')
-  await postStore.clearPostUpdateRequest()
-  await postStore.clearTemporaryTagProducts()
-  await router.push({ path: `/ootds/${postUpdateResponse.id}` })
+    const postUpdateResponse = await updatePost(postId.value, postUpdateRequest.value)
+    alert('게시글 수정이 성공하였습니다.')
+    await postStore.clearPostUpdateRequest()
+    await postStore.clearTemporaryTagProducts()
+    await router.push({ path: `/ootds/${postUpdateResponse.id}` })
+  }
 }
 
 const onCancel = async () => {
-  router.go(-1)
+  const isConfirmed = confirm("작성을 취소하시겠습니까?")
+  if(isConfirmed) {
+    router.go(-1)
+  }
 }
 </script>
 

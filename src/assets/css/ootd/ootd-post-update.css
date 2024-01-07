@@ -21,10 +21,28 @@
     gap: 1vw;
 }
 
+.OOTD > .text-wrapper {
+    color: var(--Grayscale7, #000);
+    font-family: The Jamsil;
+    font-size: 1vw;
+    font-style: normal;
+    font-weight: 350;
+    line-height: normal;
+}
+
+.OOTD > .span {
+    color: var(--Grayscale7, #000);
+    font-family: The Jamsil;
+    font-size: 1.1vw;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
 .text-wrapper, .text-wrapper-2 {
     color: var(--Grayscale7, #000);
     font-family: The Jamsil;
-    font-size: 0.9375rem;
+    font-size: 0.8vw;
     font-style: normal;
     font-weight: 300;
     line-height: normal;
@@ -60,7 +78,7 @@
 
     color: var(--Grayscale7, #000);
     font-family: The Jamsil;
-    font-size: 0.9375rem;
+    font-size: 1vw;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
@@ -82,7 +100,7 @@
 .text-wrapper-4 {
     color: #000;
     font-family: The Jamsil;
-    font-size: 0.9375rem;
+    font-size: 0.9vw;
     font-style: normal;
     font-weight: 300;
     line-height: 1.25rem; /* 133.333% */
@@ -98,11 +116,30 @@
 }
 
 .rectangle {
-    width: 9.375rem;
-    height: 1.875rem;
+    width: 7vw;
+    height: 2vh;
+    padding: 0.3vw;
 
     border: 1px solid var(--Grayscale3, #E9E9E9);
     background: var(--Grayscale1, #FFF);
+
+    color: #000;
+    text-align: start;
+    font-family: The Jamsil;
+    font-size: 0.7vw;
+    font-style: normal;
+    font-weight: 300;
+}
+
+.rectangle::placeholder {
+    flex: 1 0 0;
+
+    color: var(--Grayscale5, #808080);
+    text-align: start;
+    font-family: The Jamsil;
+    font-size: 0.7vw;
+    font-style: normal;
+    font-weight: 300;
 }
 
 input::-webkit-outer-spin-button,
@@ -136,7 +173,8 @@ input::-webkit-inner-spin-button {
 .div-wrapper {
     display: flex;
     width: fit-content;
-    padding: 0.3125rem;
+    height: 2vh;
+    padding: 0.3vw;
     justify-content: center;
     align-items: center;
 
@@ -146,11 +184,10 @@ input::-webkit-inner-spin-button {
 .text-wrapper-5 {
     flex: 1 0 0;
     text-align: center;
-    align-self: stretch;
 
     color: var(--Grayscale1, #FFF);
     font-family: The Jamsil;
-    font-size: 0.9375rem;
+    font-size: 0.8vw;
     font-style: normal;
     font-weight: 300;
     line-height: normal;
@@ -177,7 +214,8 @@ input::-webkit-inner-spin-button {
 .div-wrapper-2 {
     display: flex;
     width: fit-content;
-    padding: 0.3125rem;
+    height: 2vh;
+    padding: 0.3vw;
     justify-content: center;
     align-items: center;
 
@@ -186,14 +224,15 @@ input::-webkit-inner-spin-button {
 
 .div-11 {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 0.875rem;
 }
 
 .div-wrapper-3 {
     display: flex;
     width: fit-content;
-    padding: 0.3125rem;
+    height: 2vh;
+    padding: 0.3vw;
     justify-content: center;
     align-items: center;
 
@@ -206,20 +245,20 @@ input::-webkit-inner-spin-button {
 
 .div-wrapper-3::placeholder {
     flex: 1 0 0;
-    align-self: stretch;
 
     color: var(--Grayscale5, #808080);
     text-align: center;
     font-family: The Jamsil;
-    font-size: 0.9375rem;
+    font-size: 0.7vw;
     font-style: normal;
     font-weight: 300;
-    line-height: normal;
 }
 
 .div-wrapper-4 {
     display: flex;
-    padding: 0.3125rem 0.625rem;
+    width: fit-content;
+    height: 2vh;
+    padding: 0.3vw;
     justify-content: center;
     align-items: center;
     gap: 0.625rem;
@@ -244,7 +283,7 @@ input::-webkit-inner-spin-button {
 .text-wrapper-7 {
     color: var(--Grayscale1, #FFF);
     font-family: The Jamsil;
-    font-size: 0.9375rem;
+    font-size: 0.8vw;
     font-style: normal;
     font-weight: 300;
     line-height: normal;
@@ -275,7 +314,7 @@ input::-webkit-inner-spin-button {
 
     color: var(--Grayscale4, #000000);
     font-family: The Jamsil;
-    font-size: 1.875rem;
+    font-size: 1.8vw;
     font-style: normal;
     font-weight: 300;
     line-height: normal;
@@ -393,12 +432,13 @@ input::-webkit-inner-spin-button {
 
     color: var(--Grayscale4, #000000);
     font-family: The Jamsil;
-    font-size: 1.25rem;
+    font-size: 1.1vw;
     font-style: normal;
     font-weight: 300;
     line-height: normal;
 
     border: none;
+    resize: none;
 }
 
 .text-wrapper-12:focus {
@@ -410,8 +450,8 @@ input::-webkit-inner-spin-button {
 }
 
 .post-img {
-    max-width: 1000px;
-    max-height: 1000px;
+    max-width: 40vw;
+    max-height: 105vh;
 }
 
 .button-container {
@@ -439,7 +479,7 @@ input::-webkit-inner-spin-button {
     color: var(--Grayscale1, #FFF);
     text-align: center;
     font-family: The Jamsil;
-    font-size: 1.2rem;
+    font-size: 1vw;
     font-style: normal;
     font-weight: 300;
     line-height: normal;
@@ -459,7 +499,7 @@ input::-webkit-inner-spin-button {
     color: var(--Grayscale1, #FFF);
     text-align: center;
     font-family: The Jamsil;
-    font-size: 1.2rem;
+    font-size: 1vw;
     font-style: normal;
     font-weight: 300;
     line-height: normal;
@@ -480,8 +520,9 @@ input::-webkit-inner-spin-button {
 
 .product-detail-tag-wrapper {
     display: flex;
-    padding: 0.625rem;
     align-items: flex-start;
+    width: 1.5vw;
+    height: 3vh;
     gap: 0.625rem;
 
     position: absolute;
@@ -504,17 +545,17 @@ input::-webkit-inner-spin-button {
     align-items: center;
 
     position: absolute;
-    left: -10.0625rem;
-    bottom: -12.20313rem;
+    left: -470%;
+    bottom: -590%;
 }
 
 .product-detail-tag-dropdown-pointer {
     position: absolute;
-    left: 46%;
-    top: -13%;
+    left: 43.5%;
+    top: -9%;
 
-    width: 1.94856rem;
-    height: 2.20313rem;
+    width: 2vw;
+    height: 2vh;
 
     fill: var(--Grayscale1, #FFF);
 }
@@ -523,8 +564,9 @@ input::-webkit-inner-spin-button {
     display: flex;
     align-items: center;
 
-    width: 23.1875rem;
-    height: 11rem;
+    width: 15vw;
+    height: 15vh;
+    padding: 5px;
 
     border-radius: 0.625rem;
     background: var(--Grayscale1, #FFF);
@@ -532,8 +574,8 @@ input::-webkit-inner-spin-button {
 }
 
 .product-image {
-    width: 7rem;
-    height: 9rem;
+    width: 30%;
+    height: 60%;
 
     border-radius: 0.625rem;
 }
@@ -541,29 +583,27 @@ input::-webkit-inner-spin-button {
 .product-image-brand-and-name-wrapper {
     display: flex;
     flex-direction: column;
-    padding: 0.625rem;
     justify-content: center;
-    align-items: center;
-    gap: 0.625rem;
+    align-items: flex-start;
+    width: 100%;
+    height: 100%;
 
-    position: absolute;
-    right: 8.625rem;
-    top: 0.6875rem;
+    padding: 5px;
 }
 
 .product-image-brand {
     color: var(--Grayscale7, #000);
     font-family: The Jamsil;
-    font-size: 1.25rem;
+    font-size: 1vw;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 400;
     line-height: 1.875rem; /* 150% */
 }
 
 .product-image-name {
     color: var(--Grayscale7, #000);
     font-family: The Jamsil;
-    font-size: 1.25rem;
+    font-size: 0.8vw;
     font-style: normal;
     font-weight: 300;
     line-height: 1.875rem;
@@ -578,19 +618,15 @@ input::-webkit-inner-spin-button {
     gap: 0.625rem;
 
     height: 80%;
-
-    position: absolute;
-    right: 1.875rem;
-    bottom: 0.64063rem;
 }
 
 .product-size {
     color: var(--Grayscale7, #000);
     text-align: right;
     font-family: The Jamsil;
-    font-size: 1.5625rem;
+    font-size: 1vw;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 400;
     line-height: 1.875rem; /* 120% */
 }
 

@@ -1195,8 +1195,18 @@
     fill: var(--Dark-Red, #C22727);
 }
 
-.product-detail-tag-dropdown-wrapper {
+.product-detail-tag-dropdown-wrapper  {
     display: none;
+    flex-direction: column;
+    align-items: center;
+
+    position: absolute;
+    left: -470%;
+    bottom: -590%;
+}
+
+.product-detail-tag-dropdown-wrapper.isActive {
+    display: block;
     flex-direction: column;
     align-items: center;
 
