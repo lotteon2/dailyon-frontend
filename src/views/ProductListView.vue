@@ -77,7 +77,11 @@ watch(isScrollEnd, async (after, before) => {
         :to="`/products/${product.id}`"
         :key="product.id"
       >
-        <img :src="`${VITE_STATIC_IMG_URL}${product.imgUrl}?w=200&h=200`" alt="productImg" />
+        <img
+          class="product-img"
+          :src="`${VITE_STATIC_IMG_URL}${product.imgUrl}?w=200&h=200`"
+          alt="productImg"
+        />
         <h1>{{ product.brandName }}</h1>
         <h2>{{ product.name }}</h2>
         <div class="product-third-info">
@@ -155,5 +159,10 @@ watch(isScrollEnd, async (after, before) => {
 .product-aggregate {
   display: flex;
   align-items: center;
+}
+
+.product-img {
+  width: 200px;
+  height: 200px;
 }
 </style>

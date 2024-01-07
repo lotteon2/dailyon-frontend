@@ -10,6 +10,7 @@ import type { GiftInfo } from '@/apis/order/orderDto'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 import WhitePageComponent from '@/components/wishcart/WhitePageComponent.vue'
 import router from '@/router'
+
 const productStore = useProductStore()
 const props = defineProps({
   targetId: {
@@ -137,7 +138,12 @@ watch(requestPage, async (afterPage: number, beforePage: number) => {
         <td class="center-text">판매 가격</td>
         <td></td>
       </tr>
-      <tr v-for="(wishList, idx) in wishLists" :key="idx" class="wish-table-data2">
+      <tr
+        v-for="(wishList, idx) in wishLists"
+        :key="idx"
+        class="wish-table-data2"
+        @click="router.push(`/products/${wishList.productId}`)"
+      >
         <td class="left-margin">
           <img
             class="basket-img"
@@ -156,8 +162,8 @@ watch(requestPage, async (afterPage: number, beforePage: number) => {
           <span class="prod-price">{{ wishList.productPrice.toLocaleString() }}원</span>
         </td>
         <td>
-          <button class="wishBtn" v-if="isMine" @click="executeDelete(idx)">삭제</button
-          ><button class="wishBtn" v-else @click="routeOrder(idx)">선물</button>
+          <button class="wishBtn" v-if="isMine" @click="executeDelete(idx)">삭제</button>
+          <button class="wishBtn" v-else @click="routeOrder(idx)">선물</button>
         </td>
       </tr>
     </table>
