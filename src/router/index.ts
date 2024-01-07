@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
-import OrderHistoryComponent from '@/components/order/OrderHistoryComponent.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -24,6 +23,11 @@ const router = createRouter({
       path: '/product-list',
       name: 'productList',
       component: () => import('@/views/ProductListView.vue')
+    },
+    {
+      path: '/product-search',
+      name: 'productSearch',
+      component: () => import('@/views/ProductSearchView.vue')
     },
     {
       path: '/products/:id',
@@ -188,9 +192,9 @@ const router = createRouter({
       component: () => import('@/views/LoginGetInfo.vue')
     },
     {
-      path: "/:catchAll(.*)",
-      name: "not-found",
-      component: () => import("@/views/NotFoundView.vue"),
+      path: '/:catchAll(.*)',
+      name: 'not-found',
+      component: () => import('@/views/NotFoundView.vue')
     }
   ]
 })
@@ -202,11 +206,11 @@ router.beforeEach((to, from, next) => {
   } else if (to.name === 'login' && isLoggedIn()) {
     alert('이미 로그인한 상태입니다.')
     next('/')
-  }  else if (to.name === 'not-found') {
-    alert('페이지를 찾을 수 없습니다.');
-    next('/');
+  } else if (to.name === 'not-found') {
+    alert('페이지를 찾을 수 없습니다.')
+    next('/')
   } else {
-    next();
+    next()
   }
 })
 

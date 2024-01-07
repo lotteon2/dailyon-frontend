@@ -55,6 +55,14 @@
     padding-bottom: 10px;
 }
 
+.wish-table-data2 {
+    cursor: pointer;
+}
+
+.wish-table-data2:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
 .wish-table-data2 > td {
     color: var(--Grayscale7, #202027);
     font-family: TheJamsil;
@@ -67,6 +75,8 @@
 .basket-img {
     flex-shrink: 0;
     margin: 20px 0;
+    width: 100px;
+    height: 100px;
 }
 
 .basket-column {
