@@ -8,5 +8,5 @@ export interface OOTDMemberProfileResponse {
   profileImgUrl: string;
   followingCount: number;
   followerCount: number;
-  isFollowing: boolean;
+  isFollowing?: boolean;
 }

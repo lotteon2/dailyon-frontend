@@ -36,7 +36,7 @@ const post = ref<PostDetailResponse>({
     nickname: '',
     profileImgUrl: '',
     code: '',
-    isFollowing: false
+    isFollowing: undefined
   },
   hashTags: [] as PostDetailHashTagResponse[],
   postImageProductDetails: [] as PostImageProductDetailResponse[]
@@ -93,8 +93,12 @@ const likeButtonClickListener = (isLike: boolean | undefined) => {
 const followStore = useFollowStore()
 const follows = followStore.follows
 const followButtonClickListener = (followingId: number, isFollowing: boolean | undefined) => {
-  post.value.member.isFollowing = !isFollowing
-  follows.has(followingId) ? follows.delete(followingId) : follows.add(followingId)
+  if(isFollowing === undefined) {
+    alert('로그인이 필요합니다.')
+  } else {
+    post.value.member.isFollowing = !isFollowing
+    follows.has(followingId) ? follows.delete(followingId) : follows.add(followingId)
+  }
 }
 
 const flushFollowStore = async () => {

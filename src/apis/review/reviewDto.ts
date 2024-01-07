@@ -8,6 +8,7 @@ export interface ReviewResponse {
   nickname: string
   profileImgUrl: string
   isWrittenByMe: boolean
+  createdAt: string
 }
 
 export interface ReviewPageResponse<T extends ReviewResponse> {
