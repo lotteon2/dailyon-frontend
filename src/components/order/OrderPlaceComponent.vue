@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, defineEmits } from 'vue'
 import AddressModal from '@/components/order/OrderAddressModal.vue'
-
-const emit = defineEmits(['submit2', 'changeReceiver', 'changePhoneNumber'])
+import { getDefaultAddress } from '@/apis/member/member'
+const emit = defineEmits(['submit2', 'changeReceiver', 'changePhoneNumber', 'fetchDefaultAddress'])
 const isModalVisible = ref(false)
 const openModal = () => {
   isModalVisible.value = true
@@ -44,6 +44,16 @@ const limitReceiver = () => {
   address.value.receiver = temp
   emit('changeReceiver', address.value.receiver)
 }
+
+const fetchDefaultAddress = async () => {
+  const data = await getDefaultAddress()
+  if (!data) {
+    alert('기본 배송지가 설정 되어있지 않습니다.')
+    return
+  }
+  address.value = data
+  emit('fetchDefaultAddress', address.value)
+}
 </script>
 
 <template>
@@ -56,8 +66,7 @@ const limitReceiver = () => {
     <div class="place-first-row">
       <div class="container-title">배송지</div>
       <div class="place-button-wrapper">
-        <div class="black-button"><span>주문자 정보와 동일</span></div>
-        <div class="black-button"><span>배송지 목록 조회</span></div>
+        <div class="black-button" @click="fetchDefaultAddress"><span>주문자 정보와 동일</span></div>
       </div>
     </div>
     <div class="line"></div>
