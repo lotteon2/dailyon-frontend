@@ -57,118 +57,100 @@ onMounted(async () => {
       }
     },
     transport: new WebsocketClientTransport({
-      url: 'ws://localhost:6777/rs'
-      // wsCreator: (url) => new WebSocket(url) as any
+      url: 'ws://localhost:6777/rs',
+      wsCreator: (url) => new WebSocket(url) as any
     })
   })
+  const rsocket = await connector.value.connect()
 
-  rsocket.value = await connector.value.connect()
-  requester.value = rsocket.value.requestChannel(
-    {
-      data: null,
-      metadata: Buffer.from(String.fromCharCode('send'.length) + 'send')
-    },
-    1,
-    false,
-    {
-      onError: (e: any) => {
-        console.log(e)
-      },
-      onNext: (payload, isComplete) => {
-        if (isComplete) {
-          console.log(`payload[data: ${payload.data}; metadata: ${payload.metadata}]|${isComplete}`)
-        }
-      },
-      onComplete: () => {},
-      onExtension: () => {},
-      request: (n) => {
-        console.log(`request(${n})`)
-        requester.value.onNext(
-          {
-            data: Buffer.from(JSON.stringify(message)),
-            metadata: Buffer.from(String.fromCharCode('send'.length) + 'send')
-          },
-          true
-        )
-      },
-      cancel: () => {}
-    }
-  )
-
-  rsocket.value.requestChannel(
-    {
-      data: null,
-      metadata: Buffer.from(String.fromCharCode('send'.length) + 'send')
-    },
-    1,
-    false,
-    {
-      onError: (e: any) => {
-        console.log(e)
-      },
-      onNext: (payload, isComplete) => {
-        if (isComplete) {
-          console.log(`payload[data: ${payload.data}; metadata: ${payload.metadata}]|${isComplete}`)
-        }
-      },
-      onComplete: () => {},
-      onExtension: () => {},
-      request: (n) => {
-        console.log(`request(${n})`)
-      },
-      cancel: () => {}
-    }
-  )
-})
-
-const send = () => {
-  if (!newMessage.value.trim()) {
-    alert('메세지를 입력해주세요')
-    return
-  }
-  if (rsocket.value) {
-    const timestamp = new Date().toLocaleTimeString()
-    const message: Message = {
-      user: user.value,
-      content: newMessage.value,
-      timestamp: timestamp
-    }
-    messages.value.push(message)
-
-    rsocket.value.requestChannel(
+  await new Promise((resolve, reject) => {
+    const requester = rsocket.requestChannel(
       {
-        data: Buffer.from(JSON.stringify(message)),
-        metadata: Buffer.from(String.fromCharCode('send'.length) + 'send')
+        data: Buffer.from('Hello World')
       },
-      100000,
+      1,
       false,
       {
-        onError: (e: any) => {
-          console.log(e)
-        },
+        onError: (e) => reject(e),
         onNext: (payload, isComplete) => {
           console.log(`payload[data: ${payload.data}; metadata: ${payload.metadata}]|${isComplete}`)
-          newMessage.value = ''
+
+          requester.request(1)
+
+          if (isComplete) {
+            resolve(payload)
+          }
         },
-        onComplete: () => {},
+        onComplete: () => {
+          resolve(null)
+        },
         onExtension: () => {},
         request: (n) => {
           console.log(`request(${n})`)
-          // requester.value.onNext(
-          //   {
-          //     data: Buffer.from(JSON.stringify(message)),
-          //     metadata: Buffer.from(String.fromCharCode('receive'.length) + 'receive')
-          //   },
-          //   true
-          // )
+          requester.onNext(
+            {
+              data: Buffer.from('Message')
+            },
+            true
+          )
         },
         cancel: () => {}
       }
     )
-    newMessage.value = ''
-  }
-}
+  })
+})
 
+// onMounted(async () => {
+//   connector.value = new RSocketConnector({
+//     setup: {
+//       keepAlive: 100,
+//       lifetime: 10000,
+//       dataMimeType: 'application/json',
+//       metadataMimeType: 'message/x.rsocket.routing.v0',
+//       payload: {
+//         data: Buffer.from(JSON.stringify(user.value))
+//       }
+//     },
+//     transport: new WebsocketClientTransport({
+//       url: 'ws://localhost:6777/rs'
+//       // wsCreator: (url) => new WebSocket(url) as any
+//     })
+//   })
+
+//   rsocket.value = await connector.value.connect()
+//   const requester = rsocket.value.requestChannel(
+//     {
+//       data: Buffer.from(''),
+//       metadata: Buffer.from(String.fromCharCode('chat.message'.length) + 'chat.message')
+//     },
+//     2147483647,
+//     true,
+//     {
+//       onError: (e: any) => {
+//         console.error('Connection has been closed due to:', e)
+//       },
+//       onNext: (payload, isComplete) => {
+//         console.log(`payload[data: ${payload.data}; metadata: ${payload.metadata}]|${isComplete}`)
+//         if (isComplete) {
+//         }
+//       },
+//       onComplete: () => {},
+//       onExtension: () => {},
+//       request: (n) => {
+//         console.log(`request(${n})`)
+//         console.log(requester)
+//         // requester.value.onNext(
+//         //   {
+//         //     data: Buffer.from(JSON.stringify(message)),
+//         //     metadata: Buffer.from(String.fromCharCode('receive'.length) + 'receive')
+//         //   },
+//         //   true
+//         // )
+//       },
+//       cancel: () => {}
+//     }
+//   )
+// })
 // const send = () => {
 //   if (!newMessage.value.trim()) {
 //     alert('메세지를 입력해주세요')
@@ -181,38 +163,40 @@ const send = () => {
 //       content: newMessage.value,
 //       timestamp: timestamp
 //     }
-//     messages.value.push(message)
-//     const requester = rsocket.value.requestChannel(
+//     rsocket.value.requestChannel(
 //       {
 //         data: Buffer.from(JSON.stringify(message)),
-//         metadata: Buffer.from(String.fromCharCode('client.receive'.length) + 'client.receive')
+//         metadata: Buffer.from(String.fromCharCode('chat.message'.length) + 'chat.message')
 //       },
-//       1,
-//       false,
+//       2147483647,
+//       true,
 //       {
 //         onError: (e: any) => {
-//           console.log(e)
+//           console.error('Connection has been closed due to:', e)
 //         },
 //         onNext: (payload, isComplete) => {
 //           console.log(`payload[data: ${payload.data}; metadata: ${payload.metadata}]|${isComplete}`)
-//           requester.request(1)
-//           newMessage.value = ''
+//           if (isComplete) {
+//             messages.value.push(message)
+//             newMessage.value = ''
+//           }
 //         },
 //         onComplete: () => {},
 //         onExtension: () => {},
 //         request: (n) => {
 //           console.log(`request(${n})`)
-//           requester.onNext(
-//             {
-//               data: Buffer.from(JSON.stringify(message)),
-//               metadata: Buffer.from(String.fromCharCode('client.receive'.length) + 'client.receive')
-//             },
-//             true
-//           )
+//           // requester.value.onNext(
+//           //   {
+//           //     data: Buffer.from(JSON.stringify(message)),
+//           //     metadata: Buffer.from(String.fromCharCode('receive'.length) + 'receive')
+//           //   },
+//           //   true
+//           // )
 //         },
 //         cancel: () => {}
 //       }
 //     )
+//     newMessage.value = ''
 //   }
 // }
 </script>
