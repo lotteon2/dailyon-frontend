@@ -21,9 +21,19 @@ onMounted(async () => {
 
   const memberStore = useMemberStore() as any;
   const memberInfo = await getMember()
- 
-  memberStore.setMemberInfo(memberInfo);
-  redirectToMainPage();
+  
+  const deletedValue: boolean = memberInfo.deleted;
+
+  if(deletedValue){
+    localStorage.clear();
+    alert("이미 탈퇴한 계정입니다.")
+    router.push({ name:'login'})
+  } else {
+    memberStore.setMemberInfo(memberInfo);
+    redirectToMainPage();
+  }
+
+  
 });
 
 const redirectToMainPage = () => {

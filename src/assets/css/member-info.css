@@ -87,6 +87,12 @@
     cursor: pointer;
 }
 
+.leave-red {
+    background: var(--Grayscale1,  #C22727);
+    color: var(--Grayscale7, #fff);
+    cursor: pointer;
+}
+
 .user-info-second-row {
     display: flex;
     margin-top: 10px;
@@ -201,8 +207,8 @@
 }
 
 .place-add-button {
-    width: 67px;
-    height: 29px;
+    width: 80px;
+    height: 30px;
     flex-shrink: 0;
     background: var(--Grayscale7, #000);
     display: flex;

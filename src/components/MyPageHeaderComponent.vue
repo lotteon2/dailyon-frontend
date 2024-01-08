@@ -166,6 +166,7 @@ onBeforeUnmount(() => {
       <div class="logout-button" @click="logout()">로그아웃</div>
     </div>
   </div>
+  
 </template>
 
 <style scoped>

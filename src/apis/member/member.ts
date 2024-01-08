@@ -98,3 +98,12 @@ export const getImgUrl = async () => {
     console.error('API 호출 중 오류 발생:', error);
   }
 };
+
+
+export const leaveMember = async() => {
+    try{
+      await authAxiosInstance.delete(`${MEMBER_SERVICE_PREFIX}/members`);
+    }catch (error) {
+      console.error('API 호출 중 오류 발생:', error);
+    }
+};

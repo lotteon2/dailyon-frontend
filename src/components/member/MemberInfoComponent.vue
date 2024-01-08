@@ -8,7 +8,8 @@ import {
   getMemberAddress,
   getDefaultAddress,
   setDefaultAddress,
-  getImgUrl
+  getImgUrl,
+  leaveMember
 } from '@/apis/member/member'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 import type { MemberInfoDto } from '@/apis/member/MemberDto'
@@ -121,6 +122,14 @@ const setMemberInfo = async () => {
     }
 }
 
+const leave = async() => {
+  if (confirm("정말 탈퇴하시겠습니까?")) {
+    await leaveMember();
+    alert("정상적으로 탈퇴 되었습니다.")
+    localStorage.clear();
+    window.location.href = '/login';
+  }
+}
 
 const fileInput = ref<HTMLInputElement | null>(null);
 const inputPostImgFile = ref<File>()
@@ -158,6 +167,7 @@ const handleFileChange = async (event: Event) => {
     <div class="user-info-first-row">
       <div class="container-inner-title">기본 정보</div>
       <div class="modify-button-wrapper">
+        <div class="modify-white leave-red" @click="leave">회원 탈퇴</div>
         <div class="modify-white modify-black" @click="setMemberInfo">수정 완료</div>
       </div>
     </div>
