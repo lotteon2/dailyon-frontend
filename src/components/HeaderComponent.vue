@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
-import { onBeforeMount, onMounted, onBeforeUnmount, ref, computed, watch } from 'vue'
+import { computed, onBeforeMount, onBeforeUnmount, ref, watch } from 'vue'
 import HeaderCategoryComponent from '@/components/HeaderCategoryComponent.vue'
 import NotificationComponent from '@/components/notification/NotificationComponent.vue'
 import { useMemberStore } from '@/stores/member/MemberStore'
 import { useCategoryStore } from '@/stores/category/CategoryStore'
 import { useNotificationStore } from '@/stores/notification/NotificationStore'
+import router from '@/router'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -49,6 +50,12 @@ const showCategoryDropdown = ref<boolean>(true)
 const memberStore = useMemberStore()
 const memberInfo = computed(() => memberStore.getMemberInfo())
 
+const searchQuery = ref<string | null>(null)
+
+const routeSearch = () => {
+  router.push({ name: 'productSearch', query: { query: searchQuery.value } })
+}
+
 const categoryStore = useCategoryStore()
 
 onBeforeMount(() => {
@@ -67,9 +74,14 @@ onBeforeMount(() => {
     </RouterLink>
     <div class="search-wrapper">
       <div class="search-input-wrapper">
-        <input class="search-input" placeholder="통합 검색" />
+        <input
+          class="search-input"
+          placeholder="통합 검색"
+          v-model="searchQuery"
+          @keyup.enter="routeSearch"
+        />
       </div>
-      <div class="search-logo-wrapper">
+      <div class="search-logo-wrapper" @click="routeSearch">
         <svg
           class="search-logo"
           xmlns="http://www.w3.org/2000/svg"
@@ -87,20 +99,20 @@ onBeforeMount(() => {
     </div>
     <div class="auth-wrapper">
       <RouterLink v-if="!isLoggedIn()" to="/login" class="login-text">Login</RouterLink>
- <div v-else class="profile-wrapper">
-          <RouterLink to="/member-info" class="profile-link">
-            <img
-              v-if="`${VITE_STATIC_IMG_URL}${memberInfo.profileImgUrl}`"
-              :src="`${VITE_STATIC_IMG_URL}${memberInfo.profileImgUrl}`"
-              alt="Profile Image"
-              class="profile-image"
-            />
-            <div class="profile-text">
-              <span v-if="memberInfo.nickname" class="nickname">{{ memberInfo.nickname }}님</span>
-              <span class="welcome">환영합니다!</span>
-            </div>
-          </RouterLink>
-        </div>
+      <div v-else class="profile-wrapper">
+        <RouterLink to="/member-info" class="profile-link">
+          <img
+            v-if="`${VITE_STATIC_IMG_URL}${memberInfo.profileImgUrl}`"
+            :src="`${VITE_STATIC_IMG_URL}${memberInfo.profileImgUrl}`"
+            alt="Profile Image"
+            class="profile-image"
+          />
+          <div class="profile-text">
+            <span v-if="memberInfo.nickname" class="nickname">{{ memberInfo.nickname }}님</span>
+            <span class="welcome">환영합니다!</span>
+          </div>
+        </RouterLink>
+      </div>
     </div>
   </div>
   <div class="header-divide-line-wrapper">
@@ -130,26 +142,26 @@ onBeforeMount(() => {
     </div>
     <div class="nav-tab-wrapper">
       <RouterLink to="/luxury" class="nav-tab-text" :class="{ selected: $route.path === '/luxury' }"
-        >LUXURY</RouterLink
-      >
+        >LUXURY
+      </RouterLink>
     </div>
     <div class="nav-tab-wrapper">
       <RouterLink
         to="/fashions"
         class="nav-tab-text"
         :class="{ selected: $route.path === '/fashions' }"
-        >FASHION</RouterLink
-      >
+        >FASHION
+      </RouterLink>
     </div>
     <div class="nav-tab-wrapper">
       <RouterLink to="/ootds" class="nav-tab-text" :class="{ selected: $route.path === '/ootds' }"
-        >OOTD</RouterLink
-      >
+        >OOTD
+      </RouterLink>
     </div>
     <div class="nav-tab-wrapper">
       <RouterLink to="/events" class="nav-tab-text" :class="{ selected: $route.path === '/events' }"
-        >EVENT</RouterLink
-      >
+        >EVENT
+      </RouterLink>
     </div>
     <div class="nav-tab-wrapper">
       <NotificationComponent v-show="showNotificationDropdown" />

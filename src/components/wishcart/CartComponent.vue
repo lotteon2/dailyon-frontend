@@ -212,7 +212,12 @@ const routeOrderSheet = () => {
         <td class="center-text">상품 가격</td>
         <td class="center-text">총금액</td>
       </tr>
-      <tr v-for="(cartItem, idx) in cartItems" :key="idx" class="cart-table-data2">
+      <tr
+        v-for="(cartItem, idx) in cartItems"
+        :key="idx"
+        class="cart-table-data2"
+        @click="router.push(`/products/${cartItem.productId}`)"
+      >
         <td class="left-margin">
           <div class="align-center">
             <input

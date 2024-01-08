@@ -3,7 +3,7 @@
     <div class="order-item">
       <div class="product-name-block">
         <div class="image-container">
-          <img :src="orderItem.imgUrl as string" alt="상품이미지" />
+          <img :src="`${VITE_STATIC_IMG_URL}${orderItem.imgUrl}`" alt="상품이미지" />
         </div>
         <div class="product-name">{{ orderItem.productName }}</div>
       </div>
@@ -87,6 +87,8 @@ import type {
 } from '@/apis/coupon/CouponItemDto'
 import type { OrderItemDto } from '@/types/coupon'
 import type { ProductInfo } from '@/apis/product/ProductDto'
+
+const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
 const emit = defineEmits<{
   // (event: 'apply-coupon', orderItemIndex: number, couponInfoId: number | null): void

@@ -118,7 +118,7 @@ const applyCouponDatas = () => {
     let discount = 0
 
     if (item.couponInfoId !== null && item.discountValue !== null) {
-      const totalPrice = item.orderPrice * item.quantity
+      const totalPrice = item.orderPrice
 
       if (item.discountType === 'PERCENTAGE') {
         discount = totalPrice * (item.discountValue / 100)

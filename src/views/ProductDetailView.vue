@@ -4,18 +4,18 @@ import ProductDetailCouponModal from '@/components/promotion/coupon/productdetai
 import BreadCrumbComponent from '@/components/product/BreadCrumbComponent.vue'
 import { useRoute } from 'vue-router'
 import { getProductDetail } from '@/apis/product/ProductClient'
-import type { ReadProductStockResponse } from '@/apis/product/ProductDto'
-import type { ProductInfo } from '@/apis/product/ProductDto'
+import type { ProductInfo, ReadProductStockResponse } from '@/apis/product/ProductDto'
 import DescribeImageComponent from '@/components/product/DescribeImageComponent.vue'
 import ReviewComponent from '@/components/product/ReviewComponent.vue'
 import { useProductStore } from '@/stores/product/ProductStore'
 import router from '@/router'
-const productStore = useProductStore()
 import { upsertCart } from '@/apis/wishcart/CartClient'
 import type { ReadWishListFromProduct } from '@/apis/wishcart/WishListDto'
 import { readWishListFromProduct, toggleWishList } from '@/apis/wishcart/WishListClient'
 import type { AxiosResponse } from 'axios'
 import TOP4OOTDComponent from '@/components/ootd/TOP4OOTDComponent.vue'
+
+const productStore = useProductStore()
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -49,6 +49,13 @@ const executeToggle = () => {
 
   if (isWishBtnEnabled.value) {
     isWishBtnEnabled.value = false
+
+    if (!localStorage.getItem('accessToken')) {
+      alert('로그인 후 이용해 주세요')
+      isWishBtnEnabled.value = true
+      return
+    }
+
     toggleWishList({
       productId: productId.value,
       productSizeId: selectedProductSize.value.productSizeId
@@ -136,6 +143,12 @@ const toggleOption = (option: boolean) => {
 const addToCart = () => {
   if (isCartBtnEnabled.value === true) {
     isCartBtnEnabled.value = false
+
+    if (!localStorage.getItem('accessToken')) {
+      alert('로그인 후 이용해 주세요')
+      isCartBtnEnabled.value = true
+      return
+    }
 
     if (selectedProductSize.value.productSizeId === 0) {
       alert('옵션을 지정해주세요')

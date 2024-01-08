@@ -1,51 +1,29 @@
 <script setup lang="ts">
 import { inject, onBeforeMount, type Ref, ref, watch } from 'vue'
-import type { AxiosResponse } from 'axios'
 import { useRoute } from 'vue-router'
 import type { ReadProductResponse, ReadProductSliceResponse } from '@/apis/product/ProductDto'
-import { getProductSlice } from '@/apis/product/ProductClient'
-import BreadCrumbComponent from '@/components/product/BreadCrumbComponent.vue'
+import { searchProduct } from '@/apis/product/ProductClient'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
 const route = useRoute()
 
-const categoryId = ref<number>(0)
-const brandId = ref<number | null>(null)
-const gender = ref<string | null>(null)
-const type = ref<string | null>(null)
-
 const hasNext = ref<boolean>(true)
 const lastId = ref<number>(0)
+const searchQuery = ref<string | null>(null)
 const products = ref<ReadProductResponse[]>([])
 
-const initData = () => {
-  if (route.query.brand) {
-    brandId.value = Number(route.query.brand)
+const initData = async () => {
+  if (route.query.query !== null) {
+    searchQuery.value = String(route.query.query)
   }
 
-  if (route.query.gender) {
-    gender.value = String(route.query.gender)
-  }
+  const response: ReadProductSliceResponse = await searchProduct(lastId.value, searchQuery.value)
+  hasNext.value = response.hasNext
+  lastId.value = response.productResponses[response.productResponses.length - 1].id
+  products.value = [...products.value, ...response.productResponses]
 
-  if (route.query.type) {
-    type.value = String(route.query.type)
-  }
-
-  if (route.query.category) {
-    categoryId.value = Number(route.query.category)
-  }
-
-  getProductSlice(lastId.value, brandId.value, categoryId.value, gender.value, type.value)
-    .then((axiosResponse: AxiosResponse) => {
-      const response: ReadProductSliceResponse = axiosResponse.data
-      hasNext.value = response.hasNext
-      lastId.value = response.productResponses[response.productResponses.length - 1].id
-      products.value = [...products.value, ...response.productResponses]
-    })
-    .catch((error: any) => {
-      alert(error.response!.data!.message)
-    })
+  console.log(lastId.value)
 }
 
 onBeforeMount(initData)
@@ -53,23 +31,20 @@ onBeforeMount(initData)
 const isScrollEnd = inject<Ref<boolean | undefined>>('isScrollEnd') as Ref<boolean | undefined>
 watch(isScrollEnd, async (after, before) => {
   if (after !== before && hasNext.value) {
-    getProductSlice(lastId.value, brandId.value, categoryId.value, gender.value, type.value)
-      .then((axiosResponse: AxiosResponse) => {
-        const response: ReadProductSliceResponse = axiosResponse.data
-        hasNext.value = response.hasNext
-        lastId.value = response.productResponses[response.productResponses.length - 1].id
-        products.value = [...products.value, ...response.productResponses]
-      })
-      .catch((error: any) => {
-        alert(error.response!.data!.message)
-      })
+    const response: ReadProductSliceResponse = await searchProduct(lastId.value, searchQuery.value)
+    hasNext.value = response.hasNext
+    lastId.value = response.productResponses[response.productResponses.length - 1].id
+    products.value = [...products.value, ...response.productResponses]
   }
 })
 </script>
 
 <template>
-  <div style="width: 50vw">
-    <BreadCrumbComponent :category="categoryId" />
+  <div class="product-search-container">
+    <div class="product-search-result">
+      <p class="search-label">검색 결과</p>
+      <p class="search-query">{{ searchQuery }}</p>
+    </div>
     <div class="product-list-container">
       <RouterLink
         class="prod-info"
@@ -110,6 +85,34 @@ watch(isScrollEnd, async (after, before) => {
 </template>
 
 <style scoped>
+.product-search-container {
+  width: 50vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.product-search-result {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 25vw;
+  padding-bottom: 20px;
+}
+
+.search-label {
+  font-family: TheJamsil;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 1.5vw;
+}
+
+.search-query {
+  font-family: TheJamsil;
+  font-style: normal;
+  font-size: 1.5vw;
+}
+
 .product-list-container {
   display: flex;
   flex-direction: row;
