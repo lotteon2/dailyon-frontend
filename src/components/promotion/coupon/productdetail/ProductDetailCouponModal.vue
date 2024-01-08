@@ -75,7 +75,7 @@
               <div>{{ formattedTotalPrice }}</div>
             </div>
           </div>
-          <div class="download-all">쿠폰 전체 다운받기</div>
+          <div class="download-all" @click="handleDownloadMultipleCoupons">쿠폰 전체 다운받기</div>
         </div>
       </div>
       <div v-else class="coupon-body-content-wrapper no-content">
@@ -87,8 +87,14 @@
 <script setup lang="ts">
 import CouponItemComponent from './CouponItemComponent.vue'
 import { ref, onMounted, computed } from 'vue'
-import type { CouponInfoItemWithAvailabilityResponse } from '@/apis/coupon/CouponItemDto'
-import { getCouponsWithAvailibilityForProductDetail } from '@/apis/coupon/coupon'
+import type {
+  CouponInfoItemWithAvailabilityResponse,
+  MultipleCouponDownloadResponse
+} from '@/apis/coupon/CouponItemDto'
+import {
+  getCouponsWithAvailibilityForProductDetail,
+  downloadMultipleCoupons
+} from '@/apis/coupon/coupon'
 import { defineEmits } from 'vue'
 
 const emit = defineEmits(['close-coupon-modal', 'total-price-updated'])
@@ -115,9 +121,6 @@ const { showModal, productId, categoryId, productPriceValue } = defineProps({
 const productPrice = ref(productPriceValue) // Using the prop value
 const coupons = ref<CouponInfoItemWithAvailabilityResponse[]>([])
 
-// let productId = 1;
-// let categoryId = 1;
-
 onMounted(async () => {
   try {
     coupons.value = await getCouponsWithAvailibilityForProductDetail(productId, categoryId)
@@ -125,6 +128,34 @@ onMounted(async () => {
     console.error('Failed to fetch coupons for product detail:', error)
   }
 })
+
+const handleDownloadMultipleCoupons = async () => {
+  const downloadableCouponInfoIds = coupons.value
+    .filter((coupon) => coupon.isDownloadable)
+    .map((coupon) => coupon.couponInfoId)
+  if (downloadableCouponInfoIds.length === 0) {
+    alert('이미 모든 쿠폰을 다운로드 받았습니다.')
+    // console.log('다운로드 가능한 쿠폰이 없습니다.')
+    return
+  }
+
+  try {
+    const downloadResponse: MultipleCouponDownloadResponse =
+      await downloadMultipleCoupons(downloadableCouponInfoIds)
+    alert(downloadResponse.successfulIds.length + '개의 쿠폰을 다운로드 했습니다.')
+    console.log('다운로드된 couponInfoId 목록:', downloadResponse.successfulIds)
+    console.log('다운로드 실패한 couponInfoId 목록:', downloadResponse.failedIds)
+
+    coupons.value.forEach((coupon) => {
+      // 다운로드 된 쿠폰들 상태변경
+      if (downloadResponse.successfulIds.includes(coupon.couponInfoId)) {
+        coupon.isDownloadable = false
+      }
+    })
+  } catch (error) {
+    console.error('모든 쿠폰 다운로드 중 에러 발생:', error)
+  }
+}
 
 const closeModal = () => {
   emit('close-coupon-modal')
@@ -136,25 +167,33 @@ const formattedProductPrice = computed(() => {
 
 const maxDiscountAmount = computed(() => {
   let maxDiscount = 0
+
   for (const coupon of coupons.value) {
     let discountAmount = 0
+    console.log(`discountAmount:${discountAmount}`)
 
     // 할인 타입에 따라 분기
     if (coupon.discountType === 'PERCENTAGE') {
       discountAmount = (productPriceValue * coupon.discountValue) / 100
+      console.log(`PERCENTAGE:${coupon}`)
+      console.log(`discountAmount:${discountAmount}`)
     } else if (coupon.discountType === 'FIXED_AMOUNT') {
       discountAmount = coupon.discountValue
+      console.log(`FIXED_AMOUNT:${coupon}`)
+      console.log(`discountAmount:${discountAmount}`)
     }
 
     // maxDiscountAmount가 있다면 해당 쿠폰 할인이 해당 limit을 안넘는지 확인
     if (coupon.maxDiscountAmount !== undefined) {
       discountAmount = Math.min(discountAmount, coupon.maxDiscountAmount)
+      console.log(`max처리 후 임시 discountAmount:${discountAmount}`)
     }
 
     // max값 갱신
     maxDiscount = Math.max(maxDiscount, discountAmount)
+    console.log(`갱신 후 임시 maxDiscount:${maxDiscount}`)
   }
-
+  console.log(`계산완료 된 maxDiscount:${maxDiscount}`)
   return maxDiscount
 })
 
