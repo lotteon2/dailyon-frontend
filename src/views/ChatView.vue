@@ -23,6 +23,7 @@ import { Buffer } from 'buffer'
 import { RSocketConnector } from 'rsocket-core'
 import { WebsocketClientTransport } from 'rsocket-websocket-client'
 import type { RSocket, Payload } from 'rsocket-core'
+import { spaceCompactItemProps } from 'ant-design-vue/es/space/Compact'
 
 interface Message {
   user: User
@@ -61,144 +62,61 @@ onMounted(async () => {
       wsCreator: (url) => new WebSocket(url) as any
     })
   })
-  const rsocket = await connector.value.connect()
+  rsocket.value = await connector.value.connect()
+})
 
-  await new Promise((resolve, reject) => {
-    const requester = rsocket.requestChannel(
+const send = () => {
+  if (!newMessage.value.trim()) {
+    alert('메세지를 입력해주세요')
+    return
+  }
+  if (rsocket.value) {
+    const timestamp = new Date().toLocaleTimeString()
+    const message: Message = {
+      user: user.value,
+      content: newMessage.value,
+      timestamp: timestamp
+    }
+    rsocket.value.requestChannel(
       {
-        data: Buffer.from('Hello World')
+        data: Buffer.from(JSON.stringify(message)),
+        metadata: Buffer.from(String.fromCharCode('chat'.length) + 'chat')
       },
-      1,
-      false,
+      2147483647,
+      true,
       {
-        onError: (e) => reject(e),
+        onError: (e: any) => {
+          console.error('Connection has been closed due to:', e)
+        },
         onNext: (payload, isComplete) => {
           console.log(`payload[data: ${payload.data}; metadata: ${payload.metadata}]|${isComplete}`)
-
-          requester.request(1)
-
           if (isComplete) {
-            resolve(payload)
+            messages.value.push(message)
+            newMessage.value = ''
           }
         },
         onComplete: () => {
-          resolve(null)
+          console.log('?')
         },
-        onExtension: () => {},
+        onExtension: () => {
+          console.log('b')
+        },
         request: (n) => {
           console.log(`request(${n})`)
-          requester.onNext(
-            {
-              data: Buffer.from('Message')
-            },
-            true
-          )
+          // requester.value.onNext(
+          //   {
+          //     data: Buffer.from(JSON.stringify(message)),
+          //     metadata: Buffer.from(String.fromCharCode('receive'.length) + 'receive')
+          //   },
+          //   true
+          // )
         },
         cancel: () => {}
       }
     )
-  })
-})
-
-// onMounted(async () => {
-//   connector.value = new RSocketConnector({
-//     setup: {
-//       keepAlive: 100,
-//       lifetime: 10000,
-//       dataMimeType: 'application/json',
-//       metadataMimeType: 'message/x.rsocket.routing.v0',
-//       payload: {
-//         data: Buffer.from(JSON.stringify(user.value))
-//       }
-//     },
-//     transport: new WebsocketClientTransport({
-//       url: 'ws://localhost:6777/rs'
-//       // wsCreator: (url) => new WebSocket(url) as any
-//     })
-//   })
-
-//   rsocket.value = await connector.value.connect()
-//   const requester = rsocket.value.requestChannel(
-//     {
-//       data: Buffer.from(''),
-//       metadata: Buffer.from(String.fromCharCode('chat.message'.length) + 'chat.message')
-//     },
-//     2147483647,
-//     true,
-//     {
-//       onError: (e: any) => {
-//         console.error('Connection has been closed due to:', e)
-//       },
-//       onNext: (payload, isComplete) => {
-//         console.log(`payload[data: ${payload.data}; metadata: ${payload.metadata}]|${isComplete}`)
-//         if (isComplete) {
-//         }
-//       },
-//       onComplete: () => {},
-//       onExtension: () => {},
-//       request: (n) => {
-//         console.log(`request(${n})`)
-//         console.log(requester)
-//         // requester.value.onNext(
-//         //   {
-//         //     data: Buffer.from(JSON.stringify(message)),
-//         //     metadata: Buffer.from(String.fromCharCode('receive'.length) + 'receive')
-//         //   },
-//         //   true
-//         // )
-//       },
-//       cancel: () => {}
-//     }
-//   )
-// })
-// const send = () => {
-//   if (!newMessage.value.trim()) {
-//     alert('메세지를 입력해주세요')
-//     return
-//   }
-//   if (rsocket.value) {
-//     const timestamp = new Date().toLocaleTimeString()
-//     const message: Message = {
-//       user: user.value,
-//       content: newMessage.value,
-//       timestamp: timestamp
-//     }
-//     rsocket.value.requestChannel(
-//       {
-//         data: Buffer.from(JSON.stringify(message)),
-//         metadata: Buffer.from(String.fromCharCode('chat.message'.length) + 'chat.message')
-//       },
-//       2147483647,
-//       true,
-//       {
-//         onError: (e: any) => {
-//           console.error('Connection has been closed due to:', e)
-//         },
-//         onNext: (payload, isComplete) => {
-//           console.log(`payload[data: ${payload.data}; metadata: ${payload.metadata}]|${isComplete}`)
-//           if (isComplete) {
-//             messages.value.push(message)
-//             newMessage.value = ''
-//           }
-//         },
-//         onComplete: () => {},
-//         onExtension: () => {},
-//         request: (n) => {
-//           console.log(`request(${n})`)
-//           // requester.value.onNext(
-//           //   {
-//           //     data: Buffer.from(JSON.stringify(message)),
-//           //     metadata: Buffer.from(String.fromCharCode('receive'.length) + 'receive')
-//           //   },
-//           //   true
-//           // )
-//         },
-//         cancel: () => {}
-//       }
-//     )
-//     newMessage.value = ''
-//   }
-// }
+    newMessage.value = ''
+  }
+}
 </script>
 
 <style scoped>
