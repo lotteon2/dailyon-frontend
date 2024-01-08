@@ -59,7 +59,7 @@
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* Internet Explorer 10+ */
 }
-
+/* TODO: coupon-body-content-inner-wrapper 만들어서 스크롤만 처리. height 100% 잡고, flex column overflow-y */
 .coupon-body-content-wrapper::-webkit-scrollbar {
   display: none; /* Webkit browsers (Safari, Chrome) */
 }
