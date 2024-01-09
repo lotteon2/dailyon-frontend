@@ -108,7 +108,11 @@ const closeCouponModal = () => {
   showCouponModal.value = false
 }
 const openCouponModal = () => {
-  showCouponModal.value = true
+  if (!localStorage.getItem('accessToken')) {
+    alert('로그인 후 이용해주세요.')
+  } else {
+    showCouponModal.value = true
+  }
 }
 
 const handleTotalPriceUpdated = (newTotalPrice: number) => {

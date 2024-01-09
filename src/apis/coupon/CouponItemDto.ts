@@ -26,6 +26,11 @@ export interface ProductCategoryPair {
   categoryId: number
 }
 
+export interface MultipleCouponDownloadResponse {
+  successfulIds: number[]
+  failedIds: number[]
+}
+
 export interface CouponInfoItemCheckoutResponse {
   couponInfoId: number
   couponInfoName: string
@@ -43,17 +48,15 @@ export interface CouponInfoItemCheckoutResponse {
 }
 
 export interface Coupon {
-  id: number,
-  name: string,
-  discountType: string,
-  discountValue: number,
+  id: number
+  name: string
+  discountType: string
+  discountValue: number
   startAt: string
 }
 
 export interface Coupons {
-  memberId: number,
-  memberCouponInfoReadItemResponse: Coupon[],
+  memberId: number
+  memberCouponInfoReadItemResponse: Coupon[]
   totalCounts: number
 }
-
-
