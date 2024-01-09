@@ -53,6 +53,9 @@ export interface Coupon {
   discountType: string
   discountValue: number
   startAt: string
+  targetImgUrl: string
+  appliesToName: string
+  endAt: string
 }
 
 export interface Coupons {
