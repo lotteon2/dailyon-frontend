@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
-import { computed, onBeforeMount, onBeforeUnmount, ref, watch } from 'vue'
+import { computed, onBeforeMount, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import HeaderCategoryComponent from '@/components/HeaderCategoryComponent.vue'
 import NotificationComponent from '@/components/notification/NotificationComponent.vue'
 import { useMemberStore } from '@/stores/member/MemberStore'
@@ -52,6 +52,7 @@ const routeSearch = () => {
   router.push({ name: 'productSearch', query: { query: searchQuery.value } })
 }
 
+const hasUnreadNotifications = computed(() => notificationStore.unreadNotificationCount > 0)
 const showNotificationDropdown = ref<boolean>(false)
 
 const showNotificationDropdownHandler = () => {
@@ -73,6 +74,10 @@ const categoryStore = useCategoryStore()
 
 onBeforeMount(() => {
   categoryStore.setCategoryTree(null)
+})
+
+onMounted(async () => {
+  await notificationStore.fetchUnreadNotificationCount()
 })
 </script>
 
@@ -154,7 +159,10 @@ onBeforeMount(() => {
       />
     </div>
     <div class="nav-tab-wrapper">
-      <RouterLink to="/new-products" class="nav-tab-text" :class="{ selected: $route.path === '/new-products' }"
+      <RouterLink
+        to="/new-products"
+        class="nav-tab-text"
+        :class="{ selected: $route.path === '/new-products' }"
         >NEW
       </RouterLink>
     </div>
@@ -204,6 +212,9 @@ onBeforeMount(() => {
             </clipPath>
           </defs>
         </svg>
+      </div>
+      <div v-if="hasUnreadNotifications" class="notification-badge">
+        {{ notificationStore.unreadNotificationCount }}
       </div>
     </div>
     <div class="nav-tab-wrapper">
