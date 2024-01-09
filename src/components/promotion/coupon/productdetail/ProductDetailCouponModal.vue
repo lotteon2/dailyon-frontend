@@ -9,57 +9,16 @@
         <div class="discount-highlight">최대 할인 혜택</div>
       </div>
       <div v-if="coupons.length" class="coupon-body-content-wrapper">
-        <!-- TODO: 통합 테스트 완료 전까지 남겨두겠습니다. -->
-        <!-- <CouponItemComponent
-          :key="999"
-          :couponInfoItemWithAvailabilityResponse="{
-            couponInfoId: 1,
-            appliesToType: `PRODUCT`,
-            appliedToId: 1,
-            discountType: `PERCENTAGE`,
-            discountValue: 10,
-            endAt: '2023-04-30T23:59:59',
-            minPurchaseAmount: 1000,
-            maxDiscountAmount: 10000,
-            isDownloadable: true
-          }"
-        /> -->
-        <!-- <CouponItemComponent
-          :key="1000"
-          :couponInfoItemWithAvailabilityResponse="{
-            couponInfoId: 2,
-            appliesToType: `CATEGORY`,
-            appliedToId: 2,
-            discountType: `FIXED_AMOUNT`,
-            discountValue: 1000,
-            endAt: '2023-04-30T23:59:59',
-            minPurchaseAmount: 0,
-            maxDiscountAmount: undefined,
-            isDownloadable: false
-          }"
-        /> -->
-        <!-- <CouponItemComponent
-          :key="1000"
-          :couponInfoItemWithAvailabilityResponse="{
-            couponInfoId: 2,
-            appliesToType: `CATEGORY`,
-            appliedToId: 2,
-            discountType: `FIXED_AMOUNT`,
-            discountValue: 1000,
-            endAt: '2023-04-30T23:59:59',
-            minPurchaseAmount: 0,
-            maxDiscountAmount: undefined,
-            isDownloadable: false
-          }"
-        /> -->
-        <CouponItemComponent
-          v-for="(coupon, index) in coupons"
-          :key="index"
-          :couponInfoItemWithAvailabilityResponse="coupon"
-        />
-
+        <div class="scroll-wrapper">
+          <CouponItemComponent
+            v-for="(coupon, index) in coupons"
+            :key="index"
+            :couponInfoItemWithAvailabilityResponse="coupon"
+          />
+        </div>
         <div class="bottom-section">
-          <div class="price-calculation flex-row price-content">
+          <!-- 단일 상품에 대한 최대 할인 가격이 0원이면 block 안보여줄것임. -->
+          <div v-if="maxDiscountAmount" class="price-calculation flex-row price-content">
             <div class="price-content">
               <div>상품가격</div>
               <div>{{ formattedProductPrice }}</div>
@@ -170,7 +129,7 @@ const maxDiscountAmount = computed(() => {
 
   for (const coupon of coupons.value) {
     let discountAmount = 0
-    console.log(`discountAmount:${discountAmount}`)
+    console.log(`임시 discountAmount 초기화:${discountAmount}`)
 
     // 할인 타입에 따라 분기
     if (coupon.discountType === 'PERCENTAGE') {
@@ -184,16 +143,14 @@ const maxDiscountAmount = computed(() => {
     }
 
     // maxDiscountAmount가 있다면 해당 쿠폰 할인이 해당 limit을 안넘는지 확인
-    if (coupon.maxDiscountAmount !== undefined) {
-      discountAmount = Math.min(discountAmount, coupon.maxDiscountAmount)
-      console.log(`max처리 후 임시 discountAmount:${discountAmount}`)
-    }
+    discountAmount = Math.min(discountAmount, coupon.maxDiscountAmount ?? Infinity)
+    console.log(`max처리 후 임시 discountAmount:${discountAmount}`)
 
     // max값 갱신
     maxDiscount = Math.max(maxDiscount, discountAmount)
     console.log(`갱신 후 임시 maxDiscount:${maxDiscount}`)
   }
-  console.log(`계산완료 된 maxDiscount:${maxDiscount}`)
+  console.log(`최종 계산완료 된 maxDiscount:${maxDiscount}`)
   return maxDiscount
 })
 
