@@ -37,7 +37,7 @@ import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
 
 const notificationStore = useNotificationStore()
-const { notifications, notificationCount } = storeToRefs(notificationStore)
+const { notifications, unreadNotificationCount } = storeToRefs(notificationStore)
 
 // const isNotificationVisible = ref(true)
 
