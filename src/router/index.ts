@@ -10,14 +10,14 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path: '/luxury',
-      name: 'luxury',
-      component: () => import('@/views/LuxuryView.vue')
+      path: '/new-products',
+      name: 'newProduct',
+      component: () => import('@/views/NewProductView.vue')
     },
     {
-      path: '/fashions',
-      name: 'fashions',
-      component: () => import('@/views/FashionView.vue')
+      path: '/best-products',
+      name: 'bestProduct',
+      component: () => import('@/views/BestProductView.vue')
     },
     {
       path: '/product-list',

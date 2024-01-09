@@ -147,16 +147,16 @@ onBeforeMount(() => {
       />
     </div>
     <div class="nav-tab-wrapper">
-      <RouterLink to="/luxury" class="nav-tab-text" :class="{ selected: $route.path === '/luxury' }"
-        >LUXURY
+      <RouterLink to="/new-products" class="nav-tab-text" :class="{ selected: $route.path === '/new-products' }"
+        >NEW
       </RouterLink>
     </div>
     <div class="nav-tab-wrapper">
       <RouterLink
-        to="/fashions"
+        to="/best-products"
         class="nav-tab-text"
-        :class="{ selected: $route.path === '/fashions' }"
-        >FASHION
+        :class="{ selected: $route.path === '/best-products' }"
+        >BEST
       </RouterLink>
     </div>
     <div class="nav-tab-wrapper">
@@ -166,7 +166,7 @@ onBeforeMount(() => {
     </div>
     <div class="nav-tab-wrapper">
       <RouterLink to="/events" class="nav-tab-text" :class="{ selected: $route.path === '/events' }"
-        >EVENT
+        >AUCTION
       </RouterLink>
     </div>
     <div class="nav-tab-wrapper">
