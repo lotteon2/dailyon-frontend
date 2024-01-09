@@ -58,7 +58,8 @@ const initData = () => {
 
 onBeforeMount(initData)
 
-const executeUpdate = (index: number, isPlus: boolean) => {
+const executeUpdate = (index: number, isPlus: boolean, event: any) => {
+  event.stopPropagation();
   if (isUpdateBtnEnabled.value === true) {
     isUpdateBtnEnabled.value = false
 
@@ -226,6 +227,7 @@ const routeOrderSheet = () => {
               :id="`checkbox-${idx}`"
               :value="cartItem"
               v-model="checkedCartItems"
+              @click='$event.stopPropagation()'
             />
           </div>
         </td>
@@ -246,7 +248,7 @@ const routeOrderSheet = () => {
         </td>
         <td>
           <div class="count-wrapper">
-            <div class="count-black" @click="executeUpdate(idx, false)">
+            <div class="count-black" @click="executeUpdate(idx, false, $event)">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="18"
@@ -263,7 +265,7 @@ const routeOrderSheet = () => {
               </svg>
             </div>
             <div class="count-white">{{ cartItem.quantity.toLocaleString() }}</div>
-            <div class="count-black" @click="executeUpdate(idx, true)">
+            <div class="count-black" @click="executeUpdate(idx, true, $event)">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="14"
