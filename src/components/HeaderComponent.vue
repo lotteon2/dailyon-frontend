@@ -184,17 +184,17 @@ onMounted(async () => {
         >AUCTION
       </RouterLink>
     </div>
-    <div class="nav-tab-wrapper">
+    <div
+      class="nav-tab-wrapper"
+      @mouseover="showNotificationDropdownHandler"
+      @mouseleave="hideNotificationDropdownHandler"
+    >
       <NotificationComponent
         @mouse-enter-dropdown="mouseEnterDropdownHandler"
         @mouse-exit-dropdown="hideNotificationDropdownHandler"
         v-show="showNotificationDropdown"
       />
-      <div
-        @mouseover="showNotificationDropdownHandler"
-        @mouseleave="hideNotificationDropdownHandler"
-        class="nav-tab-icon cursor-on-hover"
-      >
+      <div class="nav-tab-icon cursor-on-hover">
         <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="black">
           <g clip-path="url(#clip0_197_30)">
             <path
