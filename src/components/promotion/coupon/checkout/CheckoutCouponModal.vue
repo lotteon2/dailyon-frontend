@@ -49,7 +49,7 @@ const { isCheckoutCouponModalOpen, orderItems } = defineProps<{
   orderItems: ProductInfo[]
 }>()
 
-const emit = defineEmits(['close-checkout-coupon-modal'])
+const emit = defineEmits(['close-checkout-coupon-modal', 'available-coupons-count'])
 // , {event: 'apply-coupons', null}: void
 
 const computedNestedCoupons = ref<CouponInfoItemCheckoutResponse[][]>([])
@@ -113,6 +113,17 @@ const handleUpdateCoupons = (selectedCoupons: (CouponInfoItemCheckoutResponse | 
   )
 }
 
+const emitAvailableCouponsCount = () => {
+  const distinctCouponInfoIds = new Set(
+    computedNestedCoupons.value
+      .flat()
+      .filter((coupon) => coupon.couponInfoId != null)
+      .map((coupon) => coupon.couponInfoId)
+  )
+
+  emit('available-coupons-count', distinctCouponInfoIds.size)
+}
+
 const applyCouponDatas = () => {
   const updatedProducts = orderItemsWithCouponSelections.value.map((item) => {
     let discount = 0
@@ -139,7 +150,10 @@ const applyCouponDatas = () => {
   productStore.setProducts(updatedProducts, productStore.orderType)
 }
 
-onMounted(fetchCouponsForCheckout)
+onMounted(async () => {
+  await fetchCouponsForCheckout()
+  emitAvailableCouponsCount() // Add this line to update the count after fetching
+})
 </script>
 
 <style scoped>
