@@ -146,8 +146,12 @@
 }
 
 .modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
   background-color: #fefefe;
-  padding: 20px;
+  padding: 15px;
   width: 300px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   animation-name: modalOpen;
@@ -160,10 +164,8 @@
 }
 
 .modal-content select {
-  width: 300px;
-  padding-top: 0.2rem;
-  padding-bottom: 0.2rem;
-  margin-bottom: 1rem;
+  width: 100%;
+  padding: 5px;
   border: none;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -173,10 +175,7 @@
 }
 
 .modal-content input {
-  width: 296px;
-  padding-top: 0.2rem;
-  padding-bottom: 0.2rem;
-  margin-bottom: 1rem;
+  padding: 5px;
   border: none;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -190,12 +189,18 @@
   font-size: 1rem;
 }
 
-.close {
+.close-space {
+  width: 284px;
+}
+
+.close-wrapper {
+  display: flex;
+  flex-direction: row;
+  text-align: end;
   color: #aaa;
   float: right;
   font-size: 28px;
   font-weight: bold;
-  margin-top: -23px;
 }
 
 .close:hover,

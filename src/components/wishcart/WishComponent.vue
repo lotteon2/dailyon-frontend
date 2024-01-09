@@ -50,7 +50,8 @@ const initData = () => {
     })
 }
 
-const executeDelete = (index: number) => {
+const executeDelete = (index: number, event: any) => {
+  event.stopPropagation();
   if (isBtnEnabled.value === true && confirm('삭제하시겠습니까?')) {
     isBtnEnabled.value = false
     toggleWishList({
@@ -69,7 +70,8 @@ const executeDelete = (index: number) => {
   }
 }
 
-const routeOrder = async (idx: number) => {
+const routeOrder = async (idx: number, event: any) => {
+  event.stopPropagation();
   if (!props.receiver) {
     message.error('새로고침 해주세요')
     return
@@ -162,8 +164,8 @@ watch(requestPage, async (afterPage: number, beforePage: number) => {
           <span class="prod-price">{{ wishList.productPrice.toLocaleString() }}원</span>
         </td>
         <td>
-          <button class="wishBtn" v-if="isMine" @click="executeDelete(idx)">삭제</button>
-          <button class="wishBtn" v-else @click="routeOrder(idx)">선물</button>
+          <button class="wishBtn" v-if="isMine" @click="executeDelete(idx, $event)">삭제</button>
+          <button class="wishBtn" v-else @click="routeOrder(idx, $event)">선물</button>
         </td>
       </tr>
     </table>

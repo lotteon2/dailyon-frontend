@@ -14,6 +14,7 @@
             v-for="(coupon, index) in coupons"
             :key="index"
             :couponInfoItemWithAvailabilityResponse="coupon"
+            @download-single-coupon="downloadSingleCouponHandler"
           />
         </div>
         <div class="bottom-section">
@@ -52,7 +53,8 @@ import type {
 } from '@/apis/coupon/CouponItemDto'
 import {
   getCouponsWithAvailibilityForProductDetail,
-  downloadMultipleCoupons
+  downloadMultipleCoupons,
+  downloadCoupon
 } from '@/apis/coupon/coupon'
 import { defineEmits } from 'vue'
 
@@ -87,6 +89,18 @@ onMounted(async () => {
     console.error('Failed to fetch coupons for product detail:', error)
   }
 })
+
+const downloadSingleCouponHandler = async (couponInfoId: number) => {
+  try {
+    const res = await downloadCoupon(couponInfoId)
+    const couponIndex = coupons.value.findIndex((c) => c.couponInfoId === couponInfoId)
+    if (couponIndex !== -1) {
+      coupons.value[couponIndex].isDownloadable = false
+    }
+  } catch (err) {
+    //이미 downloadCoupon메소드 안에서 alert날리는 중. catch가 필요해서 빈 block으로 둠.
+  }
+}
 
 const handleDownloadMultipleCoupons = async () => {
   const downloadableCouponInfoIds = coupons.value
