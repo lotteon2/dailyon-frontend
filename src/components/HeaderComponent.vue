@@ -40,20 +40,26 @@ onBeforeUnmount(() => {
     unsubscribe()
   }
 })
-const showNotificationDropdown = ref<boolean>(false)
-const toggleShowNotificationDropdown = () => {
-  showNotificationDropdown.value = !showNotificationDropdown.value
-}
 
 const showCategoryDropdown = ref<boolean>(true)
 
 const memberStore = useMemberStore()
 const memberInfo = computed(() => memberStore.getMemberInfo())
-
+const memberId = memberInfo.value.memberId
 const searchQuery = ref<string | null>(null)
 
 const routeSearch = () => {
   router.push({ name: 'productSearch', query: { query: searchQuery.value } })
+}
+
+const showNotificationDropdown = ref<boolean>(false)
+const toggleShowNotificationDropdown = () => {
+  if (memberId === null || memberId === undefined) {
+    alert('로그인이 필요합니다.')
+    showNotificationDropdown.value = false
+    return
+  }
+  showNotificationDropdown.value = !showNotificationDropdown.value
 }
 
 const categoryStore = useCategoryStore()
