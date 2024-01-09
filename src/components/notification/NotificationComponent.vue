@@ -1,5 +1,9 @@
 <template>
-  <div v-if="isNotificationVisible" class="notification-dropdown">
+  <div
+    class="notification-dropdown"
+    @mouseover="$emit('mouse-enter-dropdown')"
+    @mouseleave="$emit('mouse-exit-dropdown')"
+  >
     <div class="notification-list">
       <div
         v-for="notification in notifications"
@@ -35,8 +39,7 @@ import { storeToRefs } from 'pinia'
 const notificationStore = useNotificationStore()
 const { notifications, notificationCount } = storeToRefs(notificationStore)
 
-// Reactive references from the store
-const isNotificationVisible = ref(true) // This might come from some other reactive property or store
+// const isNotificationVisible = ref(true)
 
 const markNotificationAsRead = async (notificationId: string) => {
   await notificationStore.markAsRead(notificationId)

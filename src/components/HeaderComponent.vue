@@ -53,13 +53,20 @@ const routeSearch = () => {
 }
 
 const showNotificationDropdown = ref<boolean>(false)
-const toggleShowNotificationDropdown = () => {
+
+const showNotificationDropdownHandler = () => {
   if (memberId === null || memberId === undefined) {
-    alert('로그인이 필요합니다.')
-    showNotificationDropdown.value = false
     return
   }
-  showNotificationDropdown.value = !showNotificationDropdown.value
+  showNotificationDropdown.value = true
+}
+
+const mouseEnterDropdownHandler = () => {
+  showNotificationDropdown.value = true
+}
+
+const hideNotificationDropdownHandler = () => {
+  showNotificationDropdown.value = false
 }
 
 const categoryStore = useCategoryStore()
@@ -170,8 +177,16 @@ onBeforeMount(() => {
       </RouterLink>
     </div>
     <div class="nav-tab-wrapper">
-      <NotificationComponent v-show="showNotificationDropdown" />
-      <div @click="toggleShowNotificationDropdown" class="nav-tab-icon cursor-on-hover">
+      <NotificationComponent
+        @mouse-enter-dropdown="mouseEnterDropdownHandler"
+        @mouse-exit-dropdown="hideNotificationDropdownHandler"
+        v-show="showNotificationDropdown"
+      />
+      <div
+        @mouseover="showNotificationDropdownHandler"
+        @mouseleave="hideNotificationDropdownHandler"
+        class="nav-tab-icon cursor-on-hover"
+      >
         <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="black">
           <g clip-path="url(#clip0_197_30)">
             <path
