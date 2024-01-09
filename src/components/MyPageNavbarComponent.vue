@@ -11,7 +11,7 @@
       <div class="left-inner-line"></div>
       <h1>나의 혜택</h1>
       <h2><RouterLink to="/point-history">포인트 사용 내역</RouterLink></h2>
-      <h2><RouterLink to="/coupons">쿠폰 관리</RouterLink></h2>
+      <h2><RouterLink to="/coupons">보유 쿠폰 조회</RouterLink></h2>
       <h2><RouterLink to="/events">이벤트 관리</RouterLink></h2>
       <div class="left-inner-line"></div>
       <h1>나의 관심상품</h1>
