@@ -3,6 +3,7 @@ import { inject, onBeforeMount, type Ref, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import type { ReadProductResponse, ReadProductSliceResponse } from '@/apis/product/ProductDto'
 import { searchProduct } from '@/apis/product/ProductClient'
+import WhitePageComponent from '@/components/wishcart/WhitePageComponent.vue'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -14,19 +15,32 @@ const searchQuery = ref<string | null>(null)
 const products = ref<ReadProductResponse[]>([])
 
 const initData = async () => {
+  lastId.value = 0
   if (route.query.query !== null) {
     searchQuery.value = String(route.query.query)
   }
 
   const response: ReadProductSliceResponse = await searchProduct(lastId.value, searchQuery.value)
-  hasNext.value = response.hasNext
-  lastId.value = response.productResponses[response.productResponses.length - 1].id
-  products.value = [...products.value, ...response.productResponses]
+  if(response.productResponses.length === 0) {
+    products.value = []
+  } else {
+    hasNext.value = response.hasNext
+    lastId.value = response.productResponses[response.productResponses.length - 1].id
+    products.value = response.productResponses
+  }
 
-  console.log(lastId.value)
 }
 
-onBeforeMount(initData)
+onBeforeMount(() => {
+  initData()
+})
+
+watch(() => route.query.query, async (newQuery, oldQuery) => {
+  if (newQuery !== oldQuery) {
+    searchQuery.value = String(newQuery)
+    await initData()
+  }
+})
 
 const isScrollEnd = inject<Ref<boolean | undefined>>('isScrollEnd') as Ref<boolean | undefined>
 watch(isScrollEnd, async (after, before) => {
@@ -45,7 +59,7 @@ watch(isScrollEnd, async (after, before) => {
       <p class="search-label">검색 결과</p>
       <p class="search-query">{{ searchQuery }}</p>
     </div>
-    <div class="product-list-container">
+    <div v-if='products.length !== 0' class="product-list-container">
       <RouterLink
         class="prod-info"
         v-for="(product, index) in products"
@@ -81,6 +95,7 @@ watch(isScrollEnd, async (after, before) => {
         </div>
       </RouterLink>
     </div>
+    <WhitePageComponent v-else message="검색 결과가 없습니다" />
   </div>
 </template>
 
