@@ -60,6 +60,10 @@ const closeCheckoutCouponModal = () => {
   isCheckoutCouponModalOpen.value = false
 }
 
+const changeAvailableCouponsCount = (cnt: number) => {
+  availableCouponsCount.value = cnt
+}
+
 const addDeliveryInfo = async (addressInfo: DeliveryInfo) => {
   deliveryInfo.value.postCode = addressInfo.postCode
   deliveryInfo.value.roadAddress = addressInfo.roadAddress
@@ -156,6 +160,7 @@ onBeforeUnmount(() => {
     :isCheckoutCouponModalOpen="isCheckoutCouponModalOpen"
     :orderItems="products"
     @close-checkout-coupon-modal="closeCheckoutCouponModal"
+    @available-coupons-count="changeAvailableCouponsCount"
   ></CheckoutCouponModal>
   <div class="main-container">
     <h1 v-if="orderType !== 'GIFT'">주문/결제</h1>
