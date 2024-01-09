@@ -61,9 +61,15 @@ export const subscribeToNotifications = (
   onMessage: (notification: Notification) => void,
   onError?: (event: Event) => void
 ): (() => void) => {
+  console.log('SSE connection을 시도합니다.')
+
   const eventSource = new EventSource(
     `${NOTIFICATION_PREFIX_PATH}${NOTIFICATION_DOMAIN_PREFIX_PATH}/subscription`
   )
+
+  eventSource.onopen = (event) => {
+    console.log('SSE connection이 연결되었습니다.', event)
+  }
 
   eventSource.onmessage = (event) => {
     const notification: Notification = JSON.parse(event.data)
@@ -78,6 +84,8 @@ export const subscribeToNotifications = (
   }
 
   return () => {
+    console.log('SSE connection을 해제합니다.')
     eventSource.close()
+    console.log('SSE connection이 해제되었습니다.')
   }
 }
