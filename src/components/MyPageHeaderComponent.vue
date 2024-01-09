@@ -97,6 +97,8 @@ const handleMessage = async (event: MessageEvent) => {
 const memberStore = useMemberStore()
 
 onMounted(async () => {
+  await getMember()
+  const memberInfo = memberStore.getMemberInfo()
   window.addEventListener('message', handleMessage)
 })
 
