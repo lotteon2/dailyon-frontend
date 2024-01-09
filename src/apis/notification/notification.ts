@@ -72,6 +72,8 @@ export const subscribeToNotifications = (
   }
 
   eventSource.onmessage = (event) => {
+    console.log('새로운 메세지가 도착했습니다.')
+    console.log(event)
     const notification: Notification = JSON.parse(event.data)
     onMessage(notification)
   }
