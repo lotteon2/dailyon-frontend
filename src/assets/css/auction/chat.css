@@ -1,0 +1,314 @@
+@import url('https://webfontworld.github.io/TheJamsil/TheJamsil.css');
+* {
+  font-family: TheJamsil;
+}
+/* 전체 container */
+.auction-container {
+  padding-top: 30px;
+  /* width: 100%; */
+  width: 1229px;
+  height: 748px;
+  display: flex;
+  flex-direction: row;
+  gap: 2vw;
+  position: relative;
+}
+
+.left-wrap {
+  width: 404px;
+  height: 748px;
+  /* max-width: 404px; */
+  position: relative;
+}
+/* 상품 썸네일, 디테일 이미지들 들어갈 곳 */
+.product-img-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+}
+.product-img {
+  width: 404px;
+  height: 430px;
+}
+.detail-img-wrap {
+  display: flex;
+  justify-content: space-between;
+}
+.detail-img {
+  width: 90px;
+  height: 80px;
+}
+/* 시작가, 현재입찰가, 남은시간 등등 들어갈 css */
+.auction-bid-detail-wrap {
+  padding-top: 110px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  white-space: nowrap; /* 화면 줄여도 글자 무너지지 않게 */
+}
+.auction-starting-price {
+  font-style: normal;
+  font-weight: 300;
+  font-size: 20px;
+  text-decoration-line: line-through;
+  color: #c6c6c6;
+}
+.current-bid {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 25px;
+  color: #000000;
+  padding-bottom: 15px;
+}
+.remain-time {
+  display: flex;
+  gap: 10px;
+  font-style: normal;
+  font-weight: 500;
+  color: #000000;
+}
+
+.ant-statistic {
+  line-height: 0.9;
+  vertical-align: baseline;
+}
+
+.remain-time-span {
+  vertical-align: baseline;
+  font-size: 25px;
+}
+
+/* 오른쪽 섹션 css */
+.right-wrap {
+  /* width: 100%; */
+  width: 825px;
+  height: 748px;
+  border: 2px solid black;
+}
+
+.chat-window {
+  width: 100%;
+  height: 80%;
+  display: flex;
+}
+
+/* 메세지 */
+.chat-messages {
+  width: 70%;
+  height: 95%;
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  -ms-overflow-style: none; /* 인터넷 익스플로러 */
+  scrollbar-width: none;
+}
+
+.chat-messages::-webkit-scrollbar {
+  display: none; /* 크롬, 사파리, 오페라, 엣지 */
+}
+
+.message {
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+}
+.mine {
+  align-self: flex-start;
+}
+.mine .text {
+  background-color: #c6c6c6; /* 사용자의 메시지 배경색 */
+}
+
+.theirs {
+  align-self: flex-end;
+}
+
+.theirs .text {
+  background-color: #f3d4d4;
+}
+
+.mine .nickname {
+  align-self: flex-start;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.theirs .nickname {
+  align-self: flex-end;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.text {
+  margin-top: 4px;
+  border-radius: 5px;
+  padding: 10px 10px;
+  box-sizing: border-box;
+}
+
+/* 채팅 끝 */
+
+.rank-info-wrap {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 80%;
+  border-bottom: 3px solid #fff;
+}
+.rank-info {
+  display: flex;
+  width: 100%;
+  font-size: 20px;
+  align-content: center;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.nickname-info {
+  padding: 0.5px;
+  width: 45%;
+  text-align: center;
+  border-right: 1px solid white;
+  border-bottom: 1px solid white;
+  padding: 3px;
+}
+
+.bid-amount-info {
+  padding: 0.5px;
+  width: 55%;
+  text-align: center;
+  border-left: 1px solid white;
+  border-bottom: 1px solid white;
+  padding: 3px;
+}
+
+/* 낙찰 순위랭킹과, 참여자 목록 */
+.user-list-wrap {
+  width: 30%;
+  background-color: #000000;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  font-size: 20px;
+  border: 1px;
+  margin: 5px;
+}
+
+.rank {
+  padding-top: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.bid-rank {
+  padding-left: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+  display: flex;
+  gap: 5px;
+}
+
+.rank-user {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 75px;
+}
+
+.rank-user-amount {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100px;
+}
+
+/* 타이머 */
+.next-round-timer-wrap {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.next-round-timer-text {
+  font-size: 25px;
+  font-weight: 300;
+}
+
+.next-round-timer > span {
+  float: right;
+}
+
+:deep(.next-round-timer .ant-statistic .ant-statistic-content) {
+  color: #fff !important;
+  font-weight: 400;
+  font-size: 30px;
+}
+
+.bid-rank:hover {
+  cursor: pointer;
+  color: #fee500;
+}
+.bid-button-wrap {
+  width: 100%;
+  height: 9%;
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 7px;
+}
+
+.currnt-winning-bid-btn {
+  width: 100%;
+  margin: 5px;
+  background: #c22727;
+  color: #fff;
+  border-radius: 5px;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.input-btn {
+  width: 100%;
+  margin: 5px;
+  background: #fee500;
+  border-radius: 5px;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* 채팅 보내기 */
+.chat-input {
+  display: flex;
+  border: 1.5px solid black;
+  border-radius: 5px;
+  margin-left: 7px;
+  width: 98%;
+  height: 8%;
+  font-size: 20px;
+}
+.send-message-text {
+  margin: 6px;
+  width: 88%;
+  height: 75%;
+  border: none;
+  padding-left: 10px;
+  font-size: 18px;
+}
+.send-message-btn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.btn-text {
+  cursor: pointer;
+}

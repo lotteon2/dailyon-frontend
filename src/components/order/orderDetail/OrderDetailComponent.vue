@@ -128,7 +128,7 @@ const beforeUpload = (file: UploadFile) => {
 const cancel = async (orderDetailNo: string) => {
   if (confirm('정말로 취소하시겠습니까?')) {
     await cancelOrderDetail(orderDetailNo)
-    alert('취소 요청이 접수되었습니다.')
+    alert('완료 : 실제 취소완료 까지 시간이 걸릴 수 있습니다')
     emits('closeModal')
     return
   }

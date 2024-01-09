@@ -3,19 +3,87 @@
    License: none (public domain)
 */
 
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
   margin: 0;
   padding: 0;
   border: 0;
@@ -24,21 +92,34 @@ time, mark, audio, video {
   vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure,
-footer, header, hgroup, menu, nav, section {
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
   display: block;
 }
 body {
   line-height: 1;
 }
-ol, ul {
+ol,
+ul {
   list-style: none;
 }
-blockquote, q {
+blockquote,
+q {
   quotes: none;
 }
-blockquote:before, blockquote:after,
-q:before, q:after {
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
   content: '';
   content: none;
 }
@@ -64,10 +145,10 @@ a:link a:visited a:active {
   display: flex;
   flex-direction: column;
   align-items: center;
-
+  overflow-x: hidden;
   overflow-y: scroll;
   gap: 3vh;
-  height: 100vh
+  height: 100vh;
 }
 
 header {
@@ -87,45 +168,45 @@ footer {
   align-items: flex-start;
   gap: 18.75rem;
 
-  background: #C6C6C6;
+  background: #c6c6c6;
 }
 
 @font-face {
-  font-family:'AppleSDGothicNeoB';
+  font-family: 'AppleSDGothicNeoB';
   src: url('@/assets/fonts/AppleSDGothicNeoB.ttf') format('truetype');
   font-weight: 400;
 }
 @font-face {
-  font-family:'AppleSDGothicNeoM';
+  font-family: 'AppleSDGothicNeoM';
   src: url('@/assets/fonts/AppleSDGothicNeoM.ttf') format('truetype');
   font-weight: 400;
 }
 @font-face {
-  font-family:'Baskerville';
+  font-family: 'Baskerville';
   src: url('@/assets/fonts/BASKVILL.ttf') format('truetype');
 }
 @font-face {
-  font-family:'TheJamsil1Thin';
+  font-family: 'TheJamsil1Thin';
   src: url('@/assets/fonts/The Jamsil 1 Thin.ttf') format('truetype');
 }
 @font-face {
-  font-family:'TheJamsil2Light';
+  font-family: 'TheJamsil2Light';
   src: url('@/assets/fonts/The Jamsil 2 Light.ttf') format('truetype');
 }
 @font-face {
-  font-family:'TheJamsil3Regular';
+  font-family: 'TheJamsil3Regular';
   src: url('@/assets/fonts/The Jamsil 3 Regular.ttf') format('truetype');
 }
 @font-face {
-  font-family:'TheJamsil4Medium';
+  font-family: 'TheJamsil4Medium';
   src: url('@/assets/fonts/The Jamsil 4 Medium.ttf') format('truetype');
 }
 @font-face {
-  font-family:'TheJamsil5Bold';
+  font-family: 'TheJamsil5Bold';
   src: url('@/assets/fonts/The Jamsil 5 Bold.ttf') format('truetype');
 }
 @font-face {
-  font-family:'TheJamsil6ExtraBold';
+  font-family: 'TheJamsil6ExtraBold';
   src: url('@/assets/fonts/The Jamsil 6 ExtraBold.ttf') format('truetype');
 }
 
