@@ -63,7 +63,6 @@ onUnmounted(() => {
   disconnect()
 })
 const connect = async () => {
-  message.success('취소 되었습니다. 반영까지는 시간이 걸릴 수 있습니다.')
   const websocketUrl = `ws://localhost:8083/ws/chat?id=${userInfo.value.userId}`
   socket.value = new WebSocket(websocketUrl)
   socket.value.onopen = () => {
