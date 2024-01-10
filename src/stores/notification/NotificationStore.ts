@@ -10,7 +10,7 @@ export const useNotificationStore = defineStore(
   'notification',
   () => {
     const notifications = ref<Notification[]>([])
-    const notificationCount = ref(0)
+    const unreadNotificationCount = ref(0)
 
     // 새 알림 가져오기 (unread 최근 5개)
     const fetchRecentNotifications = async () => {
@@ -24,11 +24,11 @@ export const useNotificationStore = defineStore(
 
     // 알림 개수 업데이트
     const fetchUnreadNotificationCount = async () => {
-      notificationCount.value = await notificationApi.getUnreadNotificationCount()
+      unreadNotificationCount.value = await notificationApi.getUnreadNotificationCount()
     }
 
     const increaseNotificationCount = async () => {
-      notificationCount.value++
+      unreadNotificationCount.value++
     }
 
     const markAsRead = async (notificationId: string) => {
@@ -58,7 +58,7 @@ export const useNotificationStore = defineStore(
     const deleteAllNotifs = async () => {
       await notificationApi.deleteAllNotifications()
       notifications.value = []
-      notificationCount.value = 0
+      unreadNotificationCount.value = 0
     }
 
     /**
@@ -72,7 +72,7 @@ export const useNotificationStore = defineStore(
         (notification) => {
           console.log('notificationApi.subscribeToNotifications 통해 새 알림 도착')
           notifications.value.unshift(notification)
-          notificationCount.value++
+          unreadNotificationCount.value++
           handleNewNotification(notification)
         },
         (errorEvent) => {
@@ -100,7 +100,7 @@ export const useNotificationStore = defineStore(
 
     return {
       notifications,
-      notificationCount,
+      unreadNotificationCount,
       fetchRecentNotifications,
       fetchAllNotifications,
       fetchUnreadNotificationCount,
@@ -117,7 +117,7 @@ export const useNotificationStore = defineStore(
     persist: {
       key: 'notificationState',
       storage: window.sessionStorage,
-      paths: ['notifications', 'notificationCount']
+      paths: ['notifications', 'unreadNotificationCount']
     }
   }
 )

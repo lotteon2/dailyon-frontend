@@ -64,16 +64,14 @@ const formatDiscountValue = (coupon: Coupon) => {
 </script>
 <template>
   <div class="coupon-container">
-    <div class="container-title">쿠폰 관리</div>
+    <div class="container-title">보유 쿠폰 조회</div>
     <div class="container-line"></div>
     <table> 
-      <col width="150px" />
-      <col width="400px" />
+      <col width="1200px" />
       <col width="200px" />
       <col width="200px" />
       <thead>
         <tr class="coupon-table-data1">
-          <th></th>
           <th>쿠폰이름</th>
           <th>할인금액</th>
           <th>마감일</th>
@@ -81,15 +79,6 @@ const formatDiscountValue = (coupon: Coupon) => {
       </thead>
       <tbody>
         <tr v-for="(coupon, index) in coupons?.memberCouponInfoReadItemResponse" :key="index" class="coupon-table-data2 ">
-          <td> <image
-            :href="`${VITE_STATIC_IMG_URL}${coupon.targetImgUrl}` || undefined"
-            x="0"
-            y="0"
-            width="150"
-            height="150"
-            mask="url(#circle-mask)"
-            preserveAspectRatio="xMidYMid slice"
-          /></td>
           <td>{{ coupon.name }}</td>
           <td>{{ formatDiscountValue(coupon) }}</td>
           <td>{{ formatCouponDate(coupon.endAt) }}</td>
