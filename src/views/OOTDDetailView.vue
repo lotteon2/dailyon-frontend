@@ -430,11 +430,6 @@ const onTagedProductMouseLeave = async (productId: number) => {
             </span>
           </div>
         </div>
-        <div class='ootd-detail-footer-comment-count-wrapper'>
-          <div class='ootd-detail-footer-comment-count'>
-            댓글 <span class='count-wrapper'>{{ post.commentCount }}</span>
-          </div>
-        </div>
         <div class='ootd-detail-footer-view-count-wrapper'>
           <div class='ootd-detail-footer-view-count'>
             조회 <span class='count-wrapper'>{{ post.viewCount }}</span>
