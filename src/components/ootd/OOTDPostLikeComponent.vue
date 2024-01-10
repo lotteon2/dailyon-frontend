@@ -6,8 +6,6 @@ import { getPostLikes } from '@/apis/ootd/PostService'
 import OOTDPostCardComponent from '@/components/ootd/OOTDPostCardComponent.vue'
 import OOTDSortComponent from '@/components/ootd/OOTDSortComponent.vue'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
-import { usePostLikeStore } from '@/stores/postlike/PostLikeStore'
-import { togglePostLike } from '@/apis/ootd/PostLikeService'
 
 const sortOptions = reactive([
   { label: '조회순', value: 'viewCount,desc' },
@@ -60,21 +58,6 @@ watch(requestPage, async (afterPage, beforePage) => {
   }
 })
 
-
-const postLikeStore = usePostLikeStore()
-const postLikes = postLikeStore.postLikes
-
-const flushLikeStore = async () => {
-  const postIds: number[] = []
-  postLikes.forEach((postLike) => {
-    postIds.push(postLike)
-  })
-
-  if (postIds.length !== 0) {
-    await togglePostLike(postIds)
-    postLikes.clear()
-  }
-}
 </script>
 
 <template>
