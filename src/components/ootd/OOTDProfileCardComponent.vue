@@ -10,13 +10,14 @@ import { toggleFollow } from '@/apis/ootd/FollowService'
 import { onBeforeRouteLeave } from 'vue-router'
 import { useMemberStore } from '@/stores/member/MemberStore'
 import type { GiftInfo } from '@/apis/order/orderDto'
+import { storeToRefs } from 'pinia'
 
 const emit = defineEmits(['fetchData'])
 const memberStore = useMemberStore()
 const memberId = memberStore.getMemberInfo().memberId
 const nickname = memberStore.nickname ? memberStore.nickname : ''
 const followStore = useFollowStore()
-const follows = followStore.follows
+const {follows} = storeToRefs(followStore)
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -62,20 +63,20 @@ const followButtonClickListener = (followingId: number, isFollowing: boolean | u
       ? (member.value!.followerCount -= 1)
       : (member.value!.followerCount += 1)
     member.value!.isFollowing = !isFollowing
-    follows.has(followingId) ? follows.delete(followingId) : follows.add(followingId)
+    followStore.toggleFollows(followingId)
   }
 
 }
 
 const flushFollowStore = async () => {
   const followingIds: number[] = []
-  follows.forEach((followingId: number) => {
+  follows.value.forEach((followingId: number) => {
     followingIds.push(followingId)
   })
 
   if (followingIds.length !== 0) {
     await toggleFollow(followingIds)
-    follows.clear()
+    await followStore.clearFollows()
   }
 }
 

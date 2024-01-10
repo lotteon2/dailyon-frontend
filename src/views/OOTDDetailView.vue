@@ -12,6 +12,7 @@ import { useFollowStore } from '@/stores/follow/FollowStore'
 import { toggleFollow } from '@/apis/ootd/FollowService'
 import { usePostStore } from '@/stores/post/PostStore'
 import { useMemberStore } from '@/stores/member/MemberStore'
+import { storeToRefs } from 'pinia'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -75,53 +76,53 @@ onBeforeMount(async () => {
 })
 
 const postLikeStore = usePostLikeStore()
-const postLikes = postLikeStore.postLikes
+const {postLikes} = storeToRefs(postLikeStore)
 const likeButtonClickListener = (isLike: boolean | undefined) => {
   if (isLike === undefined) {
     alert('로그인이 필요합니다.')
   } else {
-    if (postLikes.has(postId.value)) {
+    if (postLikeStore.hasPostLike(postId.value)) {
       post.value.isLike ? post.value.likeCount += 1 : post.value.likeCount -= 1
     } else {
       post.value.isLike ? post.value.likeCount -= 1 : post.value.likeCount += 1
     }
-    postLikes.has(postId.value) ? postLikes.delete(postId.value) : postLikes.add(postId.value)
+    postLikeStore.togglePostLikes(postId.value)
   }
 }
 
 
 const followStore = useFollowStore()
-const follows = followStore.follows
+const {follows} = storeToRefs(followStore)
 const followButtonClickListener = (followingId: number, isFollowing: boolean | undefined) => {
   if(isFollowing === undefined) {
     alert('로그인이 필요합니다.')
   } else {
     post.value.member.isFollowing = !isFollowing
-    follows.has(followingId) ? follows.delete(followingId) : follows.add(followingId)
+    followStore.toggleFollows(followingId)
   }
 }
 
 const flushFollowStore = async () => {
   const followingIds: number[] = []
-  follows.forEach((followingId: number) => {
+  follows.value.forEach((followingId: number) => {
     followingIds.push(followingId)
   })
 
   if (followingIds.length !== 0) {
     await toggleFollow(followingIds)
-    follows.clear()
+    await followStore.clearFollows()
   }
 }
 
 const flushLikeStore = async () => {
   const postIds: number[] = []
-  postLikes.forEach((postLike) => {
-    postIds.push(postLike)
+  postLikes.value.forEach((storedPostLike) => {
+    postIds.push(storedPostLike)
   })
 
   if (postIds.length !== 0) {
     await togglePostLike(postIds)
-    postLikes.clear()
+    await postLikeStore.clearPostLikes()
   }
 }
 
@@ -129,25 +130,6 @@ const flushLikeStore = async () => {
 onBeforeRouteLeave(async (to, from) => {
   await flushLikeStore()
   await flushFollowStore()
-})
-
-// 새로고침 or 브라우저 창 닫을 때 이벤트
-window.addEventListener('beforeunload', async (event) => {
-  // event를 멈춰놓고 flush 성공시 리로드
-  event.returnValue = ''
-  flushFollowStore().then((res) => {
-    flushLikeStore().then((res2) => {
-      window.location.reload()
-    }).catch((error) => {
-      console.error(error)
-      event.preventDefault()
-      event.returnValue = ''
-    })
-  }).catch((error) => {
-    console.error(error)
-    event.preventDefault()
-    event.returnValue = ''
-  })
 })
 
 const postStore = usePostStore()
@@ -279,7 +261,7 @@ const onTagedProductMouseLeave = async (productId: number) => {
           <div class='ootd-detail-like-button-wrapper'>
             <div class='ootd-detail-like-button' @click='likeButtonClickListener(post.isLike)'>
               <svg
-                :class="{ 'selected': post.isLike === undefined ? false : (postLikes.has(post.id) ? !post.isLike : post.isLike) }"
+                :class="{ 'selected': post.isLike === undefined ? false : (postLikeStore.hasPostLike(post.id) ? !post.isLike : post.isLike) }"
                 class='ootd-detail-like-button-icon' xmlns='http://www.w3.org/2000/svg'
                 viewBox='0 0 40 37' fill='none'>
                 <path

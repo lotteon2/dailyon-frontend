@@ -7,6 +7,7 @@ import { getFollowers } from '@/apis/ootd/FollowService'
 import { onBeforeMount, watch } from 'vue'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 import { useFollowStore } from '@/stores/follow/FollowStore'
+import { storeToRefs } from 'pinia'
 
 const props = defineProps({
   addedFollowings: {
@@ -23,7 +24,7 @@ const totalPages = ref<number>()
 const totalElements = ref<number>()
 
 const followStore = useFollowStore()
-const follows = followStore.follows
+const {follows} = storeToRefs(followStore)
 
 const fetchDefaultData = async (): Promise<FollowerPageResponse<FollowerResponse>> => {
   const followerPageResponse = await getFollowers(0, 5, 'createdAt,desc')
@@ -58,7 +59,7 @@ const followButtonClickListener = (followerId: number, isFollowing: boolean | un
   // 이미 팔로잉하는 상태라면
   if(isFollowing) {
     // 언팔로우
-    if(!follows.has(followerId)) {
+    if(!followStore.hasFollowingId(followerId)) {
       followers.value?.forEach((follower) => {
         if(follower.id === followerId) {
           props.addedFollowings!.push({
@@ -81,7 +82,7 @@ const followButtonClickListener = (followerId: number, isFollowing: boolean | un
   // 아니라면
   else {
     // 언팔로우
-    if(follows.has(followerId)) {
+    if(followStore.hasFollowingId(followerId)) {
       const indexToRemove = props.addedFollowings!.findIndex((following) => following.id === followerId)
       if (indexToRemove !== -1) {
         props.addedFollowings?.splice(indexToRemove, 1)
@@ -101,7 +102,7 @@ const followButtonClickListener = (followerId: number, isFollowing: boolean | un
       })
     }
   }
-  follows.has(followerId) ? follows.delete(followerId) : follows.add(followerId)
+  followStore.toggleFollows(followerId)
 }
 
 const img = ref<Array<HTMLImageElement>>(new Array<HTMLImageElement>())
@@ -142,7 +143,7 @@ const handleImageLoad = async () => {
           {{ follower.nickname }}
         </RouterLink>
       </div>
-      <div v-if='follows.has(follower.id) ? !follower.isFollowing : follower.isFollowing'
+      <div v-if='followStore.hasFollowingId(follower.id) ? !follower.isFollowing : follower.isFollowing'
            class='follow-btn following'
            @click='followButtonClickListener(follower.id, follower.isFollowing)'>
         <svg
