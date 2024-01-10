@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, nextTick } from 'vue'
 import { StatisticCountdown, message } from 'ant-design-vue'
-const VITE_AUCTION_WS_URL = ref<string>(import.meta.env.VITE_AUCTION_WS_URL)
+const VITE_AUCTION_WS_URL: string = import.meta.env.VITE_AUCTION_WS_URL
 
 // 더미데이터
 interface userInfo {
