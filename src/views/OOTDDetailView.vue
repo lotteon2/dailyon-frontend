@@ -81,11 +81,6 @@ const likeButtonClickListener = (isLike: boolean | undefined) => {
   if (isLike === undefined) {
     alert('로그인이 필요합니다.')
   } else {
-    if (postLikeStore.hasPostLike(postId.value)) {
-      post.value.isLike ? post.value.likeCount += 1 : post.value.likeCount -= 1
-    } else {
-      post.value.isLike ? post.value.likeCount -= 1 : post.value.likeCount += 1
-    }
     postLikeStore.togglePostLikes(postId.value)
   }
 }
@@ -97,7 +92,6 @@ const followButtonClickListener = (followingId: number, isFollowing: boolean | u
   if(isFollowing === undefined) {
     alert('로그인이 필요합니다.')
   } else {
-    post.value.member.isFollowing = !isFollowing
     followStore.toggleFollows(followingId)
   }
 }
@@ -230,14 +224,9 @@ const onTagedProductMouseLeave = async (productId: number) => {
                 </RouterLink>
                 <div class='ootd-detail-header-follow-wrapper'>
                   <div v-if='post.member.id === memberId'></div>
-                  <div v-else-if='!post.member.isFollowing'
-                       @click='followButtonClickListener(post.member.id, post.member.isFollowing)'
-                       class='ootd-detail-header-follow'>
-                    <div class='ootd-detail-header-follow-text'>
-                      +팔로우
-                    </div>
-                  </div>
-                  <div v-else class='ootd-detail-header-following'
+
+                  <div v-else-if='post.member.isFollowing === undefined ? true : (followStore.hasFollowingId(post.member.id) ? !post.member.isFollowing : post.member.isFollowing)'
+                       class='ootd-detail-header-following'
                        @click='followButtonClickListener(post.member.id, post.member.isFollowing)'>
                     <svg class='ootd-detail-header-following-icon' xmlns='http://www.w3.org/2000/svg'
                          viewBox='0 0 14 10' fill='none'>
@@ -247,6 +236,13 @@ const onTagedProductMouseLeave = async (productId: number) => {
                     </svg>
                     <div class='ootd-detail-header-following-text'>
                       팔로잉
+                    </div>
+                  </div>
+                  <div v-else
+                       @click='followButtonClickListener(post.member.id, post.member.isFollowing)'
+                       class='ootd-detail-header-follow'>
+                    <div class='ootd-detail-header-follow-text'>
+                      +팔로우
                     </div>
                   </div>
                 </div>
@@ -270,7 +266,15 @@ const onTagedProductMouseLeave = async (productId: number) => {
             </div>
             <div class='ootd-detail-like-text-wrapper'>
               <div v-if='post.likeCount <= 999' class='ootd-detail-like-text'>
-                {{ post.likeCount }}
+                <div v-if='post.isLike !== undefined && postLikeStore.hasPostLike(post.id) && post.isLike'>
+                  {{ post.likeCount - 1 }}
+                </div>
+                <div v-else-if='post.isLike !== undefined && postLikeStore.hasPostLike(post.id) && !post.isLike'>
+                  {{ post.likeCount + 1 }}
+                </div>
+                <div v-else>
+                  {{ post.likeCount }}
+                </div>
               </div>
               <div v-else class='ootd-detail-like-text'>
                 999+
@@ -409,12 +413,21 @@ const onTagedProductMouseLeave = async (productId: number) => {
       <div class='ootd-detail-footer-count-wrapper'>
         <div class='ootd-detail-footer-like-count-wrapper'>
           <div class='ootd-detail-footer-like-count'>
-            좋아요 <span class='count-wrapper'>{{ post.likeCount }}</span>
-          </div>
-        </div>
-        <div class='ootd-detail-footer-comment-count-wrapper'>
-          <div class='ootd-detail-footer-comment-count'>
-            댓글 <span class='count-wrapper'>{{ post.commentCount }}</span>
+            좋아요
+            <span v-if='post.likeCount <= 999' class='count-wrapper'>
+              <span v-if='post.isLike !== undefined && postLikeStore.hasPostLike(post.id) && post.isLike'>
+                {{ post.likeCount - 1 }}
+              </span>
+              <span v-else-if='post.isLike !== undefined && postLikeStore.hasPostLike(post.id) && !post.isLike'>
+                {{ post.likeCount + 1 }}
+              </span>
+              <span v-else>
+                {{ post.likeCount }}
+              </span>
+            </span>
+            <span v-else class='count-wrapper'>
+              999+
+            </span>
           </div>
         </div>
         <div class='ootd-detail-footer-view-count-wrapper'>
