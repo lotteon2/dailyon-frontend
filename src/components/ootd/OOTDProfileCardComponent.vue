@@ -59,10 +59,10 @@ const followButtonClickListener = (followingId: number, isFollowing: boolean | u
   if(isFollowing === undefined) {
     alert('로그인이 필요합니다.')
   } else {
-    member.value!.isFollowing
-      ? (member.value!.followerCount -= 1)
-      : (member.value!.followerCount += 1)
-    member.value!.isFollowing = !isFollowing
+    // member.value!.isFollowing
+    //   ? (member.value!.followerCount -= 1)
+    //   : (member.value!.followerCount += 1)
+    // member.value!.isFollowing = !isFollowing
     followStore.toggleFollows(followingId)
   }
 
@@ -127,12 +127,23 @@ const handleImageLoad = async () => {
     />
     <div class="nickname">{{ member.nickname }}</div>
     <div class="follow-wrapper">
-      팔로워 <span class="follow-count">{{ member.followerCount }}</span> | 팔로우
+      팔로워
+      <span class="follow-count">
+        <span v-if='member.isFollowing !== undefined && followStore.hasFollowingId(member.id) && member.isFollowing'>
+          {{ member.followerCount - 1 }}
+        </span>
+        <span v-else-if='member.isFollowing !== undefined && followStore.hasFollowingId(member.id) && !member.isFollowing'>
+          {{ member.followerCount + 1 }}
+        </span>
+        <span v-else>
+          {{ member.followerCount }}
+        </span>
+      </span> | 팔로우
       <span class="follow-count">{{ member.followingCount }}</span>
     </div>
     <div v-if="member.id === memberId"></div>
     <div
-      v-else-if="member.isFollowing"
+      v-else-if='member.isFollowing === undefined ? true : (followStore.hasFollowingId(member.id) ? !member.isFollowing : member.isFollowing)'
       class="follow-inactive-btn"
       @click="followButtonClickListener(member.id, member.isFollowing)"
     >

@@ -92,7 +92,6 @@ const followButtonClickListener = (followingId: number, isFollowing: boolean | u
   if(isFollowing === undefined) {
     alert('로그인이 필요합니다.')
   } else {
-    post.value.member.isFollowing = !isFollowing
     followStore.toggleFollows(followingId)
   }
 }
@@ -225,14 +224,9 @@ const onTagedProductMouseLeave = async (productId: number) => {
                 </RouterLink>
                 <div class='ootd-detail-header-follow-wrapper'>
                   <div v-if='post.member.id === memberId'></div>
-                  <div v-else-if='!post.member.isFollowing'
-                       @click='followButtonClickListener(post.member.id, post.member.isFollowing)'
-                       class='ootd-detail-header-follow'>
-                    <div class='ootd-detail-header-follow-text'>
-                      +팔로우
-                    </div>
-                  </div>
-                  <div v-else class='ootd-detail-header-following'
+
+                  <div v-else-if='post.member.isFollowing === undefined ? true : (followStore.hasFollowingId(post.member.id) ? !post.member.isFollowing : post.member.isFollowing)'
+                       class='ootd-detail-header-following'
                        @click='followButtonClickListener(post.member.id, post.member.isFollowing)'>
                     <svg class='ootd-detail-header-following-icon' xmlns='http://www.w3.org/2000/svg'
                          viewBox='0 0 14 10' fill='none'>
@@ -242,6 +236,13 @@ const onTagedProductMouseLeave = async (productId: number) => {
                     </svg>
                     <div class='ootd-detail-header-following-text'>
                       팔로잉
+                    </div>
+                  </div>
+                  <div v-else
+                       @click='followButtonClickListener(post.member.id, post.member.isFollowing)'
+                       class='ootd-detail-header-follow'>
+                    <div class='ootd-detail-header-follow-text'>
+                      +팔로우
                     </div>
                   </div>
                 </div>
