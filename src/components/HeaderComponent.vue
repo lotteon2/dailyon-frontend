@@ -77,6 +77,9 @@ onBeforeMount(() => {
 })
 
 onMounted(async () => {
+  if (memberId === null || memberId === undefined) {
+    return
+  }
   await notificationStore.fetchUnreadNotificationCount()
 })
 </script>
