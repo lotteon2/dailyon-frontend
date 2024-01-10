@@ -2,7 +2,9 @@
 import { AxiosError } from 'axios'
 import { authAxiosInstance } from '@/apis/utils/index'
 import type { Notification } from '@/types/notification' // Notification 타입을 정의해야 합니다.
+import { EventSourcePolyfill } from 'event-source-polyfill'
 
+const BASE_URL = import.meta.env.VITE_API_BASE_URL
 const NOTIFICATION_PREFIX_PATH = '/notification-service'
 const NOTIFICATION_DOMAIN_PREFIX_PATH = '/notifications'
 
@@ -59,12 +61,25 @@ export const deleteAllNotifications = async (): Promise<void> => {
 // 알림 구독
 export const subscribeToNotifications = (
   onMessage: (notification: Notification) => void,
-  onError?: (event: Event) => void
+  onError?: (event: Event | MessageEvent) => void
 ): (() => void) => {
   console.log('SSE connection을 시도합니다.')
+  const accessToken = localStorage.getItem('accessToken')
 
-  const eventSource = new EventSource(
-    `${NOTIFICATION_PREFIX_PATH}${NOTIFICATION_DOMAIN_PREFIX_PATH}/subscription`
+  if (accessToken === null) {
+    console.log('accessToken을 찾을 수 없습니다.')
+    return () => {
+      console.log('No active SSE connection to close because accessToken was null.')
+    }
+  }
+
+  const eventSource = new EventSourcePolyfill(
+    `${BASE_URL}${NOTIFICATION_PREFIX_PATH}${NOTIFICATION_DOMAIN_PREFIX_PATH}/subscription`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    }
   )
 
   eventSource.onopen = (event) => {
@@ -81,7 +96,7 @@ export const subscribeToNotifications = (
   eventSource.onerror = (event) => {
     console.error('EventSource error:', event)
     if (onError) {
-      onError(event)
+      onError(event as Event)
     }
   }
 
