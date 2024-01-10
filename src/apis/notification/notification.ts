@@ -1,7 +1,8 @@
 // src/apis/notification/notification.ts
 import { AxiosError } from 'axios'
 import { authAxiosInstance } from '@/apis/utils/index'
-import type { Notification } from '@/types/notification' // Notification 타입을 정의해야 합니다.
+import type { Notification } from '@/types/notification'
+import { NotificationType } from '@/types/notification'
 import { EventSourcePolyfill } from 'event-source-polyfill'
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL
@@ -87,9 +88,16 @@ export const subscribeToNotifications = (
   }
 
   eventSource.onmessage = (event) => {
+    const notification: Notification = JSON.parse(event.data)
+
+    if (notification.notificationType === NotificationType.HEARTBEAT) {
+      console.log('하트비트 수신')
+      return // 하트비트일 경우 처리하지 않음
+    }
+
     console.log('새로운 메세지가 도착했습니다.')
     console.log(event)
-    const notification: Notification = JSON.parse(event.data)
+
     onMessage(notification)
   }
 
