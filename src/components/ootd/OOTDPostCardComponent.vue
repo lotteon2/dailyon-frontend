@@ -23,13 +23,9 @@ const likeButtonClickListener = async (postId: number, isLike: boolean | undefin
     alert('로그인이 필요합니다.')
   } else {
     const postIndex = props.posts.findIndex((post) => post.id === postId)
+    console.log(postIndex)
+    console.log(props.posts[postIndex].isLike)
     if (postIndex !== -1) {
-      const hasPostLike = postLikeStore.hasPostLike(postId)
-      if (hasPostLike) {
-        props.posts[postIndex].isLike ? props.posts[postIndex].likeCount += 1 : props.posts[postIndex].likeCount -= 1
-      } else {
-        props.posts[postIndex].isLike ? props.posts[postIndex].likeCount -= 1 : props.posts[postIndex].likeCount += 1
-      }
       await postLikeStore.togglePostLikes(postId)
     }
   }
@@ -106,8 +102,18 @@ const handleImageLoad = async () => {
               d='M8.82563 15L7.64035 13.921C3.43054 10.1035 0.651245 7.57766 0.651245 4.49591C0.651245 1.97003 2.62945 0 5.14716 0C6.5695 0 7.93462 0.662125 8.82563 1.70027C9.71664 0.662125 11.0818 0 12.5041 0C15.0218 0 17 1.97003 17 4.49591C17 7.57766 14.2207 10.1035 10.0109 13.921L8.82563 15Z'
               fill='#FF0000' />
           </svg>
-          <div v-if='post.likeCount <= 999' class='ootd-post-card-like-view-count-text'>{{ post.likeCount }}</div>
-          <div v-else class='ootd-post-card-like-view-count-text'>{{ post.likeCount }}+</div>
+          <div v-if='post.likeCount <= 999' class='ootd-post-card-like-view-count-text'>
+            <div v-if='post.isLike !== undefined && postLikeStore.hasPostLike(post.id) && post.isLike'>
+              {{ post.likeCount - 1 }}
+            </div>
+            <div v-else-if='post.isLike !== undefined && postLikeStore.hasPostLike(post.id) && !post.isLike'>
+              {{ post.likeCount + 1 }}
+            </div>
+            <div v-else>
+              {{ post.likeCount }}
+            </div>
+          </div>
+          <div v-else class='ootd-post-card-like-view-count-text'>999+</div>
         </div>
         <div class='ootd-post-card-count-view-wrapper'>
           <svg class='ootd-post-card-view-count-icon' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 15'
@@ -117,7 +123,7 @@ const handleImageLoad = async () => {
               fill='#C6C6C6' />
           </svg>
           <div v-if='post.viewCount <= 999' class='ootd-post-card-count-view-count-text'>{{ post.viewCount }}</div>
-          <div v-else class='ootd-post-card-count-view-count-text'>{{ post.viewCount }}+</div>
+          <div v-else class='ootd-post-card-count-view-count-text'>999+</div>
         </div>
       </div>
     </div>
