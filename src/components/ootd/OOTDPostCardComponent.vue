@@ -82,7 +82,7 @@ const handleImageLoad = async () => {
         <RouterLink :to='`/ootds/${post.id}`'>
           <Image class='ootd-post-card-image' ref='img'
                  @load='getImageSize'
-                 :src='`${VITE_STATIC_IMG_URL}${post.thumbnailImgUrl}?w=${imageSize.width}&h=${imageSize.height}&q=100`'
+                 :src='`${VITE_STATIC_IMG_URL}${post.thumbnailImgUrl}?w=${imageSize.width}&h=${imageSize.height}&q=95`'
                  :preview='false'>
             <template #placeholder>
               <Image
