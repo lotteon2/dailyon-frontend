@@ -25,7 +25,7 @@ const sortOptions = reactive([
 const requestPage = ref<number>(0)
 const requestSize = ref<number>(6)
 const requestSort = ref<string>(sortOptions[0].value)
-const posts = ref<Array<OOTDPostResponse>>()
+const posts = ref<Array<OOTDPostResponse>>(new Array<OOTDPostResponse>())
 const totalPages = ref<number>()
 const totalElements = ref<number>()
 
@@ -92,7 +92,7 @@ watch(requestPage, async (afterPage, beforePage) => {
         <div class="blank-gap"></div>
       </div>
     </div>
-    <WhitePageComponent v-if='posts.length === 0' message="작성한 게시글이 없습니다" />
+    <WhitePageComponent v-if='posts.length === 0' message="작성된 게시글이 없습니다" />
     <div v-else>
       <OOTDPostCardComponent :posts="posts" />
       <PaginationComponent
