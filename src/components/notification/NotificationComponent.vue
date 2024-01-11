@@ -14,7 +14,7 @@
         ]"
       >
         <div class="flex-row-space-btw">
-          <div @click="markNotificationAsRead(notification.id)" class="notification-message">
+          <div @click="notificationClickHandler(notification)" class="notification-message">
             {{ notification.message }}
           </div>
 
@@ -35,6 +35,7 @@ import { useNotificationStore } from '@/stores/notification/NotificationStore'
 import type { Notification } from '@/types/notification'
 import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
+import router from '@/router'
 
 const notificationStore = useNotificationStore()
 const { notifications, unreadNotificationCount } = storeToRefs(notificationStore)
@@ -55,6 +56,18 @@ const deleteNotification = async (notificationId: string) => {
 
 const deleteAllNotifications = async () => {
   await notificationStore.deleteAllNotifs()
+}
+
+const notificationClickHandler = (clickedNotification: Notification) => {
+  console.log(
+    clickedNotification.id,
+    clickedNotification.linkUrl,
+    clickedNotification.message,
+    clickedNotification.notificationType,
+    clickedNotification.read
+  )
+  router.push(clickedNotification.linkUrl)
+  markNotificationAsRead(clickedNotification.id)
 }
 </script>
 
