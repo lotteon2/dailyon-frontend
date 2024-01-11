@@ -32,7 +32,10 @@ onMounted(async () => {
     router.push({ name: 'login' })
   } else {
     memberStore.setMemberInfo(memberInfo)
+
     notificationStore.subscribeToNotificationsHandler()
+    await notificationStore.fetchUnreadNotificationCount()
+    await notificationStore.fetchRecentNotifications()
     redirectToMainPage()
   }
 })
