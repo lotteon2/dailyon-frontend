@@ -11,20 +11,33 @@ export const useNotificationStore = defineStore(
   () => {
     const notifications = ref<Notification[]>([])
     const unreadNotificationCount = ref(0)
+    let unsubscribe: (() => void) | null = null
 
     // 새 알림 가져오기 (unread 최근 5개)
     const fetchRecentNotifications = async () => {
-      notifications.value = await notificationApi.getRecentNotifications()
+      try {
+        notifications.value = await notificationApi.getRecentNotifications()
+      } catch (error) {
+        console.error('최근 알림 조회 도중 오류 발생:', error)
+      }
     }
 
     // 모든 알림 가져오기 ( unread/read 모두 )
     const fetchAllNotifications = async () => {
-      notifications.value = await notificationApi.getAllNotifications()
+      try {
+        notifications.value = await notificationApi.getAllNotifications()
+      } catch (error) {
+        console.error('모든 알림 조회 도중 오류 발생:', error)
+      }
     }
 
     // 알림 개수 업데이트
     const fetchUnreadNotificationCount = async () => {
-      unreadNotificationCount.value = await notificationApi.getUnreadNotificationCount()
+      try {
+        unreadNotificationCount.value = await notificationApi.getUnreadNotificationCount()
+      } catch (error) {
+        console.error('알림 개수 업데이트 도중 오류 발생:', error)
+      }
     }
 
     const increaseNotificationCount = async () => {
@@ -65,10 +78,15 @@ export const useNotificationStore = defineStore(
      * 아래는 구독관련 로직
      * unsubscribe -> 함수 형태이거나 null 값. 구독상태에 따라 토글됨
      */
-    let unsubscribe: (() => void) | null = null
 
-    function subscribeToNotifications(): () => void {
-      const unsubscribe = notificationApi.subscribeToNotifications(
+    const subscribeToNotifications = () => {
+      const accessToken = localStorage.getItem('accessToken')
+      if (!accessToken) {
+        console.error('accessToken이 없습니다.')
+        return () => {} // 빈함수 return
+      }
+
+      unsubscribe = notificationApi.subscribeToNotifications(
         (notification) => {
           console.log('notificationApi.subscribeToNotifications 통해 새 알림 도착')
           notifications.value.unshift(notification)
@@ -79,7 +97,13 @@ export const useNotificationStore = defineStore(
           console.error('Error while subscribing to notifications:', errorEvent)
         }
       )
-      return unsubscribe
+
+      return () => {
+        if (unsubscribe) {
+          unsubscribe()
+          unsubscribe = null
+        }
+      }
     }
 
     const unsubscribeFromNotifications = () => {
@@ -110,7 +134,8 @@ export const useNotificationStore = defineStore(
       deleteNotif,
       deleteAllNotifs,
       subscribeToNotifications,
-      unsubscribeFromNotifications
+      unsubscribeFromNotifications,
+      handleNewNotification
     }
   },
   {

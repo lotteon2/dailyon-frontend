@@ -5,7 +5,9 @@ import { usePostLikeStore } from '@/stores/postlike/PostLikeStore'
 import { onBeforeRouteLeave } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { togglePostLike } from '@/apis/ootd/PostLikeService'
+
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
+import { Image } from 'ant-design-vue'
 
 const props = defineProps({
   posts: {
@@ -16,7 +18,7 @@ const props = defineProps({
 })
 
 const postLikeStore = usePostLikeStore()
-const {postLikes} = storeToRefs(postLikeStore)
+const { postLikes } = storeToRefs(postLikeStore)
 
 const likeButtonClickListener = async (postId: number, isLike: boolean | undefined) => {
   if (isLike === undefined) {
@@ -66,7 +68,7 @@ const handleImageLoad = async () => {
   if (img.value) {
     imageSize.value = {
       width: img.value[0]!.width,
-      height: img.value[0]!.height,
+      height: img.value[0]!.height
     }
   }
 }
@@ -78,11 +80,18 @@ const handleImageLoad = async () => {
     <div v-for='post in posts' class='ootd-post-card-wrapper'>
       <div class='ootd-post-card-image-wrapper'>
         <RouterLink :to='`/ootds/${post.id}`'>
-          <img v-if='imageSize.width === 0 || imageSize.height === 0' class='ootd-post-card-image' ref='img'
-               @load='getImageSize' src='@/assets/images/loading.gif'/>
-          <img v-else class='ootd-post-card-image' ref='img'
-               @load='getImageSize'
-               :src='`${VITE_STATIC_IMG_URL}${post.thumbnailImgUrl}?w=${imageSize.width}&h=${imageSize.height}`' />
+          <Image class='ootd-post-card-image' ref='img'
+                 @load='getImageSize'
+                 :src='`${VITE_STATIC_IMG_URL}${post.thumbnailImgUrl}?w=${imageSize.width}&h=${imageSize.height}&q=95`'
+                 :preview='false'>
+            <template #placeholder>
+              <Image
+                :src='`${VITE_STATIC_IMG_URL}${post.thumbnailImgUrl}?q=0`'
+                :style="{'width': '100%', 'height': '100%'}"
+                :preview="false"
+              />
+            </template>
+          </Image>
         </RouterLink>
         <div class='ootd-post-card-like-wrapper' @click='likeButtonClickListener(post.id, post.isLike)'>
           <svg class='ootd-post-card-like' xmlns='http://www.w3.org/2000/svg'

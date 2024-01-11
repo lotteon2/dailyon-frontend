@@ -7,32 +7,57 @@ import { useMemberStore } from '@/stores/member/MemberStore'
 import { useCategoryStore } from '@/stores/category/CategoryStore'
 import { useNotificationStore } from '@/stores/notification/NotificationStore'
 import router from '@/router'
+import { subscribeToNotifications } from '@/apis/notification/notification'
+import type { Notification } from '@/types/notification'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
+const notificationStore = useNotificationStore()
+const memberStore = useMemberStore()
+const categoryStore = useCategoryStore()
+
 const isLoggedIn = () => {
   const token = localStorage.getItem('accessToken')
-  const isLoggedIn = !!token
-  return isLoggedIn
+  return !!token
 }
 
 /**
  * 알림 구독관련
  */
 let unsubscribe: (() => void) | null = null // 구독 해지 함수를 저장하기 위한 변수
-const notificationStore = useNotificationStore()
+
+const subscribe = (): (() => void) | null => {
+  const token = localStorage.getItem('accessToken')
+  if (!token) {
+    console.log('subscription위한 토큰 없음. 연결 안함.')
+    return null
+  }
+  unsubscribe = subscribeToNotifications(
+    (notification: Notification) => {
+      console.log('New notification:', notification)
+      notificationStore.handleNewNotification(notification)
+      notificationStore.notifications.unshift(notification)
+      notificationStore.unreadNotificationCount++
+      // Here you can handle the notification, e.g., show a toast or update the state
+    },
+    (errorEvent: Event | MessageEvent) => {
+      console.error('Error while subscribing to notifications:', errorEvent)
+    }
+  )
+  return unsubscribe
+}
 
 watch(
   isLoggedIn,
   (loggedIn) => {
     if (loggedIn && !unsubscribe) {
-      unsubscribe = notificationStore.subscribeToNotifications()
+      unsubscribe = subscribe()
     } else if (!loggedIn && unsubscribe) {
       unsubscribe()
       unsubscribe = null
     }
   },
-  { immediate: true } // watch가 처음 실행될 때 로직을 실행
+  { immediate: true }
 )
 
 onBeforeUnmount(() => {
@@ -43,7 +68,6 @@ onBeforeUnmount(() => {
 
 const showCategoryDropdown = ref<boolean>(true)
 
-const memberStore = useMemberStore()
 const memberInfo = computed(() => memberStore.getMemberInfo())
 const memberId = memberInfo.value.memberId
 const searchQuery = ref<string | null>(null)
@@ -69,8 +93,6 @@ const mouseEnterDropdownHandler = () => {
 const hideNotificationDropdownHandler = () => {
   showNotificationDropdown.value = false
 }
-
-const categoryStore = useCategoryStore()
 
 onBeforeMount(() => {
   categoryStore.setCategoryTree(null)
