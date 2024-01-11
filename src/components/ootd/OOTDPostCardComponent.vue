@@ -86,7 +86,7 @@ const handleImageLoad = async () => {
                  :preview='false'>
             <template #placeholder>
               <Image
-                :src='`${VITE_STATIC_IMG_URL}${post.thumbnailImgUrl}?q=0`'
+                :src='`${VITE_STATIC_IMG_URL}${post.thumbnailImgUrl}?w=${imageSize.width}&h=${imageSize.height}&q=0`'
                 :style="{'width': '100%', 'height': '100%'}"
                 :preview="false"
               />

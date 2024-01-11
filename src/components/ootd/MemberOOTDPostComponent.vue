@@ -8,6 +8,7 @@ import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 import { togglePostLike } from '@/apis/ootd/PostLikeService'
 import { usePostLikeStore } from '@/stores/postlike/PostLikeStore'
 import { onBeforeRouteLeave } from 'vue-router'
+import WhitePageComponent from '@/components/wishcart/WhitePageComponent.vue'
 
 const props = defineProps({
   postMemberId: {
@@ -91,12 +92,15 @@ watch(requestPage, async (afterPage, beforePage) => {
         <div class="blank-gap"></div>
       </div>
     </div>
-    <OOTDPostCardComponent :posts="posts" />
-    <PaginationComponent
-      :requestPage="requestPage"
-      :totalPages="totalPages"
-      :onChangePage="onChangePage"
-    />
+    <WhitePageComponent v-if='posts.length === 0' message="작성한 게시글이 없습니다" />
+    <div v-else>
+      <OOTDPostCardComponent :posts="posts" />
+      <PaginationComponent
+        :requestPage="requestPage"
+        :totalPages="totalPages"
+        :onChangePage="onChangePage"
+      />
+    </div>
   </div>
 </template>
 

@@ -6,6 +6,7 @@ import { getMyPosts } from '@/apis/ootd/PostService'
 import OOTDPostCardComponent from '@/components/ootd/OOTDPostCardComponent.vue'
 import OOTDSortComponent from '@/components/ootd/OOTDSortComponent.vue'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
+import WhitePageComponent from '@/components/wishcart/WhitePageComponent.vue'
 
 const sortOptions = reactive([
   { label: '조회순', value: 'viewCount,desc' },
@@ -15,7 +16,7 @@ const sortOptions = reactive([
 const requestPage = ref<number>(0)
 const requestSize = ref<number>(6)
 const requestSort = ref<string>(sortOptions[0].value)
-const posts = ref<Array<OOTDPostResponse>>()
+const posts = ref<Array<OOTDPostResponse>>(new Array<OOTDPostResponse>())
 const totalPages = ref<number>()
 const totalElements = ref<number>()
 
@@ -73,9 +74,14 @@ watch(requestPage, async (afterPage, beforePage) => {
         </div>
       </div>
     </div>
-    <OOTDPostCardComponent :posts='posts' />
-    <PaginationComponent :requestPage='requestPage' :totalPages='totalPages' :onChangePage='onChangePage' />
+    <WhitePageComponent v-if='posts.length === 0' message="작성한 게시글이 없습니다" />
+    <div v-else>
+      <OOTDPostCardComponent :posts='posts' />
+      <PaginationComponent :requestPage='requestPage' :totalPages='totalPages' :onChangePage='onChangePage' />
+    </div>
+
   </div>
+
 </template>
 
 <style scoped>
