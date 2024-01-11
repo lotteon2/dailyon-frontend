@@ -13,7 +13,7 @@ export const getFutureAuctionPage = async (
     const { data } = await defaultAxiosInstance.get(
       `${AUCTION_SERVICE_PREFIX}${AUCTION_PREFIX}/future`,
       {
-        params: { page: number, size: size }
+        params: { page: page, size: size }
       }
     )
     return data
@@ -41,7 +41,7 @@ export const getCurrentAuctionPage = async (
     const { data } = await defaultAxiosInstance.get(
       `${AUCTION_SERVICE_PREFIX}${AUCTION_PREFIX}/current`,
       {
-        params: { page: number, size: size }
+        params: { page: page, size: size }
       }
     )
     return data
@@ -69,7 +69,7 @@ export const getPastAuctionPage = async (
     const { data } = await defaultAxiosInstance.get(
       `${AUCTION_SERVICE_PREFIX}${AUCTION_PREFIX}/past`,
       {
-        params: { page: number, size: size }
+        params: { page: page, size: size }
       }
     )
     return data
