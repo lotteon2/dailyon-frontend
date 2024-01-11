@@ -50,29 +50,6 @@ onBeforeRouteLeave(async (to, from) => {
   await flushLikeStore()
 })
 
-const img = ref<Array<HTMLImageElement>>(new Array<HTMLImageElement>())
-const imageSize = ref({
-  width: 0,
-  height: 0
-})
-
-const getImageSize = async () => {
-  if (img.value[0]) {
-    await handleImageLoad()
-  } else {
-    (img.value[0] as HTMLImageElement).onload = handleImageLoad
-  }
-}
-
-const handleImageLoad = async () => {
-  if (img.value) {
-    imageSize.value = {
-      width: img.value[0]!.width,
-      height: img.value[0]!.height
-    }
-  }
-}
-
 </script>
 
 <template>
@@ -80,16 +57,15 @@ const handleImageLoad = async () => {
     <div v-for='post in posts' class='ootd-post-card-wrapper'>
       <div class='ootd-post-card-image-wrapper'>
         <RouterLink :to='`/ootds/${post.id}`'>
-          <Image class='ootd-post-card-image' ref='img'
-                 @load='getImageSize'
-                 :src='`${VITE_STATIC_IMG_URL}${post.thumbnailImgUrl}?w=${imageSize.width}&h=${imageSize.height}&q=95`'
-                 :preview='false'>
+          <Image class='ootd-post-card-image'
+                 :src='`${VITE_STATIC_IMG_URL}${post.thumbnailImgUrl}?w=290&h=370&q=95`'
+                 :preview='false'
+                 alt='게시글 이미지'>
             <template #placeholder>
-              <Image class='ootd-post-card-image' ref='img'
-                @load='getImageSize'
-                :src='`${VITE_STATIC_IMG_URL}${post.thumbnailImgUrl}?w=${imageSize.width}&h=${imageSize.height}&q=0`'
-                :preview="false"
-              />
+              <Image class='ootd-post-card-image'
+                     :src='`${VITE_STATIC_IMG_URL}${post.thumbnailImgUrl}?w=290&h=370&q=0`'
+                     :preview='false'
+                     alt='게시글 이미지' />
             </template>
           </Image>
         </RouterLink>
