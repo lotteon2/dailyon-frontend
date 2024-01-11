@@ -1,6 +1,6 @@
 // src/stores/notification/NotificationStore.ts
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import type { Notification } from '@/types/notification' // Notification 타입을 정의해야 합니다.
 import { notification as notiPopUp } from 'ant-design-vue'
 
@@ -11,7 +11,8 @@ export const useNotificationStore = defineStore(
   () => {
     const notifications = ref<Notification[]>([])
     const unreadNotificationCount = ref(0)
-    let unsubscribe: (() => void) | null = null
+    // let unsubscribe: (() => void) | null = null
+    let eventSourceUnsubscribe: (() => void) | null = null
 
     // 새 알림 가져오기 (unread 최근 5개)
     const fetchRecentNotifications = async () => {
@@ -79,37 +80,48 @@ export const useNotificationStore = defineStore(
      * unsubscribe -> 함수 형태이거나 null 값. 구독상태에 따라 토글됨
      */
 
-    const subscribeToNotifications = () => {
+    const subscribeToNotificationsHandler = () => {
+      unsubscribeFromNotifications() // 이전 구독이 있다면 해제
+
       const accessToken = localStorage.getItem('accessToken')
       if (!accessToken) {
         console.error('accessToken이 없습니다.')
-        return () => {} // 빈함수 return
+        return
       }
 
-      unsubscribe = notificationApi.subscribeToNotifications(
-        (notification) => {
-          console.log('notificationApi.subscribeToNotifications 통해 새 알림 도착')
+      eventSourceUnsubscribe = notificationApi.subscribeToNotifications(
+        (notification: Notification) => {
           notifications.value.unshift(notification)
           unreadNotificationCount.value++
-          handleNewNotification(notification)
+          notiPopUp.open({
+            message: notification.message,
+            description: '새로운 알림이 도착했습니다.',
+            placement: 'bottomRight',
+            duration: 5
+          })
         },
         (errorEvent) => {
           console.error('Error while subscribing to notifications:', errorEvent)
         }
       )
-
-      return () => {
-        if (unsubscribe) {
-          unsubscribe()
-          unsubscribe = null
-        }
-      }
     }
 
+    watch(
+      () => localStorage.getItem('accessToken'),
+      (newToken) => {
+        if (newToken) {
+          subscribeToNotificationsHandler()
+        } else {
+          unsubscribeFromNotifications()
+        }
+      },
+      { immediate: true }
+    )
+
     const unsubscribeFromNotifications = () => {
-      if (unsubscribe) {
-        unsubscribe()
-        unsubscribe = null
+      if (eventSourceUnsubscribe) {
+        eventSourceUnsubscribe()
+        eventSourceUnsubscribe = null
       }
     }
 
@@ -133,7 +145,7 @@ export const useNotificationStore = defineStore(
       markAllAsRead,
       deleteNotif,
       deleteAllNotifs,
-      subscribeToNotifications,
+      subscribeToNotificationsHandler,
       unsubscribeFromNotifications,
       handleNewNotification
     }
