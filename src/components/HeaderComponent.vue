@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
 import { computed, onBeforeMount, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { storeToRefs } from 'pinia'
 import HeaderCategoryComponent from '@/components/HeaderCategoryComponent.vue'
 import NotificationComponent from '@/components/notification/NotificationComponent.vue'
 import { useMemberStore } from '@/stores/member/MemberStore'
 import { useCategoryStore } from '@/stores/category/CategoryStore'
 import { useNotificationStore } from '@/stores/notification/NotificationStore'
 import router from '@/router'
-import { subscribeToNotifications } from '@/apis/notification/notification'
-import type { Notification } from '@/types/notification'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
 const notificationStore = useNotificationStore()
+const { notifications, unreadNotificationCount } = storeToRefs(notificationStore)
 const memberStore = useMemberStore()
 const categoryStore = useCategoryStore()
 
@@ -20,51 +20,6 @@ const isLoggedIn = () => {
   const token = localStorage.getItem('accessToken')
   return !!token
 }
-
-/**
- * 알림 구독관련
- */
-let unsubscribe: (() => void) | null = null // 구독 해지 함수를 저장하기 위한 변수
-
-const subscribe = (): (() => void) | null => {
-  const token = localStorage.getItem('accessToken')
-  if (!token) {
-    console.log('subscription위한 토큰 없음. 연결 안함.')
-    return null
-  }
-  unsubscribe = subscribeToNotifications(
-    (notification: Notification) => {
-      console.log('New notification:', notification)
-      notificationStore.handleNewNotification(notification)
-      notificationStore.notifications.unshift(notification)
-      notificationStore.unreadNotificationCount++
-      // Here you can handle the notification, e.g., show a toast or update the state
-    },
-    (errorEvent: Event | MessageEvent) => {
-      console.error('Error while subscribing to notifications:', errorEvent)
-    }
-  )
-  return unsubscribe
-}
-
-watch(
-  isLoggedIn,
-  (loggedIn) => {
-    if (loggedIn && !unsubscribe) {
-      unsubscribe = subscribe()
-    } else if (!loggedIn && unsubscribe) {
-      unsubscribe()
-      unsubscribe = null
-    }
-  },
-  { immediate: true }
-)
-
-onBeforeUnmount(() => {
-  if (unsubscribe) {
-    unsubscribe()
-  }
-})
 
 const showCategoryDropdown = ref<boolean>(true)
 
