@@ -88,6 +88,7 @@ export const subscribeToNotifications = (
   }
 
   eventSource.onmessage = (event) => {
+    console.log('모든 메세지 수신시 로그')
     const notification: Notification = JSON.parse(event.data)
 
     if (notification.notificationType === NotificationType.HEARTBEAT) {
@@ -96,6 +97,7 @@ export const subscribeToNotifications = (
     }
 
     console.log('새로운 메세지가 도착했습니다.')
+    console.log(event.data)
     console.log(event)
 
     onMessage(notification)
