@@ -13,7 +13,9 @@ const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
 const notificationStore = useNotificationStore()
 const { notifications, unreadNotificationCount } = storeToRefs(notificationStore)
+
 const memberStore = useMemberStore()
+// const {  } = storeToRefs(memberStore)
 const categoryStore = useCategoryStore()
 
 const isLoggedIn = () => {
@@ -24,7 +26,8 @@ const isLoggedIn = () => {
 const showCategoryDropdown = ref<boolean>(true)
 
 const memberInfo = computed(() => memberStore.getMemberInfo())
-const memberId = memberInfo.value.memberId
+// const memberId = memberInfo.value.memberId // 아래 라인으로 변경했음. 문제시 rollback
+const memberId = computed(() => memberInfo.value.memberId)
 const searchQuery = ref<string | null>(null)
 
 const routeSearch = () => {
@@ -35,7 +38,7 @@ const hasUnreadNotifications = computed(() => notificationStore.unreadNotificati
 const showNotificationDropdown = ref<boolean>(false)
 
 const showNotificationDropdownHandler = () => {
-  if (memberId === null || memberId === undefined) {
+  if (memberId.value === null || memberId.value === undefined) {
     return
   }
   showNotificationDropdown.value = true
@@ -54,7 +57,7 @@ onBeforeMount(() => {
 })
 
 onMounted(async () => {
-  if (memberId === null || memberId === undefined) {
+  if (memberId.value === null || memberId.value === undefined) {
     return
   }
   await notificationStore.fetchUnreadNotificationCount()
