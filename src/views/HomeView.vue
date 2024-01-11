@@ -14,7 +14,7 @@
     <div class="new-container">
       <h1>신상품</h1>
       <div class="new-more-wrapper">
-        <div class="new-more-btn-wrapper">
+        <RouterLink to="/new-products" class="new-more-btn-wrapper">
           <span>더보기</span>
           <svg
             width="11"
@@ -28,7 +28,7 @@
               fill="#C6C6C6"
             />
           </svg>
-        </div>
+        </RouterLink>
       </div>
       <div class="new-prod-wrapper">
         <svg
@@ -72,7 +72,7 @@
     <div class="new-container">
       <h1>베스트 상품</h1>
       <div class="new-more-wrapper">
-        <div class="new-more-btn-wrapper">
+        <RouterLink to="/best-products" class="new-more-btn-wrapper">
           <span>더보기</span>
           <svg
             width="11"
@@ -86,7 +86,7 @@
               fill="#C6C6C6"
             />
           </svg>
-        </div>
+        </RouterLink>
       </div>
       <div class="new-prod-wrapper">
         <svg
