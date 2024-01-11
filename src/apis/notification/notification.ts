@@ -64,7 +64,7 @@ export const subscribeToNotifications = (
   onMessage: (notification: Notification) => void,
   onError?: (event: Event | MessageEvent) => void
 ): (() => void) => {
-  console.log('SSE connection을 시도합니다.')
+  console.log('src/apis/notification/notification.ts에서 SSE connection을 시도합니다.')
   const accessToken = localStorage.getItem('accessToken')
 
   if (accessToken === null) {

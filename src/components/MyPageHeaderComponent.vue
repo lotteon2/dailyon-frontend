@@ -7,7 +7,6 @@ import { useMemberStore } from '@/stores/member/MemberStore'
 import { useNotificationStore } from '@/stores/notification/NotificationStore'
 import { getMember } from '@/apis/member/member'
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
-let unsubscribe: (() => void) | null = null
 const memberStore = useMemberStore()
 const notificationStore = useNotificationStore()
 const router = useRouter()
@@ -57,9 +56,6 @@ const logout = () => {
   localStorage.removeItem('member')
 
   // 알림 clean로직
-  /**
-   * 여기서 에러 나옴.
-   */
   notificationStore.unsubscribeFromNotifications()
   notificationStore.unreadNotificationCount = 0
 
@@ -113,7 +109,6 @@ onMounted(async () => {
 
 onBeforeUnmount(() => {
   window.removeEventListener('message', handleMessage)
-  unsubscribe?.()
 })
 </script>
 
