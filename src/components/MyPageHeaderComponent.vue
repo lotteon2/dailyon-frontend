@@ -59,6 +59,9 @@ const logout = () => {
   notificationStore.unsubscribeFromNotifications()
   notificationStore.clearNotificationForLogout()
 
+  // memberStroe clean 로직
+  memberStore.clearMemberInfo()
+
   router.push({ name: 'home' })
   alert('로그아웃 완료')
 }
