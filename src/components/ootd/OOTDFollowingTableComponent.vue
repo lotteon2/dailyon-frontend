@@ -6,6 +6,7 @@ import type { FollowingPageResponse, FollowingResponse } from '@/apis/ootd/Follo
 import { getFollowings } from '@/apis/ootd/FollowService'
 import { useFollowStore } from '@/stores/follow/FollowStore'
 import { storeToRefs } from 'pinia'
+import WhitePageComponent from '@/components/wishcart/WhitePageComponent.vue'
 
 const props = defineProps({
   addedFollowings: {
@@ -17,7 +18,7 @@ const props = defineProps({
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
 const requestPage = ref<number>(0)
-const followings = ref<Array<FollowingResponse>>()
+const followings = ref<Array<FollowingResponse>>(new Array<FollowingResponse>())
 const totalPages = ref<number>()
 const totalElements = ref<number>()
 
@@ -92,7 +93,8 @@ const handleImageLoad = async () => {
 </script>
 
 <template>
-  <div class='follow-row-container'>
+  <WhitePageComponent v-if='followings.length === 0' message="팔로잉이 없습니다" />
+  <div v-else class='follow-row-container'>
     <div v-for='following in followings' :key='following.id' class='follow-row'>
       <RouterLink :to='`/ootds/profile/${following.id}`'>
         <img v-if='imageSize.width === 0 || imageSize.height === 0' class='follow-img' ref='img' @load='getImageSize'

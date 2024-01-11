@@ -8,6 +8,7 @@ import { onBeforeMount, watch } from 'vue'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 import { useFollowStore } from '@/stores/follow/FollowStore'
 import { storeToRefs } from 'pinia'
+import WhitePageComponent from '@/components/wishcart/WhitePageComponent.vue'
 
 const props = defineProps({
   addedFollowings: {
@@ -19,7 +20,7 @@ const props = defineProps({
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
 const requestPage = ref<number>(0)
-const followers = ref<Array<FollowerResponse>>()
+const followers = ref<Array<FollowerResponse>>(new Array<FollowerResponse>())
 const totalPages = ref<number>()
 const totalElements = ref<number>()
 
@@ -130,7 +131,8 @@ const handleImageLoad = async () => {
 </script>
 
 <template>
-  <div class='follow-row-container'>
+  <WhitePageComponent v-if='followers.length === 0' message="팔로워가 없습니다" />
+  <div v-else class='follow-row-container'>
     <div v-for='follower in followers' :key='follower.id' class='follow-row'>
       <RouterLink :to='`/ootds/profile/${follower.id}`' class='follow-img-wrapper'>
         <img v-if='imageSize.width === 0 || imageSize.height === 0' class='follow-img' ref='img' @load='getImageSize'
