@@ -79,6 +79,12 @@ export const useNotificationStore = defineStore(
      * 아래는 구독관련 로직
      * unsubscribe -> 함수 형태이거나 null 값. 구독상태에 따라 토글됨
      */
+    const unsubscribeFromNotifications = () => {
+      if (eventSourceUnsubscribe) {
+        eventSourceUnsubscribe()
+        eventSourceUnsubscribe = null
+      }
+    }
 
     const subscribeToNotificationsHandler = () => {
       console.log('subscribeToNotificationsHandler를 발동')
@@ -108,6 +114,15 @@ export const useNotificationStore = defineStore(
       )
     }
 
+    const handleNewNotification = (notificationData: Notification): void => {
+      notiPopUp.open({
+        message: notificationData.message,
+        description: '새로운 알림이 도착했습니다.', // Customize as needed
+        placement: 'bottomRight',
+        duration: 5 // notification will be closed automatically after 5 seconds
+      })
+    }
+
     watch(
       () => localStorage.getItem('accessToken'),
       (newToken) => {
@@ -123,22 +138,6 @@ export const useNotificationStore = defineStore(
       },
       { immediate: true }
     )
-
-    const unsubscribeFromNotifications = () => {
-      if (eventSourceUnsubscribe) {
-        eventSourceUnsubscribe()
-        eventSourceUnsubscribe = null
-      }
-    }
-
-    const handleNewNotification = (notificationData: Notification): void => {
-      notiPopUp.open({
-        message: notificationData.message,
-        description: '새로운 알림이 도착했습니다.', // Customize as needed
-        placement: 'bottomRight',
-        duration: 5 // notification will be closed automatically after 5 seconds
-      })
-    }
 
     return {
       notifications,
