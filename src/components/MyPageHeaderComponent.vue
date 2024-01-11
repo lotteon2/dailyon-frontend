@@ -57,7 +57,7 @@ const logout = () => {
 
   // 알림 clean로직
   notificationStore.unsubscribeFromNotifications()
-  notificationStore.unreadNotificationCount = 0
+  notificationStore.clearNotificationForLogout()
 
   router.push({ name: 'home' })
   alert('로그아웃 완료')

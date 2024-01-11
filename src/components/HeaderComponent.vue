@@ -58,6 +58,7 @@ onMounted(async () => {
     return
   }
   await notificationStore.fetchUnreadNotificationCount()
+  await notificationStore.fetchRecentNotifications()
 })
 </script>
 

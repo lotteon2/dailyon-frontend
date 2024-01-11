@@ -17,6 +17,7 @@ export const useNotificationStore = defineStore(
     // 새 알림 가져오기 (unread 최근 5개)
     const fetchRecentNotifications = async () => {
       try {
+        console.log('notification store: 최근 5개 안읽은 알림을 가져옵니다.')
         notifications.value = await notificationApi.getRecentNotifications()
       } catch (error) {
         console.error('최근 알림 조회 도중 오류 발생:', error)
@@ -123,6 +124,11 @@ export const useNotificationStore = defineStore(
       })
     }
 
+    const clearNotificationForLogout = () => {
+      notifications.value = []
+      unreadNotificationCount.value = 0
+    }
+
     watch(
       () => localStorage.getItem('accessToken'),
       (newToken) => {
@@ -152,7 +158,8 @@ export const useNotificationStore = defineStore(
       deleteAllNotifs,
       subscribeToNotificationsHandler,
       unsubscribeFromNotifications,
-      handleNewNotification
+      handleNewNotification,
+      clearNotificationForLogout
     }
   },
   {
