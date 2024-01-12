@@ -3,6 +3,7 @@ import { ref, onMounted, computed, watch, onBeforeMount } from 'vue'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 import { getMyCoupons } from '@/apis/coupon/coupon'
 import type { Coupons, Coupon } from '@/apis/coupon/CouponItemDto'
+import WhitePageComponent from '@/components/wishcart/WhitePageComponent.vue'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -24,13 +25,10 @@ const onChangePage = async (page: number) => {
 
 onBeforeMount(async () => {
   const response = await getMyCoupons(0);
-  console.log("로딩 완료");
-  console.log(response);
   
   totalElements.value = response.totalCounts;
   totalPages.value = Math.ceil(response.totalCounts / pageSize);
   coupons.value = response;
-  console.log(coupons)
 })
 
 
@@ -62,39 +60,48 @@ const formatDiscountValue = (coupon: Coupon) => {
 };
 
 </script>
+
 <template>
-  <div class="coupon-container">
-    <div class="container-title">보유 쿠폰 조회</div>
-    <div class="container-line"></div>
-    <table> 
-      <col width="1200px" />
-      <col width="200px" />
-      <col width="200px" />
-      <thead>
-        <tr class="coupon-table-data1">
-          <th>쿠폰이름</th>
-          <th>할인금액</th>
-          <th>마감일</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(coupon, index) in coupons?.memberCouponInfoReadItemResponse" :key="index" class="coupon-table-data2 ">
-          <td>{{ coupon.name }}</td>
-          <td>{{ formatDiscountValue(coupon) }}</td>
-          <td>{{ formatCouponDate(coupon.endAt) }}</td>
-        </tr>
-      </tbody>
-    </table>
-    <br>
-    <div class="pagination">
-      <PaginationComponent
-      :onChangePage="onChangePage"
-      :requestPage="requestPage"
-      :totalPages="totalPages"
-    />
+  <div class="container-title">보유 쿠폰 조회</div>
+  <div class="container-line"></div>
+  <template v-if="coupons !== null">
+    <div class="coupon-container">
+      
+      <table> 
+        <col width="1200px" />
+        <col width="200px" />
+        <col width="200px" />
+        <thead>
+          <tr class="coupon-table-data1">
+            <th>쿠폰이름</th>
+            <th>할인금액</th>
+            <th>마감일</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(coupon, index) in coupons?.memberCouponInfoReadItemResponse" :key="index" class="coupon-table-data2 ">
+            <td>{{ coupon.name }}</td>
+            <td>{{ formatDiscountValue(coupon) }}</td>
+            <td>{{ formatCouponDate(coupon.endAt) }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <br>
+      <div class="pagination">
+        <PaginationComponent
+        :onChangePage="onChangePage"
+        :requestPage="requestPage"
+        :totalPages="totalPages"
+      />
+      </div>
     </div>
-  </div>
+  </template>
+  <template v-else>
+    <WhitePageComponent message="보유 쿠폰이 없습니다."/>
+  </template>
 </template>
+
+
 
 <style scoped>
 @import "@/assets/css/coupon.css";
