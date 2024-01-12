@@ -40,7 +40,6 @@ export const getMember = async () => {
           size: 5,
         },
       });
-      console.log(response.data);
       return response.data;
     } catch (error) {
       console.error('API 호출 중 오류 발생:', error);
