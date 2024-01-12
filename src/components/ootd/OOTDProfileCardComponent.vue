@@ -10,13 +10,14 @@ import { toggleFollow } from '@/apis/ootd/FollowService'
 import { onBeforeRouteLeave } from 'vue-router'
 import { useMemberStore } from '@/stores/member/MemberStore'
 import type { GiftInfo } from '@/apis/order/orderDto'
+import { storeToRefs } from 'pinia'
 
 const emit = defineEmits(['fetchData'])
 const memberStore = useMemberStore()
 const memberId = memberStore.getMemberInfo().memberId
 const nickname = memberStore.nickname ? memberStore.nickname : ''
 const followStore = useFollowStore()
-const follows = followStore.follows
+const {follows} = storeToRefs(followStore)
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -58,43 +59,30 @@ const followButtonClickListener = (followingId: number, isFollowing: boolean | u
   if(isFollowing === undefined) {
     alert('로그인이 필요합니다.')
   } else {
-    member.value!.isFollowing
-      ? (member.value!.followerCount -= 1)
-      : (member.value!.followerCount += 1)
-    member.value!.isFollowing = !isFollowing
-    follows.has(followingId) ? follows.delete(followingId) : follows.add(followingId)
+    // member.value!.isFollowing
+    //   ? (member.value!.followerCount -= 1)
+    //   : (member.value!.followerCount += 1)
+    // member.value!.isFollowing = !isFollowing
+    followStore.toggleFollows(followingId)
   }
 
 }
 
 const flushFollowStore = async () => {
   const followingIds: number[] = []
-  follows.forEach((followingId: number) => {
+  follows.value.forEach((followingId: number) => {
     followingIds.push(followingId)
   })
 
   if (followingIds.length !== 0) {
     await toggleFollow(followingIds)
-    follows.clear()
+    await followStore.clearFollows()
   }
 }
 
 // 페이지 이동 시 이벤트
 onBeforeRouteLeave(async (to, from) => {
   await flushFollowStore()
-})
-
-// 새로고침 or 브라우저 창 닫을 때 이벤트
-window.addEventListener('beforeunload', async (event) => {
-  flushFollowStore()
-    .then((res) => {
-      window.location.reload()
-    })
-    .catch((error) => {
-      console.error(error)
-      event.preventDefault()
-      event.returnValue = ''
-    })
 })
 
 const img = ref<HTMLImageElement | null>(null)
@@ -139,12 +127,23 @@ const handleImageLoad = async () => {
     />
     <div class="nickname">{{ member.nickname }}</div>
     <div class="follow-wrapper">
-      팔로워 <span class="follow-count">{{ member.followerCount }}</span> | 팔로우
+      팔로워
+      <span class="follow-count">
+        <span v-if='member.isFollowing !== undefined && followStore.hasFollowingId(member.id) && member.isFollowing'>
+          {{ member.followerCount - 1 }}
+        </span>
+        <span v-else-if='member.isFollowing !== undefined && followStore.hasFollowingId(member.id) && !member.isFollowing'>
+          {{ member.followerCount + 1 }}
+        </span>
+        <span v-else>
+          {{ member.followerCount }}
+        </span>
+      </span> | 팔로우
       <span class="follow-count">{{ member.followingCount }}</span>
     </div>
     <div v-if="member.id === memberId"></div>
     <div
-      v-else-if="member.isFollowing"
+      v-else-if='member.isFollowing === undefined ? true : (followStore.hasFollowingId(member.id) ? !member.isFollowing : member.isFollowing)'
       class="follow-inactive-btn"
       @click="followButtonClickListener(member.id, member.isFollowing)"
     >

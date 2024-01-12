@@ -286,3 +286,19 @@
 .cursor-on-hover {
   cursor: pointer;
 }
+
+.notification-badge {
+  font-family: TheJamsil;
+  position: absolute;
+  top: -5px; /* Tweak as necessary */
+  right: -5px; /* Tweak as necessary */
+  width: 20px; /* Adjust based on design */
+  height: 20px; /* Adjust based on design */
+  background-color: red;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+}

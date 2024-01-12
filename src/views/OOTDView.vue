@@ -6,6 +6,7 @@ import type { PostPageResponse, PostResponse } from '@/apis/ootd/PostDto'
 import OOTDPostCardComponent from '@/components/ootd/OOTDPostCardComponent.vue'
 import OOTDSortComponent from '@/components/ootd/OOTDSortComponent.vue'
 import { debounce } from 'lodash'
+import WhitePageComponent from '@/components/wishcart/WhitePageComponent.vue'
 
 const sortOptions = reactive([
   { label: '조회순', value: 'viewCount,desc' },
@@ -15,7 +16,7 @@ const sortOptions = reactive([
 const requestPage = ref<number>(0)
 const requestSize = ref<number>(8)
 const requestSort = ref<string>(sortOptions[0].value)
-const posts = ref<Array<PostResponse>>()
+const posts = ref<Array<PostResponse>>(new Array<PostResponse>())
 const hasNext = ref<boolean>()
 
 const fetchDefaultData = debounce(async (): Promise<PostPageResponse<PostResponse>> => {
@@ -81,7 +82,8 @@ watch(isScrollEnd, async (afterScrollEnd, beforeScrollEnd) => {
         </div>
       </div>
     </div>
-    <OOTDPostCardComponent :posts='posts' />
+    <WhitePageComponent v-if='posts.length === 0' message="작성된 게시글이 없습니다" />
+    <OOTDPostCardComponent v-else :posts='posts' />
   </div>
 </template>
 

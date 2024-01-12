@@ -5,6 +5,8 @@ import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 import type { FollowingPageResponse, FollowingResponse } from '@/apis/ootd/FollowDto'
 import { getFollowings } from '@/apis/ootd/FollowService'
 import { useFollowStore } from '@/stores/follow/FollowStore'
+import { storeToRefs } from 'pinia'
+import WhitePageComponent from '@/components/wishcart/WhitePageComponent.vue'
 
 const props = defineProps({
   addedFollowings: {
@@ -16,12 +18,12 @@ const props = defineProps({
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
 const requestPage = ref<number>(0)
-const followings = ref<Array<FollowingResponse>>()
+const followings = ref<Array<FollowingResponse>>(new Array<FollowingResponse>())
 const totalPages = ref<number>()
 const totalElements = ref<number>()
 
 const followStore = useFollowStore()
-const follows = followStore.follows
+const {follows} = storeToRefs(followStore)
 
 const fetchDefaultData = async (): Promise<FollowingPageResponse<FollowingResponse>> => {
   const followingPageResponse = await getFollowings(0, 5, 'createdAt,desc')
@@ -60,7 +62,7 @@ watch(requestPage, async (afterPage, beforePage) => {
 })
 
 const followButtonClickListener = (followingId: number, isFollowing: boolean | undefined) => {
-  follows.has(followingId) ? follows.delete(followingId) : follows.add(followingId)
+  followStore.toggleFollows(followingId)
 }
 
 const followingEmits = defineEmits(['followings'])
@@ -91,7 +93,8 @@ const handleImageLoad = async () => {
 </script>
 
 <template>
-  <div class='follow-row-container'>
+  <WhitePageComponent v-if='followings.length === 0' message="팔로잉이 없습니다" />
+  <div v-else class='follow-row-container'>
     <div v-for='following in followings' :key='following.id' class='follow-row'>
       <RouterLink :to='`/ootds/profile/${following.id}`'>
         <img v-if='imageSize.width === 0 || imageSize.height === 0' class='follow-img' ref='img' @load='getImageSize'
@@ -104,7 +107,7 @@ const handleImageLoad = async () => {
           {{ following.nickname }}
         </RouterLink>
       </div>
-      <div v-if='follows.has(following.id) ? !following.isFollowing : following.isFollowing'
+      <div v-if='followStore.hasFollowingId(following.id) ? !following.isFollowing : following.isFollowing'
            class='follow-btn following'
            @click='followButtonClickListener(following.id, following.isFollowing)'>
         <svg

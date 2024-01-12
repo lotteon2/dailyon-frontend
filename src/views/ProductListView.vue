@@ -5,6 +5,7 @@ import { useRoute } from 'vue-router'
 import type { ReadProductResponse, ReadProductSliceResponse } from '@/apis/product/ProductDto'
 import { getProductSlice } from '@/apis/product/ProductClient'
 import BreadCrumbComponent from '@/components/product/BreadCrumbComponent.vue'
+import { Image } from 'ant-design-vue'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -77,11 +78,20 @@ watch(isScrollEnd, async (after, before) => {
         :to="`/products/${product.id}`"
         :key="product.id"
       >
-        <img
+        <Image
           class="product-img"
-          :src="`${VITE_STATIC_IMG_URL}${product.imgUrl}?w=200&h=200`"
+          :src="`${VITE_STATIC_IMG_URL}${product.imgUrl}?w=200&h=200&q=95`"
+          :preview="false"
           alt="productImg"
-        />
+        >
+          <template #placeholder>
+            <Image
+              class="product-img"
+              :src='`${VITE_STATIC_IMG_URL}${product.imgUrl}?w=200&h=200&q=0`'
+              :preview="false"
+            />
+          </template>
+        </Image>
         <h1>{{ product.brandName }}</h1>
         <h2>{{ product.name }}</h2>
         <div class="product-third-info">
@@ -162,7 +172,7 @@ watch(isScrollEnd, async (after, before) => {
 }
 
 .product-img {
-  width: 200px;
-  height: 200px;
+  width: 10vw;
+  height: 19.5vh;
 }
 </style>

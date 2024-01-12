@@ -1,6 +1,6 @@
 // src/stores/notification/NotificationStore.ts
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import type { Notification } from '@/types/notification' // Notification 타입을 정의해야 합니다.
 import { notification as notiPopUp } from 'ant-design-vue'
 
@@ -10,25 +10,40 @@ export const useNotificationStore = defineStore(
   'notification',
   () => {
     const notifications = ref<Notification[]>([])
-    const notificationCount = ref(0)
+    const unreadNotificationCount = ref(0)
+    // let unsubscribe: (() => void) | null = null
+    let eventSourceUnsubscribe: (() => void) | null = null
 
     // 새 알림 가져오기 (unread 최근 5개)
     const fetchRecentNotifications = async () => {
-      notifications.value = await notificationApi.getRecentNotifications()
+      try {
+        console.log('notification store: 최근 5개 안읽은 알림을 가져옵니다.')
+        notifications.value = await notificationApi.getRecentNotifications()
+      } catch (error) {
+        console.error('최근 알림 조회 도중 오류 발생:', error)
+      }
     }
 
     // 모든 알림 가져오기 ( unread/read 모두 )
     const fetchAllNotifications = async () => {
-      notifications.value = await notificationApi.getAllNotifications()
+      try {
+        notifications.value = await notificationApi.getAllNotifications()
+      } catch (error) {
+        console.error('모든 알림 조회 도중 오류 발생:', error)
+      }
     }
 
     // 알림 개수 업데이트
     const fetchUnreadNotificationCount = async () => {
-      notificationCount.value = await notificationApi.getUnreadNotificationCount()
+      try {
+        unreadNotificationCount.value = await notificationApi.getUnreadNotificationCount()
+      } catch (error) {
+        console.error('알림 개수 업데이트 도중 오류 발생:', error)
+      }
     }
 
-    const increaseNotificationCount = async () => {
-      notificationCount.value++
+    const increaseNotificationCount = () => {
+      unreadNotificationCount.value++
     }
 
     const markAsRead = async (notificationId: string) => {
@@ -58,35 +73,46 @@ export const useNotificationStore = defineStore(
     const deleteAllNotifs = async () => {
       await notificationApi.deleteAllNotifications()
       notifications.value = []
-      notificationCount.value = 0
+      unreadNotificationCount.value = 0
     }
 
     /**
      * 아래는 구독관련 로직
      * unsubscribe -> 함수 형태이거나 null 값. 구독상태에 따라 토글됨
      */
-    let unsubscribe: (() => void) | null = null
+    const unsubscribeFromNotifications = () => {
+      if (eventSourceUnsubscribe) {
+        eventSourceUnsubscribe()
+        eventSourceUnsubscribe = null
+      }
+    }
 
-    function subscribeToNotifications(): () => void {
-      const unsubscribe = notificationApi.subscribeToNotifications(
-        (notification) => {
-          console.log('notificationApi.subscribeToNotifications 통해 새 알림 도착')
+    const subscribeToNotificationsHandler = () => {
+      console.log('subscribeToNotificationsHandler를 발동')
+      unsubscribeFromNotifications() // 이전 구독이 있다면 해제
+
+      const accessToken = localStorage.getItem('accessToken')
+      if (!accessToken) {
+        console.error('accessToken이 없습니다.')
+        return
+      }
+      console.error('subscribeToNotificationsHandler accessToken 검증 통과.')
+
+      eventSourceUnsubscribe = notificationApi.subscribeToNotifications(
+        (notification: Notification) => {
           notifications.value.unshift(notification)
-          notificationCount.value++
-          handleNewNotification(notification)
+          unreadNotificationCount.value++
+          notiPopUp.open({
+            message: notification.message,
+            description: '새로운 알림이 도착했습니다.',
+            placement: 'bottomRight',
+            duration: 5
+          })
         },
         (errorEvent) => {
           console.error('Error while subscribing to notifications:', errorEvent)
         }
       )
-      return unsubscribe
-    }
-
-    const unsubscribeFromNotifications = () => {
-      if (unsubscribe) {
-        unsubscribe()
-        unsubscribe = null
-      }
     }
 
     const handleNewNotification = (notificationData: Notification): void => {
@@ -98,9 +124,30 @@ export const useNotificationStore = defineStore(
       })
     }
 
+    const clearNotificationForLogout = () => {
+      notifications.value = []
+      unreadNotificationCount.value = 0
+    }
+
+    watch(
+      () => localStorage.getItem('accessToken'),
+      (newToken) => {
+        if (newToken) {
+          console.log(
+            "localStorage.getItem('accessToken') 토큰 변경 감지 subscribeToNotificationsHandler발동 전"
+          )
+          subscribeToNotificationsHandler()
+        } else {
+          console.log('토큰이 없어졌음. 구독 해제 직전.')
+          unsubscribeFromNotifications()
+        }
+      },
+      { immediate: true }
+    )
+
     return {
       notifications,
-      notificationCount,
+      unreadNotificationCount,
       fetchRecentNotifications,
       fetchAllNotifications,
       fetchUnreadNotificationCount,
@@ -109,15 +156,17 @@ export const useNotificationStore = defineStore(
       markAllAsRead,
       deleteNotif,
       deleteAllNotifs,
-      subscribeToNotifications,
-      unsubscribeFromNotifications
+      subscribeToNotificationsHandler,
+      unsubscribeFromNotifications,
+      handleNewNotification,
+      clearNotificationForLogout
     }
   },
   {
     persist: {
       key: 'notificationState',
       storage: window.sessionStorage,
-      paths: ['notifications', 'notificationCount']
+      paths: ['notifications', 'unreadNotificationCount']
     }
   }
 )

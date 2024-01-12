@@ -4,9 +4,11 @@ import { useRouter } from 'vue-router'
 import { pointPaymentReady } from '@/apis/payment/payment'
 import type { PointPaymentDto } from '@/apis/payment/paymentDto'
 import { useMemberStore } from '@/stores/member/MemberStore'
+import { useNotificationStore } from '@/stores/notification/NotificationStore'
 import { getMember } from '@/apis/member/member'
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
-
+const memberStore = useMemberStore()
+const notificationStore = useNotificationStore()
 const router = useRouter()
 const redirectUrl = ref('')
 const displayModal = ref(false)
@@ -52,6 +54,14 @@ const inputClear = () => {
 const logout = () => {
   localStorage.removeItem('accessToken')
   localStorage.removeItem('member')
+
+  // 알림 clean로직
+  notificationStore.unsubscribeFromNotifications()
+  notificationStore.clearNotificationForLogout()
+
+  // memberStroe clean 로직
+  memberStore.clearMemberInfo()
+
   router.push({ name: 'home' })
   alert('로그아웃 완료')
 }
@@ -93,8 +103,6 @@ const handleMessage = async (event: MessageEvent) => {
   window.scrollTo(0, 0)
   router.replace({ name: routeName })
 }
-
-const memberStore = useMemberStore()
 
 onMounted(async () => {
   await getMember()
@@ -145,8 +153,8 @@ onBeforeUnmount(() => {
       <div v-if="displayModal" class="payment-modal">
         <div class="modal-content">
           <span class="close-wrapper">
-            <div class='close-space'></div>
-            <div @click="displayModal = false" class='close'>&times;</div>
+            <div class="close-space"></div>
+            <div @click="displayModal = false" class="close">&times;</div>
           </span>
           <p>결제 금액을 선택하거나 입력해주세요.</p>
           <select v-model="selectedAmount" class="select">
@@ -171,7 +179,6 @@ onBeforeUnmount(() => {
       <div class="logout-button" @click="logout()">로그아웃</div>
     </div>
   </div>
-  
 </template>
 
 <style scoped>

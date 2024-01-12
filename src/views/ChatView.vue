@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, nextTick } from 'vue'
 import { StatisticCountdown, message } from 'ant-design-vue'
+const VITE_AUCTION_WS_URL: string = import.meta.env.VITE_AUCTION_WS_URL
+
 // 더미데이터
 interface userInfo {
   userId: number
@@ -63,7 +65,7 @@ onUnmounted(() => {
   disconnect()
 })
 const connect = async () => {
-  const websocketUrl = `ws://localhost:8083/ws/chat?id=${userInfo.value.userId}`
+  const websocketUrl = `${VITE_AUCTION_WS_URL}/chat?id=${userInfo.value.userId}`
   socket.value = new WebSocket(websocketUrl)
   socket.value.onopen = () => {
     console.log(`connected`)

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
-import { computed, onBeforeMount, onBeforeUnmount, ref, watch } from 'vue'
+import { computed, onBeforeMount, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { storeToRefs } from 'pinia'
 import HeaderCategoryComponent from '@/components/HeaderCategoryComponent.vue'
 import NotificationComponent from '@/components/notification/NotificationComponent.vue'
 import { useMemberStore } from '@/stores/member/MemberStore'
@@ -10,52 +11,34 @@ import router from '@/router'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
+const notificationStore = useNotificationStore()
+const { notifications, unreadNotificationCount } = storeToRefs(notificationStore)
+
+const memberStore = useMemberStore()
+// const {  } = storeToRefs(memberStore)
+const categoryStore = useCategoryStore()
+
 const isLoggedIn = () => {
   const token = localStorage.getItem('accessToken')
-  const isLoggedIn = !!token
-  return isLoggedIn
+  return !!token
 }
-
-/**
- * 알림 구독관련
- */
-let unsubscribe: (() => void) | null = null // 구독 해지 함수를 저장하기 위한 변수
-const notificationStore = useNotificationStore()
-
-watch(
-  isLoggedIn,
-  (loggedIn) => {
-    if (loggedIn && !unsubscribe) {
-      unsubscribe = notificationStore.subscribeToNotifications()
-    } else if (!loggedIn && unsubscribe) {
-      unsubscribe()
-      unsubscribe = null
-    }
-  },
-  { immediate: true } // watch가 처음 실행될 때 로직을 실행
-)
-
-onBeforeUnmount(() => {
-  if (unsubscribe) {
-    unsubscribe()
-  }
-})
 
 const showCategoryDropdown = ref<boolean>(true)
 
-const memberStore = useMemberStore()
 const memberInfo = computed(() => memberStore.getMemberInfo())
-const memberId = memberInfo.value.memberId
+// const memberId = memberInfo.value.memberId // 아래 라인으로 변경했음. 문제시 rollback
+const memberId = computed(() => memberInfo.value.memberId)
 const searchQuery = ref<string | null>(null)
 
 const routeSearch = () => {
   router.push({ name: 'productSearch', query: { query: searchQuery.value } })
 }
 
+const hasUnreadNotifications = computed(() => notificationStore.unreadNotificationCount > 0)
 const showNotificationDropdown = ref<boolean>(false)
 
 const showNotificationDropdownHandler = () => {
-  if (memberId === null || memberId === undefined) {
+  if (memberId.value === null || memberId.value === undefined) {
     return
   }
   showNotificationDropdown.value = true
@@ -69,10 +52,16 @@ const hideNotificationDropdownHandler = () => {
   showNotificationDropdown.value = false
 }
 
-const categoryStore = useCategoryStore()
-
 onBeforeMount(() => {
   categoryStore.setCategoryTree(null)
+})
+
+onMounted(async () => {
+  if (memberId.value === null || memberId.value === undefined) {
+    return
+  }
+  await notificationStore.fetchUnreadNotificationCount()
+  await notificationStore.fetchRecentNotifications()
 })
 </script>
 
@@ -154,7 +143,10 @@ onBeforeMount(() => {
       />
     </div>
     <div class="nav-tab-wrapper">
-      <RouterLink to="/new-products" class="nav-tab-text" :class="{ selected: $route.path === '/new-products' }"
+      <RouterLink
+        to="/new-products"
+        class="nav-tab-text"
+        :class="{ selected: $route.path === '/new-products' }"
         >NEW
       </RouterLink>
     </div>
@@ -176,17 +168,17 @@ onBeforeMount(() => {
         >AUCTION
       </RouterLink>
     </div>
-    <div class="nav-tab-wrapper">
+    <div
+      class="nav-tab-wrapper"
+      @mouseover="showNotificationDropdownHandler"
+      @mouseleave="hideNotificationDropdownHandler"
+    >
       <NotificationComponent
         @mouse-enter-dropdown="mouseEnterDropdownHandler"
         @mouse-exit-dropdown="hideNotificationDropdownHandler"
         v-show="showNotificationDropdown"
       />
-      <div
-        @mouseover="showNotificationDropdownHandler"
-        @mouseleave="hideNotificationDropdownHandler"
-        class="nav-tab-icon cursor-on-hover"
-      >
+      <div class="nav-tab-icon cursor-on-hover">
         <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="black">
           <g clip-path="url(#clip0_197_30)">
             <path
@@ -204,6 +196,9 @@ onBeforeMount(() => {
             </clipPath>
           </defs>
         </svg>
+      </div>
+      <div v-if="hasUnreadNotifications" class="notification-badge">
+        {{ notificationStore.unreadNotificationCount }}
       </div>
     </div>
     <div class="nav-tab-wrapper">

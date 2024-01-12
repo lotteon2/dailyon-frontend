@@ -14,6 +14,7 @@ import type { ReadWishListFromProduct } from '@/apis/wishcart/WishListDto'
 import { readWishListFromProduct, toggleWishList } from '@/apis/wishcart/WishListClient'
 import type { AxiosResponse } from 'axios'
 import TOP4OOTDComponent from '@/components/ootd/TOP4OOTDComponent.vue'
+import { Image } from 'ant-design-vue'
 
 const productStore = useProductStore()
 
@@ -236,7 +237,20 @@ watch(selectedProductSize, () => {
     <BreadCrumbComponent v-if="product.categoryId !== 0" :category="product.categoryId" />
     <div class="first-wrapper">
       <div class="prod-first-col">
-        <img class="img-big" :src="`${VITE_STATIC_IMG_URL}${product.imgUrl}?w=200&h=200`" alt="" />
+        <Image
+          class="img-big"
+          :src="`${VITE_STATIC_IMG_URL}${product.imgUrl}?w=480&h=480&q=95`"
+          :preview="true"
+          alt="productImg"
+        >
+          <template #placeholder>
+            <Image
+              class="img-big"
+              :src='`${VITE_STATIC_IMG_URL}${product.imgUrl}?w=480&h=480&q=0`'
+              :preview="true"
+            />
+          </template>
+        </Image>
       </div>
       <div class="prod-second-col">
         <div class="second-col-first-row">

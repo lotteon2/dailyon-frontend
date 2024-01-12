@@ -21,6 +21,8 @@ const props = defineProps({
   align-items: center;
   width: 100%;
   height: 50%;
+
+  padding-top: 50px;
 }
 
 .white-page > h1 {

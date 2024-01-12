@@ -7,9 +7,10 @@ import { useFollowStore } from '@/stores/follow/FollowStore'
 import { toggleFollow } from '@/apis/ootd/FollowService'
 import { onBeforeRouteLeave } from 'vue-router'
 import type { FollowingResponse } from '@/apis/ootd/FollowDto'
+import { storeToRefs } from 'pinia'
 
 const followStore = useFollowStore()
-const follows = followStore.follows
+const {follows} = storeToRefs(followStore)
 
 const tabOptions = reactive([
   { label: '팔로워', value: 'follower' },
@@ -24,32 +25,18 @@ const onTabChange = async (tabOption: string) => {
 
 const flushFollowStore = async () => {
   const followingIds: number[] = []
-  follows.forEach((followingId: number) => {
+  follows.value.forEach((followingId: number) => {
     followingIds.push(followingId)
   })
 
   if (followingIds.length !== 0) {
     await toggleFollow(followingIds)
-    follows.clear()
+    await followStore.clearFollows()
   }
 }
-
 // 페이지 이동 시 이벤트
 onBeforeRouteLeave(async (to, from) => {
   await flushFollowStore()
-})
-
-// 새로고침 or 브라우저 창 닫을 때 이벤트
-window.addEventListener('beforeunload', async (event) => {
-  // event를 멈춰놓고 flush 성공시 리로드
-  event.returnValue = ''
-  flushFollowStore().then((res) => {
-    window.location.reload()
-  }).catch((error) => {
-    console.error(error)
-    event.preventDefault()
-    event.returnValue = ''
-  })
 })
 
 </script>
