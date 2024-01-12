@@ -164,7 +164,10 @@ onMounted(async () => {
       </RouterLink>
     </div>
     <div class="nav-tab-wrapper">
-      <RouterLink to="/events" class="nav-tab-text" :class="{ selected: $route.path === '/events' }"
+      <RouterLink
+        to="/auctions"
+        class="nav-tab-text"
+        :class="{ selected: $route.path === '/auctions' }"
         >AUCTION
       </RouterLink>
     </div>

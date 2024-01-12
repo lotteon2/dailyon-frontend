@@ -80,6 +80,12 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
+      path: '/auctions',
+      name: 'auctions',
+      component: () => import('@/views/AuctionListView.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
       path: '/my-page',
       name: 'my-page',
       redirect: '/order-history',
