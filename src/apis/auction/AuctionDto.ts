@@ -3,7 +3,7 @@ import type { ReadProductDetailResponse } from '@/apis/product/ProductDto'
 export interface ReadAuctionPageResponse {
   totalElements: number
   totalPages: number
-  response: ReadAuctionResponse[]
+  responses: ReadAuctionResponse[]
 }
 
 export interface ReadAuctionDetailResponse {
