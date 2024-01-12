@@ -80,9 +80,11 @@ const handleImageLoad = async () => {
     <div v-for='post in posts' class='ootd-post-card-wrapper'>
       <div class='ootd-post-card-image-wrapper'>
         <RouterLink :to='`/ootds/${post.id}`'>
-          <img class='ootd-post-card-image' @load='getImageSize' ref='img'
-                 :src='`${VITE_STATIC_IMG_URL}${post.thumbnailImgUrl}?w=${imageSize.width}&h=${imageSize.height}&q=95`'
-                 alt='게시글 이미지' />
+          <img v-if='imageSize.width === 0 || imageSize.height === 0' class='ootd-post-card-image' ref='img'
+               @load='getImageSize' src='@/assets/images/loading.gif' alt='게시글 이미지'/>
+          <img v-else class='ootd-post-card-image' ref='img'
+               @load='getImageSize'
+               :src='`${VITE_STATIC_IMG_URL}${post.thumbnailImgUrl}?w=${imageSize.width}&h=${imageSize.height}&q=95`' alt='게시글 이미지' />
         </RouterLink>
         <div class='ootd-post-card-like-wrapper' @click='likeButtonClickListener(post.id, post.isLike)'>
           <svg class='ootd-post-card-like' xmlns='http://www.w3.org/2000/svg'
