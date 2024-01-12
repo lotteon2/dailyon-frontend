@@ -88,12 +88,13 @@ export const subscribeToNotifications = (
   }
 
   eventSource.onmessage = (event) => {
-    console.log('모든 메세지 수신시 로그')
     const notification: Notification = JSON.parse(event.data)
 
     if (notification.notificationType === NotificationType.HEARTBEAT) {
       console.log('하트비트 수신')
       return // 하트비트일 경우 처리하지 않음
+    } else {
+      console.log('하트비트 외 모든 메세지 수신')
     }
 
     console.log('새로운 메세지가 도착했습니다.')

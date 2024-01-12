@@ -96,10 +96,12 @@ export const useNotificationStore = defineStore(
         console.error('accessToken이 없습니다.')
         return
       }
-      console.error('subscribeToNotificationsHandler accessToken 검증 통과.')
+      // console.error('subscribeToNotificationsHandler accessToken 검증 통과.')
 
       eventSourceUnsubscribe = notificationApi.subscribeToNotifications(
         (notification: Notification) => {
+          console.log('구독 후 알림을 받았습니다..')
+          console.log('토스트 알림을 띄웁니다.')
           notifications.value.unshift(notification)
           unreadNotificationCount.value++
           notiPopUp.open({
@@ -116,6 +118,7 @@ export const useNotificationStore = defineStore(
     }
 
     const handleNewNotification = (notificationData: Notification): void => {
+      console.log('토스트 알림을 띄웁니다2.')
       notiPopUp.open({
         message: notificationData.message,
         description: '새로운 알림이 도착했습니다.', // Customize as needed
@@ -133,12 +136,12 @@ export const useNotificationStore = defineStore(
       () => localStorage.getItem('accessToken'),
       (newToken) => {
         if (newToken) {
-          console.log(
-            "localStorage.getItem('accessToken') 토큰 변경 감지 subscribeToNotificationsHandler발동 전"
-          )
+          // console.log(
+          //   "localStorage.getItem('accessToken') 토큰 변경 감지 subscribeToNotificationsHandler발동 전"
+          // )
           subscribeToNotificationsHandler()
         } else {
-          console.log('토큰이 없어졌음. 구독 해제 직전.')
+          // console.log('토큰이 없어졌음. 구독 해제 직전.')
           unsubscribeFromNotifications()
         }
       },
