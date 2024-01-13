@@ -93,7 +93,7 @@ watch(requestPage, async (afterPage, beforePage) => {
       </div>
     </div>
     <WhitePageComponent v-if='posts.length === 0' message="작성된 게시글이 없습니다" />
-    <div v-else>
+    <div v-else style='width: 100%'>
       <OOTDPostCardComponent :posts="posts" />
       <PaginationComponent
         :requestPage="requestPage"
