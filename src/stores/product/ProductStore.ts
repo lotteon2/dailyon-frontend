@@ -11,7 +11,7 @@ export const useProductStore = defineStore(
     const orderType = ref()
     const referralCode = ref()
 
-    const setProducts = (productInfos: ProductInfo[], type: String, refCode: String) => {
+    const setProducts = (productInfos: ProductInfo[], type: String, refCode: String | null) => {
       products.value = productInfos
       orderType.value = type
       referralCode.value = refCode
