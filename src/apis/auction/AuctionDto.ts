@@ -21,3 +21,9 @@ export interface ReadAuctionResponse {
   started: boolean
   ended: boolean
 }
+
+export interface CreateBidRequest {
+  auctionId: string
+  round: string
+  bidAmount: number
+}

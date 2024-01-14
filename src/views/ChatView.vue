@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, nextTick } from 'vue'
-import { StatisticCountdown, message } from 'ant-design-vue'
+import { StatisticCountdown, message, Image, ImagePreviewGroup } from 'ant-design-vue'
+import type { CreateBidRequest } from '@/apis/auction/AuctionDto'
+import { createBid } from '@/apis/auction/Auction'
 const VITE_AUCTION_WS_URL: string = import.meta.env.VITE_AUCTION_WS_URL
 
 // 더미데이터
@@ -11,7 +13,6 @@ interface userInfo {
 
 interface Message extends userInfo {
   message: string
-  timestamp: string
 }
 
 interface Bid {
@@ -109,13 +110,24 @@ const send = () => {
     const message: Message = {
       userId: userInfo.value.userId,
       nickname: userInfo.value.nickname,
-      message: newMessage.value,
-      timestamp: new Date().toLocaleTimeString()
+      message: newMessage.value
     }
     socket.value.send(JSON.stringify(message))
     newMessage.value = ''
     scrollDown()
   }
+}
+
+const bidding = async () => {
+  const dummyBidAmount: number = 10000
+  const data: CreateBidRequest = {
+    auctionId: '1',
+    round: '1',
+    bidAmount: dummyBidAmount
+  }
+
+  const response = await createBid(data)
+  console.log(response)
 }
 
 const scrollDown = () => {
@@ -212,7 +224,7 @@ const scrollDown = () => {
 
       <!-- 현재 낙찰가 + 버튼 , 사용자 입력 금액 버튼 -->
       <div class="bid-button-wrap">
-        <button class="currnt-winning-bid-btn">현재 낙찰 가의 {{}}원</button>
+        <button class="currnt-winning-bid-btn" @click="bidding">현재 낙찰 가의 {{}}원</button>
         <button class="input-btn">사용자 입력 금액</button>
       </div>
       <!-- 채팅 입력창 들어갈 자리 -->
