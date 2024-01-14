@@ -14,7 +14,7 @@ import type { ReadWishListFromProduct } from '@/apis/wishcart/WishListDto'
 import { readWishListFromProduct, toggleWishList } from '@/apis/wishcart/WishListClient'
 import type { AxiosResponse } from 'axios'
 import TOP4OOTDComponent from '@/components/ootd/TOP4OOTDComponent.vue'
-import { Image } from 'ant-design-vue'
+import { Image, Select, SelectOption } from 'ant-design-vue'
 
 const productStore = useProductStore()
 
