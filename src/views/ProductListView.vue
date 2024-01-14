@@ -110,7 +110,7 @@ watch(isScrollEnd, async (after, before) => {
             </svg>
             <h1>{{ product.avgRating.toFixed(1) }} | ({{ product.reviewCount }})</h1>
           </div>
-          <div>
+          <div class='product-price'>
             <h3>{{ product.price.toLocaleString() }}원</h3>
           </div>
         </div>
@@ -139,7 +139,7 @@ watch(isScrollEnd, async (after, before) => {
 .prod-info > h1 {
   color: var(--Grayscale7, #000);
   font-family: TheJamsil;
-  font-size: 20px;
+  font-size: 1.1vw;
   font-style: normal;
   font-weight: 400;
   line-height: 30px; /* 150% */
@@ -148,7 +148,7 @@ watch(isScrollEnd, async (after, before) => {
 .prod-info > h2 {
   color: var(--Grayscale7, #000);
   font-family: TheJamsil;
-  font-size: 20px;
+  font-size: 1.1vw;
   font-style: normal;
   font-weight: 300;
   line-height: 30px;
@@ -160,7 +160,7 @@ watch(isScrollEnd, async (after, before) => {
   justify-content: space-between;
   color: var(--Grayscale7, #000);
   font-family: TheJamsil;
-  font-size: 20px;
+  font-size: 0.9vw;
   font-style: normal;
   font-weight: 400;
   line-height: 30px; /* 120% */
@@ -169,6 +169,12 @@ watch(isScrollEnd, async (after, before) => {
 .product-aggregate {
   display: flex;
   align-items: center;
+  width: 50%;
+}
+
+.product-price {
+  width: 50%;
+  text-align: end;
 }
 
 .product-img {
