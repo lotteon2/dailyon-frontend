@@ -53,7 +53,7 @@ const executeToggle = () => {
     isWishBtnEnabled.value = false
 
     if (!localStorage.getItem('accessToken')) {
-      infoModal('알림', '로그인 후 이용해 주세요')
+      infoModal('알림', LOGIN_NEED_MSG)
       isWishBtnEnabled.value = true
       return
     }
@@ -111,7 +111,7 @@ const closeCouponModal = () => {
 }
 const openCouponModal = () => {
   if (!localStorage.getItem('accessToken')) {
-    infoModal('알림', '로그인 후 이용해주세요.')
+    infoModal('알림', LOGIN_NEED_MSG)
   } else {
     showCouponModal.value = true
   }
@@ -151,7 +151,7 @@ const addToCart = () => {
     isCartBtnEnabled.value = false
 
     if (!localStorage.getItem('accessToken')) {
-      warningModal('알림', '로그인 후 이용해 주세요')
+      warningModal('알림', LOGIN_NEED_MSG)
       isCartBtnEnabled.value = true
       return
     }

@@ -1,10 +1,9 @@
 <script setup lang='ts'>
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterView } from 'vue-router'
 import { provide, ref } from 'vue'
 import HeaderComponent from '@/components/HeaderComponent.vue'
 import FooterComponent from '@/components/FooterComponent.vue'
 import { debounce } from 'lodash'
-import { notification } from 'ant-design-vue'
 
 let isScrollEnd = ref<boolean>(false)
 
@@ -17,15 +16,6 @@ const onScroll = debounce(async (event: any) => {
 }, 200)
 
 provide('isScrollEnd', isScrollEnd)
-
-const openInternalServerErrorNotification = () => {
-  notification['error']({
-    message: '서버 내부 오류',
-    description:
-      '서버에 문제가 발생했습니다.'
-  })
-}
-provide('openInternalServerErrorNotification', openInternalServerErrorNotification)
 </script>
 
 <template>

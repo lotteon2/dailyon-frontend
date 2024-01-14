@@ -213,13 +213,13 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth && !isLoggedIn()) {
-    infoModal('알림', '로그인이 필요한 페이지입니다.')
+    infoModal('알림', LOGIN_NEED_MSG)
     next('/login')
   } else if (to.name === 'login' && isLoggedIn()) {
     infoModal('알림', '이미 로그인한 상태입니다.')
     next('/')
   } else if (to.name === 'not-found') {
-    warningModal('알림', '페이지를 찾을 수 없습니다.')
+    warningModal('알림', NOTFOUND_MSG)
     next('/')
   } else {
     next()

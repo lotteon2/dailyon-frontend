@@ -22,7 +22,7 @@ const { postLikes } = storeToRefs(postLikeStore)
 
 const likeButtonClickListener = async (postId: number, isLike: boolean | undefined) => {
   if (isLike === undefined) {
-    await infoModal('알림', '로그인이 필요합니다.')
+    await infoModal('알림', LOGIN_NEED_MSG)
   } else {
     const postIndex = props.posts.findIndex((post) => post.id === postId)
     if (postIndex !== -1) {

@@ -49,6 +49,13 @@ const showNotificationDropdownHandler = () => {
   showNotificationDropdown.value = true
 }
 
+const onClickNotificationDropdownHandler = () => {
+  if (memberId.value === null || memberId.value === undefined) {
+    infoModal('알림', LOGIN_NEED_MSG)
+    return
+  }
+}
+
 const mouseEnterDropdownHandler = () => {
   showNotificationDropdown.value = true
 }
@@ -178,6 +185,7 @@ onMounted(async () => {
     </div>
     <div
       class="nav-tab-wrapper"
+      @click='onClickNotificationDropdownHandler'
       @mouseover="showNotificationDropdownHandler"
       @mouseleave="hideNotificationDropdownHandler"
     >

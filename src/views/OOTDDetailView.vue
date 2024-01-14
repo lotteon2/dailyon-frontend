@@ -82,7 +82,7 @@ const postLikeStore = usePostLikeStore()
 const { postLikes } = storeToRefs(postLikeStore)
 const likeButtonClickListener = (isLike: boolean | undefined) => {
   if (isLike === undefined) {
-    infoModal('알림', '로그인이 필요합니다.')
+    infoModal('알림', LOGIN_NEED_MSG)
   } else {
     postLikeStore.togglePostLikes(postId.value)
   }
@@ -93,7 +93,7 @@ const followStore = useFollowStore()
 const { follows } = storeToRefs(followStore)
 const followButtonClickListener = (followingId: number, isFollowing: boolean | undefined) => {
   if (isFollowing === undefined) {
-    infoModal('알림', '로그인이 필요합니다.')
+    infoModal('알림', LOGIN_NEED_MSG)
   } else {
     followStore.toggleFollows(followingId)
   }
