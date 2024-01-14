@@ -81,32 +81,38 @@ const toProductList = (id: number) => {
   border-bottom: #808080 solid 1px;
   border-right: #808080 solid 1px;
   border-left: #808080 solid 1px;
-  padding: 12px 16px;
+  padding: 12px 20px;
   z-index: 1;
 
   position: absolute;
   top: 100%;
   left: 0;
 
-  width: 200px;
-  height: 600px;
+  width: 12vw;
+  height: fit-content;
 }
 
 .category-content {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding-top: 5px;
-  padding-bottom: 5px;
+  align-items: flex-start;
+  padding: 5px;
+  width: 100%;
 
   cursor: pointer;
 
+  font-size: 1vw;
   font-family: TheJamsil;
+  font-weight: 600;
 }
 
 .category-content > a {
   color: inherit;
   text-decoration: none;
+}
+
+.category-content:hover {
+  color: #c22727;
 }
 
 .child-category {
