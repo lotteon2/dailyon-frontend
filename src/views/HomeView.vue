@@ -1,13 +1,17 @@
-<script setup lang="ts"></script>
+<script setup lang='ts'>
+</script>
 
 <template>
   <div class="main-container">
     <div class="md-container">
       <div class="md-prod-container">
         <div class="info-wrapper">
-          <div v-for="n in 2" class="md-prod-info">
-            <img src="@/assets/images/md-img1.png" alt="" />
-          </div>
+          <RouterLink class='banner' to='/auctions'>
+            <img class='banner-img' src='@/assets/images/bid-banner.png' alt=''>
+          </RouterLink>
+          <RouterLink class='banner' to='/ootds'>
+            <img class='banner-img' src="@/assets/images/ootd-banner.png" alt="" />
+          </RouterLink>
         </div>
       </div>
     </div>
