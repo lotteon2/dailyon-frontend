@@ -31,11 +31,11 @@ export const getProductDetail = async (productId: number): Promise<ReadProductDe
   } catch (error) {
     if (error instanceof AxiosError) {
       if (error.response) {
-        if (error.response.status >= 400) {
+        if (error.response.status >= 400 && error.response.status < 500) {
           alert(error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
-        } else if (error.response.status < 500) {
-          alert('서버 내부 오류')
+        }
+        if (error.response.status >= 500) {
           console.error('Internal Server Error')
         }
       }
@@ -59,10 +59,11 @@ export const searchProduct = async (
   } catch (error) {
     if (error instanceof AxiosError) {
       if (error.response) {
-        if (error.response.status >= 400) {
+        if (error.response.status >= 400 && error.response.status < 500) {
           alert(error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
-        } else if (error.response.status < 500) {
+        }
+        if (error.response.status >= 500) {
           alert('서버 내부 오류')
           console.error('Internal Server Error')
         }

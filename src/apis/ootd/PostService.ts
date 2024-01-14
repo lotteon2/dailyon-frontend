@@ -44,7 +44,6 @@ export const getPosts = async (
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
-          alert('서버 내부 오류')
           console.error('Internal Server Error')
         }
       }
@@ -78,7 +77,6 @@ export const getMyPosts = async (
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
-          alert('서버 내부 오류')
           console.error('Internal Server Error')
         }
       }
@@ -114,7 +112,6 @@ export const getMemberPosts = async (
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
-          alert('서버 내부 오류')
           console.error('Internal Server Error')
         }
       }
@@ -148,7 +145,6 @@ export const getPostLikes = async (
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
-          alert('서버 내부 오류')
           console.error('Internal Server Error')
         }
       }
@@ -174,7 +170,6 @@ export const createPost = async (
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
-          alert('서버 내부 오류')
           console.error('Internal Server Error')
         }
       }
@@ -201,7 +196,6 @@ export const updatePost = async (
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
-          alert('서버 내부 오류')
           console.error('Internal Server Error')
         }
       }
@@ -221,7 +215,6 @@ export const deletePost = async (postId: number): Promise<void> => {
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
-          alert('서버 내부 오류')
           console.error('Internal Server Error')
         }
       }
@@ -244,7 +237,6 @@ export const getPostDetail = async (postId: number): Promise<PostDetailResponse>
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
-          alert('서버 내부 오류')
           console.error('Internal Server Error')
         }
       }
@@ -264,7 +256,6 @@ export const addViewCount = async (postId: number): Promise<void> => {
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
-          alert('서버 내부 오류')
           console.error('Internal Server Error')
         }
       }
@@ -290,7 +281,6 @@ export const getTOP4OOTD = async (productId: number): Promise<Array<TOP4OOTDResp
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
-          alert('서버 내부 오류')
           console.error('Internal Server Error')
         }
       }

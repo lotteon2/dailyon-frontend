@@ -1,6 +1,6 @@
 <script setup lang='ts'>
 
-import { ref } from 'vue'
+import { inject, ref } from 'vue'
 import type { FollowerResponse, FollowingResponse } from '@/apis/ootd/FollowDto'
 import { type FollowerPageResponse } from '@/apis/ootd/FollowDto'
 import { getFollowers } from '@/apis/ootd/FollowService'
@@ -9,6 +9,10 @@ import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 import { useFollowStore } from '@/stores/follow/FollowStore'
 import { storeToRefs } from 'pinia'
 import WhitePageComponent from '@/components/wishcart/WhitePageComponent.vue'
+import { getMyPosts } from '@/apis/ootd/PostService'
+import { AxiosError } from 'axios'
+
+const openInternalServerErrorNotification: Function | undefined = inject('openInternalServerErrorNotification')
 
 const props = defineProps({
   addedFollowings: {
@@ -27,13 +31,23 @@ const totalElements = ref<number>()
 const followStore = useFollowStore()
 const {follows} = storeToRefs(followStore)
 
-const fetchDefaultData = async (): Promise<FollowerPageResponse<FollowerResponse>> => {
-  const followerPageResponse = await getFollowers(0, 5, 'createdAt,desc')
-  followers.value = followerPageResponse.followers
-  totalPages.value = followerPageResponse.totalPages
-  totalElements.value = followerPageResponse.totalElements
-
-  return followerPageResponse
+const fetchDefaultData = async () => {
+  try {
+    const followerPageResponse = await getFollowers(0, 5, 'createdAt,desc')
+    followers.value = followerPageResponse.followers
+    totalPages.value = followerPageResponse.totalPages
+    totalElements.value = followerPageResponse.totalElements
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      if (error.response !== undefined) {
+        if (error.response.status >= 500) {
+          if (openInternalServerErrorNotification !== undefined) {
+            openInternalServerErrorNotification()
+          }
+        }
+      }
+    }
+  }
 }
 
 onBeforeMount(async () => {
@@ -132,42 +146,44 @@ const handleImageLoad = async () => {
 
 <template>
   <WhitePageComponent v-if='followers.length === 0' message="팔로워가 없습니다" />
-  <div v-else class='follow-row-container'>
-    <div v-for='follower in followers' :key='follower.id' class='follow-row'>
-      <RouterLink :to='`/ootds/profile/${follower.id}`' class='follow-img-wrapper'>
-        <img v-if='imageSize.width === 0 || imageSize.height === 0' class='follow-img' ref='img' @load='getImageSize'
-             src='@/assets/images/loading.gif' />
-        <img v-else class='follow-img' ref='img' @load='getImageSize'
-             :src='`${VITE_STATIC_IMG_URL}${follower.profileImgUrl}?w=${imageSize.width}&h=${imageSize.height}`' />
-      </RouterLink>
-      <div class='nickname-wrapper'>
-        <RouterLink class='nickname' :to='`/ootds/profile/${follower.id}`'>
-          {{ follower.nickname }}
+  <div v-else>
+    <div class='follow-row-container'>
+      <div v-for='follower in followers' :key='follower.id' class='follow-row'>
+        <RouterLink :to='`/ootds/profile/${follower.id}`' class='follow-img-wrapper'>
+          <img v-if='imageSize.width === 0 || imageSize.height === 0' class='follow-img' ref='img' @load='getImageSize'
+               src='@/assets/images/loading.gif' />
+          <img v-else class='follow-img' ref='img' @load='getImageSize'
+               :src='`${VITE_STATIC_IMG_URL}${follower.profileImgUrl}?w=${imageSize.width}&h=${imageSize.height}`' />
         </RouterLink>
-      </div>
-      <div v-if='followStore.hasFollowingId(follower.id) ? !follower.isFollowing : follower.isFollowing'
-           class='follow-btn following'
-           @click='followButtonClickListener(follower.id, follower.isFollowing)'>
-        <svg
-          xmlns='http://www.w3.org/2000/svg'
-          width='13'
-          height='9'
-          viewBox='0 0 13 9'
-          fill='none'
-        >
-          <path
-            d='M4.22659 9L0 4.77341L0.6072 4.16706L4.22659 7.78645L12.013 0L12.6194 0.60635L4.22659 9Z'
-            fill='#C6C6C6'
-          />
-        </svg>
-        팔로잉
-      </div>
-      <div v-else class='follow-btn non-following'
-           @click='followButtonClickListener(follower.id, follower.isFollowing)'>+팔로우
+        <div class='nickname-wrapper'>
+          <RouterLink class='nickname' :to='`/ootds/profile/${follower.id}`'>
+            {{ follower.nickname }}
+          </RouterLink>
+        </div>
+        <div v-if='followStore.hasFollowingId(follower.id) ? !follower.isFollowing : follower.isFollowing'
+             class='follow-btn following'
+             @click='followButtonClickListener(follower.id, follower.isFollowing)'>
+          <svg
+            xmlns='http://www.w3.org/2000/svg'
+            width='13'
+            height='9'
+            viewBox='0 0 13 9'
+            fill='none'
+          >
+            <path
+              d='M4.22659 9L0 4.77341L0.6072 4.16706L4.22659 7.78645L12.013 0L12.6194 0.60635L4.22659 9Z'
+              fill='#C6C6C6'
+            />
+          </svg>
+          팔로잉
+        </div>
+        <div v-else class='follow-btn non-following'
+             @click='followButtonClickListener(follower.id, follower.isFollowing)'>+팔로우
+        </div>
       </div>
     </div>
+    <PaginationComponent :onChangePage='onChangePage' :requestPage='requestPage' :totalPages='totalPages' />
   </div>
-  <PaginationComponent :onChangePage='onChangePage' :requestPage='requestPage' :totalPages='totalPages' />
 </template>
 
 <style scoped>

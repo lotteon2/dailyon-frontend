@@ -25,8 +25,6 @@ const likeButtonClickListener = async (postId: number, isLike: boolean | undefin
     alert('로그인이 필요합니다.')
   } else {
     const postIndex = props.posts.findIndex((post) => post.id === postId)
-    console.log(postIndex)
-    console.log(props.posts[postIndex].isLike)
     if (postIndex !== -1) {
       await postLikeStore.togglePostLikes(postId)
     }

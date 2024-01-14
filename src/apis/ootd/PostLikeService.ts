@@ -18,7 +18,6 @@ export const togglePostLike = async (postIds: Array<number>): Promise<void> => {
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
-          alert('서버 내부 오류')
           console.error('Internal Server Error')
         }
       }

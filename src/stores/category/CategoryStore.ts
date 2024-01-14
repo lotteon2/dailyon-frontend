@@ -30,7 +30,7 @@ export const useCategoryStore = defineStore(
             })
           })
           .catch((error: any) => {
-            alert(error.response!.data!.message)
+            throw error
           })
       }
     }

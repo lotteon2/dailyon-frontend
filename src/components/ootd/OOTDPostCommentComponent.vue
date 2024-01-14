@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import { onBeforeMount, ref, watch } from 'vue'
+import { inject, onBeforeMount, ref, watch } from 'vue'
 import type {
   CommentPageResponse,
   CommentResponse,
@@ -11,6 +11,10 @@ import { useRoute } from 'vue-router'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 import { useMemberStore } from '@/stores/member/MemberStore'
 import { debounce } from 'lodash'
+import { getFollowings } from '@/apis/ootd/FollowService'
+import { AxiosError } from 'axios'
+
+const openInternalServerErrorNotification: Function | undefined = inject('openInternalServerErrorNotification')
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -27,13 +31,23 @@ const comments = ref<Array<CommentResponse>>()
 const totalPages = ref<number>()
 const totalElements = ref<number>()
 
-const fetchDefaultData = async (): Promise<CommentPageResponse<CommentResponse>> => {
-  const commentPageResponse = await getComments(postId.value, 0, requestSize.value, requestSort.value)
-  comments.value = commentPageResponse.comments
-  totalPages.value = commentPageResponse.totalPages
-  totalElements.value = commentPageResponse.totalElements
-
-  return commentPageResponse
+const fetchDefaultData = async () => {
+  try {
+    const commentPageResponse = await getComments(postId.value, 0, requestSize.value, requestSort.value)
+    comments.value = commentPageResponse.comments
+    totalPages.value = commentPageResponse.totalPages
+    totalElements.value = commentPageResponse.totalElements
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      if (error.response !== undefined) {
+        if (error.response.status >= 500) {
+          if (openInternalServerErrorNotification !== undefined) {
+            openInternalServerErrorNotification()
+          }
+        }
+      }
+    }
+  }
 }
 
 onBeforeMount(async () => {
@@ -76,9 +90,21 @@ const onSubmitComment = debounce(async () => {
       alert('댓글은 최소 5자 최대 140자까지 등록할 수 있습니다.')
     } else {
       if (!isCommentRegistered.value) {
-        await createComment(postId.value, createCommentRequest.value)
-        alert('댓글을 성공적으로 등록하였습니다.')
-        createCommentRequest.value.description = ''
+        try {
+          await createComment(postId.value, createCommentRequest.value)
+          alert('댓글을 성공적으로 등록하였습니다.')
+          createCommentRequest.value.description = ''
+        } catch (error) {
+          if (error instanceof AxiosError) {
+            if (error.response !== undefined) {
+              if (error.response.status >= 500) {
+                if (openInternalServerErrorNotification !== undefined) {
+                  openInternalServerErrorNotification()
+                }
+              }
+            }
+          }
+        }
       }
     }
     isCommentRegistered.value = true
@@ -104,9 +130,21 @@ const onSubmitReplyComment = debounce(async (commentId: number) => {
       alert('답글은 최소 5자 최대 140자까지 등록할 수 있습니다.')
     } else {
       if (!isCommentRegistered.value) {
-        await createReplyComment(postId.value, commentId, createReplyCommentRequest.value)
-        alert('답글을 성공적으로 등록하였습니다.')
-        createReplyCommentRequest.value.description = ''
+        try {
+          await createReplyComment(postId.value, commentId, createReplyCommentRequest.value)
+          alert('답글을 성공적으로 등록하였습니다.')
+          createReplyCommentRequest.value.description = ''
+        } catch (error) {
+          if (error instanceof AxiosError) {
+            if (error.response !== undefined) {
+              if (error.response.status >= 500) {
+                if (openInternalServerErrorNotification !== undefined) {
+                  openInternalServerErrorNotification()
+                }
+              }
+            }
+          }
+        }
       }
     }
     isCommentRegistered.value = true
@@ -116,18 +154,42 @@ const onSubmitReplyComment = debounce(async (commentId: number) => {
 const onDeleteComment = async (commentId: number) => {
   const isConfirm = confirm('댓글을 삭제하시겠습니까?')
   if (isConfirm) {
-    await deleteComment(postId.value, commentId)
-    alert('댓글을 성공적으로 삭제하였습니다.')
-    await fetchDefaultData()
+    try {
+      await deleteComment(postId.value, commentId)
+      alert('댓글을 성공적으로 삭제하였습니다.')
+      await fetchDefaultData()
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.response !== undefined) {
+          if (error.response.status >= 500) {
+            if (openInternalServerErrorNotification !== undefined) {
+              openInternalServerErrorNotification()
+            }
+          }
+        }
+      }
+    }
   }
 }
 
 const onDeleteReplyComment = async (commentId: number) => {
   const isConfirm = confirm('답글을 삭제하시겠습니까?')
   if (isConfirm) {
-    await deleteComment(postId.value, commentId)
-    alert('답글을 성공적으로 삭제하였습니다.')
-    await fetchDefaultData()
+    try {
+      await deleteComment(postId.value, commentId)
+      alert('답글을 성공적으로 삭제하였습니다.')
+      await fetchDefaultData()
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.response !== undefined) {
+          if (error.response.status >= 500) {
+            if (openInternalServerErrorNotification !== undefined) {
+              openInternalServerErrorNotification()
+            }
+          }
+        }
+      }
+    }
   }
 }
 

@@ -1,9 +1,12 @@
 <script setup lang='ts'>
 
-import { type PropType, ref, watch } from 'vue'
-import type { ProductSearchPageResponse, ProductSearchResponse } from '@/apis/ootd/PostDto'
+import { inject, type PropType, ref, watch } from 'vue'
+import type { ProductSearchResponse } from '@/apis/ootd/PostDto'
 import { searchProductFromOOTD } from '@/apis/ootd/ProductSearchService'
 import { debounce } from 'lodash'
+import { AxiosError } from 'axios'
+
+const openInternalServerErrorNotification: Function | undefined = inject('openInternalServerErrorNotification')
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -34,17 +37,32 @@ const clearProductData = async () => {
   lastId.value = 0
 }
 
-const searchProducts = async () => {
-  if(query.value !== '') {
-    await clearProductData()
+const isCurrentlySearched = ref<boolean>(false)
+const searchProducts = debounce(async () => {
+  if (query.value !== '' && !isCurrentlySearched.value) {
+    isCurrentlySearched.value = true
+    try {
+      await clearProductData()
 
-    const productSearchPageResponse = await searchProductFromOOTD(query.value, lastId.value)
-    products.value = productSearchPageResponse.products
-    hasNext.value = productSearchPageResponse.hasNext
+      const productSearchPageResponse = await searchProductFromOOTD(query.value, lastId.value)
+      products.value = productSearchPageResponse.products
+      hasNext.value = productSearchPageResponse.hasNext
 
-    query.value = ''
+      query.value = ''
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.response !== undefined) {
+          if (error.response.status >= 500) {
+            if (openInternalServerErrorNotification !== undefined) {
+              openInternalServerErrorNotification()
+            }
+          }
+        }
+      }
+    }
+    isCurrentlySearched.value = false
   }
-}
+}, 500)
 
 const isScrollEnd = ref<boolean>(false)
 const onScroll = debounce(async (event: any) => {
