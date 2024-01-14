@@ -1,15 +1,12 @@
 <script setup lang='ts'>
 
-import { inject, ref } from 'vue'
+import { inject, onBeforeMount, ref, watch } from 'vue'
 import type { FollowerResponse, FollowingResponse } from '@/apis/ootd/FollowDto'
-import { type FollowerPageResponse } from '@/apis/ootd/FollowDto'
 import { getFollowers } from '@/apis/ootd/FollowService'
-import { onBeforeMount, watch } from 'vue'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 import { useFollowStore } from '@/stores/follow/FollowStore'
 import { storeToRefs } from 'pinia'
 import WhitePageComponent from '@/components/wishcart/WhitePageComponent.vue'
-import { getMyPosts } from '@/apis/ootd/PostService'
 import { AxiosError } from 'axios'
 
 const openInternalServerErrorNotification: Function | undefined = inject('openInternalServerErrorNotification')
@@ -29,7 +26,7 @@ const totalPages = ref<number>()
 const totalElements = ref<number>()
 
 const followStore = useFollowStore()
-const {follows} = storeToRefs(followStore)
+const { follows } = storeToRefs(followStore)
 
 const fetchDefaultData = async () => {
   try {
@@ -72,11 +69,11 @@ watch(requestPage, async (afterPage, beforePage) => {
 const followButtonClickListener = (followerId: number, isFollowing: boolean | undefined) => {
 
   // 이미 팔로잉하는 상태라면
-  if(isFollowing) {
+  if (isFollowing) {
     // 언팔로우
-    if(!followStore.hasFollowingId(followerId)) {
+    if (!followStore.hasFollowingId(followerId)) {
       followers.value?.forEach((follower) => {
-        if(follower.id === followerId) {
+        if (follower.id === followerId) {
           props.addedFollowings!.push({
             id: follower.id,
             nickname: follower.nickname,
@@ -97,7 +94,7 @@ const followButtonClickListener = (followerId: number, isFollowing: boolean | un
   // 아니라면
   else {
     // 언팔로우
-    if(followStore.hasFollowingId(followerId)) {
+    if (followStore.hasFollowingId(followerId)) {
       const indexToRemove = props.addedFollowings!.findIndex((following) => following.id === followerId)
       if (indexToRemove !== -1) {
         props.addedFollowings?.splice(indexToRemove, 1)
@@ -106,7 +103,7 @@ const followButtonClickListener = (followerId: number, isFollowing: boolean | un
     // 팔로우
     else {
       followers.value?.forEach((follower) => {
-        if(follower.id === followerId) {
+        if (follower.id === followerId) {
           props.addedFollowings!.push({
             id: follower.id,
             nickname: follower.nickname,
@@ -138,14 +135,14 @@ const handleImageLoad = async () => {
   if (img.value) {
     imageSize.value = {
       width: img.value[0]!.width,
-      height: img.value[0]!.height,
+      height: img.value[0]!.height
     }
   }
 }
 </script>
 
 <template>
-  <WhitePageComponent v-if='followers.length === 0' message="팔로워가 없습니다" />
+  <WhitePageComponent v-if='followers.length === 0' message='팔로워가 없습니다' />
   <div v-else>
     <div class='follow-row-container'>
       <div v-for='follower in followers' :key='follower.id' class='follow-row'>

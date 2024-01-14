@@ -5,9 +5,9 @@ import { usePostLikeStore } from '@/stores/postlike/PostLikeStore'
 import { onBeforeRouteLeave } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { togglePostLike } from '@/apis/ootd/PostLikeService'
+import { infoModal } from '@/utils/Modal'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
-import { Image } from 'ant-design-vue'
 
 const props = defineProps({
   posts: {
@@ -22,7 +22,7 @@ const { postLikes } = storeToRefs(postLikeStore)
 
 const likeButtonClickListener = async (postId: number, isLike: boolean | undefined) => {
   if (isLike === undefined) {
-    alert('로그인이 필요합니다.')
+    await infoModal('알림', '로그인이 필요합니다.')
   } else {
     const postIndex = props.posts.findIndex((post) => post.id === postId)
     if (postIndex !== -1) {
@@ -79,10 +79,11 @@ const handleImageLoad = async () => {
       <div class='ootd-post-card-image-wrapper'>
         <RouterLink :to='`/ootds/${post.id}`'>
           <img v-if='imageSize.width === 0 || imageSize.height === 0' class='ootd-post-card-image' ref='img'
-               @load='getImageSize' src='@/assets/images/loading.gif' alt='게시글 이미지'/>
+               @load='getImageSize' src='@/assets/images/loading.gif' alt='게시글 이미지' />
           <img v-else class='ootd-post-card-image' ref='img'
                @load='getImageSize'
-               :src='`${VITE_STATIC_IMG_URL}${post.thumbnailImgUrl}?w=${imageSize.width}&h=${imageSize.height}&q=95`' alt='게시글 이미지' />
+               :src='`${VITE_STATIC_IMG_URL}${post.thumbnailImgUrl}?w=${imageSize.width}&h=${imageSize.height}&q=95`'
+               alt='게시글 이미지' />
         </RouterLink>
         <div class='ootd-post-card-like-wrapper' @click='likeButtonClickListener(post.id, post.isLike)'>
           <svg class='ootd-post-card-like' xmlns='http://www.w3.org/2000/svg'

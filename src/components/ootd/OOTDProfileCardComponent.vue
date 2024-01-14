@@ -13,6 +13,7 @@ import type { GiftInfo } from '@/apis/order/orderDto'
 import { storeToRefs } from 'pinia'
 import { getComments } from '@/apis/ootd/CommentService'
 import { AxiosError } from 'axios'
+import { infoModal } from '@/utils/Modal'
 
 const openInternalServerErrorNotification: Function | undefined = inject('openInternalServerErrorNotification')
 
@@ -70,7 +71,7 @@ onBeforeMount(async () => {
 
 const followButtonClickListener = (followingId: number, isFollowing: boolean | undefined) => {
   if(isFollowing === undefined) {
-    alert('로그인이 필요합니다.')
+    infoModal('알림', '로그인이 필요합니다.')
   } else {
     followStore.toggleFollows(followingId)
   }
