@@ -57,7 +57,7 @@ const axiosAuthApi = (baseURL: string) => {
           } else {
             // 토큰 갱신 실패 시 로그인 페이지로 리다이렉트 또는 다른 적절한 조치 수행
             localStorage.clear();
-            alert("로그인 정보가 만료되었습니다. 다시 로그인해주세요.");
+            showAlert("로그인 정보가 만료되었습니다. 다시 로그인해주세요.(code1)");
             window.location.href = '/login';
             return Promise.reject(error);
           }
@@ -112,7 +112,7 @@ const refreshToken = async () => {
     if (
       (error as any)?.response?.status === 401 && (error as any)?.response?.data === 'RefreshToken expired'
     ) {
-      alert("로그인 정보가 만료되었습니다. 다시 로그인해주세요.");
+      showAlert("로그인 정보가 만료되었습니다. 다시 로그인해주세요.(code2)");
       window.location.href = '/login';
     } else {
       // 기타 예외 처리
@@ -121,7 +121,17 @@ const refreshToken = async () => {
   }
 };
 
+let lastAlertTime: number | null = null;
 
+const showAlert = (message: string): void => {
+  const now: number = Date.now();
+  const timeSinceLastAlert: number = now - (lastAlertTime || 0);
+
+  if (lastAlertTime === null || timeSinceLastAlert > 5000) { // 5000ms = 5s
+    alert(message);
+    lastAlertTime = now;
+  }
+};
 
 
 export const defaultAxiosInstance: AxiosInstance = axiosApi(BASE_URL)

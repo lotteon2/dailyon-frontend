@@ -3,6 +3,7 @@ import { getMemberPoints } from '@/apis/member/member'
 import { ref, onMounted, watch, onBeforeMount } from 'vue'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 import type { Point } from '@/apis/member/MemberDto'
+import WhitePageComponent from '@/components/wishcart/WhitePageComponent.vue'
 
 const points = ref<Point[]>([])
 const requestPage = ref<number>(0)
@@ -61,20 +62,18 @@ const updatePoints = (response: any) => {
           <td>{{ point.status ? '사용' : '적립' }}</td>
         </tr>
       </table>
-    </template>
 
+      <div class="pagination">
+        <PaginationComponent
+          :onChangePage="onChangePage"
+          :requestPage="requestPage"
+          :totalPages="totalPages"
+        />
+      </div>
+    </template>
     <template v-else>
-      <br />
-      <p>포인트 내역이 없습니다.</p>
+      <WhitePageComponent message="포인트 내역이 없습니다"/>
     </template>
-  </div>
-
-  <div class="pagination">
-    <PaginationComponent
-      :onChangePage="onChangePage"
-      :requestPage="requestPage"
-      :totalPages="totalPages"
-    />
   </div>
 </template>
 

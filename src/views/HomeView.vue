@@ -1,20 +1,24 @@
-<script setup lang="ts"></script>
+<script setup lang='ts'>
+</script>
 
 <template>
   <div class="main-container">
     <div class="md-container">
       <div class="md-prod-container">
         <div class="info-wrapper">
-          <div v-for="n in 2" class="md-prod-info">
-            <img src="@/assets/images/md-img1.png" alt="" />
-          </div>
+          <RouterLink class='banner' to='/auctions'>
+            <img class='banner-img' src='@/assets/images/bid-banner.png' alt=''>
+          </RouterLink>
+          <RouterLink class='banner' to='/ootds'>
+            <img class='banner-img' src="@/assets/images/ootd-banner.png" alt="" />
+          </RouterLink>
         </div>
       </div>
     </div>
     <div class="new-container">
       <h1>신상품</h1>
       <div class="new-more-wrapper">
-        <div class="new-more-btn-wrapper">
+        <RouterLink to="/new-products" class="new-more-btn-wrapper">
           <span>더보기</span>
           <svg
             width="11"
@@ -28,7 +32,7 @@
               fill="#C6C6C6"
             />
           </svg>
-        </div>
+        </RouterLink>
       </div>
       <div class="new-prod-wrapper">
         <svg
@@ -72,7 +76,7 @@
     <div class="new-container">
       <h1>베스트 상품</h1>
       <div class="new-more-wrapper">
-        <div class="new-more-btn-wrapper">
+        <RouterLink to="/best-products" class="new-more-btn-wrapper">
           <span>더보기</span>
           <svg
             width="11"
@@ -86,7 +90,7 @@
               fill="#C6C6C6"
             />
           </svg>
-        </div>
+        </RouterLink>
       </div>
       <div class="new-prod-wrapper">
         <svg

@@ -40,8 +40,6 @@ import router from '@/router'
 const notificationStore = useNotificationStore()
 const { notifications, unreadNotificationCount } = storeToRefs(notificationStore)
 
-// const isNotificationVisible = ref(true)
-
 const markNotificationAsRead = async (notificationId: string) => {
   await notificationStore.markAsRead(notificationId)
 }
@@ -59,14 +57,17 @@ const deleteAllNotifications = async () => {
 }
 
 const notificationClickHandler = (clickedNotification: Notification) => {
-  console.log(
-    clickedNotification.id,
-    clickedNotification.linkUrl,
-    clickedNotification.message,
-    clickedNotification.notificationType,
-    clickedNotification.read
-  )
-  router.push(clickedNotification.linkUrl)
+  // console.log(
+  //   clickedNotification.id,
+  //   clickedNotification.linkUrl,
+  //   clickedNotification.message,
+  //   clickedNotification.notificationType,
+  //   clickedNotification.read
+  // )
+
+  if (clickedNotification.linkUrl !== '') {
+    router.push(clickedNotification.linkUrl)
+  }
   markNotificationAsRead(clickedNotification.id)
 }
 </script>
