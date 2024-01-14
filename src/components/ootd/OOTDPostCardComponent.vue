@@ -25,8 +25,6 @@ const likeButtonClickListener = async (postId: number, isLike: boolean | undefin
     alert('로그인이 필요합니다.')
   } else {
     const postIndex = props.posts.findIndex((post) => post.id === postId)
-    console.log(postIndex)
-    console.log(props.posts[postIndex].isLike)
     if (postIndex !== -1) {
       await postLikeStore.togglePostLikes(postId)
     }
@@ -50,6 +48,29 @@ onBeforeRouteLeave(async (to, from) => {
   await flushLikeStore()
 })
 
+const img = ref<Array<HTMLImageElement>>(new Array<HTMLImageElement>())
+const imageSize = ref({
+  width: 0,
+  height: 0
+})
+
+const getImageSize = async () => {
+  if (img.value[0]) {
+    await handleImageLoad()
+  } else {
+    (img.value[0] as HTMLImageElement).onload = handleImageLoad
+  }
+}
+
+const handleImageLoad = async () => {
+  if (img.value) {
+    imageSize.value = {
+      width: img.value[0]!.width,
+      height: img.value[0]!.height
+    }
+  }
+}
+
 </script>
 
 <template>
@@ -57,17 +78,11 @@ onBeforeRouteLeave(async (to, from) => {
     <div v-for='post in posts' class='ootd-post-card-wrapper'>
       <div class='ootd-post-card-image-wrapper'>
         <RouterLink :to='`/ootds/${post.id}`'>
-          <Image class='ootd-post-card-image'
-                 :src='`${VITE_STATIC_IMG_URL}${post.thumbnailImgUrl}?w=290&h=370&q=95`'
-                 :preview='false'
-                 alt='게시글 이미지'>
-            <template #placeholder>
-              <Image class='ootd-post-card-image'
-                     :src='`${VITE_STATIC_IMG_URL}${post.thumbnailImgUrl}?w=290&h=370&q=0`'
-                     :preview='false'
-                     alt='게시글 이미지' />
-            </template>
-          </Image>
+          <img v-if='imageSize.width === 0 || imageSize.height === 0' class='ootd-post-card-image' ref='img'
+               @load='getImageSize' src='@/assets/images/loading.gif' alt='게시글 이미지'/>
+          <img v-else class='ootd-post-card-image' ref='img'
+               @load='getImageSize'
+               :src='`${VITE_STATIC_IMG_URL}${post.thumbnailImgUrl}?w=${imageSize.width}&h=${imageSize.height}&q=95`' alt='게시글 이미지' />
         </RouterLink>
         <div class='ootd-post-card-like-wrapper' @click='likeButtonClickListener(post.id, post.isLike)'>
           <svg class='ootd-post-card-like' xmlns='http://www.w3.org/2000/svg'

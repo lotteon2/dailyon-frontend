@@ -7,6 +7,7 @@ import OOTDPostCardComponent from '@/components/ootd/OOTDPostCardComponent.vue'
 import OOTDSortComponent from '@/components/ootd/OOTDSortComponent.vue'
 import { debounce } from 'lodash'
 import WhitePageComponent from '@/components/wishcart/WhitePageComponent.vue'
+import { AxiosError } from 'axios'
 
 const sortOptions = reactive([
   { label: '조회순', value: 'viewCount,desc' },
@@ -19,12 +20,24 @@ const requestSort = ref<string>(sortOptions[0].value)
 const posts = ref<Array<PostResponse>>(new Array<PostResponse>())
 const hasNext = ref<boolean>()
 
-const fetchDefaultData = debounce(async (): Promise<PostPageResponse<PostResponse>> => {
-  const postPageResponse = await getPosts(0, 8, sortOptions[0].value)
-  posts.value = postPageResponse.posts
-  hasNext.value = postPageResponse.hasNext
-
-  return postPageResponse
+const openInternalServerErrorNotification: Function | undefined = inject('openInternalServerErrorNotification')
+const fetchDefaultData = debounce(async () => {
+  try {
+    const postPageResponse = await getPosts(0, 8, sortOptions[0].value)
+    posts.value = postPageResponse.posts
+    hasNext.value = postPageResponse.hasNext
+    return postPageResponse
+  } catch(error) {
+    if (error instanceof AxiosError) {
+      if(error.response !== undefined) {
+        if(error.response.status >= 500) {
+          if(openInternalServerErrorNotification !== undefined) {
+            openInternalServerErrorNotification()
+          }
+        }
+      }
+    }
+  }
 }, 100)
 
 onBeforeMount(async () => {

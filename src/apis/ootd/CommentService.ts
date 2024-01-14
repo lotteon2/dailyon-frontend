@@ -28,7 +28,6 @@ export const getComments = async (postId: number, page: number, size: number, so
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
-          alert('서버 내부 오류')
           console.error('Internal Server Error')
         }
       }
@@ -49,7 +48,6 @@ export const createComment = async (postId: number, createCommentRequest: Create
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
-          alert('서버 내부 오류')
           console.error('Internal Server Error')
         }
       }
@@ -70,7 +68,6 @@ export const createReplyComment = async (postId: number, commentId: number, crea
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
-          alert('서버 내부 오류')
           console.error('Internal Server Error')
         }
       }
@@ -91,7 +88,6 @@ export const deleteComment = async (postId: number, commentId: number)
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
-          alert('서버 내부 오류')
           console.error('Internal Server Error')
         }
       }

@@ -1,17 +1,21 @@
 <script setup lang='ts'>
 
-import { onBeforeMount, reactive, ref, watch } from 'vue'
+import { inject, onBeforeMount, reactive, ref, watch } from 'vue'
 import type {
   PostImageProductDetailUpdateRequest,
   PostUpdateHashTagRequest,
   PostUpdateRequest,
   TemporaryUpdateTagProduct
 } from '@/apis/ootd/PostDto'
-import { updatePost } from '@/apis/ootd/PostService'
+import { createPost, updatePost } from '@/apis/ootd/PostService'
 import router from '@/router'
 import OOTDProductSearchModalComponent from '@/components/ootd/OOTDProductSearchModalComponent.vue'
 import { usePostStore } from '@/stores/post/PostStore'
 import { useRoute } from 'vue-router'
+import { uploadImageToS3 } from '@/apis/ootd/FileService'
+import { AxiosError } from 'axios'
+
+const openInternalServerErrorNotification: Function | undefined = inject('openInternalServerErrorNotification')
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -172,11 +176,23 @@ const onSubmit = async () => {
       })
     })
 
-    const postUpdateResponse = await updatePost(postId.value, postUpdateRequest.value)
-    alert('게시글 수정이 성공하였습니다.')
-    await postStore.clearPostUpdateRequest()
-    await postStore.clearTemporaryTagProducts()
-    await router.push({ path: `/ootds/${postUpdateResponse.id}` })
+    try {
+      const postUpdateResponse = await updatePost(postId.value, postUpdateRequest.value)
+      alert('게시글 수정이 성공하였습니다.')
+      await postStore.clearPostUpdateRequest()
+      await postStore.clearTemporaryTagProducts()
+      await router.push({ path: `/ootds/${postUpdateResponse.id}` })
+    } catch(error) {
+      if (error instanceof AxiosError) {
+        if(error.response !== undefined) {
+          if(error.response.status >= 500) {
+            if(openInternalServerErrorNotification !== undefined) {
+              openInternalServerErrorNotification()
+            }
+          }
+        }
+      }
+    }
   }
 }
 

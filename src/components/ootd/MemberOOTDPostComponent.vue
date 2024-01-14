@@ -1,14 +1,14 @@
-<script setup lang="ts">
-import { onBeforeMount, reactive, ref, watch } from 'vue'
-import type { OOTDPostPageResponse, OOTDPostResponse } from '@/apis/ootd/PostDto'
+<script setup lang='ts'>
+import { inject, onBeforeMount, reactive, ref, watch } from 'vue'
+import type { OOTDPostResponse } from '@/apis/ootd/PostDto'
 import { getMemberPosts } from '@/apis/ootd/PostService'
 import OOTDPostCardComponent from '@/components/ootd/OOTDPostCardComponent.vue'
 import OOTDSortComponent from '@/components/ootd/OOTDSortComponent.vue'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
-import { togglePostLike } from '@/apis/ootd/PostLikeService'
-import { usePostLikeStore } from '@/stores/postlike/PostLikeStore'
-import { onBeforeRouteLeave } from 'vue-router'
 import WhitePageComponent from '@/components/wishcart/WhitePageComponent.vue'
+import { AxiosError } from 'axios'
+
+const openInternalServerErrorNotification: Function | undefined = inject('openInternalServerErrorNotification')
 
 const props = defineProps({
   postMemberId: {
@@ -29,13 +29,23 @@ const posts = ref<Array<OOTDPostResponse>>(new Array<OOTDPostResponse>())
 const totalPages = ref<number>()
 const totalElements = ref<number>()
 
-const fetchDefaultData = async (): Promise<OOTDPostPageResponse<OOTDPostResponse>> => {
-  const postPageResponse = await getMemberPosts(props.postMemberId!, 0, 6, sortOptions[0].value)
-  posts.value = postPageResponse.posts
-  totalPages.value = postPageResponse.totalPages
-  totalElements.value = postPageResponse.totalElements
-
-  return postPageResponse
+const fetchDefaultData = async () => {
+  try {
+    const postPageResponse = await getMemberPosts(props.postMemberId!, 0, 6, sortOptions[0].value)
+    posts.value = postPageResponse.posts
+    totalPages.value = postPageResponse.totalPages
+    totalElements.value = postPageResponse.totalElements
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      if (error.response !== undefined) {
+        if (error.response.status >= 500) {
+          if (openInternalServerErrorNotification !== undefined) {
+            openInternalServerErrorNotification()
+          }
+        }
+      }
+    }
+  }
 }
 
 onBeforeMount(async () => {
@@ -81,24 +91,24 @@ watch(requestPage, async (afterPage, beforePage) => {
 </script>
 
 <template>
-  <div class="ootd-container">
-    <div class="ootd-header-container">
-      <div class="ootd-header-bar-wrapper">
+  <div class='ootd-container'>
+    <div class='ootd-header-container'>
+      <div class='ootd-header-bar-wrapper'>
         <OOTDSortComponent
-          :onChangeSort="onChangeSort"
-          :requestSort="requestSort"
-          :sortOptions="sortOptions"
+          :onChangeSort='onChangeSort'
+          :requestSort='requestSort'
+          :sortOptions='sortOptions'
         />
-        <div class="blank-gap"></div>
+        <div class='blank-gap'></div>
       </div>
     </div>
-    <WhitePageComponent v-if='posts.length === 0' message="작성된 게시글이 없습니다" />
-    <div v-else>
-      <OOTDPostCardComponent :posts="posts" />
+    <WhitePageComponent v-if='posts.length === 0' message='작성된 게시글이 없습니다' />
+    <div v-else style='width: 100%'>
+      <OOTDPostCardComponent :posts='posts' />
       <PaginationComponent
-        :requestPage="requestPage"
-        :totalPages="totalPages"
-        :onChangePage="onChangePage"
+        :requestPage='requestPage'
+        :totalPages='totalPages'
+        :onChangePage='onChangePage'
       />
     </div>
   </div>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeMount, ref, defineEmits } from 'vue'
+import { onBeforeMount, ref, defineEmits, inject } from 'vue'
 import { getOOTDMemberProfile } from '@/apis/ootd/MemberService'
 import type {
   OOTDMemberProfileResponse,
@@ -11,6 +11,10 @@ import { onBeforeRouteLeave } from 'vue-router'
 import { useMemberStore } from '@/stores/member/MemberStore'
 import type { GiftInfo } from '@/apis/order/orderDto'
 import { storeToRefs } from 'pinia'
+import { getComments } from '@/apis/ootd/CommentService'
+import { AxiosError } from 'axios'
+
+const openInternalServerErrorNotification: Function | undefined = inject('openInternalServerErrorNotification')
 
 const emit = defineEmits(['fetchData'])
 const memberStore = useMemberStore()
@@ -37,18 +41,27 @@ const member = ref<OOTDMemberProfileResponse>({
   isFollowing: undefined
 })
 
-const fetchDefaultData = async (): Promise<
-  OOTDMemberProfileResponseWrapper<OOTDMemberProfileResponse>
-> => {
-  const memberResponse = await getOOTDMemberProfile(props.postMemberId!)
-  member.value = memberResponse.member
-  const giftInfo: GiftInfo = {
-    receiverId: member.value.id,
-    receiverName: member.value.nickname,
-    senderName: nickname
+const fetchDefaultData = async () => {
+  try {
+    const memberResponse = await getOOTDMemberProfile(props.postMemberId!)
+    member.value = memberResponse.member
+    const giftInfo: GiftInfo = {
+      receiverId: member.value.id,
+      receiverName: member.value.nickname,
+      senderName: nickname
+    }
+    emit('fetchData', giftInfo)
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      if (error.response !== undefined) {
+        if (error.response.status >= 500) {
+          if (openInternalServerErrorNotification !== undefined) {
+            openInternalServerErrorNotification()
+          }
+        }
+      }
+    }
   }
-  emit('fetchData', giftInfo)
-  return memberResponse
 }
 
 onBeforeMount(async () => {
@@ -59,10 +72,6 @@ const followButtonClickListener = (followingId: number, isFollowing: boolean | u
   if(isFollowing === undefined) {
     alert('로그인이 필요합니다.')
   } else {
-    // member.value!.isFollowing
-    //   ? (member.value!.followerCount -= 1)
-    //   : (member.value!.followerCount += 1)
-    // member.value!.isFollowing = !isFollowing
     followStore.toggleFollows(followingId)
   }
 

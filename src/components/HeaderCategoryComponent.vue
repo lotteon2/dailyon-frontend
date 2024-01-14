@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { inject, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCategoryStore } from '@/stores/category/CategoryStore'
 import type { Category } from '@/apis/category/CategoryDto'
+import { AxiosError } from 'axios'
 
 const props = defineProps({
   showDropdown: {
@@ -21,9 +22,23 @@ const categoryStore = useCategoryStore()
 const childCategories = ref<Category[]>([])
 const router = useRouter()
 
+const openInternalServerErrorNotification: Function | undefined = inject('openInternalServerErrorNotification')
 const mouseOver = (id: number) => {
   showChildDropdown.value = true
-  categoryStore.setCategoryTree(id)
+  try {
+    categoryStore.setCategoryTree(id)
+  } catch(error) {
+    if (error instanceof AxiosError) {
+      if(error.response !== undefined) {
+        if(error.response.status >= 500) {
+          if(openInternalServerErrorNotification !== undefined) {
+            openInternalServerErrorNotification()
+          }
+        }
+      }
+    }
+  }
+
   childCategories.value = categoryStore.findCategoryTree(id)!.categories
 }
 

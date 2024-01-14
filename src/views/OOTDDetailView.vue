@@ -1,9 +1,9 @@
 <script setup lang='ts'>
 
-import { onBeforeMount, ref } from 'vue'
+import { inject, onBeforeMount, ref } from 'vue'
 import type { PostDetailHashTagResponse, PostDetailResponse, PostImageProductDetailResponse } from '@/apis/ootd/PostDto'
 import { onBeforeRouteLeave, useRoute } from 'vue-router'
-import { addViewCount, deletePost, getPostDetail } from '@/apis/ootd/PostService'
+import { addViewCount, deletePost, getPostDetail, getPosts } from '@/apis/ootd/PostService'
 import OOTDPostCommentComponent from '@/components/ootd/OOTDPostCommentComponent.vue'
 import { usePostLikeStore } from '@/stores/postlike/PostLikeStore'
 import router from '@/router'
@@ -14,6 +14,9 @@ import { usePostStore } from '@/stores/post/PostStore'
 import { useMemberStore } from '@/stores/member/MemberStore'
 import { storeToRefs } from 'pinia'
 import { Image } from 'ant-design-vue'
+import { AxiosError } from 'axios'
+
+const openInternalServerErrorNotification: Function | undefined = inject('openInternalServerErrorNotification')
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -44,11 +47,21 @@ const post = ref<PostDetailResponse>({
   postImageProductDetails: [] as PostImageProductDetailResponse[]
 })
 
-const fetchDefaultData = async (): Promise<PostDetailResponse> => {
-  const postDetailResponse = await getPostDetail(postId.value)
-  post.value = postDetailResponse
-
-  return postDetailResponse
+const fetchDefaultData = async () => {
+  try {
+    const postDetailResponse = await getPostDetail(postId.value)
+    post.value = postDetailResponse
+  } catch(error) {
+    if (error instanceof AxiosError) {
+      if(error.response !== undefined) {
+        if(error.response.status >= 500) {
+          if(openInternalServerErrorNotification !== undefined) {
+            openInternalServerErrorNotification()
+          }
+        }
+      }
+    }
+  }
 }
 
 const formattedCreatedAt = ref<string>('')
@@ -170,9 +183,21 @@ const onUpdateBtnClick = async () => {
 const onDeleteBtnClick = async () => {
   const isConfirmed = confirm('게시글을 삭제하시겠습니까?')
   if (isConfirmed) {
-    await deletePost(postId.value)
-    alert('게시글이 삭제되었습니다.')
-    await router.push({ path: '/ootds' })
+    try {
+      await deletePost(postId.value)
+      alert('게시글이 삭제되었습니다.')
+      await router.push({ path: '/ootds' })
+    } catch(error) {
+      if (error instanceof AxiosError) {
+        if(error.response !== undefined) {
+          if(error.response.status >= 500) {
+            if(openInternalServerErrorNotification !== undefined) {
+              openInternalServerErrorNotification()
+            }
+          }
+        }
+      }
+    }
   }
 }
 
