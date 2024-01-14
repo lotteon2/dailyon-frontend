@@ -12,6 +12,7 @@ import { useProductStore } from '@/stores/product/ProductStore'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 import WhitePageComponent from '@/components/wishcart/WhitePageComponent.vue'
 import router from '@/router'
+import { confirmModal, errorModal, successModal, warningModal } from '@/utils/Modal'
 
 const productStore = useProductStore()
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
@@ -52,7 +53,7 @@ const initData = () => {
       cartItems.value = response.responses
     })
     .catch((error: any) => {
-      alert(error.response!.data!.message)
+      errorModal('알림', error.response!.data!.message)
     })
 }
 
@@ -64,13 +65,13 @@ const executeUpdate = (index: number, isPlus: boolean, event: any) => {
     isUpdateBtnEnabled.value = false
 
     if (isPlus && cartItems.value[index].quantity + 1 > cartItems.value[index].productQuantity) {
-      alert('재고 수보다 높게 설정할 수 없습니다')
+      warningModal('알림', '재고 수보다 높게 설정할 수 없습니다')
       isUpdateBtnEnabled.value = true
       return
     }
 
     if (!isPlus && cartItems.value[index].quantity - 1 <= 0) {
-      alert('0개 이하로 설정할 수 없습니다')
+      warningModal('알림', '0개 이하로 설정할 수 없습니다')
       isUpdateBtnEnabled.value = true
       return
     }
@@ -86,7 +87,7 @@ const executeUpdate = (index: number, isPlus: boolean, event: any) => {
           : cartItems.value[index].quantity - 1
       })
       .catch((error: any) => {
-        alert(error.response!.data!.message)
+        errorModal('알림', error.response!.data!.message)
       })
       .finally(() => {
         isUpdateBtnEnabled.value = true
@@ -110,7 +111,7 @@ watch(requestPage, async (afterPage: number, beforePage: number) => {
         cartItems.value = response.responses
       })
       .catch((error: any) => {
-        alert(error.response!.data!.message)
+        errorModal('오류', error.response!.data!.message)
       })
   }
 })
@@ -124,13 +125,13 @@ const toggleAll = () => {
   allChecked.value = !allChecked.value
 }
 
-const deleteChecked = () => {
+const deleteChecked = async () => {
   if (checkedCartItems.value.length === 0) {
-    alert('삭제할 상품을 선택해주세요')
+    await warningModal('알림', '삭제할 상품을 선택해주세요')
     return
   }
 
-  if (confirm('삭제하시겠습니까?')) {
+  if (await confirmModal('진행 여부 확인', '삭제하시겠습니까?')) {
     const requests: Array<DeleteCartRequest> = checkedCartItems.value.map((cartItem) => ({
       productId: cartItem.productId,
       productSizeId: cartItem.productSizeId
@@ -139,17 +140,17 @@ const deleteChecked = () => {
     deleteCart({ requests: requests })
       .then(() => {
         checkedCartItems.value = []
-        alert('삭제 완료')
+        successModal('알림', '삭제 완료')
       })
       .then(initData)
       .catch((error: any) => {
-        alert(error.response!.data!.message)
+        errorModal('오류', error.response!.data!.message)
       })
   }
 }
 
-const deleteAll = () => {
-  if (confirm('삭제하시겠습니까?')) {
+const deleteAll = async () => {
+  if (await confirmModal('진행 여부 확인', '삭제하시겠습니까?')) {
     const requests: Array<DeleteCartRequest> = cartItems.value.map((cartItem) => ({
       productId: cartItem.productId,
       productSizeId: cartItem.productSizeId
@@ -157,18 +158,18 @@ const deleteAll = () => {
 
     deleteCart({ requests: requests })
       .then(() => {
-        alert('삭제 완료')
+        successModal('알림', '삭제 완료')
         cartItems.value = []
       })
       .catch((error: any) => {
-        alert(error.response!.data!.message)
+        errorModal('오류', error.response!.data!.message)
       })
   }
 }
 
 const routeOrderSheet = () => {
   if (!checkedCartItems.value.length) {
-    alert('주문 할 상품을 선택해주세요.')
+    warningModal('알', '주문 할 상품을 선택해주세요.')
     return
   }
   const productInfos: ProductInfo[] = []

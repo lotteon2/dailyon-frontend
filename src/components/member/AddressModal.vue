@@ -1,54 +1,54 @@
-<script setup lang="ts">
-import { ref, defineProps, computed, watch} from 'vue';
-import { VueDaumPostcode } from 'vue-daum-postcode';
-import { authAxiosInstance } from '@/apis/utils';
+<script setup lang='ts'>
+import { defineProps, ref, watch } from 'vue'
+import { VueDaumPostcode } from 'vue-daum-postcode'
+import { authAxiosInstance } from '@/apis/utils'
+import { successModal, warningModal } from '@/utils/Modal'
 
-const props = defineProps(['closeModal', 'selectedAddress']);
+const props = defineProps(['closeModal', 'selectedAddress'])
 
 
-const postOpen = ref(false);
-const userName = ref('');
-const useDefaultAddr = ref(false);
-const postcode = ref('');
-const roadAddr = ref('');
-const detailAddr = ref('');
-const phone = ref('');
+const postOpen = ref(false)
+const userName = ref('')
+const useDefaultAddr = ref(false)
+const postcode = ref('')
+const roadAddr = ref('')
+const detailAddr = ref('')
+const phone = ref('')
 
 const search = () => {
-  postOpen.value = true;
-};
-
+  postOpen.value = true
+}
 
 
 const onComplete = (result: any) => {
   if (result.userSelectedType === 'R') {
-    roadAddr.value = result.roadAddress;
+    roadAddr.value = result.roadAddress
   } else {
-    roadAddr.value = result.jibunAddress;
+    roadAddr.value = result.jibunAddress
   }
-  postcode.value = result.zonecode;
-  postOpen.value = false;
-  
-};
+  postcode.value = result.zonecode
+  postOpen.value = false
 
-const submitInProgress = ref(false);
+}
+
+const submitInProgress = ref(false)
 
 const submitForm = async () => {
   if (submitInProgress.value) {
-    return;
+    return
   }
 
   try {
-    submitInProgress.value = true;
+    submitInProgress.value = true
 
     if (!userName.value || !postcode.value || !detailAddr.value || !phone.value) {
-      alert('필수 입력 항목을 모두 입력하세요.');
-      return;
+      await warningModal('알림', '필수 입력 항목을 모두 입력하세요.')
+      return
     }
 
     const endpoint = props.selectedAddress.id
       ? '/member-service/addresses'
-      : '/member-service/addresses';
+      : '/member-service/addresses'
 
     const formData = {
       addressId: props.selectedAddress.id,
@@ -57,126 +57,129 @@ const submitForm = async () => {
       detailAddress: detailAddr.value,
       roadAddress: roadAddr.value,
       postCode: postcode.value,
-      phoneNumber: phone.value,
-    };
+      phoneNumber: phone.value
+    }
 
 
     if (props.selectedAddress.id) {
       const response = await authAxiosInstance.put(endpoint, formData, {
         headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+          'Content-Type': 'application/json'
+        }
+      })
     } else {
       const response = await authAxiosInstance.post(endpoint, formData, {
         headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+          'Content-Type': 'application/json'
+        }
+      })
     }
 
-    props.closeModal();
-    alert("배송지 저장이 완료되었습니다.");
-    window.location.reload();
+    props.closeModal()
+    await successModal('알림', '배송지 저장이 완료되었습니다.')
+    window.location.reload()
   } catch (error) {
-    console.error('API 호출 중 오류 발생:', error);
+    console.error('API 호출 중 오류 발생:', error)
   } finally {
-    submitInProgress.value = false;
+    submitInProgress.value = false
   }
-};
-
-
+}
 
 
 const limitInput = () => {
-  let numericValue = phone.value.replace(/[^\d]/g, "");
+  let numericValue = phone.value.replace(/[^\d]/g, '')
   if (numericValue.length > 11) {
-    numericValue = numericValue.slice(0, 11);
+    numericValue = numericValue.slice(0, 11)
   }
-  phone.value = numericValue;
-};
+  phone.value = numericValue
+}
 
 watch(() => props.selectedAddress, (newValue: any) => {
-  userName.value = newValue.name;
-    useDefaultAddr.value = newValue.isDefault;
-    postcode.value = newValue.postCode;
-    roadAddr.value = newValue.roadAddress;
-    detailAddr.value = newValue.detailAddress;
-    phone.value = newValue.phoneNumber;
-}, { immediate: true });
+  userName.value = newValue.name
+  useDefaultAddr.value = newValue.isDefault
+  postcode.value = newValue.postCode
+  roadAddr.value = newValue.roadAddress
+  detailAddr.value = newValue.detailAddress
+  phone.value = newValue.phoneNumber
+}, { immediate: true })
 </script>
 
 <template>
-  <div class="modal">
-    <div class="overlay" @click=props.closeModal()></div>
-    <div class="modal-card">
-      <div class="modal-header">
-        <h2 class="headline">배송 정보 입력</h2>
-        <button class="close-btn" @click=props.closeModal()>X</button>
+  <div class='modal'>
+    <div class='overlay' @click=props.closeModal()></div>
+    <div class='modal-card'>
+      <div class='modal-header'>
+        <h2 class='headline'>배송 정보 입력</h2>
+        <button class='close-btn' @click=props.closeModal()>X</button>
       </div>
-      <div class="modal-body">
+      <div class='modal-body'>
         <table>
           <tr>
-            <td class="label">배송지명:</td>
+            <td class='label'>배송지명:</td>
             <td>
-              <input type="text" class="input" name="userName" v-model="userName" :class="{ 'is-invalid': !userName }" />
-              <p v-if="!userName" class="alert-msg">필수로 입력해주세요.</p>
+              <input type='text' class='input' name='userName' v-model='userName'
+                     :class="{ 'is-invalid': !userName }" />
+              <p v-if='!userName' class='alert-msg'>필수로 입력해주세요.</p>
             </td>
           </tr>
           <tr>
-            <td class="label">배송지</td>
+            <td class='label'>배송지</td>
             <td>
-              <label for="useDefaultAddr">
+              <label for='useDefaultAddr'>
                 <input
-                  type="radio"
-                  name="useDefaultAddr"
-                  v-model="useDefaultAddr"
-                  value=true
+                  type='radio'
+                  name='useDefaultAddr'
+                  v-model='useDefaultAddr'
+                  value='true'
                 />기본</label>
-              <label for="useDefaultAddr">
+              <label for='useDefaultAddr'>
                 <input
-                  type="radio"
-                  name="useDefaultAddr"
-                  v-model="useDefaultAddr"
-                  value=false
+                  type='radio'
+                  name='useDefaultAddr'
+                  v-model='useDefaultAddr'
+                  value='false'
                 />신규</label>
             </td>
           </tr>
           <tr>
-            <td class="label">도로명 주소</td>
+            <td class='label'>도로명 주소</td>
             <td>
-              <input type="text" class="input" name="roadAddr" v-model="roadAddr" style="background-color: #ccc;"  readonly />
+              <input type='text' class='input' name='roadAddr' v-model='roadAddr' style='background-color: #ccc;'
+                     readonly />
             </td>
             <td>
-              <button @click="search" class="search-button">검색</button>
-            </td>
-          </tr>
-          <tr>
-            <td class="label">우편번호</td>
-            <td>
-              <input type="text" class="input" name="postcode" v-model="postcode" style="background-color: #ccc;"  readonly />
-              <p v-if="!postcode" class="alert-msg">필수로 입력해주세요.</p>
+              <button @click='search' class='search-button'>검색</button>
             </td>
           </tr>
           <tr>
-            <td class="label">상세 주소</td>
+            <td class='label'>우편번호</td>
             <td>
-              <input type="text" class="input" name="detailAddr" v-model="detailAddr" :class="{ 'is-invalid': !detailAddr }" />
-              <p v-if="!detailAddr" class="alert-msg">필수로 입력해주세요.</p>
+              <input type='text' class='input' name='postcode' v-model='postcode' style='background-color: #ccc;'
+                     readonly />
+              <p v-if='!postcode' class='alert-msg'>필수로 입력해주세요.</p>
             </td>
           </tr>
           <tr>
-            <td class="label">전화번호</td>
+            <td class='label'>상세 주소</td>
             <td>
-              <input type="text" class="input" name="phone" v-model="phone" @input="limitInput" :class="{ 'is-invalid': !phone }"/>
-              <p v-if="!phone" class="alert-msg">필수로 입력해주세요.</p>
+              <input type='text' class='input' name='detailAddr' v-model='detailAddr'
+                     :class="{ 'is-invalid': !detailAddr }" />
+              <p v-if='!detailAddr' class='alert-msg'>필수로 입력해주세요.</p>
             </td>
           </tr>
-          <button @click="submitForm" class="submit-button">저장</button>
+          <tr>
+            <td class='label'>전화번호</td>
+            <td>
+              <input type='text' class='input' name='phone' v-model='phone' @input='limitInput'
+                     :class="{ 'is-invalid': !phone }" />
+              <p v-if='!phone' class='alert-msg'>필수로 입력해주세요.</p>
+            </td>
+          </tr>
+          <button @click='submitForm' class='submit-button'>저장</button>
         </table>
       </div>
-      <div class="post-box" v-if="postOpen">
-        <VueDaumPostcode @complete="onComplete" />
+      <div class='post-box' v-if='postOpen'>
+        <VueDaumPostcode @complete='onComplete' />
       </div>
     </div>
   </div>
@@ -191,10 +194,12 @@ watch(() => props.selectedAddress, (newValue: any) => {
   left: 0;
   top: 0;
 }
+
 .overlay {
   opacity: 0.7;
   background-color: var(--Grayscale7, #000);
 }
+
 .modal-body {
   padding: 2em;
 }
@@ -295,6 +300,7 @@ td {
   border-radius: 5px;
   margin-top: 1em;
 }
+
 .is-invalid {
   border-color: red;
 }

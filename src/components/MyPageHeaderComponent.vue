@@ -6,6 +6,7 @@ import type { PointPaymentDto } from '@/apis/payment/paymentDto'
 import { useMemberStore } from '@/stores/member/MemberStore'
 import { useNotificationStore } from '@/stores/notification/NotificationStore'
 import { getMember } from '@/apis/member/member'
+import { successModal, warningModal } from '@/utils/Modal'
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 const memberStore = useMemberStore()
 const notificationStore = useNotificationStore()
@@ -33,7 +34,7 @@ watch(inputAmount, () => {
 
 const validateInput = () => {
   if (!/^\d*$/.test(inputAmount.value)) {
-    alert('숫자만 입력 가능합니다.')
+    warningModal('알', '숫자만 입력 가능합니다.')
     inputAmount.value = ''
     return
   } else if (inputAmount.value.length > 9) {
@@ -63,7 +64,7 @@ const logout = () => {
   memberStore.clearMemberInfo()
 
   router.push({ name: 'home' })
-  alert('로그아웃 완료')
+  successModal('알림', '로그아웃 완료')
 }
 
 const modify = () => {
@@ -73,7 +74,7 @@ const modify = () => {
 const processPayment = async () => {
   const amount = Number(selectedAmount.value || inputAmount.value)
   if (!amount) {
-    alert('0원은 충전할 수 없습니다.')
+    await warningModal('알림', '0원은 충전할 수 없습니다.')
     inputAmount.value = ''
     return
   }

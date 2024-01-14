@@ -6,6 +6,7 @@ import type { ReadProductResponse, ReadProductSliceResponse } from '@/apis/produ
 import { getProductSlice } from '@/apis/product/ProductClient'
 import BreadCrumbComponent from '@/components/product/BreadCrumbComponent.vue'
 import { Image } from 'ant-design-vue'
+import { errorModal } from '@/utils/Modal'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -45,7 +46,7 @@ const initData = () => {
       products.value = [...products.value, ...response.productResponses]
     })
     .catch((error: any) => {
-      alert(error.response!.data!.message)
+      errorModal('오류', error.response!.data!.message)
     })
 }
 
@@ -62,7 +63,7 @@ watch(isScrollEnd, async (after, before) => {
         products.value = [...products.value, ...response.productResponses]
       })
       .catch((error: any) => {
-        alert(error.response!.data!.message)
+        errorModal('오류', error.response!.data!.message)
       })
   }
 })
