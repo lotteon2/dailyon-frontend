@@ -7,6 +7,8 @@ import type {
   CouponInfoItemResponse,
   MultipleCouponDownloadResponse
 } from '@/apis/coupon/CouponItemDto'
+import { openInternalServerErrorNotification } from '@/utils/Toast'
+import { warningModal } from '@/utils/Modal'
 
 const PROMOTION_PREFIX_PATH = '/promotion-service'
 const COUPON_DOMAIN_PREFIX_PATH = '/coupons'
@@ -27,7 +29,18 @@ export const getCouponsWithAvailibilityForProductDetail = async (
     )
     return response.data
   } catch (error) {
-    console.error('Error fetching coupons:', error)
+    if (error instanceof AxiosError) {
+      if (error.response) {
+        if (error.response.status >= 400 && error.response.status < 500) {
+          await warningModal('알림', error.response.data.message)
+          console.error(`Client Error=${error.response.data.message}`)
+        }
+        if (error.response.status >= 500) {
+          openInternalServerErrorNotification()
+          console.error('Internal Server Error')
+        }
+      }
+    }
     throw error
   }
 }
@@ -36,17 +49,16 @@ export const downloadCoupon = async (couponInfoId: number): Promise<string> => {
   try {
     let url = `${PROMOTION_PREFIX_PATH}${COUPON_DOMAIN_PREFIX_PATH}/${couponInfoId}/download`
     const response = await authAxiosInstance.post(url)
-    alert('쿠폰을 다운로드 했습니다.')
     return response.data
   } catch (error) {
     if (error instanceof AxiosError) {
       if (error.response) {
-        if (error.response.status >= 400) {
-          alert('쿠폰을 다운로드 하지 못했습니다.' + error.response.data.message)
-          // alert(error.response.data.message)
+        if (error.response.status >= 400 && error.response.status < 500) {
+          await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
-        } else if (error.response.status < 500) {
-          alert('서버 내부 오류')
+        }
+        if (error.response.status >= 500) {
+          openInternalServerErrorNotification()
           console.error('Internal Server Error')
         }
       }
@@ -65,7 +77,18 @@ export const downloadMultipleCoupons = async (
     )
     return response.data
   } catch (error) {
-    console.error('쿠폰 전체 다운로드 중 에러 발생:', error)
+    if (error instanceof AxiosError) {
+      if (error.response) {
+        if (error.response.status >= 400 && error.response.status < 500) {
+          await warningModal('알림', error.response.data.message)
+          console.error(`Client Error=${error.response.data.message}`)
+        }
+        if (error.response.status >= 500) {
+          openInternalServerErrorNotification()
+          console.error('Internal Server Error')
+        }
+      }
+    }
     throw error
   }
 }
@@ -82,12 +105,12 @@ export const getCouponsForCheckout = async (
   } catch (error) {
     if (error instanceof AxiosError) {
       if (error.response) {
-        if (error.response.status >= 400) {
-          alert('적용가능한 쿠폰을 가져오지 못했습니다.' + error.response.data.message)
-          // alert(error.response.data.message)
+        if (error.response.status >= 400 && error.response.status < 500) {
+          await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
-        } else if (error.response.status < 500) {
-          alert('서버 내부 오류')
+        }
+        if (error.response.status >= 500) {
+          openInternalServerErrorNotification()
           console.error('Internal Server Error')
         }
       }
@@ -109,6 +132,18 @@ export const getMyCoupons = async (page: Number) => {
     )
     return response.data
   } catch (error) {
-    console.error('API 호출 중 오류 발생:', error)
+    if (error instanceof AxiosError) {
+      if (error.response) {
+        if (error.response.status >= 400 && error.response.status < 500) {
+          await warningModal('알림', error.response.data.message)
+          console.error(`Client Error=${error.response.data.message}`)
+        }
+        if (error.response.status >= 500) {
+          openInternalServerErrorNotification()
+          console.error('Internal Server Error')
+        }
+      }
+    }
+    throw error
   }
 }

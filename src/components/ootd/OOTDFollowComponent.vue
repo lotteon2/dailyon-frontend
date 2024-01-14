@@ -10,7 +10,7 @@ import type { FollowingResponse } from '@/apis/ootd/FollowDto'
 import { storeToRefs } from 'pinia'
 
 const followStore = useFollowStore()
-const {follows} = storeToRefs(followStore)
+const { follows } = storeToRefs(followStore)
 
 const tabOptions = reactive([
   { label: '팔로워', value: 'follower' },

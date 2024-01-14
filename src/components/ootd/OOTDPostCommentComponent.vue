@@ -1,18 +1,13 @@
 <script setup lang='ts'>
 import { inject, onBeforeMount, ref, watch } from 'vue'
-import type {
-  CommentPageResponse,
-  CommentResponse,
-  CreateCommentRequest,
-  CreateReplyCommentRequest
-} from '@/apis/ootd/CommentDto'
+import type { CommentResponse, CreateCommentRequest, CreateReplyCommentRequest } from '@/apis/ootd/CommentDto'
 import { createComment, createReplyComment, deleteComment, getComments } from '@/apis/ootd/CommentService'
 import { useRoute } from 'vue-router'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 import { useMemberStore } from '@/stores/member/MemberStore'
 import { debounce } from 'lodash'
-import { getFollowings } from '@/apis/ootd/FollowService'
 import { AxiosError } from 'axios'
+import { confirmModal, infoModal, successModal, warningModal } from '@/utils/Modal'
 
 const openInternalServerErrorNotification: Function | undefined = inject('openInternalServerErrorNotification')
 
@@ -32,22 +27,10 @@ const totalPages = ref<number>()
 const totalElements = ref<number>()
 
 const fetchDefaultData = async () => {
-  try {
-    const commentPageResponse = await getComments(postId.value, 0, requestSize.value, requestSort.value)
-    comments.value = commentPageResponse.comments
-    totalPages.value = commentPageResponse.totalPages
-    totalElements.value = commentPageResponse.totalElements
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      if (error.response !== undefined) {
-        if (error.response.status >= 500) {
-          if (openInternalServerErrorNotification !== undefined) {
-            openInternalServerErrorNotification()
-          }
-        }
-      }
-    }
-  }
+  const commentPageResponse = await getComments(postId.value, 0, requestSize.value, requestSort.value)
+  comments.value = commentPageResponse.comments
+  totalPages.value = commentPageResponse.totalPages
+  totalElements.value = commentPageResponse.totalElements
 }
 
 onBeforeMount(async () => {
@@ -83,28 +66,16 @@ const createCommentRequest = ref<CreateCommentRequest>({
 
 const onSubmitComment = debounce(async () => {
   if (!isCommentRegistered.value) {
-    if(memberId === null) {
-      alert("로그인이 필요합니다.")
+    if (memberId === null) {
+      await infoModal('알림', '로그인이 필요합니다.')
     } else if (createCommentRequest.value.description === ''
       || createCommentRequest.value.description.length < 5 || createCommentRequest.value.description.length > 140) {
-      alert('댓글은 최소 5자 최대 140자까지 등록할 수 있습니다.')
+      await successModal('알림', '댓글은 최소 5자 최대 140자까지 등록할 수 있습니다.')
     } else {
       if (!isCommentRegistered.value) {
-        try {
-          await createComment(postId.value, createCommentRequest.value)
-          alert('댓글을 성공적으로 등록하였습니다.')
-          createCommentRequest.value.description = ''
-        } catch (error) {
-          if (error instanceof AxiosError) {
-            if (error.response !== undefined) {
-              if (error.response.status >= 500) {
-                if (openInternalServerErrorNotification !== undefined) {
-                  openInternalServerErrorNotification()
-                }
-              }
-            }
-          }
-        }
+        await createComment(postId.value, createCommentRequest.value)
+        await successModal('알림', '댓글을 성공적으로 등록하였습니다.')
+        createCommentRequest.value.description = ''
       }
     }
     isCommentRegistered.value = true
@@ -123,28 +94,16 @@ const createReplyCommentRequest = ref<CreateReplyCommentRequest>({
 
 const onSubmitReplyComment = debounce(async (commentId: number) => {
   if (!isCommentRegistered.value) {
-    if(memberId === null) {
-      alert('로그인이 필요합니다.')
+    if (memberId === null) {
+      await infoModal('알림', '로그인이 필요합니다.')
     } else if (createReplyCommentRequest.value.description === ''
       || createReplyCommentRequest.value.description.length < 5 || createReplyCommentRequest.value.description.length > 140) {
-      alert('답글은 최소 5자 최대 140자까지 등록할 수 있습니다.')
+      await warningModal('알림', '답글은 최소 5자 최대 140자까지 등록할 수 있습니다.')
     } else {
       if (!isCommentRegistered.value) {
-        try {
-          await createReplyComment(postId.value, commentId, createReplyCommentRequest.value)
-          alert('답글을 성공적으로 등록하였습니다.')
-          createReplyCommentRequest.value.description = ''
-        } catch (error) {
-          if (error instanceof AxiosError) {
-            if (error.response !== undefined) {
-              if (error.response.status >= 500) {
-                if (openInternalServerErrorNotification !== undefined) {
-                  openInternalServerErrorNotification()
-                }
-              }
-            }
-          }
-        }
+        await createReplyComment(postId.value, commentId, createReplyCommentRequest.value)
+        await successModal('알림', '답글을 성공적으로 등록하였습니다.')
+        createReplyCommentRequest.value.description = ''
       }
     }
     isCommentRegistered.value = true
@@ -152,44 +111,20 @@ const onSubmitReplyComment = debounce(async (commentId: number) => {
 }, 500)
 
 const onDeleteComment = async (commentId: number) => {
-  const isConfirm = confirm('댓글을 삭제하시겠습니까?')
+  const isConfirm = await confirmModal('진행 여부 확인', '댓글을 삭제하시겠습니까?')
   if (isConfirm) {
-    try {
-      await deleteComment(postId.value, commentId)
-      alert('댓글을 성공적으로 삭제하였습니다.')
-      await fetchDefaultData()
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        if (error.response !== undefined) {
-          if (error.response.status >= 500) {
-            if (openInternalServerErrorNotification !== undefined) {
-              openInternalServerErrorNotification()
-            }
-          }
-        }
-      }
-    }
+    await deleteComment(postId.value, commentId)
+    await successModal('알림', '댓글을 성공적으로 삭제하였습니다.')
+    await fetchDefaultData()
   }
 }
 
 const onDeleteReplyComment = async (commentId: number) => {
-  const isConfirm = confirm('답글을 삭제하시겠습니까?')
+  const isConfirm = await confirmModal('진행 여부 확인', '답글을 삭제하시겠습니까?')
   if (isConfirm) {
-    try {
-      await deleteComment(postId.value, commentId)
-      alert('답글을 성공적으로 삭제하였습니다.')
-      await fetchDefaultData()
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        if (error.response !== undefined) {
-          if (error.response.status >= 500) {
-            if (openInternalServerErrorNotification !== undefined) {
-              openInternalServerErrorNotification()
-            }
-          }
-        }
-      }
-    }
+    await deleteComment(postId.value, commentId)
+    await successModal('알림', '답글을 성공적으로 삭제하였습니다.')
+    await fetchDefaultData()
   }
 }
 

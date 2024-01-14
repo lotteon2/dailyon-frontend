@@ -1,6 +1,8 @@
 import type { ProductSearchPageResponse, ProductSearchResponse } from '@/apis/ootd/PostDto'
 import { AxiosError, type AxiosResponse } from 'axios'
 import { authAxiosInstance } from '@/apis/utils'
+import { openInternalServerErrorNotification } from '@/utils/Toast'
+import { warningModal } from '@/utils/Modal'
 
 const PRODUCT_SERVICE_PREFIX_PATH = '/product-service'
 
@@ -18,10 +20,11 @@ export const searchProductFromOOTD = async (query: string, lastId?: number)
     if (error instanceof AxiosError) {
       if (error.response) {
         if (error.response.status >= 400 && error.response.status < 500) {
-          alert(error.response.data.message)
+          await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
+          openInternalServerErrorNotification()
           console.error('Internal Server Error')
         }
       }

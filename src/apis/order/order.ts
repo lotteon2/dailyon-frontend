@@ -9,6 +9,8 @@ import type {
   GiftResponse,
   GiftPageResponse
 } from './orderDto'
+import { openInternalServerErrorNotification } from '@/utils/Toast'
+import { warningModal } from '@/utils/Modal'
 
 const ORDER_SERVICE_PREFIX_PATH = '/order-service'
 
@@ -23,11 +25,12 @@ export const getReceiverGifts = async (page: number): Promise<GiftPageResponse<G
   } catch (error) {
     if (error instanceof AxiosError) {
       if (error.response) {
-        if (error.response.status >= 400) {
-          alert(error.response.data.message)
+        if (error.response.status >= 400 && error.response.status < 500) {
+          await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
-        } else if (error.response.status < 500) {
-          alert('서버 내부 오류')
+        }
+        if (error.response.status >= 500) {
+          openInternalServerErrorNotification()
           console.error('Internal Server Error')
         }
       }
@@ -47,11 +50,12 @@ export const getSenderGifts = async (page: number): Promise<GiftPageResponse<Gif
   } catch (error) {
     if (error instanceof AxiosError) {
       if (error.response) {
-        if (error.response.status >= 400) {
-          alert(error.response.data.message)
+        if (error.response.status >= 400 && error.response.status < 500) {
+          await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
-        } else if (error.response.status < 500) {
-          alert('서버 내부 오류')
+        }
+        if (error.response.status >= 500) {
+          openInternalServerErrorNotification()
           console.error('Internal Server Error')
         }
       }
@@ -67,11 +71,12 @@ export const order = async (orderSheet: OrderSheet): Promise<string> => {
   } catch (error) {
     if (error instanceof AxiosError) {
       if (error.response) {
-        if (error.response.status >= 400) {
-          alert(error.response.data.message)
+        if (error.response.status >= 400 && error.response.status < 500) {
+          await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
-        } else if (error.response.status < 500) {
-          alert('서버 내부 오류')
+        }
+        if (error.response.status >= 500) {
+          openInternalServerErrorNotification()
           console.error('Internal Server Error')
         }
       }
@@ -91,11 +96,12 @@ export const getOrders = async (page: number): Promise<OrderPageResponse<OrderRe
   } catch (error) {
     if (error instanceof AxiosError) {
       if (error.response) {
-        if (error.response.status >= 400) {
-          alert(error.response.data.message)
+        if (error.response.status >= 400 && error.response.status < 500) {
+          await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
-        } else if (error.response.status < 500) {
-          alert('서버 내부 오류')
+        }
+        if (error.response.status >= 500) {
+          openInternalServerErrorNotification()
           console.error('Internal Server Error')
         }
       }
@@ -111,11 +117,12 @@ export const getOrderDetails = async (orderNo: String): Promise<OrderDetailRespo
   } catch (error) {
     if (error instanceof AxiosError) {
       if (error.response) {
-        if (error.response.status >= 400) {
-          alert(error.response.data.message)
+        if (error.response.status >= 400 && error.response.status < 500) {
+          await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
-        } else if (error.response.status < 500) {
-          alert('서버 내부 오류')
+        }
+        if (error.response.status >= 500) {
+          openInternalServerErrorNotification()
           console.error('Internal Server Error')
         }
       }
@@ -133,10 +140,10 @@ export const cancelOrderDetail = async (orderDetailNo: String) => {
     if (error instanceof AxiosError) {
       if (error.response) {
         if (error.response.status >= 400) {
-          alert(error.response.data.message)
+          await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
         } else if (error.response.status < 500) {
-          alert('서버 내부 오류')
+          openInternalServerErrorNotification()
           console.error('Internal Server Error')
         }
       }
@@ -153,10 +160,10 @@ export const gifts = async (giftInfo: GiftInfo): Promise<string> => {
     if (error instanceof AxiosError) {
       if (error.response) {
         if (error.response.status >= 400) {
-          alert(error.response.data.message)
+          await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
         } else if (error.response.status < 500) {
-          alert('서버 내부 오류')
+          openInternalServerErrorNotification()
           console.error('Internal Server Error')
         }
       }

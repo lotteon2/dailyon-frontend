@@ -2,6 +2,8 @@ import type { AxiosResponse } from 'axios'
 import { authAxiosInstance } from '@/apis/utils'
 import type { ReadWishListsFromProduct, ToggleWishListRequest } from '@/apis/wishcart/WishListDto'
 import { AxiosError } from 'axios'
+import { openInternalServerErrorNotification } from '@/utils/Toast'
+import { warningModal } from '@/utils/Modal'
 
 const WISH_CART_SERVICE_PREFIX: string = '/wish-cart-service'
 const WISH_LIST_PREFIX: string = '/wish-list'
@@ -28,11 +30,12 @@ export const readWishListFromProduct = async (
   } catch (error) {
     if (error instanceof AxiosError) {
       if (error.response) {
-        if (error.response.status >= 400) {
-          alert(error.response.data.message)
+        if (error.response.status >= 400 && error.response.status < 500) {
+          await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
-        } else if (error.response.status < 500) {
-          alert('서버 내부 오류')
+        }
+        if (error.response.status >= 500) {
+          openInternalServerErrorNotification()
           console.error('Internal Server Error')
         }
       }

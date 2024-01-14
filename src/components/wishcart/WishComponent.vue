@@ -10,6 +10,7 @@ import type { GiftInfo } from '@/apis/order/orderDto'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 import WhitePageComponent from '@/components/wishcart/WhitePageComponent.vue'
 import router from '@/router'
+import { confirmModal, errorModal } from '@/utils/Modal'
 
 const productStore = useProductStore()
 const props = defineProps({
@@ -46,13 +47,13 @@ const initData = () => {
       wishLists.value = response.responses
     })
     .catch((error: any) => {
-      alert(error.response!.data!.message)
+      errorModal('오류', error.response!.data!.message)
     })
 }
 
-const executeDelete = (index: number, event: any) => {
+const executeDelete = async (index: number, event: any) => {
   event.stopPropagation();
-  if (isBtnEnabled.value === true && confirm('삭제하시겠습니까?')) {
+  if (isBtnEnabled.value === true && await confirmModal('진행 여부 확인', '삭제하시겠습니까?')) {
     isBtnEnabled.value = false
     toggleWishList({
       productId: wishLists.value[index].productId,
@@ -62,7 +63,7 @@ const executeDelete = (index: number, event: any) => {
         wishLists.value.splice(index, 1)
       })
       .catch((error: any) => {
-        alert(error.response!.data!.message)
+        errorModal('오류', error.response!.data!.message)
       })
       .finally(() => {
         isBtnEnabled.value = true
@@ -76,7 +77,7 @@ const routeOrder = async (idx: number, event: any) => {
     message.error('새로고침 해주세요')
     return
   }
-  if (confirm(`${props.receiver.receiverName} 님에게 선물하기를 하시겠습니까?`)) {
+  if (await confirmModal('진행 여부 확인', `${props.receiver.receiverName} 님에게 선물하기를 하시겠습니까?`)) {
     const productInfo: ProductInfo[] = [
       {
         productId: wishLists.value[idx].productId,
@@ -122,7 +123,7 @@ watch(requestPage, async (afterPage: number, beforePage: number) => {
         wishLists.value = response.responses
       })
       .catch((error: any) => {
-        alert(error.response!.data!.message)
+        errorModal('오류', error.response!.data!.message)
       })
   }
 })

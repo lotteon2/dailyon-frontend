@@ -2,8 +2,8 @@
 
 import { inject, onBeforeMount, ref, watch } from 'vue'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
-import type { FollowingPageResponse, FollowingResponse } from '@/apis/ootd/FollowDto'
-import { getFollowers, getFollowings } from '@/apis/ootd/FollowService'
+import type { FollowingResponse } from '@/apis/ootd/FollowDto'
+import { getFollowings } from '@/apis/ootd/FollowService'
 import { useFollowStore } from '@/stores/follow/FollowStore'
 import { storeToRefs } from 'pinia'
 import WhitePageComponent from '@/components/wishcart/WhitePageComponent.vue'
@@ -26,25 +26,13 @@ const totalPages = ref<number>()
 const totalElements = ref<number>()
 
 const followStore = useFollowStore()
-const {follows} = storeToRefs(followStore)
+const { follows } = storeToRefs(followStore)
 
 const fetchDefaultData = async () => {
-  try {
-    const followingPageResponse = await getFollowings(0, 5, 'createdAt,desc')
-    followings.value = followingPageResponse.followings
-    totalPages.value = followingPageResponse.totalPages
-    totalElements.value = followingPageResponse.totalElements
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      if (error.response !== undefined) {
-        if (error.response.status >= 500) {
-          if (openInternalServerErrorNotification !== undefined) {
-            openInternalServerErrorNotification()
-          }
-        }
-      }
-    }
-  }
+  const followingPageResponse = await getFollowings(0, 5, 'createdAt,desc')
+  followings.value = followingPageResponse.followings
+  totalPages.value = followingPageResponse.totalPages
+  totalElements.value = followingPageResponse.totalElements
 }
 
 onBeforeMount(async () => {
@@ -99,14 +87,14 @@ const handleImageLoad = async () => {
   if (img.value) {
     imageSize.value = {
       width: img.value[0]!.width,
-      height: img.value[0]!.height,
+      height: img.value[0]!.height
     }
   }
 }
 </script>
 
 <template>
-  <WhitePageComponent v-if='followings.length === 0' message="팔로잉이 없습니다" />
+  <WhitePageComponent v-if='followings.length === 0' message='팔로잉이 없습니다' />
   <div v-else>
     <div class='follow-row-container'>
       <div v-for='following in followings' :key='following.id' class='follow-row'>
