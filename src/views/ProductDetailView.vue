@@ -45,7 +45,7 @@ const checkWishList = (): boolean => {
 
 const executeToggle = () => {
   if (selectedProductSize.value.productSizeId === 0 || productId.value === 0) {
-    await warningModal('알림', '치수를 선택해주세요')
+    warningModal('알림', '치수를 선택해주세요')
     return
   }
 
@@ -151,18 +151,18 @@ const addToCart = () => {
     isCartBtnEnabled.value = false
 
     if (!localStorage.getItem('accessToken')) {
-      await warningModal('알림', '로그인 후 이용해 주세요')
+      warningModal('알림', '로그인 후 이용해 주세요')
       isCartBtnEnabled.value = true
       return
     }
 
     if (selectedProductSize.value.productSizeId === 0) {
-      await warningModal('알림', '옵션을 지정해주세요')
+      warningModal('알림', '옵션을 지정해주세요')
       isCartBtnEnabled.value = true
       return
     }
     if (selectedQuantity.value === 0) {
-      await warningModal('알림', '개수를 추가해주세요')
+      warningModal('알림', '개수를 추가해주세요')
       isCartBtnEnabled.value = true
       return
     }
@@ -208,7 +208,7 @@ const routeOrderSheet = async () => {
 
 const validation = (): boolean => {
   if (selectedQuantity.value === 0 || selectedOriginalPrice.value === 0) {
-    await warningModal('알림', '상품옵션과 수량을 선택해 주세요.')
+    warningModal('알림', '상품옵션과 수량을 선택해 주세요.')
     return false
   }
   return true
