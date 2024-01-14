@@ -1,12 +1,12 @@
 import { AxiosError, type AxiosResponse } from 'axios'
-import { authAxiosInstance, defaultAxiosInstance } from '@/apis/utils'
+import { authAxiosInstance, defaultAxiosInstance, chatAuthAxiosInstance } from '@/apis/utils'
 import type { CreateBidRequest } from './AuctionDto'
 import { useRouter } from 'vue-router'
 const AUCTION_SERVICE_PREFIX_PATH = '/auction-service'
 
 export const createBid = async (createBidRequest: CreateBidRequest): Promise<number> => {
   try {
-    const { data } = await authAxiosInstance.post(
+    const { data } = await chatAuthAxiosInstance.post(
       `${AUCTION_SERVICE_PREFIX_PATH}/bids`,
       createBidRequest
     )
@@ -33,7 +33,6 @@ export const enter = async (auctionId: string): Promise<AxiosResponse> => {
     const response = await authAxiosInstance.get(
       `${AUCTION_SERVICE_PREFIX_PATH}/auctions/enter/${auctionId}`
     )
-    console.log(response)
     return response
   } catch (error) {
     if (error instanceof AxiosError) {

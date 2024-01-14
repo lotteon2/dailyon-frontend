@@ -3,10 +3,13 @@ import { onMounted, onUnmounted, ref, nextTick } from 'vue'
 import { StatisticCountdown, message, Image, ImagePreviewGroup } from 'ant-design-vue'
 import type { CreateBidRequest } from '@/apis/auction/AuctionDto'
 import { createBid, enter } from '@/apis/auction/Auction'
-import router from '@/router'
 import { useRoute } from 'vue-router'
+import { useAuctionStore } from '@/stores/auction/AuctionStore'
+import { storeToRefs } from 'pinia'
 const VITE_AUCTION_WS_URL: string = import.meta.env.VITE_AUCTION_WS_URL
-
+const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
+const auctionStore = useAuctionStore()
+const { auctionDetail } = storeToRefs(auctionStore)
 // 더미데이터
 interface userInfo {
   userId: number
@@ -63,6 +66,7 @@ const messages = ref<Message[]>([])
 const newMessage = ref<string>('')
 onMounted(async () => {
   const response = await enter(String(route.params.auctionId))
+  auctionStore.setToken(response.data)
   await connect()
 })
 onUnmounted(() => {
@@ -148,7 +152,11 @@ const scrollDown = () => {
       <div class="product-img-wrap">
         <!-- 대표 썸네일 들어갈 곳 -->
         <div class="thumbnail">
-          <img class="product-img" src="../assets/images/prod-img.png" alt="Product Image" />
+          <img
+            class="product-img"
+            :src="`${VITE_STATIC_IMG_URL}${auctionDetail.productDetailResponse.imgUrl}`"
+            alt="Product Image"
+          />
         </div>
         <!-- 상세 이미지들 -->
         <div class="detail-img-wrap">
