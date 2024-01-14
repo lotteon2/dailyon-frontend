@@ -103,7 +103,7 @@ const toProductList = (id: number) => {
 
   font-size: 1vw;
   font-family: TheJamsil;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .category-content > a {

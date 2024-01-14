@@ -20,7 +20,6 @@
       <div class="left-inner-line"></div>
       <h1>나의 정보</h1>
       <h2><RouterLink to="/member-info">회원정보 수정</RouterLink></h2>
-      <h2><RouterLink to="/reviews">리뷰 관리</RouterLink></h2>
       <div class="left-inner-line"></div>
       <h1>나의 OOTD</h1>
       <h2><RouterLink to="/follows">팔로잉/팔로워 관리</RouterLink></h2>
