@@ -9,10 +9,12 @@ export const useProductStore = defineStore(
     const products = ref()
     const giftInfo = ref()
     const orderType = ref()
+    const referralCode = ref()
 
-    const setProducts = (productInfos: ProductInfo[], type: String) => {
+    const setProducts = (productInfos: ProductInfo[], type: String, refCode: String) => {
       products.value = productInfos
       orderType.value = type
+      referralCode.value = refCode
     }
 
     const setReceiver = (data: GiftInfo) => {
@@ -22,12 +24,12 @@ export const useProductStore = defineStore(
       products.value = null
       giftInfo.value = null
       orderType.value = null
-      sessionStorage.removeItem('orderProduct')
     }
     return {
       products,
       orderType,
       giftInfo,
+      referralCode,
       setProducts,
       setReceiver,
       deletePinia
@@ -37,7 +39,7 @@ export const useProductStore = defineStore(
     persist: {
       key: 'orderProduct',
       storage: sessionStorage,
-      paths: ['products', 'orderType', 'giftInfo']
+      paths: ['products', 'orderType', 'giftInfo', 'referralCode']
     }
   }
 )

@@ -14,7 +14,7 @@ import { useMemberStore } from '@/stores/member/MemberStore'
 import router from '@/router'
 import { warningModal } from '@/utils/Modal'
 const productStore = useProductStore()
-const { products, orderType, giftInfo } = storeToRefs(productStore)
+const { products, orderType, giftInfo, referralCode } = storeToRefs(productStore)
 const { point } = storeToRefs(useMemberStore())
 
 const redirectUrl = ref('')
@@ -88,8 +88,7 @@ const doOrder = async () => {
       couponInfoId: product.couponInfoId,
       sizeId: product.sizeId,
       orderPrice: product.orderPrice,
-      quantity: product.quantity,
-      referralCode: product.referralCode
+      quantity: product.quantity
     }
     orderItems.push(orderItem)
   })
@@ -104,7 +103,8 @@ const doOrder = async () => {
     totalCouponDiscountPrice: null,
     orderItems: orderItems,
     deliveryInfo: orderType.value === 'GIFT' ? null : deliveryInfo.value,
-    paymentType: 'KAKAOPAY'
+    paymentType: 'KAKAOPAY',
+    referralCode: referralCode.value
   }
   redirectUrl.value = await order(orderSheet)
 

@@ -197,11 +197,10 @@ const routeOrderSheet = async () => {
         orderPrice: selectedOriginalPrice.value,
         quantity: selectedQuantity.value,
         couponInfoId: null,
-        discountAmount: 0,
-        referralCode: referralCode.value
+        discountAmount: 0
       }
     ]
-    productStore.setProducts(productInfos, 'SINGLE')
+    productStore.setProducts(productInfos, 'SINGLE', referralCode.value)
     router.push('/orders')
   }
 }
@@ -247,7 +246,7 @@ watch(selectedProductSize, () => {
           <template #placeholder>
             <Image
               class="img-big"
-              :src='`${VITE_STATIC_IMG_URL}${product.imgUrl}?w=480&h=480&q=0`'
+              :src="`${VITE_STATIC_IMG_URL}${product.imgUrl}?w=480&h=480&q=0`"
               :preview="true"
             />
           </template>
