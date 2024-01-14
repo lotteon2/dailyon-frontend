@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, defineProps, defineEmits } from 'vue'
 import { VueDaumPostcode } from 'vue-daum-postcode'
+import { warningModal } from '@/utils/Modal'
 
 const props = defineProps(['closeModal'])
 const emit = defineEmits(['submit'])
@@ -32,7 +33,7 @@ const submit = async () => {
     !deliveryInfo.value.roadAddress ||
     !deliveryInfo.value.phoneNumber
   ) {
-    alert('필수 입력 항목을 모두 입력하세요.')
+    await warningModal('알림', '필수 입력 항목을 모두 입력하세요.')
     return
   }
   emit('submit', deliveryInfo.value)

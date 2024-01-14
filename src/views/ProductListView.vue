@@ -6,6 +6,7 @@ import type { ReadProductResponse, ReadProductSliceResponse } from '@/apis/produ
 import { getProductSlice } from '@/apis/product/ProductClient'
 import BreadCrumbComponent from '@/components/product/BreadCrumbComponent.vue'
 import { Image } from 'ant-design-vue'
+import { errorModal } from '@/utils/Modal'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -45,7 +46,7 @@ const initData = () => {
       products.value = [...products.value, ...response.productResponses]
     })
     .catch((error: any) => {
-      alert(error.response!.data!.message)
+      errorModal('오류', error.response!.data!.message)
     })
 }
 
@@ -62,7 +63,7 @@ watch(isScrollEnd, async (after, before) => {
         products.value = [...products.value, ...response.productResponses]
       })
       .catch((error: any) => {
-        alert(error.response!.data!.message)
+        errorModal('오류', error.response!.data!.message)
       })
   }
 })
@@ -110,7 +111,7 @@ watch(isScrollEnd, async (after, before) => {
             </svg>
             <h1>{{ product.avgRating.toFixed(1) }} | ({{ product.reviewCount }})</h1>
           </div>
-          <div>
+          <div class='product-price'>
             <h3>{{ product.price.toLocaleString() }}원</h3>
           </div>
         </div>
@@ -139,7 +140,7 @@ watch(isScrollEnd, async (after, before) => {
 .prod-info > h1 {
   color: var(--Grayscale7, #000);
   font-family: TheJamsil;
-  font-size: 20px;
+  font-size: 1.1vw;
   font-style: normal;
   font-weight: 400;
   line-height: 30px; /* 150% */
@@ -148,7 +149,7 @@ watch(isScrollEnd, async (after, before) => {
 .prod-info > h2 {
   color: var(--Grayscale7, #000);
   font-family: TheJamsil;
-  font-size: 20px;
+  font-size: 1.1vw;
   font-style: normal;
   font-weight: 300;
   line-height: 30px;
@@ -160,7 +161,7 @@ watch(isScrollEnd, async (after, before) => {
   justify-content: space-between;
   color: var(--Grayscale7, #000);
   font-family: TheJamsil;
-  font-size: 20px;
+  font-size: 0.9vw;
   font-style: normal;
   font-weight: 400;
   line-height: 30px; /* 120% */
@@ -169,6 +170,12 @@ watch(isScrollEnd, async (after, before) => {
 .product-aggregate {
   display: flex;
   align-items: center;
+  width: 50%;
+}
+
+.product-price {
+  width: 50%;
+  text-align: end;
 }
 
 .product-img {

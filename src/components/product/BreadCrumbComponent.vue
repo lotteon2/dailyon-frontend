@@ -4,6 +4,7 @@ import { onMounted, ref } from 'vue'
 import type { Category } from '@/apis/category/CategoryDto'
 import { getBreadCrumbs } from '@/apis/category/CategoryClient'
 import type { AxiosResponse } from 'axios'
+import { errorModal } from '@/utils/Modal'
 
 const route = useRoute()
 const breadCrumbs = ref<Category[]>([])
@@ -20,7 +21,7 @@ const initData = () => {
       breadCrumbs.value = axiosResponse.data.breadCrumbs
     })
     .catch((error: any) => {
-      alert(error.response!.data!.message)
+      errorModal('오류', error.response!.data!.message)
     })
 }
 

@@ -165,20 +165,20 @@ table {
   margin-top: 33px;
 }
 
+.prod-second-col {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+}
+
 .bell-box {
-  width: 100px;
-  height: 100px;
+  width: 20%;
+  height: 10vh;
   background: var(--Grayscale7, #000);
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-}
-
-.prod-second-col {
-  width: 50%;
-  display: flex;
-  flex-direction: column;
 }
 
 .second-col-first-row {
@@ -236,7 +236,9 @@ table {
 .line {
   width: 100%;
   height: 1px;
+  margin-top: 5px;
   margin-bottom: 10px;
+
   background: #c6c6c6;
 }
 
@@ -347,11 +349,14 @@ table {
   font-weight: 300;
 }
 
+.product-option-select {
+  width: 238px;
+}
+
 .option-container {
   /*width: 678px;*/
   height: 52px;
   background: var(--Grayscale2, #f3f3f3);
-  margin-left: 19px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -443,12 +448,13 @@ table {
   justify-content: space-between;
   flex-direction: row;
   width: 100%;
+  gap: 5px;
   margin-top: 27px;
 }
 
 .bucket-button {
-  width: 200px;
-  height: 97px;
+  width: 40%;
+  height: 10vh;
   border: 1px solid var(--Grayscale6, #4d4d4d);
   background: var(--Grayscale1, #fff);
   color: var(--Grayscale7, #000);
@@ -466,8 +472,8 @@ table {
 }
 
 .purchase-button {
-  width: 200px;
-  height: 97px;
+  width: 40%;
+  height: 10vh;
   border: 1px solid var(--Grayscale6, #4d4d4d);
   background: var(--Grayscale1, #000);
   color: var(--Grayscale7, #fff);
@@ -501,8 +507,9 @@ table {
 }
 
 .selected-button {
-  width: 280px;
-  height: 100px;
+  width: 10vw;
+  height: 10vh;
+  border: 1px solid var(--Grayscale6, #4d4d4d);
   background: var(--Grayscale7, #000);
   color: var(--Grayscale1, #fff);
   text-align: center;
@@ -516,8 +523,8 @@ table {
 }
 
 .non-selected-button {
-  width: 279px;
-  height: 99px;
+  width: 10vw;
+  height: 10vh;
   border: 1px solid var(--Grayscale6, #4d4d4d);
   background: var(--Grayscale7, #fff);
   color: var(--Grayscale1, #000);
@@ -526,7 +533,6 @@ table {
   font-size: 30px;
   font-style: normal;
   font-weight: 300;
-  line-height: 80px; /* 266.667% */
   display: flex;
   justify-content: center;
   align-items: center;

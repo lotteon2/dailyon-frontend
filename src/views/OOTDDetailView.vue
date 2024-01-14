@@ -15,6 +15,7 @@ import { useMemberStore } from '@/stores/member/MemberStore'
 import { storeToRefs } from 'pinia'
 import { Image } from 'ant-design-vue'
 import { AxiosError } from 'axios'
+import { confirmModal, infoModal, successModal } from '@/utils/Modal'
 
 const openInternalServerErrorNotification: Function | undefined = inject('openInternalServerErrorNotification')
 
@@ -48,20 +49,8 @@ const post = ref<PostDetailResponse>({
 })
 
 const fetchDefaultData = async () => {
-  try {
-    const postDetailResponse = await getPostDetail(postId.value)
-    post.value = postDetailResponse
-  } catch(error) {
-    if (error instanceof AxiosError) {
-      if(error.response !== undefined) {
-        if(error.response.status >= 500) {
-          if(openInternalServerErrorNotification !== undefined) {
-            openInternalServerErrorNotification()
-          }
-        }
-      }
-    }
-  }
+  const postDetailResponse = await getPostDetail(postId.value)
+  post.value = postDetailResponse
 }
 
 const formattedCreatedAt = ref<string>('')
@@ -93,7 +82,7 @@ const postLikeStore = usePostLikeStore()
 const { postLikes } = storeToRefs(postLikeStore)
 const likeButtonClickListener = (isLike: boolean | undefined) => {
   if (isLike === undefined) {
-    alert('로그인이 필요합니다.')
+    infoModal('알림', '로그인이 필요합니다.')
   } else {
     postLikeStore.togglePostLikes(postId.value)
   }
@@ -104,7 +93,7 @@ const followStore = useFollowStore()
 const { follows } = storeToRefs(followStore)
 const followButtonClickListener = (followingId: number, isFollowing: boolean | undefined) => {
   if (isFollowing === undefined) {
-    alert('로그인이 필요합니다.')
+    infoModal('알림', '로그인이 필요합니다.')
   } else {
     followStore.toggleFollows(followingId)
   }
@@ -181,11 +170,11 @@ const onUpdateBtnClick = async () => {
 }
 
 const onDeleteBtnClick = async () => {
-  const isConfirmed = confirm('게시글을 삭제하시겠습니까?')
+  const isConfirmed = await confirmModal('진행 여부 확인', '게시글을 삭제하시겠습니까?')
   if (isConfirmed) {
     try {
       await deletePost(postId.value)
-      alert('게시글이 삭제되었습니다.')
+      await successModal('알림', '게시글이 삭제되었습니다.')
       await router.push({ path: '/ootds' })
     } catch(error) {
       if (error instanceof AxiosError) {

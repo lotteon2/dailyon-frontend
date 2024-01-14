@@ -1,7 +1,9 @@
-<script setup lang="ts">
-import { ref, defineEmits } from 'vue'
+<script setup lang='ts'>
+import { defineEmits, ref } from 'vue'
 import AddressModal from '@/components/order/OrderAddressModal.vue'
 import { getDefaultAddress } from '@/apis/member/member'
+import { infoModal } from '@/utils/Modal'
+
 const emit = defineEmits(['submit2', 'changeReceiver', 'changePhoneNumber', 'fetchDefaultAddress'])
 const isModalVisible = ref(false)
 const openModal = () => {
@@ -48,7 +50,7 @@ const limitReceiver = () => {
 const fetchDefaultAddress = async () => {
   const data = await getDefaultAddress()
   if (!data) {
-    alert('기본 배송지가 설정 되어있지 않습니다.')
+    await infoModal('알림', '기본 배송지가 설정 되어있지 않습니다.')
     return
   }
   address.value = data
@@ -57,37 +59,37 @@ const fetchDefaultAddress = async () => {
 </script>
 
 <template>
-  <div class="place-container">
+  <div class='place-container'>
     <AddressModal
-      v-if="isModalVisible"
-      :closeModal="closeModal"
-      @submit="(deliveryInfo) => fill(deliveryInfo)"
+      v-if='isModalVisible'
+      :closeModal='closeModal'
+      @submit='(deliveryInfo) => fill(deliveryInfo)'
     />
-    <div class="place-first-row">
-      <div class="container-title">배송지</div>
-      <div class="place-button-wrapper">
-        <div class="black-button" @click="fetchDefaultAddress"><span>주문자 정보와 동일</span></div>
+    <div class='place-first-row'>
+      <div class='container-title'>배송지</div>
+      <div class='place-button-wrapper'>
+        <div class='black-button' @click='fetchDefaultAddress'><span>주문자 정보와 동일</span></div>
       </div>
     </div>
-    <div class="line"></div>
-    <div class="user-info-wrapper">
-      <div class="user-info-first-col">
+    <div class='line'></div>
+    <div class='user-info-wrapper'>
+      <div class='user-info-first-col'>
         <span>받는분 성함</span>
         <span>받는분 주소</span>
         <span>&nbsp;</span>
         <span>&nbsp;</span>
         <span>받는분 휴대폰</span>
       </div>
-      <div class="user-info-second-col">
-        <input type="text" v-model="address.receiver" placeholder="성함" @input="limitReceiver" />
-        <input type="text" v-model="address.postCode" placeholder="우편번호" disabled />
-        <input type="text" v-model="address.roadAddress" placeholder="주소" disabled />
-        <input type="text" v-model="address.detailAddress" placeholder="상세주소" disabled />
-        <input type="text" v-model="address.phoneNumber" @input="limitInput" placeholder="휴대폰" />
+      <div class='user-info-second-col'>
+        <input type='text' v-model='address.receiver' placeholder='성함' @input='limitReceiver' />
+        <input type='text' v-model='address.postCode' placeholder='우편번호' disabled />
+        <input type='text' v-model='address.roadAddress' placeholder='주소' disabled />
+        <input type='text' v-model='address.detailAddress' placeholder='상세주소' disabled />
+        <input type='text' v-model='address.phoneNumber' @input='limitInput' placeholder='휴대폰' />
       </div>
-      <div class="place-third-col">
+      <div class='place-third-col'>
         <span>&nbsp;</span>
-        <div class="black-button" @click="openModal"><span>검색</span></div>
+        <div class='black-button' @click='openModal'><span>검색</span></div>
       </div>
     </div>
   </div>

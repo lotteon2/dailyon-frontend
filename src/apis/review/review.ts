@@ -1,6 +1,8 @@
 import { AxiosError } from 'axios'
 import { defaultAxiosInstance, authAxiosInstance } from '@/apis/utils'
 import type { ReviewPageResponse, ReviewResponse, ReviewCreateRequest } from './reviewDto'
+import { openInternalServerErrorNotification } from '@/utils/Toast'
+import { warningModal } from '@/utils/Modal'
 const REVIEW_SERVICE_PREFIX: string = '/review-service'
 
 export const createReview = async (reviewDto: ReviewCreateRequest): Promise<string> => {
@@ -8,15 +10,14 @@ export const createReview = async (reviewDto: ReviewCreateRequest): Promise<stri
     const { data } = await authAxiosInstance.post(`${REVIEW_SERVICE_PREFIX}/reviews/`, reviewDto)
     return data
   } catch (error) {
-    console.log(error)
     if (error instanceof AxiosError) {
       if (error.response) {
         if (error.response.status >= 400 && error.response.status < 500) {
-          alert(error.response.data.message)
+          await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
-          alert('서버 내부 오류')
+          openInternalServerErrorNotification()
           console.error('Internal Server Error')
         }
       }
@@ -42,11 +43,11 @@ export const getProductReviews = async (
     if (error instanceof AxiosError) {
       if (error.response) {
         if (error.response.status >= 400 && error.response.status < 500) {
-          alert(error.response.data.message)
+          await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
-          alert('서버 내부 오류')
+          openInternalServerErrorNotification()
           console.error('Internal Server Error')
         }
       }

@@ -10,6 +10,7 @@ import { useMemberStore } from '@/stores/member/MemberStore'
 import type { OrderDetailResponse } from '@/apis/order/orderDto'
 import type { ReviewCreateRequest } from '@/apis/review/reviewDto'
 import type { UploadProps, UploadChangeParam, UploadFile } from 'ant-design-vue'
+import { confirmModal } from '@/utils/Modal'
 const { nickname, profileImgUrl } = storeToRefs(useMemberStore())
 const orderDetails = ref<Array<OrderDetailResponse>>([])
 const emits = defineEmits(['closeModal'])
@@ -126,7 +127,7 @@ const beforeUpload = (file: UploadFile) => {
 }
 
 const cancel = async (orderDetailNo: string) => {
-  if (confirm('정말로 취소하시겠습니까?')) {
+  if (await confirmModal('진행 여부 확인', '정말로 취소하시겠습니까?')) {
     await cancelOrderDetail(orderDetailNo)
     message.success('취소 되었습니다. 반영까지는 시간이 걸릴 수 있습니다.')
     emits('closeModal')

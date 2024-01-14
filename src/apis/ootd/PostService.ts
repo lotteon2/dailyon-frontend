@@ -16,6 +16,8 @@ import type {
 } from '@/apis/ootd/PostDto'
 import type { AxiosResponse } from 'axios'
 import { AxiosError } from 'axios'
+import { openInternalServerErrorNotification } from '@/utils/Toast'
+import { warningModal } from '@/utils/Modal'
 
 const SNS_SERVICE_PREFIX_PATH = '/sns-service'
 
@@ -40,10 +42,11 @@ export const getPosts = async (
     if (error instanceof AxiosError) {
       if (error.response) {
         if (error.response.status >= 400 && error.response.status < 500) {
-          alert(error.response.data.message)
+          await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
+          openInternalServerErrorNotification()
           console.error('Internal Server Error')
         }
       }
@@ -73,10 +76,11 @@ export const getMyPosts = async (
     if (error instanceof AxiosError) {
       if (error.response) {
         if (error.response.status >= 400 && error.response.status < 500) {
-          alert(error.response.data.message)
+          await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
+          openInternalServerErrorNotification()
           console.error('Internal Server Error')
         }
       }
@@ -108,10 +112,11 @@ export const getMemberPosts = async (
     if (error instanceof AxiosError) {
       if (error.response) {
         if (error.response.status >= 400 && error.response.status < 500) {
-          alert(error.response.data.message)
+          await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
+          openInternalServerErrorNotification()
           console.error('Internal Server Error')
         }
       }
@@ -141,10 +146,11 @@ export const getPostLikes = async (
     if (error instanceof AxiosError) {
       if (error.response) {
         if (error.response.status >= 400 && error.response.status < 500) {
-          alert(error.response.data.message)
+          await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
+          openInternalServerErrorNotification()
           console.error('Internal Server Error')
         }
       }
@@ -166,7 +172,7 @@ export const createPost = async (
     if (error instanceof AxiosError) {
       if (error.response) {
         if (error.response.status >= 400 && error.response.status < 500) {
-          alert(error.response.data.message)
+          await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
@@ -192,7 +198,7 @@ export const updatePost = async (
     if (error instanceof AxiosError) {
       if (error.response) {
         if (error.response.status >= 400 && error.response.status < 500) {
-          alert(error.response.data.message)
+          await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
@@ -211,7 +217,7 @@ export const deletePost = async (postId: number): Promise<void> => {
     if (error instanceof AxiosError) {
       if (error.response) {
         if (error.response.status >= 400 && error.response.status < 500) {
-          alert(error.response.data.message)
+          await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
@@ -233,7 +239,7 @@ export const getPostDetail = async (postId: number): Promise<PostDetailResponse>
     if (error instanceof AxiosError) {
       if (error.response) {
         if (error.response.status >= 400 && error.response.status < 500) {
-          alert(error.response.data.message)
+          await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
@@ -252,7 +258,7 @@ export const addViewCount = async (postId: number): Promise<void> => {
     if (error instanceof AxiosError) {
       if (error.response) {
         if (error.response.status >= 400 && error.response.status < 500) {
-          alert(error.response.data.message)
+          await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
@@ -277,7 +283,7 @@ export const getTOP4OOTD = async (productId: number): Promise<Array<TOP4OOTDResp
     if (error instanceof AxiosError) {
       if (error.response) {
         if (error.response.status >= 400 && error.response.status < 500) {
-          alert(error.response.data.message)
+          await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {

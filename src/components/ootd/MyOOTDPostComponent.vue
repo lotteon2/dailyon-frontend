@@ -24,22 +24,10 @@ const totalPages = ref<number>()
 const totalElements = ref<number>()
 
 const fetchDefaultData = async () => {
-  try {
-    const postPageResponse = await getMyPosts(0, 6, sortOptions[0].value)
-    posts.value = postPageResponse.posts
-    totalPages.value = postPageResponse.totalPages
-    totalElements.value = postPageResponse.totalElements
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      if (error.response !== undefined) {
-        if (error.response.status >= 500) {
-          if (openInternalServerErrorNotification !== undefined) {
-            openInternalServerErrorNotification()
-          }
-        }
-      }
-    }
-  }
+  const postPageResponse = await getMyPosts(0, 6, sortOptions[0].value)
+  posts.value = postPageResponse.posts
+  totalPages.value = postPageResponse.totalPages
+  totalElements.value = postPageResponse.totalElements
 }
 
 onBeforeMount(async () => {

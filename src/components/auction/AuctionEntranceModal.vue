@@ -2,6 +2,7 @@
 import { ref, watch } from 'vue'
 import { getAuctionDetail } from '@/apis/auction/AuctionClient'
 import type { ReadAuctionDetailResponse } from '@/apis/auction/AuctionDto'
+import { infoModal } from '@/utils/Modal'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -54,7 +55,7 @@ const closeModal = () => {
 }
 
 const enterAuction = () => {
-  alert('경매 입장')
+  infoModal('알림', '경매 입장')
   emits('close-modal')
 }
 

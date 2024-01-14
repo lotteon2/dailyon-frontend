@@ -57,6 +57,7 @@ import {
   downloadCoupon
 } from '@/apis/coupon/coupon'
 import { defineEmits } from 'vue'
+import { successModal, warningModal } from '@/utils/Modal'
 
 const emit = defineEmits(['close-coupon-modal', 'total-price-updated'])
 
@@ -107,7 +108,7 @@ const handleDownloadMultipleCoupons = async () => {
     .filter((coupon) => coupon.isDownloadable)
     .map((coupon) => coupon.couponInfoId)
   if (downloadableCouponInfoIds.length === 0) {
-    alert('이미 모든 쿠폰을 다운로드 받았습니다.')
+    await warningModal('알림', '이미 모든 쿠폰을 다운로드 받았습니다.')
     // console.log('다운로드 가능한 쿠폰이 없습니다.')
     return
   }
@@ -115,7 +116,7 @@ const handleDownloadMultipleCoupons = async () => {
   try {
     const downloadResponse: MultipleCouponDownloadResponse =
       await downloadMultipleCoupons(downloadableCouponInfoIds)
-    alert(downloadResponse.successfulIds.length + '개의 쿠폰을 다운로드 했습니다.')
+    await successModal('알림', downloadResponse.successfulIds.length + '개의 쿠폰을 다운로드 했습니다.')
     console.log('다운로드된 couponInfoId 목록:', downloadResponse.successfulIds)
     console.log('다운로드 실패한 couponInfoId 목록:', downloadResponse.failedIds)
 
