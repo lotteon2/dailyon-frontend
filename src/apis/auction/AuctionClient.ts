@@ -3,7 +3,7 @@ import { defaultAxiosInstance } from '@/apis/utils'
 import { AxiosError } from 'axios'
 
 const AUCTION_SERVICE_PREFIX: string = '/auction-service'
-const AUCTION_PREFIX: string = '/auction'
+const AUCTION_PREFIX: string = '/auctions'
 
 export const getAuctionPage = async (
   path: string,

@@ -203,7 +203,7 @@ const router = createRouter({
       component: () => import('@/views/NotFoundView.vue')
     },
     {
-      path: '/chat',
+      path: '/chat/:auctionId',
       name: 'chat',
       component: () => import('@/views/ChatView.vue')
     }

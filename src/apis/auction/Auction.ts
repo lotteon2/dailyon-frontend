@@ -1,7 +1,7 @@
 import { AxiosError, type AxiosResponse } from 'axios'
 import { authAxiosInstance, defaultAxiosInstance } from '@/apis/utils'
 import type { CreateBidRequest } from './AuctionDto'
-
+import { useRouter } from 'vue-router'
 const AUCTION_SERVICE_PREFIX_PATH = '/auction-service'
 
 export const createBid = async (createBidRequest: CreateBidRequest): Promise<number> => {
@@ -17,10 +17,35 @@ export const createBid = async (createBidRequest: CreateBidRequest): Promise<num
         if (error.response.status >= 400 && error.response.status < 500) {
           alert(error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
-        }
-        if (error.response.status >= 500) {
+        } else if (error.response.status >= 500) {
           alert('서버 내부 오류')
           console.error('Internal Server Error')
+        }
+      }
+    }
+    throw error
+  }
+}
+
+export const enter = async (auctionId: string): Promise<AxiosResponse> => {
+  const router = useRouter()
+  try {
+    const response = await authAxiosInstance.get(
+      `${AUCTION_SERVICE_PREFIX_PATH}/auctions/enter/${auctionId}`
+    )
+    console.log(response)
+    return response
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      if (error.response) {
+        if (error.response.status >= 400 && error.response.status < 500) {
+          alert(error.response.data.message)
+          console.error(`Client Error=${error.response.data.message}`)
+          router.replace('/')
+        } else if (error.response.status >= 500) {
+          alert('서버 내부 오류')
+          console.error('Internal Server Error')
+          router.replace('/')
         }
       }
     }

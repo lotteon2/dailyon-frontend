@@ -2,7 +2,9 @@
 import { onMounted, onUnmounted, ref, nextTick } from 'vue'
 import { StatisticCountdown, message, Image, ImagePreviewGroup } from 'ant-design-vue'
 import type { CreateBidRequest } from '@/apis/auction/AuctionDto'
-import { createBid } from '@/apis/auction/Auction'
+import { createBid, enter } from '@/apis/auction/Auction'
+import router from '@/router'
+import { useRoute } from 'vue-router'
 const VITE_AUCTION_WS_URL: string = import.meta.env.VITE_AUCTION_WS_URL
 
 // 더미데이터
@@ -52,7 +54,7 @@ const userInfo = ref<userInfo>({
   userId: Math.floor(Math.random() * 10000),
   nickname: 'test:' + Math.floor(Math.random() * 100)
 })
-
+const route = useRoute()
 const chatMessages = ref<any>(null)
 const socket = ref<WebSocket | null>(null)
 
@@ -60,6 +62,7 @@ const connected = ref(false)
 const messages = ref<Message[]>([])
 const newMessage = ref<string>('')
 onMounted(async () => {
+  const response = await enter(String(route.params.auctionId))
   await connect()
 })
 onUnmounted(() => {
@@ -73,7 +76,7 @@ const connect = async () => {
     connected.value = true
   }
   socket.value.onerror = (error) => {
-    console.log(`could not connect to ${websocketUrl}`)
+    console.log(`could not connect `)
     console.error(error)
   }
 
@@ -85,7 +88,7 @@ const connect = async () => {
   }
 
   socket.value.onclose = (error) => {
-    console.log(`disconnected from ${websocketUrl}`)
+    console.log(`disconnected `)
     connected.value = false
     if (error instanceof CloseEvent) {
       console.log(`CloseEvent code: ${error.code}, reason: ${error.reason}`)
