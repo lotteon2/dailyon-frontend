@@ -29,22 +29,10 @@ const followStore = useFollowStore()
 const { follows } = storeToRefs(followStore)
 
 const fetchDefaultData = async () => {
-  try {
-    const followingPageResponse = await getFollowings(0, 5, 'createdAt,desc')
-    followings.value = followingPageResponse.followings
-    totalPages.value = followingPageResponse.totalPages
-    totalElements.value = followingPageResponse.totalElements
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      if (error.response !== undefined) {
-        if (error.response.status >= 500) {
-          if (openInternalServerErrorNotification !== undefined) {
-            openInternalServerErrorNotification()
-          }
-        }
-      }
-    }
-  }
+  const followingPageResponse = await getFollowings(0, 5, 'createdAt,desc')
+  followings.value = followingPageResponse.followings
+  totalPages.value = followingPageResponse.totalPages
+  totalElements.value = followingPageResponse.totalElements
 }
 
 onBeforeMount(async () => {

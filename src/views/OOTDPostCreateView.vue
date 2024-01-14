@@ -255,28 +255,16 @@ const onSubmit = async () => {
       })
     })
 
+    const postCreateResponse = await createPost(postCreateRequest.value)
     try {
-      const postCreateResponse = await createPost(postCreateRequest.value)
-      try {
-        await uploadImageToS3(postCreateResponse.imgPreSignedUrl, inputPostImgFile.value)
-        await uploadImageToS3(postCreateResponse.thumbnailImgPreSignedUrl, inputPostImgFile.value)
-        await successModal('알림', '게시글 등록이 성공하였습니다.')
-        await router.push({ path: `/ootds/${postCreateResponse.id}` })
-      } catch (error: any) {
-        await errorModal('오류', '게시글 이미지 업로드중 오류가 발생했습니다.')
-        console.error(error)
-        throw error
-      }
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        if (error.response !== undefined) {
-          if (error.response.status >= 500) {
-            if (openInternalServerErrorNotification !== undefined) {
-              openInternalServerErrorNotification()
-            }
-          }
-        }
-      }
+      await uploadImageToS3(postCreateResponse.imgPreSignedUrl, inputPostImgFile.value)
+      await uploadImageToS3(postCreateResponse.thumbnailImgPreSignedUrl, inputPostImgFile.value)
+      await successModal('알림', '게시글 등록이 성공하였습니다.')
+      await router.push({ path: `/ootds/${postCreateResponse.id}` })
+    } catch (error: any) {
+      await errorModal('오류', '게시글 이미지 업로드중 오류가 발생했습니다.')
+      console.error(error)
+      throw error
     }
   }
 }

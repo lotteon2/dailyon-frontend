@@ -41,25 +41,15 @@ const isCurrentlySearched = ref<boolean>(false)
 const searchProducts = debounce(async () => {
   if (query.value !== '' && !isCurrentlySearched.value) {
     isCurrentlySearched.value = true
-    try {
-      await clearProductData()
 
-      const productSearchPageResponse = await searchProductFromOOTD(query.value, lastId.value)
-      products.value = productSearchPageResponse.products
-      hasNext.value = productSearchPageResponse.hasNext
+    await clearProductData()
 
-      query.value = ''
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        if (error.response !== undefined) {
-          if (error.response.status >= 500) {
-            if (openInternalServerErrorNotification !== undefined) {
-              openInternalServerErrorNotification()
-            }
-          }
-        }
-      }
-    }
+    const productSearchPageResponse = await searchProductFromOOTD(query.value, lastId.value)
+    products.value = productSearchPageResponse.products
+    hasNext.value = productSearchPageResponse.hasNext
+
+    query.value = ''
+
     isCurrentlySearched.value = false
   }
 }, 500)

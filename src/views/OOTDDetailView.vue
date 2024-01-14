@@ -49,20 +49,8 @@ const post = ref<PostDetailResponse>({
 })
 
 const fetchDefaultData = async () => {
-  try {
-    const postDetailResponse = await getPostDetail(postId.value)
-    post.value = postDetailResponse
-  } catch(error) {
-    if (error instanceof AxiosError) {
-      if(error.response !== undefined) {
-        if(error.response.status >= 500) {
-          if(openInternalServerErrorNotification !== undefined) {
-            openInternalServerErrorNotification()
-          }
-        }
-      }
-    }
-  }
+  const postDetailResponse = await getPostDetail(postId.value)
+  post.value = postDetailResponse
 }
 
 const formattedCreatedAt = ref<string>('')

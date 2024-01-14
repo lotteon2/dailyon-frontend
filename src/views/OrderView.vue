@@ -12,6 +12,7 @@ import { storeToRefs } from 'pinia'
 import { useProductStore } from '@/stores/product/ProductStore'
 import { useMemberStore } from '@/stores/member/MemberStore'
 import router from '@/router'
+import { warningModal } from '@/utils/Modal'
 const productStore = useProductStore()
 const { products, orderType, giftInfo } = storeToRefs(productStore)
 const { point } = storeToRefs(useMemberStore())
@@ -76,7 +77,7 @@ const changeReceiver = async (input: string) => {
 
 const doOrder = async () => {
   if (orderType.value !== 'GIFT' && !validation()) {
-    alert('배송지 정보는 필수 입니다.')
+    await warningModal('알림', '배송지 정보는 필수 입니다.')
     return
   }
   const orderItems: OrderItem[] = []

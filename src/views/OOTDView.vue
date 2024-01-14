@@ -22,22 +22,10 @@ const hasNext = ref<boolean>()
 
 const openInternalServerErrorNotification: Function | undefined = inject('openInternalServerErrorNotification')
 const fetchDefaultData = debounce(async () => {
-  try {
-    const postPageResponse = await getPosts(0, 8, sortOptions[0].value)
-    posts.value = postPageResponse.posts
-    hasNext.value = postPageResponse.hasNext
-    return postPageResponse
-  } catch(error) {
-    if (error instanceof AxiosError) {
-      if(error.response !== undefined) {
-        if(error.response.status >= 500) {
-          if(openInternalServerErrorNotification !== undefined) {
-            openInternalServerErrorNotification()
-          }
-        }
-      }
-    }
-  }
+  const postPageResponse = await getPosts(0, 8, sortOptions[0].value)
+  posts.value = postPageResponse.posts
+  hasNext.value = postPageResponse.hasNext
+  return postPageResponse
 }, 100)
 
 onBeforeMount(async () => {

@@ -1,4 +1,5 @@
 import axios, { type AxiosInstance, type InternalAxiosRequestConfig } from 'axios'
+import { infoModal } from '@/utils/Modal'
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL
 
@@ -128,7 +129,7 @@ const showAlert = (message: string): void => {
   const timeSinceLastAlert: number = now - (lastAlertTime || 0);
 
   if (lastAlertTime === null || timeSinceLastAlert > 5000) { // 5000ms = 5s
-    alert(message);
+    infoModal('알림', message);
     lastAlertTime = now;
   }
 };

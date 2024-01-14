@@ -2,6 +2,8 @@ import type { AxiosResponse } from 'axios'
 import { AxiosError } from 'axios'
 import { defaultAxiosInstance } from '@/apis/utils'
 import type { ReadProductDetailResponse, ReadProductSliceResponse } from './ProductDto'
+import { openInternalServerErrorNotification } from '@/utils/Toast'
+import { warningModal } from '@/utils/Modal'
 
 const PRODUCT_SERVICE_PREFIX: string = '/product-service'
 const PRODUCT_PREFIX: string = '/products'
@@ -32,10 +34,11 @@ export const getProductDetail = async (productId: number): Promise<ReadProductDe
     if (error instanceof AxiosError) {
       if (error.response) {
         if (error.response.status >= 400 && error.response.status < 500) {
-          alert(error.response.data.message)
+          await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
+          openInternalServerErrorNotification()
           console.error('Internal Server Error')
         }
       }
@@ -60,10 +63,11 @@ export const searchProduct = async (
     if (error instanceof AxiosError) {
       if (error.response) {
         if (error.response.status >= 400 && error.response.status < 500) {
-          alert(error.response.data.message)
+          await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
+          openInternalServerErrorNotification()
           console.error('Internal Server Error')
         }
       }

@@ -176,23 +176,11 @@ const onSubmit = async () => {
       })
     })
 
-    try {
-      const postUpdateResponse = await updatePost(postId.value, postUpdateRequest.value)
-      await successModal('알림', '게시글 수정이 성공하였습니다.')
-      await postStore.clearPostUpdateRequest()
-      await postStore.clearTemporaryTagProducts()
-      await router.push({ path: `/ootds/${postUpdateResponse.id}` })
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        if (error.response !== undefined) {
-          if (error.response.status >= 500) {
-            if (openInternalServerErrorNotification !== undefined) {
-              openInternalServerErrorNotification()
-            }
-          }
-        }
-      }
-    }
+    const postUpdateResponse = await updatePost(postId.value, postUpdateRequest.value)
+    await successModal('알림', '게시글 수정이 성공하였습니다.')
+    await postStore.clearPostUpdateRequest()
+    await postStore.clearTemporaryTagProducts()
+    await router.push({ path: `/ootds/${postUpdateResponse.id}` })
   }
 }
 

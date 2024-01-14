@@ -87,7 +87,7 @@ const executeUpdate = (index: number, isPlus: boolean, event: any) => {
           : cartItems.value[index].quantity - 1
       })
       .catch((error: any) => {
-        errorModal('알림', error.response!.data!.message)
+        errorModal('오류', error.response!.data!.message)
       })
       .finally(() => {
         isUpdateBtnEnabled.value = true
@@ -169,7 +169,7 @@ const deleteAll = async () => {
 
 const routeOrderSheet = () => {
   if (!checkedCartItems.value.length) {
-    warningModal('알', '주문 할 상품을 선택해주세요.')
+    warningModal('알림', '주문 할 상품을 선택해주세요.')
     return
   }
   const productInfos: ProductInfo[] = []

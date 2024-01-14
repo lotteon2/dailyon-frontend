@@ -7,6 +7,8 @@ import type {
   CouponInfoItemResponse,
   MultipleCouponDownloadResponse
 } from '@/apis/coupon/CouponItemDto'
+import { openInternalServerErrorNotification } from '@/utils/Toast'
+import { warningModal } from '@/utils/Modal'
 
 const PROMOTION_PREFIX_PATH = '/promotion-service'
 const COUPON_DOMAIN_PREFIX_PATH = '/coupons'
@@ -30,10 +32,11 @@ export const getCouponsWithAvailibilityForProductDetail = async (
     if (error instanceof AxiosError) {
       if (error.response) {
         if (error.response.status >= 400 && error.response.status < 500) {
-          alert(error.response.data.message)
+          await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
+          openInternalServerErrorNotification()
           console.error('Internal Server Error')
         }
       }
@@ -51,10 +54,11 @@ export const downloadCoupon = async (couponInfoId: number): Promise<string> => {
     if (error instanceof AxiosError) {
       if (error.response) {
         if (error.response.status >= 400 && error.response.status < 500) {
-          alert(error.response.data.message)
+          await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
+          openInternalServerErrorNotification()
           console.error('Internal Server Error')
         }
       }
@@ -76,10 +80,11 @@ export const downloadMultipleCoupons = async (
     if (error instanceof AxiosError) {
       if (error.response) {
         if (error.response.status >= 400 && error.response.status < 500) {
-          alert(error.response.data.message)
+          await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
+          openInternalServerErrorNotification()
           console.error('Internal Server Error')
         }
       }
@@ -101,10 +106,11 @@ export const getCouponsForCheckout = async (
     if (error instanceof AxiosError) {
       if (error.response) {
         if (error.response.status >= 400 && error.response.status < 500) {
-          alert(error.response.data.message)
+          await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
+          openInternalServerErrorNotification()
           console.error('Internal Server Error')
         }
       }
@@ -129,10 +135,11 @@ export const getMyCoupons = async (page: Number) => {
     if (error instanceof AxiosError) {
       if (error.response) {
         if (error.response.status >= 400 && error.response.status < 500) {
-          alert(error.response.data.message)
+          await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
+          openInternalServerErrorNotification()
           console.error('Internal Server Error')
         }
       }
