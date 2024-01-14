@@ -8,7 +8,6 @@ export const createReview = async (reviewDto: ReviewCreateRequest): Promise<stri
     const { data } = await authAxiosInstance.post(`${REVIEW_SERVICE_PREFIX}/reviews/`, reviewDto)
     return data
   } catch (error) {
-    console.log(error)
     if (error instanceof AxiosError) {
       if (error.response) {
         if (error.response.status >= 400 && error.response.status < 500) {
@@ -16,7 +15,6 @@ export const createReview = async (reviewDto: ReviewCreateRequest): Promise<stri
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
-          alert('서버 내부 오류')
           console.error('Internal Server Error')
         }
       }
@@ -46,7 +44,6 @@ export const getProductReviews = async (
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
-          alert('서버 내부 오류')
           console.error('Internal Server Error')
         }
       }
