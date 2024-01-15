@@ -84,6 +84,10 @@ const productPrice = ref(productPriceValue) // Using the prop value
 const coupons = ref<CouponInfoItemWithAvailabilityResponse[]>([])
 
 onMounted(async () => {
+  if (!localStorage.getItem('accessToken')) {
+    return
+  }
+
   try {
     coupons.value = await getCouponsWithAvailibilityForProductDetail(productId, categoryId)
   } catch (error) {
@@ -116,7 +120,10 @@ const handleDownloadMultipleCoupons = async () => {
   try {
     const downloadResponse: MultipleCouponDownloadResponse =
       await downloadMultipleCoupons(downloadableCouponInfoIds)
-    await successModal('알림', downloadResponse.successfulIds.length + '개의 쿠폰을 다운로드 했습니다.')
+    await successModal(
+      '알림',
+      downloadResponse.successfulIds.length + '개의 쿠폰을 다운로드 했습니다.'
+    )
     console.log('다운로드된 couponInfoId 목록:', downloadResponse.successfulIds)
     console.log('다운로드 실패한 couponInfoId 목록:', downloadResponse.failedIds)
 
