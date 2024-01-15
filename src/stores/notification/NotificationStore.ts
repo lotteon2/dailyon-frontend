@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
 import type { Notification } from '@/types/notification' // Notification 타입을 정의해야 합니다.
 import { notification as notiPopUp } from 'ant-design-vue'
+import { openInfoNotification } from '@/utils/Toast'
 
 import * as notificationApi from '@/apis/notification/notification'
 
@@ -104,12 +105,7 @@ export const useNotificationStore = defineStore(
           // console.log('토스트 알림을 띄웁니다.')
           notifications.value.unshift(notification)
           unreadNotificationCount.value++
-          notiPopUp.open({
-            message: notification.message,
-            description: '새로운 알림이 도착했습니다.',
-            placement: 'bottomRight',
-            duration: 5
-          })
+          openInfoNotification('새로운 알림', notification.message)
         },
         (errorEvent) => {
           console.error('Error while subscribing to notifications:', errorEvent)
