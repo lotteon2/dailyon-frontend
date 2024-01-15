@@ -57,3 +57,17 @@ export interface ProductInfo {
   couponInfoId: number | null
   discountAmount: number | null
 }
+
+export interface ReadCacheProductListResponse {
+  responses: ReadCacheProductResponse[]
+}
+
+export interface ReadCacheProductResponse {
+  id: number
+  brandName: string
+  categoryName: string
+  price: number
+  name: string
+  code: string
+  imgUrl: string
+}

@@ -1,4 +1,52 @@
-<script setup lang='ts'>
+<script setup lang="ts">
+import { onBeforeMount, ref } from 'vue'
+import { getBestProducts, getNewProducts } from '@/apis/product/ProductClient'
+import type { ReadCacheProductResponse } from '@/apis/product/ProductDto'
+
+const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
+
+const newProducts = ref<ReadCacheProductResponse[]>([
+  {
+    id: 0,
+    brandName: '',
+    code: '',
+    categoryName: '',
+    imgUrl: '',
+    name: '',
+    price: 0
+  }
+])
+
+const bestProducts = ref<ReadCacheProductResponse[]>([
+  {
+    id: 0,
+    brandName: '',
+    code: '',
+    categoryName: '',
+    imgUrl: '',
+    name: '',
+    price: 0
+  }
+])
+
+const fetchNewProduct = async () => {
+  const newProductData = await getNewProducts()
+  newProducts.value = newProductData.responses.slice(
+    0,
+    Math.min(newProductData.responses.length, 4)
+  )
+}
+
+const fetchBestProduct = async () => {
+  const bestProductData = await getBestProducts()
+  bestProducts.value = bestProductData.responses.slice(
+    0,
+    Math.min(bestProductData.responses.length, 4)
+  )
+}
+
+onBeforeMount(fetchBestProduct)
+onBeforeMount(fetchNewProduct)
 </script>
 
 <template>
@@ -6,11 +54,11 @@
     <div class="md-container">
       <div class="md-prod-container">
         <div class="info-wrapper">
-          <RouterLink class='banner' to='/auctions'>
-            <img class='banner-img' src='@/assets/images/bid-banner.png' alt=''>
+          <RouterLink class="banner" to="/auctions">
+            <img class="banner-img" src="@/assets/images/bid-banner.png" alt="" />
           </RouterLink>
-          <RouterLink class='banner' to='/ootds'>
-            <img class='banner-img' src="@/assets/images/ootd-banner.png" alt="" />
+          <RouterLink class="banner" to="/ootds">
+            <img class="banner-img" src="@/assets/images/ootd-banner.png" alt="" />
           </RouterLink>
         </div>
       </div>
@@ -35,41 +83,18 @@
         </RouterLink>
       </div>
       <div class="new-prod-wrapper">
-        <svg
-          class="back-btn"
-          width="17"
-          height="30"
-          viewBox="0 0 17 30"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M14.985 29.97C14.7885 29.9724 14.5936 29.9337 14.413 29.8562C14.2323 29.7788 14.0699 29.6644 13.9361 29.5205L0.44955 16.034C-0.14985 15.4346 -0.14985 14.5055 0.44955 13.9061L13.9361 0.44955C14.5355 -0.14985 15.4645 -0.14985 16.0639 0.44955C16.6633 1.04895 16.6633 1.97802 16.0639 2.57742L3.62637 14.985L16.0639 27.4226C16.6633 28.022 16.6633 28.951 16.0639 29.5504C15.7642 29.8501 15.3746 30 15.015 30L14.985 29.97Z"
-            fill="#4D4D4D"
-          />
-        </svg>
-
         <div class="new-prod-grid">
-          <div v-for="n in 4" class="new-prod-info">
-            <img src="@/assets/images/prod-img.png" alt="" />
-            <h1>BRAND</h1>
-            <h2>상품명</h2>
-            <h3>가격</h3>
-          </div>
+          <RouterLink
+            v-for="(newProduct, index) in newProducts"
+            :to="`/products/${newProduct.id}`"
+            class="new-prod-info"
+          >
+            <img :src="`${VITE_STATIC_IMG_URL}${newProduct.imgUrl}?w=200&h=200&q=95`" alt="" />
+            <h1>{{ newProduct.brandName }}</h1>
+            <h2>{{ newProduct.name }}</h2>
+            <h3>{{ newProduct.price.toLocaleString() }}원</h3>
+          </RouterLink>
         </div>
-        <svg
-          class="front-btn"
-          width="17"
-          height="30"
-          viewBox="0 0 17 30"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M1.4985 29.9999C1.30197 30.0023 1.10711 29.9635 0.926456 29.8861C0.745803 29.8087 0.583352 29.6943 0.449549 29.5503C-0.14985 28.951 -0.14985 28.0219 0.449549 27.4225L12.8871 14.985L0.449549 2.57741C-0.14985 1.97801 -0.14985 1.04895 0.449549 0.449549C1.04895 -0.14985 1.97802 -0.14985 2.57741 0.449549L16.0339 13.966C16.6333 14.5654 16.6333 15.4944 16.0339 16.0938L2.54744 29.5503C2.24774 29.85 1.85814 29.9999 1.4985 29.9999Z"
-            fill="#4D4D4D"
-          />
-        </svg>
       </div>
     </div>
 
@@ -93,41 +118,18 @@
         </RouterLink>
       </div>
       <div class="new-prod-wrapper">
-        <svg
-          class="back-btn"
-          width="17"
-          height="30"
-          viewBox="0 0 17 30"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M14.985 29.97C14.7885 29.9724 14.5936 29.9337 14.413 29.8562C14.2323 29.7788 14.0699 29.6644 13.9361 29.5205L0.44955 16.034C-0.14985 15.4346 -0.14985 14.5055 0.44955 13.9061L13.9361 0.44955C14.5355 -0.14985 15.4645 -0.14985 16.0639 0.44955C16.6633 1.04895 16.6633 1.97802 16.0639 2.57742L3.62637 14.985L16.0639 27.4226C16.6633 28.022 16.6633 28.951 16.0639 29.5504C15.7642 29.8501 15.3746 30 15.015 30L14.985 29.97Z"
-            fill="#4D4D4D"
-          />
-        </svg>
-
         <div class="new-prod-grid">
-          <div v-for="n in 4" class="new-prod-info">
-            <img src="@/assets/images/prod-img.png" alt="" />
-            <h1>BRAND</h1>
-            <h2>상품명</h2>
-            <h3>가격</h3>
-          </div>
+          <RouterLink
+            v-for="(bestProduct, index) in bestProducts"
+            :to="`/products/${bestProduct.id}`"
+            class="new-prod-info"
+          >
+            <img :src="`${VITE_STATIC_IMG_URL}${bestProduct.imgUrl}?w=200&h=200&q=95`" alt="" />
+            <h1>{{ bestProduct.brandName }}</h1>
+            <h2>{{ bestProduct.name }}</h2>
+            <h3>{{ bestProduct.price.toLocaleString() }}원</h3>
+          </RouterLink>
         </div>
-        <svg
-          class="front-btn"
-          width="17"
-          height="30"
-          viewBox="0 0 17 30"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M1.4985 29.9999C1.30197 30.0023 1.10711 29.9635 0.926456 29.8861C0.745803 29.8087 0.583352 29.6943 0.449549 29.5503C-0.14985 28.951 -0.14985 28.0219 0.449549 27.4225L12.8871 14.985L0.449549 2.57741C-0.14985 1.97801 -0.14985 1.04895 0.449549 0.449549C1.04895 -0.14985 1.97802 -0.14985 2.57741 0.449549L16.0339 13.966C16.6333 14.5654 16.6333 15.4944 16.0339 16.0938L2.54744 29.5503C2.24774 29.85 1.85814 29.9999 1.4985 29.9999Z"
-            fill="#4D4D4D"
-          />
-        </svg>
       </div>
     </div>
   </div>
