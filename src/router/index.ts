@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import { infoModal, warningModal } from '@/utils/Modal'
+import { NOTFOUND_MSG, LOGIN_NEED_MSG } from '@/utils/CommonMessage'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

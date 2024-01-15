@@ -16,6 +16,7 @@ import type { AxiosResponse } from 'axios'
 import TOP4OOTDComponent from '@/components/ootd/TOP4OOTDComponent.vue'
 import { Image, Select, SelectOption } from 'ant-design-vue'
 import { errorModal, infoModal, warningModal } from '@/utils/Modal'
+import { LOGIN_NEED_MSG } from '@/utils/CommonMessage'
 
 const productStore = useProductStore()
 
