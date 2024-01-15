@@ -226,19 +226,7 @@
 
 .order-type-select {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  background-color: #f8f8f8;
-  color: #333;
-  cursor: pointer;
 }
-
-/* .order-history {
-  display: block;
-  width: 93%;
-  flex-wrap: wrap;
-  justify-content: center;
-} */
 
 .table-inner-header {
   cursor: pointer;
