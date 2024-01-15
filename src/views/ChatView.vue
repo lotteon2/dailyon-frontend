@@ -1,20 +1,22 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, nextTick } from 'vue'
+import { onMounted, onUnmounted, ref, nextTick, computed } from 'vue'
 import { StatisticCountdown, message, Image, ImagePreviewGroup } from 'ant-design-vue'
 import type { CreateBidRequest } from '@/apis/auction/AuctionDto'
 import { createBid, enter } from '@/apis/auction/Auction'
 import { useRoute } from 'vue-router'
 import { useAuctionStore } from '@/stores/auction/AuctionStore'
+import { useMemberStore } from '@/stores/member/MemberStore'
 import { storeToRefs } from 'pinia'
-import LoadingSpinner from '@/components/auction/LoadingSpinner.vue'
 const VITE_AUCTION_WS_URL: string = import.meta.env.VITE_AUCTION_WS_URL
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
+const mebmerStore = useMemberStore()
 const auctionStore = useAuctionStore()
 const { auctionDetail } = storeToRefs(auctionStore)
+const { nickname } = storeToRefs(mebmerStore)
 // 더미데이터
 interface userInfo {
   userId: number
-  nickname: string
+  nickname: string | null
 }
 
 interface Message extends userInfo {
@@ -44,32 +46,51 @@ const bids = ref<Bid[]>([
     amount: 300000
   }
 ])
-
-const isLoading = ref<boolean>(true)
 const showModal = ref(false)
-const currentBid = ref<number>(200000)
-const countingTime = ref<number>(15)
-const AuctionDeadline = Date.now() + 1000 * 60 * 5
-const roundDeadline = Date.now() + 1000 * 30
-const round = ref<Number>(1)
+const currentBid = ref<number>(0)
+const roundDeadline = ref(0)
+const countDeadline = ref(0)
+const deadLine = ref(0)
+const round = ref<string>('1')
 const onFinish = () => {
-  console.log('finished!')
+  roundDeadline.value = 0
+  countDeadline.value = 0
+  deadLine.value = 0
 }
 // 더미데이터 끝
 const userInfo = ref<userInfo>({
   userId: Math.floor(Math.random() * 10000),
-  nickname: 'test:' + Math.floor(Math.random() * 100)
+  nickname: nickname.value
 })
 const route = useRoute()
 const chatMessages = ref<any>(null)
 const socket = ref<WebSocket | null>(null)
-
 const connected = ref(false)
 const messages = ref<Message[]>([])
 const newMessage = ref<string>('')
 
-const closeModal = () => {
-  showModal.value = false
+// timer
+const totalSeconds = ref(300) // 5분
+const intervalId = ref<any>(null)
+
+const minutes = ref(Math.floor(totalSeconds.value / 60))
+const seconds = ref(totalSeconds.value % 60)
+
+const isRoundEnd = ref(false)
+
+const startTimer = () => {
+  intervalId.value = setInterval(() => {
+    if (totalSeconds.value > 0) {
+      totalSeconds.value--
+      minutes.value = Math.floor(totalSeconds.value / 60)
+      seconds.value = totalSeconds.value % 60
+    } else {
+      clearInterval(intervalId.value)
+    }
+  }, 1000)
+  totalSeconds.value--
+  minutes.value = Math.floor(totalSeconds.value / 60)
+  seconds.value = totalSeconds.value % 60
 }
 onMounted(async () => {
   const response = await enter(String(route.params.auctionId))
@@ -78,9 +99,11 @@ onMounted(async () => {
   currentBid.value = auctionDetail.value.auctionResponse.startBidPrice
   await connect()
 })
+
 onUnmounted(() => {
   disconnect()
 })
+
 const connect = async () => {
   const websocketUrl = `${VITE_AUCTION_WS_URL}/chat?id=${userInfo.value.userId}`
   socket.value = new WebSocket(websocketUrl)
@@ -117,6 +140,27 @@ const disconnect = () => {
     socket.value.close()
   }
 }
+const start = () => {
+  startTimer()
+  isRoundEnd.value = false
+  deadLine.value = Date.now() + 1000 * 60 * 5
+  roundDeadline.value = Date.now() + 1000 * 30
+}
+
+const roundFinish = () => {
+  roundEnd()
+}
+
+const roundEnd = () => {
+  isRoundEnd.value = true
+  round.value = String(Number(round.value) + 1)
+  countDeadline.value = Date.now() + 1000 * 30
+}
+
+const countFinish = () => {
+  isRoundEnd.value = false
+  roundDeadline.value = Date.now() + 1000 * 30
+}
 
 const send = () => {
   if (!newMessage.value) {
@@ -137,8 +181,8 @@ const send = () => {
 const bidding = async () => {
   const dummyBidAmount: number = 10000
   const data: CreateBidRequest = {
-    auctionId: '1',
-    round: '1',
+    auctionId: auctionDetail.value.auctionResponse.id,
+    round: round.value,
     bidAmount: dummyBidAmount
   }
 
@@ -185,8 +229,9 @@ const scrollDown = () => {
           <span class="current-bid"> 현재 입찰가 {{ currentBid.toLocaleString() }} 원 </span>
           <span class="remain-time">
             <span class="remain-time-span"> 남은 시간 : </span>
-            <StatisticCountdown :value="AuctionDeadline" @finish="onFinish" />
+            <StatisticCountdown :value="deadLine" @finish="onFinish" />
           </span>
+          <button @click="start">start</button>
         </div>
         <!-- 경매 정보 끝 -->
       </div>
@@ -220,10 +265,16 @@ const scrollDown = () => {
               </div>
             </div>
           </div>
-          <div class="next-round-timer-wrap">
+          <div class="next-round-timer-wrap" v-if="!isRoundEnd">
             <div class="next-round-timer-text">{{ `${round}` }} 라운드 종료까지</div>
             <div class="next-round-timer">
-              <span><StatisticCountdown :value="roundDeadline" @finish="onFinish" /></span>
+              <span><StatisticCountdown :value="roundDeadline" @finish="roundFinish" /></span>
+            </div>
+          </div>
+          <div class="next-round-timer-wrap" v-else>
+            <div class="next-round-timer-text">집계 시간</div>
+            <div class="next-round-timer">
+              <span><StatisticCountdown :value="countDeadline" @finish="countFinish" /></span>
             </div>
           </div>
         </div>
@@ -241,61 +292,23 @@ const scrollDown = () => {
       </div>
     </div>
   </div>
-  <div v-if="showModal" class="modal">
+  <!-- <div v-if="showModal" class="modal">
     <div class="modal-content" @click.stop>
-      <LoadingSpinner id="imgLoading" v-if="isLoading" />
+      <div class="timer-header">
+        <StatisticCountdown :value="countDeadline" @finish="countFinish" />
+      </div>
+      <div class="loader">
+        <div class="circle" id="a"></div>
+        <div class="circle" id="b"></div>
+        <div class="circle" id="c"></div>
+      </div>
+      <div class="caption">
+        <span>집계 중입니다...</span>
+      </div>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <style scoped>
 @import '@/assets/css/auction/chat.css';
-.modal {
-  display: block;
-  position: fixed;
-  z-index: 5;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.4);
-}
-.modal-content {
-  background-color: #fefefe;
-  position: fixed;
-  top: 20%;
-  padding: 20px;
-  border: 1px solid var(--Grayscale4, #c6c6c6);
-  border-radius: 15px;
-  left: 25%;
-  width: 50%;
-  height: 500px;
-  overflow-y: scroll;
-}
-
-.modal-content {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-.modal-content::-webkit-scrollbar {
-  display: none;
-}
-
-.close {
-  right: 23.5%;
-  top: 11%;
-  position: fixed;
-  color: #aaa;
-  float: right;
-  font-size: 25px;
-  font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
-}
 </style>
