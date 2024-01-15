@@ -1,10 +1,12 @@
 <script setup lang='ts'>
-import { onBeforeMount, ref, watchEffect } from 'vue'
+import { onBeforeMount, ref, watch, watchEffect } from 'vue'
 import { getOrders } from '@/apis/order/order'
 import type { OrderResponse } from '@/apis/order/orderDto'
 import PaginationComponent from '../ootd/PaginationComponent.vue'
 import OrderComponent from './OrderComponent.vue'
 import OrderDetailComponent from '@/components/order/orderDetail/OrderDetailComponent.vue'
+import { Select, SelectOption, type SelectProps } from 'ant-design-vue'
+import type { DefaultOptionType, SelectValue } from 'ant-design-vue/es/select'
 
 const requestPage = ref<number>(0)
 const totalElements = ref<Number | null>(0)
@@ -12,6 +14,21 @@ const totalPages = ref<number>()
 const orders = ref<Array<OrderResponse>>([])
 const orderNo = ref<string>('')
 const showModal = ref<boolean>(false)
+
+const defaultOption = ref({
+  value: 'NORMAL',
+  label: '일반주문'
+})
+const options = ref<SelectProps['options']>([
+  {
+    value: 'NORMAL',
+    label: '일반주문'
+  },
+  {
+    value: 'AUCTION',
+    label: '경매주문'
+  }
+])
 
 onBeforeMount(async () => {
   await fetchDefaultData(0)
@@ -42,6 +59,11 @@ const onChangePage = async (page: number) => {
 watchEffect(() => {
   fetchDefaultData(requestPage.value), requestPage.value
 })
+
+// TODO: Select 옵션 변경 이벤트
+const handleSelectedOptionChange = (value: SelectValue, option: DefaultOptionType | DefaultOptionType[]) => {
+
+}
 </script>
 <template>
   <div class='order-check-container'>
@@ -52,12 +74,11 @@ watchEffect(() => {
       <div class='container-inner-title'>주문 내역&nbsp;&nbsp;</div>
     </div>
     <div class='order-type-select-wrapper'>
-      <select class='order-type-select'>
-        <option disabled value=''>주문 타입을 선택해주세요</option>
-        <option value='일반주문'>일반주문</option>
-        <option value='경매'>경매</option>
-        <option value='응모'>응모</option>
-      </select>
+      <Select class='order-type-select'
+              @change='handleSelectedOptionChange'
+              v-model:value='defaultOption'
+              :options='options'>
+      </Select>
     </div>
     <table>
       <col width='200px' />

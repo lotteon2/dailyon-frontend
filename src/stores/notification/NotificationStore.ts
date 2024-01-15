@@ -17,7 +17,7 @@ export const useNotificationStore = defineStore(
     // 새 알림 가져오기 (unread 최근 5개)
     const fetchRecentNotifications = async () => {
       try {
-        console.log('notification store: 최근 5개 안읽은 알림을 가져옵니다.')
+        // console.log('notification store: 최근 5개 안읽은 알림을 가져옵니다.')
         notifications.value = await notificationApi.getRecentNotifications()
       } catch (error) {
         console.error('최근 알림 조회 도중 오류 발생:', error)
@@ -100,8 +100,8 @@ export const useNotificationStore = defineStore(
 
       eventSourceUnsubscribe = notificationApi.subscribeToNotifications(
         (notification: Notification) => {
-          console.log('구독 후 알림을 받았습니다..')
-          console.log('토스트 알림을 띄웁니다.')
+          console.log('구독 후 의미있는 알림을 받았습니다.')
+          // console.log('토스트 알림을 띄웁니다.')
           notifications.value.unshift(notification)
           unreadNotificationCount.value++
           notiPopUp.open({
@@ -117,15 +117,15 @@ export const useNotificationStore = defineStore(
       )
     }
 
-    const handleNewNotification = (notificationData: Notification): void => {
-      console.log('토스트 알림을 띄웁니다2.')
-      notiPopUp.open({
-        message: notificationData.message,
-        description: '새로운 알림이 도착했습니다.', // Customize as needed
-        placement: 'bottomRight',
-        duration: 5 // notification will be closed automatically after 5 seconds
-      })
-    }
+    // const handleNewNotification = (notificationData: Notification): void => {
+    //   console.log('토스트 알림을 띄웁니다2.')
+    //   notiPopUp.open({
+    //     message: notificationData.message,
+    //     description: '새로운 알림이 도착했습니다.', // Customize as needed
+    //     placement: 'bottomRight',
+    //     duration: 5 // notification will be closed automatically after 5 seconds
+    //   })
+    // }
 
     const clearNotificationForLogout = () => {
       notifications.value = []
@@ -161,7 +161,7 @@ export const useNotificationStore = defineStore(
       deleteAllNotifs,
       subscribeToNotificationsHandler,
       unsubscribeFromNotifications,
-      handleNewNotification,
+      // handleNewNotification,
       clearNotificationForLogout
     }
   },

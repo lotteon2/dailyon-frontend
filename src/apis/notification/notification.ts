@@ -64,7 +64,7 @@ export const subscribeToNotifications = (
   onMessage: (notification: Notification) => void,
   onError?: (event: Event | MessageEvent) => void
 ): (() => void) => {
-  console.log('src/apis/notification/notification.ts에서 SSE connection을 시도합니다.')
+  // console.log('src/apis/notification/notification.ts에서 SSE connection을 시도합니다.')
   const accessToken = localStorage.getItem('accessToken')
 
   if (accessToken === null) {
@@ -84,17 +84,19 @@ export const subscribeToNotifications = (
   )
 
   eventSource.onopen = (event) => {
-    console.log('SSE connection이 연결되었습니다.', event)
+    // console.log('SSE connection이 연결되었습니다.', event)
   }
 
   eventSource.onmessage = (event) => {
     const notification: Notification = JSON.parse(event.data)
 
     if (notification.notificationType === NotificationType.HEARTBEAT) {
-      console.log('하트비트 수신')
+      // console.log('하트비트 수신')
       return // 하트비트일 경우 처리하지 않음
+    } else if (notification.notificationType === NotificationType.WELCOME) {
+      return
     } else {
-      console.log('하트비트 외 모든 메세지 수신')
+      // console.log('하트비트 외 모든 메세지 수신')
     }
 
     console.log('새로운 메세지가 도착했습니다.')
@@ -112,7 +114,7 @@ export const subscribeToNotifications = (
   }
 
   return () => {
-    console.log('SSE connection을 해제합니다.')
+    // console.log('SSE connection을 해제합니다.')
     eventSource.close()
     console.log('SSE connection이 해제되었습니다.')
   }

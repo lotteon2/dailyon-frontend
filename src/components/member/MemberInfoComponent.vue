@@ -16,6 +16,9 @@ import type { MemberInfoDto } from '@/apis/member/MemberDto'
 import { deleteAddress } from '@/apis/member/member'
 import { uploadImageToS3 } from '@/apis/s3/S3Client'
 import { confirmModal, successModal } from '@/utils/Modal'
+import { Select, SelectOption } from 'ant-design-vue'
+import type { SelectValue } from 'ant-design-vue/es/select'
+
 
 const isModalVisible = ref(false)
 const addresses = ref([])
@@ -155,6 +158,9 @@ const handleFileChange = async (event: Event) => {
   }
 }
 
+const handleGenderSelectedOptionChange = (value: SelectValue, option: any) => {
+
+}
 
 </script>
 

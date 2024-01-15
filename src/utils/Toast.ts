@@ -7,3 +7,10 @@ export const openInternalServerErrorNotification = () => {
       INTERNAL_SERVER_ERROR_MSG
   })
 }
+
+export const openInfoNotification = (message: string, description: string) => {
+  notification['info']({
+    message: message,
+    description: description
+  })
+}
