@@ -100,22 +100,31 @@ onBeforeMount(fetchNewProduct)
   display: flex;
   flex-direction: column;
   flex-basis: calc(25% - 40px);
+  width: 10vw;
   margin: 20px;
 }
 
 .prod-info > h1 {
+  display: block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
   color: var(--Grayscale7, #000);
   font-family: TheJamsil;
-  font-size: 20px;
+  font-size: 1.1vw;
   font-style: normal;
   font-weight: 400;
   line-height: 30px; /* 150% */
 }
 
 .prod-info > h2 {
+  display: block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
   color: var(--Grayscale7, #000);
   font-family: TheJamsil;
-  font-size: 20px;
+  font-size: 1.1vw;
   font-style: normal;
   font-weight: 300;
   line-height: 30px;
@@ -127,7 +136,7 @@ onBeforeMount(fetchNewProduct)
   justify-content: end;
   color: var(--Grayscale7, #000);
   font-family: TheJamsil;
-  font-size: 20px;
+  font-size: 0.9vw;
   font-style: normal;
   font-weight: 400;
   line-height: 30px; /* 120% */
