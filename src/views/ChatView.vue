@@ -6,6 +6,7 @@ import { createBid, enter } from '@/apis/auction/Auction'
 import { useRoute } from 'vue-router'
 import { useAuctionStore } from '@/stores/auction/AuctionStore'
 import { storeToRefs } from 'pinia'
+import LoadingSpinner from '@/components/auction/LoadingSpinner.vue'
 const VITE_AUCTION_WS_URL: string = import.meta.env.VITE_AUCTION_WS_URL
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 const auctionStore = useAuctionStore()
@@ -44,11 +45,13 @@ const bids = ref<Bid[]>([
   }
 ])
 
-const startPrice = ref<number>(5000)
+const isLoading = ref<boolean>(true)
+const showModal = ref(false)
 const currentBid = ref<number>(200000)
-
-const AuctionDeadline = Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30
-const roundDeadline = Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30
+const countingTime = ref<number>(15)
+const AuctionDeadline = Date.now() + 1000 * 60 * 5
+const roundDeadline = Date.now() + 1000 * 30
+const round = ref<Number>(1)
 const onFinish = () => {
   console.log('finished!')
 }
@@ -64,9 +67,15 @@ const socket = ref<WebSocket | null>(null)
 const connected = ref(false)
 const messages = ref<Message[]>([])
 const newMessage = ref<string>('')
+
+const closeModal = () => {
+  showModal.value = false
+}
 onMounted(async () => {
   const response = await enter(String(route.params.auctionId))
+  console.log(auctionDetail.value)
   auctionStore.setToken(response.data)
+  currentBid.value = auctionDetail.value.auctionResponse.startBidPrice
   await connect()
 })
 onUnmounted(() => {
@@ -159,33 +168,20 @@ const scrollDown = () => {
           />
         </div>
         <!-- 상세 이미지들 -->
-        <div class="detail-img-wrap">
-          <img
-            class="detail-img"
-            src="../assets/images/default-product-img.png"
-            alt="Product Image"
-          />
-          <img
-            class="detail-img"
-            src="../assets/images/default-product-img.png"
-            alt="Product Image"
-          />
-          <img
-            class="detail-img"
-            src="../assets/images/default-product-img.png"
-            alt="Product Image"
-          />
-          <img
-            class="detail-img"
-            src="../assets/images/default-product-img.png"
-            alt="Product Image"
-          />
+        <div
+          class="detail-img-wrap"
+          v-for="(imgUrl, index) in auctionDetail.productDetailResponse.describeImgUrls"
+          :key="index"
+        >
+          <img class="detail-img" :src="`${VITE_STATIC_IMG_URL}${imgUrl}`" alt="Product Image" />
         </div>
         <!-- 상품 detail 이미지 끝 -->
 
         <!-- 경매 정보 (시작가, 현재 입찰가, 남은시간) -->
         <div class="auction-bid-detail-wrap">
-          <span class="auction-starting-price"> 시작가 {{ startPrice.toLocaleString() }} 원 </span>
+          <span class="auction-starting-price">
+            시작가 {{ auctionDetail.auctionResponse.startBidPrice.toLocaleString() }} 원
+          </span>
           <span class="current-bid"> 현재 입찰가 {{ currentBid.toLocaleString() }} 원 </span>
           <span class="remain-time">
             <span class="remain-time-span"> 남은 시간 : </span>
@@ -225,7 +221,7 @@ const scrollDown = () => {
             </div>
           </div>
           <div class="next-round-timer-wrap">
-            <div class="next-round-timer-text">{{ `N` }} 라운드 종료까지</div>
+            <div class="next-round-timer-text">{{ `${round}` }} 라운드 종료까지</div>
             <div class="next-round-timer">
               <span><StatisticCountdown :value="roundDeadline" @finish="onFinish" /></span>
             </div>
@@ -245,8 +241,61 @@ const scrollDown = () => {
       </div>
     </div>
   </div>
+  <div v-if="showModal" class="modal">
+    <div class="modal-content" @click.stop>
+      <LoadingSpinner id="imgLoading" v-if="isLoading" />
+    </div>
+  </div>
 </template>
 
 <style scoped>
 @import '@/assets/css/auction/chat.css';
+.modal {
+  display: block;
+  position: fixed;
+  z-index: 5;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+.modal-content {
+  background-color: #fefefe;
+  position: fixed;
+  top: 20%;
+  padding: 20px;
+  border: 1px solid var(--Grayscale4, #c6c6c6);
+  border-radius: 15px;
+  left: 25%;
+  width: 50%;
+  height: 500px;
+  overflow-y: scroll;
+}
+
+.modal-content {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.modal-content::-webkit-scrollbar {
+  display: none;
+}
+
+.close {
+  right: 23.5%;
+  top: 11%;
+  position: fixed;
+  color: #aaa;
+  float: right;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
 </style>
