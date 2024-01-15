@@ -1,10 +1,10 @@
 import { notification } from 'ant-design-vue'
+import { INTERNAL_SERVER_ERROR_MSG } from '@/utils/CommonMessage'
 
 export const openInternalServerErrorNotification = () => {
   notification['error']({
     message: '서버 내부 오류',
-    description:
-      INTERNAL_SERVER_ERROR_MSG
+    description: INTERNAL_SERVER_ERROR_MSG
   })
 }
 

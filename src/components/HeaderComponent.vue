@@ -9,6 +9,7 @@ import { useCategoryStore } from '@/stores/category/CategoryStore'
 import { useNotificationStore } from '@/stores/notification/NotificationStore'
 import router from '@/router'
 import { infoModal } from '@/utils/Modal'
+import { LOGIN_NEED_MSG } from '@/utils/CommonMessage'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -32,7 +33,7 @@ const memberId = computed(() => memberInfo.value.memberId)
 const searchQuery = ref<string | null>(null)
 
 const routeSearch = () => {
-  if(searchQuery.value === null) {
+  if (searchQuery.value === null) {
     infoModal('알림', '검색 키워드를 입력해주세요.')
   } else {
     router.push({ name: 'productSearch', query: { query: searchQuery.value } })
@@ -185,7 +186,7 @@ onMounted(async () => {
     </div>
     <div
       class="nav-tab-wrapper"
-      @click='onClickNotificationDropdownHandler'
+      @click="onClickNotificationDropdownHandler"
       @mouseover="showNotificationDropdownHandler"
       @mouseleave="hideNotificationDropdownHandler"
     >
