@@ -151,6 +151,7 @@ const handleImageLoad = async () => {
   display: flex;
   flex-direction: column;
   flex-basis: calc(25% - 40px);
+  width: 10vw;
   margin: 20px;
 }
 
@@ -161,6 +162,7 @@ const handleImageLoad = async () => {
   font-style: normal;
   font-weight: 400;
   line-height: 30px; /* 150% */
+  word-break: break-word;
 }
 
 .prod-info > h2 {
@@ -170,6 +172,7 @@ const handleImageLoad = async () => {
   font-style: normal;
   font-weight: 300;
   line-height: 30px;
+  word-break: break-word;
 }
 
 .product-third-info {
