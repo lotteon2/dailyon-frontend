@@ -96,7 +96,8 @@ const toProductList = (id: number) => {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 5px;
+
+  padding: 10px 5px 10px 5px;
   width: 100%;
 
   cursor: pointer;
