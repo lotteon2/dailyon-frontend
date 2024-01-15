@@ -224,7 +224,7 @@ table {
     justify-content: flex-end;
     width: 100%;
     align-items: center;
-    padding-right: 400px;
+    padding-right: 240px;
 }
 
 .new-more-btn-wrapper {
@@ -266,22 +266,30 @@ table {
 .new-prod-info {
     display: flex;
     flex-direction: column;
-    width: 255px;
+    width: 15vw;
 }
 
 .new-prod-info > h1 {
+    display: block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
     color: var(--Grayscale7, #000);
     font-family: The Jamsil;
-    font-size: 20px;
+    font-size: 1.2vw;
     font-style: normal;
     font-weight: 400;
     line-height: 30px; /* 150% */
 }
 
 .new-prod-info > h2 {
+    display: block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
     color: var(--Grayscale7, #000);
     font-family: The Jamsil;
-    font-size: 20px;
+    font-size: 1.2vw;
     font-style: normal;
     font-weight: 300;
     line-height: 30px;
@@ -294,7 +302,7 @@ table {
     color: var(--Grayscale7, #000);
     text-align: right;
     font-family: The Jamsil;
-    font-size: 20px;
+    font-size: 1.2vw;
     font-style: normal;
     font-weight: 400;
     line-height: 30px; /* 120% */

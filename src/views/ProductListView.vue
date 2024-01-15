@@ -67,6 +67,31 @@ watch(isScrollEnd, async (after, before) => {
       })
   }
 })
+
+
+const img = ref<Array<HTMLImageElement>>(new Array<HTMLImageElement>())
+const imageSize = ref({
+  width: 0,
+  height: 0
+})
+
+const getImageSize = async () => {
+  if (img.value[0]) {
+    await handleImageLoad()
+  } else {
+    (img.value[0] as HTMLImageElement).onload = handleImageLoad
+  }
+}
+
+const handleImageLoad = async () => {
+  if (img.value) {
+    imageSize.value = {
+      width: img.value[0]!.width,
+      height: img.value[0]!.height
+    }
+  }
+}
+
 </script>
 
 <template>
@@ -79,20 +104,12 @@ watch(isScrollEnd, async (after, before) => {
         :to="`/products/${product.id}`"
         :key="product.id"
       >
-        <Image
-          class="product-img"
-          :src="`${VITE_STATIC_IMG_URL}${product.imgUrl}?w=200&h=200&q=95`"
-          :preview="false"
-          alt="productImg"
-        >
-          <template #placeholder>
-            <Image
-              class="product-img"
-              :src='`${VITE_STATIC_IMG_URL}${product.imgUrl}?w=200&h=200&q=0`'
-              :preview="false"
-            />
-          </template>
-        </Image>
+        <img v-if='imageSize.width === 0 || imageSize.height === 0' class='product-img' ref='img'
+             @load='getImageSize' src='@/assets/images/loading.gif' alt='상품 이미지' />
+        <img v-else class='product-img' ref='img'
+             @load='getImageSize'
+             :src='`${VITE_STATIC_IMG_URL}${product.imgUrl}?w=${imageSize.width}&h=${imageSize.height}&q=95`'
+             alt='상품 이미지' />
         <h1>{{ product.brandName }}</h1>
         <h2>{{ product.name }}</h2>
         <div class="product-third-info">
@@ -134,19 +151,28 @@ watch(isScrollEnd, async (after, before) => {
   display: flex;
   flex-direction: column;
   flex-basis: calc(25% - 40px);
+  width: 10vw;
   margin: 20px;
 }
 
 .prod-info > h1 {
+  display: block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
   color: var(--Grayscale7, #000);
   font-family: TheJamsil;
   font-size: 1.1vw;
   font-style: normal;
   font-weight: 400;
-  line-height: 30px; /* 150% */
+  line-height: 30px;
 }
 
 .prod-info > h2 {
+  display: block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
   color: var(--Grayscale7, #000);
   font-family: TheJamsil;
   font-size: 1.1vw;
@@ -159,12 +185,13 @@ watch(isScrollEnd, async (after, before) => {
   display: flex;
   width: 100%;
   justify-content: space-between;
+  align-items: end;
   color: var(--Grayscale7, #000);
   font-family: TheJamsil;
   font-size: 0.9vw;
   font-style: normal;
   font-weight: 400;
-  line-height: 30px; /* 120% */
+  line-height: 30px;
 }
 
 .product-aggregate {
@@ -174,6 +201,9 @@ watch(isScrollEnd, async (after, before) => {
 }
 
 .product-price {
+  display: flex;
+  align-items: center;
+
   width: 50%;
   text-align: end;
 }

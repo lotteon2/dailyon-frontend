@@ -1,10 +1,11 @@
-<script setup lang='ts'>
+<script setup lang="ts">
 import { onBeforeMount, ref, watch, watchEffect } from 'vue'
 import { getOrders } from '@/apis/order/order'
 import type { OrderResponse } from '@/apis/order/orderDto'
 import PaginationComponent from '../ootd/PaginationComponent.vue'
 import OrderComponent from './OrderComponent.vue'
 import OrderDetailComponent from '@/components/order/orderDetail/OrderDetailComponent.vue'
+import WhitePageComponent from '../wishcart/WhitePageComponent.vue'
 import { Select, SelectOption, type SelectProps } from 'ant-design-vue'
 import type { DefaultOptionType, SelectValue } from 'ant-design-vue/es/select'
 
@@ -61,51 +62,59 @@ watchEffect(() => {
 })
 
 // TODO: Select 옵션 변경 이벤트
-const handleSelectedOptionChange = (value: SelectValue, option: DefaultOptionType | DefaultOptionType[]) => {
-
-}
+const handleSelectedOptionChange = (
+  value: SelectValue,
+  option: DefaultOptionType | DefaultOptionType[]
+) => {}
 </script>
 <template>
-  <div class='order-check-container'>
-    <div class='container-title'>주문/배송 조회</div>
-    <div class='container-line'></div>
-    <div class='container-inner-line'></div>
-    <div class='inner-title-container'>
-      <div class='container-inner-title'>주문 내역&nbsp;&nbsp;</div>
-    </div>
-    <div class='order-type-select-wrapper'>
-      <Select class='order-type-select'
-              @change='handleSelectedOptionChange'
-              v-model:value='defaultOption'
-              :options='options'>
-      </Select>
-    </div>
-    <table>
-      <col width='200px' />
-      <col width='200px' />
-      <col width='200px' />
-      <col width='200px' />
-      <col width='200px' />
-      <tr class='table-header'>
-        <th>주문번호</th>
-        <th>상품명</th>
-        <th>결제금액</th>
-        <th>주문상태</th>
-        <th>결제일시</th>
-      </tr>
-      <OrderComponent :orders='orders' @showModal='(index) => open(index)' />
-    </table>
-    <div v-if='showModal' class='modal' @click='closeModal'>
-      <div class='modal-content' @click.stop>
-        <span class='close' @click='closeModal'>&times;</span>
-        <OrderDetailComponent :orderNo='orderNo' @closeModal='closeModal' />
+  <div class="order-check-container">
+    <div class="container-title">주문/배송 조회</div>
+    <div class="container-line"></div>
+    <div v-if="orders.length !== 0">
+      <div class="container-inner-line"></div>
+      <div class="inner-title-container">
+        <div class="container-inner-title">주문 내역&nbsp;&nbsp;</div>
       </div>
+      <div class="order-type-select-wrapper">
+        <Select
+          class="order-type-select"
+          @change="handleSelectedOptionChange"
+          v-model:value="defaultOption"
+          :options="options"
+        >
+        </Select>
+      </div>
+      <table>
+        <col width="200px" />
+        <col width="200px" />
+        <col width="200px" />
+        <col width="200px" />
+        <col width="200px" />
+        <tr class="table-header">
+          <th>주문번호</th>
+          <th>상품명</th>
+          <th>결제금액</th>
+          <th>주문상태</th>
+          <th>결제일시</th>
+        </tr>
+        <OrderComponent :orders="orders" @showModal="(index) => open(index)" />
+      </table>
+      <div v-if="showModal" class="modal" @click="closeModal">
+        <div class="modal-content" @click.stop>
+          <span class="close" @click="closeModal">&times;</span>
+          <OrderDetailComponent :orderNo="orderNo" @closeModal="closeModal" />
+        </div>
+      </div>
+      <PaginationComponent
+        :onChangePage="onChangePage"
+        :requestPage="requestPage"
+        :totalPages="totalPages"
+      />
     </div>
-    <PaginationComponent
-      :onChangePage='onChangePage'
-      :requestPage='requestPage'
-      :totalPages='totalPages'
-    />
+    <div v-else>
+      <WhitePageComponent message="주문 내역이 없습니다" />
+    </div>
   </div>
 </template>
 

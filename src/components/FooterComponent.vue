@@ -15,7 +15,7 @@
           <div class="person-info-top-text">Backend, Frontend: 선준용</div>
         </div>
         <div class="person-info-bottom-wrapper">
-          <div class="person-info-botton-text">주문, 결제, 배송, 경매</div>
+          <div class="person-info-botton-text">주문, 결제, 배송, 리뷰, 경매</div>
         </div>
       </div>
       <div class="person-info-wrapper">
@@ -31,7 +31,7 @@
           <div class="person-info-top-text">Backend, Frontend: 전종민</div>
         </div>
         <div class="person-info-bottom-wrapper">
-          <div class="person-info-botton-text">상품, 찜, 장바구니, 리뷰, 경매</div>
+          <div class="person-info-botton-text">상품, 찜, 장바구니, 관리자, 경매</div>
         </div>
       </div>
       <div class="person-info-wrapper">
