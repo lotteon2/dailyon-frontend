@@ -16,6 +16,8 @@ import type { MemberInfoDto } from '@/apis/member/MemberDto'
 import { deleteAddress } from '@/apis/member/member'
 import { uploadImageToS3 } from '@/apis/s3/S3Client'
 import { confirmModal, successModal } from '@/utils/Modal'
+import { Select, SelectOption } from 'ant-design-vue'
+
 
 const isModalVisible = ref(false)
 const addresses = ref([])
@@ -199,11 +201,15 @@ const handleFileChange = async (event: Event) => {
       <div class='user-info-second-row-third-col'>
         <span>{{ memberInfo.email }} </span>
         <input type='text' v-model='memberInfo.nickname' class='info-underline' />
-        <select v-model='memberInfo.gender' class='info-underline'>
-          <option value='' disabled hidden>{{ memberInfo.gender ? memberInfo.gender : '선택해주세요' }}</option>
-          <option value='male'>남성</option>
-          <option value='female'>여성</option>
-        </select>
+        <Select v-model='memberInfo.gender'>
+          <SelectOption value='male'>남성</SelectOption>
+          <SelectOption value='female'>여성</SelectOption>
+        </Select>
+<!--        <select v-model='memberInfo.gender' class='info-underline'>-->
+<!--          <option value='' disabled hidden>{{ memberInfo.gender ? memberInfo.gender : '선택해주세요' }}</option>-->
+<!--          <option value='male'>남성</option>-->
+<!--          <option value='female'>여성</option>-->
+<!--        </select>-->
         <select v-model='memberInfo.birth' class='info-underline'>
           <option value='' disabled hidden>{{ memberInfo.birth ? memberInfo.birth : '선택해주세요' }}</option>
           <option value='0~9'>0~9</option>

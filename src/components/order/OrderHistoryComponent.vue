@@ -5,7 +5,8 @@ import type { OrderResponse } from '@/apis/order/orderDto'
 import PaginationComponent from '../ootd/PaginationComponent.vue'
 import OrderComponent from './OrderComponent.vue'
 import OrderDetailComponent from '@/components/order/orderDetail/OrderDetailComponent.vue'
-import { Select, SelectOption, SelectProps } from 'ant-design-vue'
+import { Select, SelectOption, type SelectProps } from 'ant-design-vue'
+import type { DefaultOptionType, SelectValue } from 'ant-design-vue/es/select'
 
 const requestPage = ref<number>(0)
 const totalElements = ref<Number | null>(0)
@@ -16,16 +17,16 @@ const showModal = ref<boolean>(false)
 
 const defaultOption = ref({
   value: 'NORMAL',
-  label: '일반주문',
+  label: '일반주문'
 })
 const options = ref<SelectProps['options']>([
   {
     value: 'NORMAL',
-    label: '일반주문',
+    label: '일반주문'
   },
   {
     value: 'AUCTION',
-    label: '경매주문',
+    label: '경매주문'
   }
 ])
 
@@ -60,7 +61,7 @@ watchEffect(() => {
 })
 
 // TODO: Select 옵션 변경 이벤트
-const handleSelectedOptionChange = (value: string) => {
+const handleSelectedOptionChange = (value: SelectValue, option: DefaultOptionType | DefaultOptionType[]) => {
 
 }
 </script>
@@ -74,7 +75,7 @@ const handleSelectedOptionChange = (value: string) => {
     </div>
     <div class='order-type-select-wrapper'>
       <Select class='order-type-select'
-              @change="handleSelectedOptionChange"
+              @change='handleSelectedOptionChange'
               v-model:value='defaultOption'
               :options='options'>
       </Select>
