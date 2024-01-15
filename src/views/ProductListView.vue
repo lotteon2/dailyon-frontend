@@ -156,35 +156,42 @@ const handleImageLoad = async () => {
 }
 
 .prod-info > h1 {
+  display: block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
   color: var(--Grayscale7, #000);
   font-family: TheJamsil;
   font-size: 1.1vw;
   font-style: normal;
   font-weight: 400;
-  line-height: 30px; /* 150% */
-  word-break: break-word;
+  line-height: 30px;
 }
 
 .prod-info > h2 {
+  display: block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
   color: var(--Grayscale7, #000);
   font-family: TheJamsil;
   font-size: 1.1vw;
   font-style: normal;
   font-weight: 300;
   line-height: 30px;
-  word-break: break-word;
 }
 
 .product-third-info {
   display: flex;
   width: 100%;
   justify-content: space-between;
+  align-items: end;
   color: var(--Grayscale7, #000);
   font-family: TheJamsil;
   font-size: 0.9vw;
   font-style: normal;
   font-weight: 400;
-  line-height: 30px; /* 120% */
+  line-height: 30px;
 }
 
 .product-aggregate {
@@ -194,6 +201,9 @@ const handleImageLoad = async () => {
 }
 
 .product-price {
+  display: flex;
+  align-items: center;
+
   width: 50%;
   text-align: end;
 }
