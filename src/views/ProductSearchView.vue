@@ -19,17 +19,15 @@ const initData = async () => {
   lastId.value = 0
   if (route.query.query !== null) {
     searchQuery.value = String(route.query.query)
+    const response: ReadProductSliceResponse = await searchProduct(lastId.value, searchQuery.value)
+    if(response.productResponses.length === 0) {
+      products.value = []
+    } else {
+      hasNext.value = response.hasNext
+      lastId.value = response.productResponses[response.productResponses.length - 1].id
+      products.value = response.productResponses
+    }
   }
-
-  const response: ReadProductSliceResponse = await searchProduct(lastId.value, searchQuery.value)
-  if(response.productResponses.length === 0) {
-    products.value = []
-  } else {
-    hasNext.value = response.hasNext
-    lastId.value = response.productResponses[response.productResponses.length - 1].id
-    products.value = response.productResponses
-  }
-
 }
 
 onBeforeMount(() => {

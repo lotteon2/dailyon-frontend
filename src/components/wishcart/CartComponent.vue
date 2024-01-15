@@ -60,7 +60,7 @@ const initData = () => {
 onBeforeMount(initData)
 
 const executeUpdate = (index: number, isPlus: boolean, event: any) => {
-  event.stopPropagation();
+  event.stopPropagation()
   if (isUpdateBtnEnabled.value === true) {
     isUpdateBtnEnabled.value = false
 
@@ -184,12 +184,11 @@ const routeOrderSheet = () => {
       orderPrice: cartItem.productPrice * cartItem.quantity,
       quantity: cartItem.quantity,
       couponInfoId: null,
-      discountAmount: 0,
-      referralCode: null
+      discountAmount: 0
     }
     productInfos.push(info)
   })
-  productStore.setProducts(productInfos, 'CART')
+  productStore.setProducts(productInfos, 'CART', null)
   router.push('/orders')
 }
 </script>
@@ -228,7 +227,7 @@ const routeOrderSheet = () => {
               :id="`checkbox-${idx}`"
               :value="cartItem"
               v-model="checkedCartItems"
-              @click='$event.stopPropagation()'
+              @click="$event.stopPropagation()"
             />
           </div>
         </td>

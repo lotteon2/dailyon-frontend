@@ -52,8 +52,8 @@ const initData = () => {
 }
 
 const executeDelete = async (index: number, event: any) => {
-  event.stopPropagation();
-  if (isBtnEnabled.value === true && await confirmModal('진행 여부 확인', '삭제하시겠습니까?')) {
+  event.stopPropagation()
+  if (isBtnEnabled.value === true && (await confirmModal('진행 여부 확인', '삭제하시겠습니까?'))) {
     isBtnEnabled.value = false
     toggleWishList({
       productId: wishLists.value[index].productId,
@@ -72,12 +72,17 @@ const executeDelete = async (index: number, event: any) => {
 }
 
 const routeOrder = async (idx: number, event: any) => {
-  event.stopPropagation();
+  event.stopPropagation()
   if (!props.receiver) {
     message.error('새로고침 해주세요')
     return
   }
-  if (await confirmModal('진행 여부 확인', `${props.receiver.receiverName} 님에게 선물하기를 하시겠습니까?`)) {
+  if (
+    await confirmModal(
+      '진행 여부 확인',
+      `${props.receiver.receiverName} 님에게 선물하기를 하시겠습니까?`
+    )
+  ) {
     const productInfo: ProductInfo[] = [
       {
         productId: wishLists.value[idx].productId,
@@ -89,8 +94,7 @@ const routeOrder = async (idx: number, event: any) => {
         orderPrice: wishLists.value[idx].productPrice,
         quantity: 1,
         couponInfoId: null,
-        discountAmount: 0,
-        referralCode: null
+        discountAmount: 0
       }
     ]
     const giftInfo: GiftInfo = {
@@ -98,7 +102,7 @@ const routeOrder = async (idx: number, event: any) => {
       receiverName: props.receiver.receiverName,
       senderName: props.receiver.senderName
     }
-    productStore.setProducts(productInfo, 'GIFT')
+    productStore.setProducts(productInfo, 'GIFT', null)
     productStore.setReceiver(giftInfo)
     router.push('/orders')
   }

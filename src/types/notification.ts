@@ -8,7 +8,8 @@ export enum NotificationType {
   AUCTION_END = 'AUCTION_END',
   GIFT_RECEIVED = 'GIFT_RECEIVED',
   POINTS_EARNED_SNS = 'POINTS_EARNED_SNS',
-  HEARTBEAT = 'HEARTBEAT'
+  HEARTBEAT = 'HEARTBEAT',
+  WELCOME = 'WELCOME'
   // ... 계속 추가됨.
 }
 

@@ -147,7 +147,7 @@ const applyCouponDatas = () => {
     }
   })
 
-  productStore.setProducts(updatedProducts, productStore.orderType)
+  productStore.setProducts(updatedProducts, productStore.orderType, null)
 }
 
 onMounted(async () => {

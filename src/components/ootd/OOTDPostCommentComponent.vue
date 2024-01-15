@@ -67,7 +67,7 @@ const createCommentRequest = ref<CreateCommentRequest>({
 const onSubmitComment = debounce(async () => {
   if (!isCommentRegistered.value) {
     if (memberId === null) {
-      await infoModal('알림', '로그인이 필요합니다.')
+      await infoModal('알림', LOGIN_NEED_MSG)
     } else if (createCommentRequest.value.description === ''
       || createCommentRequest.value.description.length < 5 || createCommentRequest.value.description.length > 140) {
       await successModal('알림', '댓글은 최소 5자 최대 140자까지 등록할 수 있습니다.')
@@ -95,7 +95,7 @@ const createReplyCommentRequest = ref<CreateReplyCommentRequest>({
 const onSubmitReplyComment = debounce(async (commentId: number) => {
   if (!isCommentRegistered.value) {
     if (memberId === null) {
-      await infoModal('알림', '로그인이 필요합니다.')
+      await infoModal('알림', LOGIN_NEED_MSG)
     } else if (createReplyCommentRequest.value.description === ''
       || createReplyCommentRequest.value.description.length < 5 || createReplyCommentRequest.value.description.length > 140) {
       await warningModal('알림', '답글은 최소 5자 최대 140자까지 등록할 수 있습니다.')

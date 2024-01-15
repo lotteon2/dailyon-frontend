@@ -53,7 +53,7 @@ const executeToggle = () => {
     isWishBtnEnabled.value = false
 
     if (!localStorage.getItem('accessToken')) {
-      infoModal('알림', '로그인 후 이용해 주세요')
+      infoModal('알림', LOGIN_NEED_MSG)
       isWishBtnEnabled.value = true
       return
     }
@@ -111,7 +111,7 @@ const closeCouponModal = () => {
 }
 const openCouponModal = () => {
   if (!localStorage.getItem('accessToken')) {
-    infoModal('알림', '로그인 후 이용해주세요.')
+    infoModal('알림', LOGIN_NEED_MSG)
   } else {
     showCouponModal.value = true
   }
@@ -151,7 +151,7 @@ const addToCart = () => {
     isCartBtnEnabled.value = false
 
     if (!localStorage.getItem('accessToken')) {
-      warningModal('알림', '로그인 후 이용해 주세요')
+      warningModal('알림', LOGIN_NEED_MSG)
       isCartBtnEnabled.value = true
       return
     }
@@ -197,11 +197,10 @@ const routeOrderSheet = async () => {
         orderPrice: selectedOriginalPrice.value,
         quantity: selectedQuantity.value,
         couponInfoId: null,
-        discountAmount: 0,
-        referralCode: referralCode.value
+        discountAmount: 0
       }
     ]
-    productStore.setProducts(productInfos, 'SINGLE')
+    productStore.setProducts(productInfos, 'SINGLE', referralCode.value)
     router.push('/orders')
   }
 }
@@ -247,7 +246,7 @@ watch(selectedProductSize, () => {
           <template #placeholder>
             <Image
               class="img-big"
-              :src='`${VITE_STATIC_IMG_URL}${product.imgUrl}?w=480&h=480&q=0`'
+              :src="`${VITE_STATIC_IMG_URL}${product.imgUrl}?w=480&h=480&q=0`"
               :preview="true"
             />
           </template>
