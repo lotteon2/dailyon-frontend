@@ -1,12 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type {
-  Category,
-  CategoryTree,
-  ReadChildrenCategoryResponse
-} from '@/apis/category/CategoryDto'
+import type { CategoryTree, ReadChildrenCategoryResponse } from '@/apis/category/CategoryDto'
 import { getChildCategories } from '@/apis/category/CategoryClient'
-import type { AxiosResponse } from 'axios'
 
 export const useCategoryStore = defineStore(
   'category',
@@ -19,19 +14,13 @@ export const useCategoryStore = defineStore(
       )
     }
 
-    const setCategoryTree = (id: number | null) => {
+    const setCategoryTree = async (id: number | null) => {
       if (findCategoryTree(id) === undefined) {
-        getChildCategories(id)
-          .then((axiosResponse: AxiosResponse) => {
-            const response: ReadChildrenCategoryResponse = axiosResponse.data
-            categoryTrees.value.push({
-              id: id === null ? 0 : id,
-              categories: response.categoryResponses
-            })
-          })
-          .catch((error: any) => {
-            throw error
-          })
+        const response: ReadChildrenCategoryResponse = await getChildCategories(id)
+        categoryTrees.value.push({
+          id: id === null ? 0 : id,
+          categories: response.categoryResponses
+        })
       }
     }
 

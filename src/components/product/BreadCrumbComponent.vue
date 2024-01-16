@@ -3,10 +3,7 @@ import { useRoute } from 'vue-router'
 import { onMounted, ref } from 'vue'
 import type { Category } from '@/apis/category/CategoryDto'
 import { getBreadCrumbs } from '@/apis/category/CategoryClient'
-import type { AxiosResponse } from 'axios'
-import { errorModal } from '@/utils/Modal'
 
-const route = useRoute()
 const breadCrumbs = ref<Category[]>([])
 
 const props = defineProps({
@@ -15,14 +12,9 @@ const props = defineProps({
     required: true
   }
 })
-const initData = () => {
-  getBreadCrumbs(props.category)
-    .then((axiosResponse: AxiosResponse) => {
-      breadCrumbs.value = axiosResponse.data.breadCrumbs
-    })
-    .catch((error: any) => {
-      errorModal('오류', error.response!.data!.message)
-    })
+const initData = async () => {
+  const response = await getBreadCrumbs(props.category)
+  breadCrumbs.value = response.breadCrumbs
 }
 
 onMounted(initData)
