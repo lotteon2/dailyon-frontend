@@ -37,18 +37,16 @@ const wishLists = ref<ReadWishListResponse[]>([])
 
 const isBtnEnabled = ref<boolean>(true)
 
-const initData = () => {
-  readWishListPage(props.targetId, requestPage.value, requestSize)
-    .then((axiosResponse: AxiosResponse) => {
-      const response: ReadWishListPageResponse = axiosResponse.data
-      totalPages.value = response.totalPages
-      totalElements.value = response.totalElements
-      isMine.value = response.mine
-      wishLists.value = response.responses
-    })
-    .catch((error: any) => {
-      errorModal('오류', error.response!.data!.message)
-    })
+const initData = async () => {
+  const response: ReadWishListPageResponse = await readWishListPage(
+    props.targetId,
+    requestPage.value,
+    requestSize
+  )
+  totalPages.value = response.totalPages
+  totalElements.value = response.totalElements
+  isMine.value = response.mine
+  wishLists.value = response.responses
 }
 
 const executeDelete = async (index: number, event: any) => {
@@ -118,17 +116,15 @@ const onChangePage = async (page: number) => {
 
 watch(requestPage, async (afterPage: number, beforePage: number) => {
   if (afterPage < totalPages.value) {
-    readWishListPage(props.targetId, afterPage, requestSize)
-      .then((axiosResponse: AxiosResponse) => {
-        const response: ReadWishListPageResponse = axiosResponse.data
-        totalPages.value = response.totalPages
-        totalElements.value = response.totalElements
-        isMine.value = response.mine
-        wishLists.value = response.responses
-      })
-      .catch((error: any) => {
-        errorModal('오류', error.response!.data!.message)
-      })
+    const response: ReadWishListPageResponse = await readWishListPage(
+      props.targetId,
+      afterPage,
+      requestSize
+    )
+    totalPages.value = response.totalPages
+    totalElements.value = response.totalElements
+    isMine.value = response.mine
+    wishLists.value = response.responses
   }
 })
 </script>

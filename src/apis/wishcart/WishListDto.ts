@@ -7,7 +7,7 @@ export interface ReadWishListPageResponse {
   mine: boolean
   totalElements: number
   totalPages: number
-  responses: Array<ReadWishListResponse>
+  responses: ReadWishListResponse[]
 }
 
 export interface ReadWishListResponse {

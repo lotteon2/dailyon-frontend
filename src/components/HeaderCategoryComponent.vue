@@ -22,16 +22,18 @@ const categoryStore = useCategoryStore()
 const childCategories = ref<Category[]>([])
 const router = useRouter()
 
-const openInternalServerErrorNotification: Function | undefined = inject('openInternalServerErrorNotification')
+const openInternalServerErrorNotification: Function | undefined = inject(
+  'openInternalServerErrorNotification'
+)
 const mouseOver = (id: number) => {
   showChildDropdown.value = true
   try {
     categoryStore.setCategoryTree(id)
-  } catch(error) {
+  } catch (error) {
     if (error instanceof AxiosError) {
-      if(error.response !== undefined) {
-        if(error.response.status >= 500) {
-          if(openInternalServerErrorNotification !== undefined) {
+      if (error.response !== undefined) {
+        if (error.response.status >= 500) {
+          if (openInternalServerErrorNotification !== undefined) {
             openInternalServerErrorNotification()
           }
         }
@@ -89,7 +91,7 @@ const toProductList = (id: number) => {
   left: 0;
 
   width: 12vw;
-  height: fit-content;
+  height: 64vh;
 }
 
 .category-content {

@@ -44,17 +44,11 @@ const sumOfCartItemPrice = computed(() => {
   return { sum, deliveryFee }
 })
 
-const initData = () => {
-  readCart(requestPage.value, requestSize)
-    .then((axiosResponse: AxiosResponse) => {
-      const response: ReadCartPageResponse = axiosResponse.data
-      totalPages.value = response.totalPages
-      totalElements.value = response.totalElements
-      cartItems.value = response.responses
-    })
-    .catch((error: any) => {
-      errorModal('알림', error.response!.data!.message)
-    })
+const initData = async () => {
+  const response: ReadCartPageResponse = await readCart(requestPage.value, requestSize)
+  totalPages.value = response.totalPages
+  totalElements.value = response.totalElements
+  cartItems.value = response.responses
 }
 
 onBeforeMount(initData)
@@ -103,16 +97,10 @@ const onChangePage = async (page: number) => {
 
 watch(requestPage, async (afterPage: number, beforePage: number) => {
   if (afterPage < totalPages.value) {
-    readCart(afterPage, requestSize)
-      .then((axiosResponse: AxiosResponse) => {
-        const response: ReadCartPageResponse = axiosResponse.data
-        totalPages.value = response.totalPages
-        totalElements.value = response.totalElements
-        cartItems.value = response.responses
-      })
-      .catch((error: any) => {
-        errorModal('오류', error.response!.data!.message)
-      })
+    const response: ReadCartPageResponse = await readCart(afterPage, requestSize)
+    totalPages.value = response.totalPages
+    totalElements.value = response.totalElements
+    cartItems.value = response.responses
   }
 })
 

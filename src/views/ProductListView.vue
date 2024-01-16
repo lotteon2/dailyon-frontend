@@ -21,7 +21,7 @@ const hasNext = ref<boolean>(true)
 const lastId = ref<number>(0)
 const products = ref<ReadProductResponse[]>([])
 
-const initData = () => {
+const initData = async () => {
   if (route.query.brand) {
     brandId.value = Number(route.query.brand)
   }
@@ -38,16 +38,17 @@ const initData = () => {
     categoryId.value = Number(route.query.category)
   }
 
-  getProductSlice(lastId.value, brandId.value, categoryId.value, gender.value, type.value)
-    .then((axiosResponse: AxiosResponse) => {
-      const response: ReadProductSliceResponse = axiosResponse.data
-      hasNext.value = response.hasNext
-      lastId.value = response.productResponses[response.productResponses.length - 1].id
-      products.value = [...products.value, ...response.productResponses]
-    })
-    .catch((error: any) => {
-      errorModal('오류', error.response!.data!.message)
-    })
+  const response: ReadProductSliceResponse = await getProductSlice(
+    lastId.value,
+    brandId.value,
+    categoryId.value,
+    gender.value,
+    type.value
+  )
+
+  hasNext.value = response.hasNext
+  lastId.value = response.productResponses[response.productResponses.length - 1].id
+  products.value = [...products.value, ...response.productResponses]
 }
 
 onBeforeMount(initData)
@@ -55,19 +56,19 @@ onBeforeMount(initData)
 const isScrollEnd = inject<Ref<boolean | undefined>>('isScrollEnd') as Ref<boolean | undefined>
 watch(isScrollEnd, async (after, before) => {
   if (after !== before && hasNext.value) {
-    getProductSlice(lastId.value, brandId.value, categoryId.value, gender.value, type.value)
-      .then((axiosResponse: AxiosResponse) => {
-        const response: ReadProductSliceResponse = axiosResponse.data
-        hasNext.value = response.hasNext
-        lastId.value = response.productResponses[response.productResponses.length - 1].id
-        products.value = [...products.value, ...response.productResponses]
-      })
-      .catch((error: any) => {
-        errorModal('오류', error.response!.data!.message)
-      })
+    const response: ReadProductSliceResponse = await getProductSlice(
+      lastId.value,
+      brandId.value,
+      categoryId.value,
+      gender.value,
+      type.value
+    )
+
+    hasNext.value = response.hasNext
+    lastId.value = response.productResponses[response.productResponses.length - 1].id
+    products.value = [...products.value, ...response.productResponses]
   }
 })
-
 
 const img = ref<Array<HTMLImageElement>>(new Array<HTMLImageElement>())
 const imageSize = ref({
@@ -91,7 +92,6 @@ const handleImageLoad = async () => {
     }
   }
 }
-
 </script>
 
 <template>
@@ -104,12 +104,22 @@ const handleImageLoad = async () => {
         :to="`/products/${product.id}`"
         :key="product.id"
       >
-        <img v-if='imageSize.width === 0 || imageSize.height === 0' class='product-img' ref='img'
-             @load='getImageSize' src='@/assets/images/loading.gif' alt='상품 이미지' />
-        <img v-else class='product-img' ref='img'
-             @load='getImageSize'
-             :src='`${VITE_STATIC_IMG_URL}${product.imgUrl}?w=${imageSize.width}&h=${imageSize.height}&q=95`'
-             alt='상품 이미지' />
+        <img
+          v-if="imageSize.width === 0 || imageSize.height === 0"
+          class="product-img"
+          ref="img"
+          @load="getImageSize"
+          src="@/assets/images/loading.gif"
+          alt="상품 이미지"
+        />
+        <img
+          v-else
+          class="product-img"
+          ref="img"
+          @load="getImageSize"
+          :src="`${VITE_STATIC_IMG_URL}${product.imgUrl}?w=${imageSize.width}&h=${imageSize.height}&q=95`"
+          alt="상품 이미지"
+        />
         <h1>{{ product.brandName }}</h1>
         <h2>{{ product.name }}</h2>
         <div class="product-third-info">
@@ -128,7 +138,7 @@ const handleImageLoad = async () => {
             </svg>
             <h1>{{ product.avgRating.toFixed(1) }} | ({{ product.reviewCount }})</h1>
           </div>
-          <div class='product-price'>
+          <div class="product-price">
             <h3>{{ product.price.toLocaleString() }}원</h3>
           </div>
         </div>
@@ -197,14 +207,11 @@ const handleImageLoad = async () => {
 .product-aggregate {
   display: flex;
   align-items: center;
-  width: 50%;
 }
 
 .product-price {
   display: flex;
   align-items: center;
-
-  width: 50%;
   text-align: end;
 }
 
