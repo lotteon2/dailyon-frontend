@@ -25,6 +25,15 @@ const isLoggedIn = () => {
   return !!token
 }
 
+onMounted(() => {
+  if (isLoggedIn()) {
+    // 로그인을 했을때는 router.push로 이동하기 때문에 이 로직이 발동이 안됨. 새로고침시 SSE 재연결하기 위함.
+    notificationStore.subscribeToNotificationsHandler()
+  } else {
+    notificationStore.unsubscribeFromNotifications()
+  }
+})
+
 const showCategoryDropdown = ref<boolean>(true)
 
 const memberInfo = computed(() => memberStore.getMemberInfo())
