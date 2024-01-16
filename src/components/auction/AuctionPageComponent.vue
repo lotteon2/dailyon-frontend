@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { ReadAuctionPageResponse, ReadAuctionResponse } from '@/apis/auction/AuctionDto'
-import { onBeforeMount, onMounted, ref, watch } from 'vue'
+import { onBeforeMount, ref, watch } from 'vue'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 import { getAuctionPage } from '@/apis/auction/AuctionClient'
 import WhitePageComponent from '@/components/wishcart/WhitePageComponent.vue'
@@ -132,6 +132,7 @@ onBeforeMount(initData)
 
 .table-block {
   padding-bottom: 10px;
+
   & table {
     width: 100%;
 
@@ -160,6 +161,7 @@ onBeforeMount(initData)
           text-align: center;
         }
       }
+
       & tr:hover {
         background-color: rgba(0, 0, 0, 0.1);
         cursor: pointer;
