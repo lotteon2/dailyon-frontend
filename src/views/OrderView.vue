@@ -118,6 +118,7 @@ const doOrder = async () => {
     const left = window.screen.width / 2 - width / 2
     const top = window.screen.height / 2 - height / 2
 
+    shouldSubscribeToSSE.value = false // 새 창에서 구독로직 차단
     newWindow.value = window.open(
       redirectUrl.value,
       'order',
