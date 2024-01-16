@@ -11,11 +11,15 @@ import type { DeliveryInfo, OrderSheet, OrderItem, GiftInfo } from '@/apis/order
 import { storeToRefs } from 'pinia'
 import { useProductStore } from '@/stores/product/ProductStore'
 import { useMemberStore } from '@/stores/member/MemberStore'
+import { useNotificationStore } from '@/stores/notification/NotificationStore'
 import router from '@/router'
 import { warningModal } from '@/utils/Modal'
 const productStore = useProductStore()
 const { products, orderType, giftInfo, referralCode } = storeToRefs(productStore)
 const { point } = storeToRefs(useMemberStore())
+
+const notificationStore = useNotificationStore()
+const { shouldSubscribeToSSE } = storeToRefs(notificationStore)
 
 const redirectUrl = ref('')
 const newWindow = ref<any>()
@@ -137,6 +141,7 @@ const validation = (): boolean => {
 const handleMessage = (event: MessageEvent) => {
   const { routeName, params } = event.data
   window.scrollTo(0, 0)
+  shouldSubscribeToSSE.value = true // 리셋
   router.replace({ name: routeName, params: params })
 }
 

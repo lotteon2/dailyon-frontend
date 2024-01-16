@@ -12,7 +12,8 @@ export const useNotificationStore = defineStore(
   () => {
     const notifications = ref<Notification[]>([])
     const unreadNotificationCount = ref(0)
-    // let unsubscribe: (() => void) | null = null
+    const shouldSubscribeToSSE = ref<boolean>(true)
+
     let eventSourceUnsubscribe: (() => void) | null = null
 
     // 새 알림 가져오기 (unread 최근 5개)
@@ -90,6 +91,13 @@ export const useNotificationStore = defineStore(
 
     const subscribeToNotificationsHandler = () => {
       console.log('subscribeToNotificationsHandler를 발동')
+
+      if (!shouldSubscribeToSSE.value) {
+        // orderSuccessView에서 SSE연결을 하지 않게 제어. 뒤로가기 누를 수 있으니 사이드이펙트 방지용으로 1회성 차단으로 설정
+        shouldSubscribeToSSE.value = true
+        return
+      }
+
       unsubscribeFromNotifications() // 이전 구독이 있다면 해제
 
       const accessToken = localStorage.getItem('accessToken')
@@ -147,6 +155,7 @@ export const useNotificationStore = defineStore(
     return {
       notifications,
       unreadNotificationCount,
+      shouldSubscribeToSSE,
       fetchRecentNotifications,
       fetchAllNotifications,
       fetchUnreadNotificationCount,
