@@ -80,7 +80,7 @@ const getImageSize = async () => {
   if (img.value[0]) {
     await handleImageLoad()
   } else {
-    ;(img.value[0] as HTMLImageElement).onload = handleImageLoad
+    (img.value[0] as HTMLImageElement).onload = handleImageLoad
   }
 }
 
