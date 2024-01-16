@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
 import { onMounted, ref } from 'vue'
 import type { Category } from '@/apis/category/CategoryDto'
 import { getBreadCrumbs } from '@/apis/category/CategoryClient'
