@@ -118,17 +118,16 @@ const doOrder = async () => {
     const left = window.screen.width / 2 - width / 2
     const top = window.screen.height / 2 - height / 2
 
+    shouldSubscribeToSSE.value = false // 새창 열기 전에 sessionStorage pinia값을 false로 만들고 new window에게 물려줌.
+
     newWindow.value = window.open(
       redirectUrl.value,
       'order',
       `width=${width},height=${height},top=${top},left=${left}`
     )
 
-    if (newWindow.value) {
-      shouldSubscribeToSSE.value = false
-    } else {
-      // 새 창이 차단되었거나 열리지 않았을 경우.
-      // 이 경우 SSE 연결을 활성화.
+    if (!newWindow.value) {
+      // 새 창이 차단되었거나 열리지 않았을 경우. SSE 재연결.
       shouldSubscribeToSSE.value = true
       notificationStore.subscribeToNotificationsHandler()
     }
@@ -154,7 +153,7 @@ const handleMessage = (event: MessageEvent) => {
   if (routeName) {
     // polling시 계속 발동하지 않고, 실제 이벤트 발생했을때 발동
     shouldSubscribeToSSE.value = true
-    notificationStore.subscribeToNotificationsHandler() // 구독 재활성화
+    // notificationStore.subscribeToNotificationsHandler() // 구독 재활성화. 문제없을시 코드 삭제 😀
   }
 
   router.replace({ name: routeName, params: params })
