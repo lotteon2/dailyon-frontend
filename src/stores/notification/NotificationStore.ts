@@ -12,7 +12,7 @@ export const useNotificationStore = defineStore(
   () => {
     const notifications = ref<Notification[]>([])
     const unreadNotificationCount = ref(0)
-    const shouldSubscribeToSSE = ref<boolean>(true)
+    const shouldSubscribeToSSE = ref<boolean>(true) // order 도중 새로운 창 열릴때 persist의 sessionStorage 공유하기 때문에 연결해제 막아주는 용도
 
     let eventSourceUnsubscribe: (() => void) | null = null
 
@@ -121,36 +121,23 @@ export const useNotificationStore = defineStore(
       )
     }
 
-    // const handleNewNotification = (notificationData: Notification): void => {
-    //   console.log('토스트 알림을 띄웁니다2.')
-    //   notiPopUp.open({
-    //     message: notificationData.message,
-    //     description: '새로운 알림이 도착했습니다.', // Customize as needed
-    //     placement: 'bottomRight',
-    //     duration: 5 // notification will be closed automatically after 5 seconds
-    //   })
-    // }
-
     const clearNotificationForLogout = () => {
       notifications.value = []
       unreadNotificationCount.value = 0
     }
 
-    watch(
-      () => localStorage.getItem('accessToken'),
-      (newToken) => {
-        if (newToken) {
-          // console.log(
-          //   "localStorage.getItem('accessToken') 토큰 변경 감지 subscribeToNotificationsHandler발동 전"
-          // )
-          subscribeToNotificationsHandler()
-        } else {
-          // console.log('토큰이 없어졌음. 구독 해제 직전.')
-          unsubscribeFromNotifications()
-        }
-      },
-      { immediate: true }
-    )
+    // watch(
+    //   () => localStorage.getItem('accessToken'),
+    //   (newToken) => {
+    //     if (newToken) {
+    //       subscribeToNotificationsHandler()
+    //     } else {
+    //       // console.log('토큰이 없어졌음. 구독 해제 직전.')
+    //       unsubscribeFromNotifications()
+    //     }
+    //   },
+    //   { immediate: true }
+    // )
 
     return {
       notifications,
@@ -166,7 +153,6 @@ export const useNotificationStore = defineStore(
       deleteAllNotifs,
       subscribeToNotificationsHandler,
       unsubscribeFromNotifications,
-      // handleNewNotification,
       clearNotificationForLogout
     }
   },

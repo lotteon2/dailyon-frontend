@@ -7,9 +7,12 @@ import { useMemberStore } from '@/stores/member/MemberStore'
 import { useNotificationStore } from '@/stores/notification/NotificationStore'
 import { getMember } from '@/apis/member/member'
 import { successModal, warningModal } from '@/utils/Modal'
+import { storeToRefs } from 'pinia'
+
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 const memberStore = useMemberStore()
 const notificationStore = useNotificationStore()
+const { shouldSubscribeToSSE } = storeToRefs(notificationStore)
 const router = useRouter()
 const redirectUrl = ref('')
 const displayModal = ref(false)
@@ -84,6 +87,7 @@ const processPayment = async () => {
   redirectUrl.value = await pointPaymentReady(paymentDto.value)
 
   if (redirectUrl.value) {
+    shouldSubscribeToSSE.value = false
     const width = 500
     const height = 500
     const left = window.screen.width / 2 - width / 2
