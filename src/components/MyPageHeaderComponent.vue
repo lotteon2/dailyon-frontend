@@ -7,6 +7,8 @@ import { useMemberStore } from '@/stores/member/MemberStore'
 import { useNotificationStore } from '@/stores/notification/NotificationStore'
 import { getMember } from '@/apis/member/member'
 import { successModal, warningModal } from '@/utils/Modal'
+import { Select, SelectOption } from 'ant-design-vue'
+
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 const memberStore = useMemberStore()
 const notificationStore = useNotificationStore()
@@ -34,7 +36,7 @@ watch(inputAmount, () => {
 
 const validateInput = () => {
   if (!/^\d*$/.test(inputAmount.value)) {
-    warningModal('알', '숫자만 입력 가능합니다.')
+    warningModal('알림', '숫자만 입력 가능합니다.')
     inputAmount.value = ''
     return
   } else if (inputAmount.value.length > 9) {
@@ -158,14 +160,16 @@ onBeforeUnmount(() => {
             <div @click="displayModal = false" class="close">&times;</div>
           </span>
           <p>결제 금액을 선택하거나 입력해주세요.</p>
-          <select v-model="selectedAmount" class="select">
-            <option disabled value="">선택해주세요</option>
-            <option>10000</option>
-            <option>30000</option>
-            <option>50000</option>
-            <option>100000</option>
-          </select>
+          <Select v-model:value='selectedAmount' class="select"
+                  :disabled="inputAmount !== ''">
+            <SelectOption disabled value='' hidden>선택해주세요</SelectOption>
+            <SelectOption value='10000'></SelectOption>
+            <SelectOption value='30000'></SelectOption>
+            <SelectOption value='50000'></SelectOption>
+            <SelectOption value='100000'></SelectOption>
+          </Select>
           <input
+            class='point-input'
             type="text"
             v-model="inputAmount"
             @input="validateInput"
