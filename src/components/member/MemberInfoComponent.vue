@@ -151,12 +151,8 @@ const handleFileChange = async (event: Event) => {
   if (fileInput.files && fileInput.files.length > 0) {
     const file: File = fileInput.files[0]
     inputPostImgFile.value = file
-
-
     
     requestImage.value = fileInput.files[0].name!
-    console.log(requestImage.value)
-    console.log("#########################")
     const imgPreSignedUrl = await getImgUrl(requestImage.value);
 
     await uploadImageToS3(imgPreSignedUrl, inputPostImgFile.value)
