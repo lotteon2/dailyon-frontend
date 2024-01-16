@@ -170,9 +170,14 @@ export const deleteAddress = async (addressId: number) => {
 }
 
 
-export const getImgUrl = async () => {
+export const getImgUrl = async (imgName : string) => {
   try {
-    const response = await authAxiosInstance.get(`${MEMBER_SERVICE_PREFIX}/members/profileimg`)
+    const response = await authAxiosInstance.get(`${MEMBER_SERVICE_PREFIX}/members/profileimg`, {
+      headers: {
+        'imgName': encodeURI(imgName)
+      }
+    });
+    
     return response.data
   } catch (error: any) {
     if (error instanceof AxiosError) {

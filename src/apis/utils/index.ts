@@ -1,4 +1,4 @@
-import axios, { type AxiosInstance, type InternalAxiosRequestConfig } from 'axios'
+import axios, { type AxiosInstance } from 'axios'
 import { infoModal } from '@/utils/Modal'
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL
@@ -7,16 +7,6 @@ const axiosApi = (baseURL: string) => {
   const instance: AxiosInstance = axios.create({
     baseURL,
     withCredentials: true
-  })
-
-  instance.interceptors.request.use((config) => {
-    const accessToken = localStorage.getItem('accessToken')
-
-    if (accessToken) {
-      config.headers.Authorization = `Bearer ${accessToken}`
-    }
-
-    return config
   })
 
   return instance
@@ -46,7 +36,7 @@ const axiosAuthApi = (baseURL: string) => {
     async (error) => {
       const originalRequest = error.config;
 
-      if (error.response.status === 401 && !originalRequest._retry) {
+      if (error.response && error.response.status === 401 && !originalRequest._retry) {      
         originalRequest._retry = true;
 
         try {
