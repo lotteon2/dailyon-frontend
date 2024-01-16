@@ -118,12 +118,20 @@ const doOrder = async () => {
     const left = window.screen.width / 2 - width / 2
     const top = window.screen.height / 2 - height / 2
 
-    shouldSubscribeToSSE.value = false // 새 창에서 구독로직 차단
     newWindow.value = window.open(
       redirectUrl.value,
       'order',
       `width=${width},height=${height},top=${top},left=${left}`
     )
+
+    if (newWindow.value) {
+      shouldSubscribeToSSE.value = false
+    } else {
+      // 새 창이 차단되었거나 열리지 않았을 경우.
+      // 이 경우 SSE 연결을 활성화.
+      shouldSubscribeToSSE.value = true
+      notificationStore.subscribeToNotificationsHandler()
+    }
   }
 }
 
@@ -142,7 +150,10 @@ const validation = (): boolean => {
 const handleMessage = (event: MessageEvent) => {
   const { routeName, params } = event.data
   window.scrollTo(0, 0)
-  shouldSubscribeToSSE.value = true // 리셋
+
+  shouldSubscribeToSSE.value = true
+  notificationStore.subscribeToNotificationsHandler() // 구독 재활성화
+
   router.replace({ name: routeName, params: params })
 }
 
