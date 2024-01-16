@@ -174,7 +174,7 @@ export const useNotificationStore = defineStore(
     persist: {
       key: 'notificationState',
       storage: window.sessionStorage,
-      paths: ['notifications', 'unreadNotificationCount']
+      paths: ['notifications', 'unreadNotificationCount', 'shouldSubscribeToSSE']
     }
   }
 )
