@@ -104,8 +104,11 @@ const processPayment = async () => {
 }
 
 const handleMessage = async (event: MessageEvent) => {
-  await getMember()
   const { routeName } = event.data
+
+  if (routeName) {
+    await getMember() // // polling시 계속 발동하지 않고, 실제 이벤트 발생했을때 발동
+  }
   window.scrollTo(0, 0)
   router.replace({ name: routeName })
 }
@@ -113,6 +116,8 @@ const handleMessage = async (event: MessageEvent) => {
 onMounted(async () => {
   await getMember()
   const memberInfo = memberStore.getMemberInfo()
+  // eventListener는 window가 아직 열리기 전이어도 해당 이벤트가 발생했는지 해당 이벤트에 대해 polling을 계속 합니다.
+  // handleMessage 함수는 계속 발동됩니다.
   window.addEventListener('message', handleMessage)
 })
 
