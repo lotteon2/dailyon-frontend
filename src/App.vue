@@ -1,11 +1,13 @@
-<script setup lang='ts'>
-import { RouterView } from 'vue-router'
-import { provide, ref } from 'vue'
+<script setup lang="ts">
+import { RouterView, useRoute } from 'vue-router'
+import { provide, ref, computed } from 'vue'
 import HeaderComponent from '@/components/HeaderComponent.vue'
 import FooterComponent from '@/components/FooterComponent.vue'
 import { debounce } from 'lodash'
 
 let isScrollEnd = ref<boolean>(false)
+const route = useRoute()
+const displayHeader = computed(() => !route.path.startsWith('/order-success'))
 
 const onScroll = debounce(async (event: any) => {
   const { scrollHeight, scrollTop, clientHeight } = event.target
@@ -19,11 +21,11 @@ provide('isScrollEnd', isScrollEnd)
 </script>
 
 <template>
-  <div class='container' @scroll='onScroll'>
+  <div class="container" @scroll="onScroll">
     <header>
-      <HeaderComponent />
+      <HeaderComponent v-if="displayHeader" />
     </header>
-    <main class='main'>
+    <main class="main">
       <RouterView />
     </main>
     <footer>

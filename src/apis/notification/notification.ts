@@ -115,7 +115,7 @@ export const subscribeToNotifications = (
 
   return () => {
     // console.log('SSE connection을 해제합니다.')
-    eventSource.close()
+    eventSource.close() // eventSourceUnsubscribe를 구독상태에서 호출하면 close함.
     console.log('SSE connection이 해제되었습니다.')
   }
 }
