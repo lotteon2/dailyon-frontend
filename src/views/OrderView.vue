@@ -153,7 +153,7 @@ const handleMessage = (event: MessageEvent) => {
   if (routeName) {
     // polling시 계속 발동하지 않고, 실제 이벤트 발생했을때 발동
     shouldSubscribeToSSE.value = true
-    // notificationStore.subscribeToNotificationsHandler() // 구독 재활성화. 문제없을시 코드 삭제 😀
+    notificationStore.subscribeToNotificationsHandler() // 구독 재활성화. 문제없을시 코드 삭제 😀
   }
 
   router.replace({ name: routeName, params: params })
