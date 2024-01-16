@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, nextTick, computed } from 'vue'
 import { StatisticCountdown, message, Image, ImagePreviewGroup } from 'ant-design-vue'
-import type { CreateBidRequest } from '@/apis/auction/AuctionDto'
-import { createBid, enter } from '@/apis/auction/Auction'
+import type { CreateBidRequest, ReadAuctionResponse } from '@/apis/auction/AuctionDto'
+import type { ReadProductDetailResponse } from '@/apis/product/ProductDto'
+import { createBid, enter, startBid } from '@/apis/auction/Auction'
 import { useRoute } from 'vue-router'
 import { useAuctionStore } from '@/stores/auction/AuctionStore'
 import { useMemberStore } from '@/stores/member/MemberStore'
@@ -11,8 +12,9 @@ const VITE_AUCTION_WS_URL: string = import.meta.env.VITE_AUCTION_WS_URL
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 const mebmerStore = useMemberStore()
 const auctionStore = useAuctionStore()
-const { auctionDetail } = storeToRefs(auctionStore)
 const { nickname } = storeToRefs(mebmerStore)
+const auctionDetail = ref<ReadAuctionResponse>()
+const productDetail = ref<ReadProductDetailResponse>()
 // 더미데이터
 interface userInfo {
   userId: number
@@ -46,16 +48,20 @@ const bids = ref<Bid[]>([
     amount: 300000
   }
 ])
-const showModal = ref(false)
+// const showModal = ref(false)
 const currentBid = ref<number>(0)
+const myBidPrice = ref<number>(0)
 const roundDeadline = ref(0)
 const countDeadline = ref(0)
 const deadLine = ref(0)
 const round = ref<string>('1')
-const onFinish = () => {
+const isEnd = ref(false)
+const onFinish = async () => {
+  isEnd.value = true
   roundDeadline.value = 0
   countDeadline.value = 0
   deadLine.value = 0
+  round.value = ''
 }
 // 더미데이터 끝
 const userInfo = ref<userInfo>({
@@ -93,10 +99,11 @@ const startTimer = () => {
   seconds.value = totalSeconds.value % 60
 }
 onMounted(async () => {
-  const response = await enter(String(route.params.auctionId))
-  console.log(auctionDetail.value)
-  auctionStore.setToken(response.data)
-  currentBid.value = auctionDetail.value.auctionResponse.startBidPrice
+  const res = await enter(String(route.params.auctionId))
+  auctionDetail.value = res.readAuctionDetailResponse.auctionResponse
+  productDetail.value = res.readAuctionDetailResponse.productDetailResponse
+  auctionStore.setToken(res.token)
+  currentBid.value = auctionDetail.value.startBidPrice
   await connect()
 })
 
@@ -111,16 +118,26 @@ const connect = async () => {
     console.log(`connected`)
     connected.value = true
   }
+
+  socket.value.addEventListener
+
   socket.value.onerror = (error) => {
     console.log(`could not connect `)
     console.error(error)
   }
 
-  socket.value.onmessage = (message) => {
-    if (message.data) {
-      messages.value.push(JSON.parse(message.data))
-      scrollDown()
+  socket.value.onmessage = (payload) => {
+    const data = JSON.parse(payload.data)
+    console.log(data)
+    switch (data.command) {
+      case 'MESSAGE':
+        messages.value.push(data.data)
+        break
+      case 'START':
+        start()
+        break
     }
+    scrollDown()
   }
 
   socket.value.onclose = (error) => {
@@ -158,6 +175,9 @@ const roundEnd = () => {
 }
 
 const countFinish = () => {
+  if (isEnd.value) {
+    return
+  }
   isRoundEnd.value = false
   roundDeadline.value = Date.now() + 1000 * 30
 }
@@ -172,7 +192,11 @@ const send = () => {
       nickname: userInfo.value.nickname,
       message: newMessage.value
     }
-    socket.value.send(JSON.stringify(message))
+    const payload = {
+      command: 'MESSAGE',
+      data: message
+    }
+    socket.value.send(JSON.stringify(payload))
     newMessage.value = ''
     scrollDown()
   }
@@ -181,7 +205,7 @@ const send = () => {
 const bidding = async () => {
   const dummyBidAmount: number = 10000
   const data: CreateBidRequest = {
-    auctionId: auctionDetail.value.auctionResponse.id,
+    auctionId: auctionDetail.value!.id,
     round: round.value,
     bidAmount: dummyBidAmount
   }
@@ -197,6 +221,11 @@ const scrollDown = () => {
     }
   })
 }
+
+const test = async () => {
+  const response = await startBid()
+  console.log(response)
+}
 </script>
 
 <template>
@@ -207,31 +236,34 @@ const scrollDown = () => {
         <div class="thumbnail">
           <img
             class="product-img"
-            :src="`${VITE_STATIC_IMG_URL}${auctionDetail.productDetailResponse.imgUrl}`"
+            :src="`${VITE_STATIC_IMG_URL}${productDetail?.imgUrl}`"
             alt="Product Image"
           />
         </div>
         <!-- 상세 이미지들 -->
         <div
           class="detail-img-wrap"
-          v-for="(imgUrl, index) in auctionDetail.productDetailResponse.describeImgUrls"
+          v-for="(imgUrl, index) in productDetail?.describeImgUrls"
           :key="index"
         >
           <img class="detail-img" :src="`${VITE_STATIC_IMG_URL}${imgUrl}`" alt="Product Image" />
         </div>
         <!-- 상품 detail 이미지 끝 -->
 
-        <!-- 경매 정보 (시작가, 현재 입찰가, 남은시간) -->
+        <!-- 경매 정보 (시작가, 현재 입찰가, 내 입찰 가격, 남은시간) -->
         <div class="auction-bid-detail-wrap">
+          <span class="my-current-bid" v-if="myBidPrice"
+            >내 입찰 가격 : {{ myBidPrice.toLocaleString() }}</span
+          >
           <span class="auction-starting-price">
-            시작가 {{ auctionDetail.auctionResponse.startBidPrice.toLocaleString() }} 원
+            시작가 {{ auctionDetail?.startBidPrice.toLocaleString() }} 원
           </span>
           <span class="current-bid"> 현재 입찰가 {{ currentBid.toLocaleString() }} 원 </span>
           <span class="remain-time">
             <span class="remain-time-span"> 남은 시간 : </span>
             <StatisticCountdown :value="deadLine" @finish="onFinish" />
           </span>
-          <button @click="start">start</button>
+          <button @click="test">start</button>
         </div>
         <!-- 경매 정보 끝 -->
       </div>

@@ -27,3 +27,8 @@ export interface CreateBidRequest {
   round: string
   bidAmount: number
 }
+
+export interface EnterResponse {
+  token: string
+  readAuctionDetailResponse: ReadAuctionDetailResponse
+}

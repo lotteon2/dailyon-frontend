@@ -54,6 +54,13 @@
   text-decoration-line: line-through;
   color: #c6c6c6;
 }
+.my-current-bid {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 25px;
+  color: #000000;
+  padding-bottom: 15px;
+}
 .current-bid {
   font-style: normal;
   font-weight: 500;
