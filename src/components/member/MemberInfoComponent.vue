@@ -136,21 +136,28 @@ const leave = async () => {
 const fileInput = ref<HTMLInputElement | null>(null)
 const inputPostImgFile = ref<File>()
 const formData = new FormData()
+const requestImage = ref<string>("")
 
 const openFileInput = () => {
   if (fileInput.value) {
     fileInput.value.click()
   }
+  
 }
 
 
 const handleFileChange = async (event: Event) => {
-  const imgPreSignedUrl = await getImgUrl()
-
   const fileInput = event.target as HTMLInputElement
   if (fileInput.files && fileInput.files.length > 0) {
     const file: File = fileInput.files[0]
     inputPostImgFile.value = file
+
+
+    
+    requestImage.value = fileInput.files[0].name!
+    console.log(requestImage.value)
+    console.log("#########################")
+    const imgPreSignedUrl = await getImgUrl(requestImage.value);
 
     await uploadImageToS3(imgPreSignedUrl, inputPostImgFile.value)
     await getMember()

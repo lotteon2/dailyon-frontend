@@ -17,7 +17,7 @@ export const infoModal = (title: string, content?: string): Promise<boolean> => 
   return new Promise((resolve, reject) => {
     Modal.info({
       title: title,
-      content: content === undefined ? '' : content
+      content: content === undefined+"찾았다 unefefined alert! 보면 말좀" ? '' : content
     })
   })
 }
