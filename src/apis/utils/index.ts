@@ -1,4 +1,4 @@
-import axios, { type AxiosInstance, type InternalAxiosRequestConfig } from 'axios'
+import axios, { type AxiosInstance } from 'axios'
 import { infoModal } from '@/utils/Modal'
 import { useNotificationStore } from '@/stores/notification/NotificationStore'
 
@@ -16,9 +16,42 @@ const axiosApi = (baseURL: string) => {
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`
     }
-
     return config
   })
+
+  instance.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    async (error) => {
+      const originalRequest = error.config;
+
+      if (error.response && error.response.status === 401 && !originalRequest._retry) {      
+        originalRequest._retry = true;
+
+        try {
+          const newToken = await refreshToken();
+
+          if (newToken) {
+            originalRequest.headers.Authorization = `Bearer ${newToken}`;
+            return axios(originalRequest);
+          } else {
+            // 토큰 갱신 실패 시 로그인 페이지로 리다이렉트 또는 다른 적절한 조치 수행
+            localStorage.clear();
+            showAlert("로그인 정보가 만료되었습니다. 다시 로그인해주세요.(code1)");
+            window.location.href = '/login';
+            return Promise.reject(error);
+          }
+        } catch (refreshError) {
+          // 토큰 갱신 중에 오류가 발생한 경우
+          console.error('Error while refreshing token:', refreshError);
+          return Promise.reject(error);
+        }
+      }
+  
+      return Promise.reject(error);
+    }
+  );
 
   return instance
 }

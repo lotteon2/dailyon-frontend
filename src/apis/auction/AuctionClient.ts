@@ -1,5 +1,5 @@
 import type { ReadAuctionDetailResponse, ReadAuctionPageResponse } from '@/apis/auction/AuctionDto'
-import { defaultAxiosInstance } from '@/apis/utils'
+import { authAxiosInstance } from '@/apis/utils'
 import { AxiosError } from 'axios'
 import { openInternalServerErrorNotification } from '@/utils/Toast'
 import { warningModal } from '@/utils/Modal'
@@ -13,7 +13,7 @@ export const getAuctionPage = async (
   size: number
 ): Promise<ReadAuctionPageResponse> => {
   try {
-    const { data } = await defaultAxiosInstance.get(
+    const { data } = await authAxiosInstance.get(
       `${AUCTION_SERVICE_PREFIX}${AUCTION_PREFIX}/${path}`,
       {
         params: { page: page, size: size }
@@ -39,7 +39,7 @@ export const getAuctionPage = async (
 
 export const getAuctionDetail = async (auctionId: string): Promise<ReadAuctionDetailResponse> => {
   try {
-    const { data } = await defaultAxiosInstance.get(
+    const { data } = await authAxiosInstance.get(
       `${AUCTION_SERVICE_PREFIX}${AUCTION_PREFIX}/detail/${auctionId}`
     )
     return data
