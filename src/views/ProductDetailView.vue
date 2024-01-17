@@ -15,10 +15,12 @@ import { readWishListFromProduct, toggleWishList } from '@/apis/wishcart/WishLis
 import type { AxiosResponse } from 'axios'
 import TOP4OOTDComponent from '@/components/ootd/TOP4OOTDComponent.vue'
 import { Image, Select, SelectOption } from 'ant-design-vue'
-import { errorModal, infoModal, warningModal } from '@/utils/Modal'
+import { errorModal, infoModal, warningModal, confirmModal } from '@/utils/Modal'
 import { LOGIN_NEED_MSG } from '@/utils/CommonMessage'
 import { SizeOrder } from '@/types/enums/SizeOrder'
 import type { ProductStock } from '@/types/product/Product'
+import { enrollRestockNotificaton } from '@/apis/notification/notification'
+import type { EnrollRestockRequest } from '@/apis/notification/NotificationDto'
 
 const productStore = useProductStore()
 
@@ -233,7 +235,44 @@ const bestPromotionalPriceUpdatedHandler = (maxDiscount: number) => {
   }
 }
 
+/**
+ * 재입고 알림신청 관련
+ */
+const enrollRestockNotificationHandler = async () => {
+  if (!localStorage.getItem('accessToken')) {
+    infoModal('알림', LOGIN_NEED_MSG)
+    return
+  }
+
+  if (selectedProductSize.value.productSizeId <= 0) {
+    warningModal('알림', '옵션을 지정해주세요.')
+    return
+  }
+
+  const confirmed = await confirmModal(
+    '재입고 알림 신청',
+    `해당 상품 ${selectedProductSize.value.productSizeName}사이즈의 재입고 알림을 신청하시겠습니까?`
+  )
+
+  if (confirmed) {
+    await postEnrollRestockNotificaton()
+  }
+}
+
+const postEnrollRestockNotificaton = async () => {
+  const enrollRestockRequest: EnrollRestockRequest = {
+    productId: productId.value,
+    sizeId: selectedProductSize.value.productSizeId
+  }
+
+  const restockId = await enrollRestockNotificaton(enrollRestockRequest)
+  if (restockId) {
+    infoModal('알림', '상품 재입고시, 신속하게 알려드리겠습니다.') // 이미 재입고 신청 취소도 가능해야하는지?
+  }
+}
+
 const getOrder = (size: string): number => {
+  // 상품 option 순서 맞추기
   const defaultOrder = 1000
   const normalizedSize = size.charAt(0).toUpperCase() + size.slice(1).toLowerCase()
 
@@ -255,6 +294,7 @@ const getOrder = (size: string): number => {
 }
 
 const sortedProductStocks = computed(() => {
+  // computed로 사이즈끼리의 순서 맞춘걸 가짐
   return product.value.productStocks.slice().sort((a: ProductStock, b: ProductStock) => {
     const orderA = getOrder(a.productSizeName)
     const orderB = getOrder(b.productSizeName)
@@ -441,7 +481,7 @@ watch(selectedProductSize, () => {
           </div>
 
           <div class="buttons-wrapper">
-            <div class="bell-box">
+            <div class="bell-box" @click="enrollRestockNotificationHandler">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="60"
