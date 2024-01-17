@@ -59,7 +59,11 @@ import {
 import { defineEmits } from 'vue'
 import { successModal, warningModal } from '@/utils/Modal'
 
-const emit = defineEmits(['close-coupon-modal', 'total-price-updated'])
+const emit = defineEmits([
+  'close-coupon-modal',
+  'total-price-updated',
+  'best-promotional-price-updated'
+])
 
 const { showModal, productId, categoryId, productPriceValue } = defineProps({
   showModal: {
@@ -175,6 +179,9 @@ const maxDiscountAmount = computed(() => {
     console.log(`갱신 후 임시 maxDiscount:${maxDiscount}`)
   }
   console.log(`최종 계산완료 된 maxDiscount:${maxDiscount}`)
+
+  emit('best-promotional-price-updated', maxDiscount) // computed로 변경시 emit
+
   return maxDiscount
 })
 
