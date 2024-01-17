@@ -4,6 +4,7 @@ import { type PropType, ref, watch } from 'vue'
 import type { ProductSearchResponse } from '@/apis/ootd/PostDto'
 import { searchProductFromOOTD } from '@/apis/ootd/ProductSearchService'
 import { debounce } from 'lodash'
+import { infoModal } from '@/utils/Modal'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -48,6 +49,10 @@ const searchProducts = debounce(async () => {
     query.value = ''
 
     isCurrentlySearched.value = false
+
+    if(products.value.length === 0) {
+      await infoModal('알림', '검색 결과가 없습니다.')
+    }
   }
 }, 500)
 
