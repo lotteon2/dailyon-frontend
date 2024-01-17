@@ -1,27 +1,13 @@
-<script setup lang="ts">
-import { inject, onBeforeMount, ref, watch } from 'vue'
-import type {
-  CommentResponse,
-  CreateCommentRequest,
-  CreateReplyCommentRequest
-} from '@/apis/ootd/CommentDto'
-import {
-  createComment,
-  createReplyComment,
-  deleteComment,
-  getComments
-} from '@/apis/ootd/CommentService'
+<script setup lang='ts'>
+import { onBeforeMount, ref, watch } from 'vue'
+import type { CommentResponse, CreateCommentRequest, CreateReplyCommentRequest } from '@/apis/ootd/CommentDto'
+import { createComment, createReplyComment, deleteComment, getComments } from '@/apis/ootd/CommentService'
 import { useRoute } from 'vue-router'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 import { useMemberStore } from '@/stores/member/MemberStore'
 import { debounce } from 'lodash'
-import { AxiosError } from 'axios'
 import { confirmModal, infoModal, successModal, warningModal } from '@/utils/Modal'
 import { LOGIN_NEED_MSG } from '@/utils/CommonMessage'
-
-const openInternalServerErrorNotification: Function | undefined = inject(
-  'openInternalServerErrorNotification'
-)
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -95,15 +81,15 @@ const onSubmitComment = debounce(async () => {
       createCommentRequest.value.description.length < 5 ||
       createCommentRequest.value.description.length > 140
     ) {
-      await successModal('알림', '댓글은 최소 5자 최대 140자까지 등록할 수 있습니다.')
+      await warningModal('알림', '댓글은 최소 5자 최대 140자까지 등록할 수 있습니다.')
     } else {
       if (!isCommentRegistered.value) {
         await createComment(postId.value, createCommentRequest.value)
-        await successModal('알림', '댓글을 성공적으로 등록하였습니다.')
         createCommentRequest.value.description = ''
+        isCommentRegistered.value = true
+        await successModal('알림', '댓글을 성공적으로 등록하였습니다.')
       }
     }
-    isCommentRegistered.value = true
   }
 }, 500)
 
@@ -131,11 +117,11 @@ const onSubmitReplyComment = debounce(async (commentId: number) => {
     } else {
       if (!isCommentRegistered.value) {
         await createReplyComment(postId.value, commentId, createReplyCommentRequest.value)
-        await successModal('알림', '답글을 성공적으로 등록하였습니다.')
         createReplyCommentRequest.value.description = ''
+        isCommentRegistered.value = true
+        await successModal('알림', '답글을 성공적으로 등록하였습니다.')
       }
     }
-    isCommentRegistered.value = true
   }
 }, 500)
 
@@ -143,8 +129,8 @@ const onDeleteComment = async (commentId: number) => {
   const isConfirm = await confirmModal('진행 여부 확인', '댓글을 삭제하시겠습니까?')
   if (isConfirm) {
     await deleteComment(postId.value, commentId)
-    await successModal('알림', '댓글을 성공적으로 삭제하였습니다.')
     await fetchDefaultData()
+    await successModal('알림', '댓글을 성공적으로 삭제하였습니다.')
   }
 }
 
@@ -152,162 +138,162 @@ const onDeleteReplyComment = async (commentId: number) => {
   const isConfirm = await confirmModal('진행 여부 확인', '답글을 삭제하시겠습니까?')
   if (isConfirm) {
     await deleteComment(postId.value, commentId)
-    await successModal('알림', '답글을 성공적으로 삭제하였습니다.')
     await fetchDefaultData()
+    await successModal('알림', '답글을 성공적으로 삭제하였습니다.')
   }
 }
 </script>
 
 <template>
-  <div class="ootd-detail-comment-wrapper">
-    <div class="ootd-detail-comment-header-wrapper">
-      <div class="ootd-detail-comment-count-wrapper">
-        <div class="ootd-detail-comment-count-text-wrapper">
-          <div class="ootd-detail-comment-count-text">댓글</div>
+  <div class='ootd-detail-comment-wrapper'>
+    <div class='ootd-detail-comment-header-wrapper'>
+      <div class='ootd-detail-comment-count-wrapper'>
+        <div class='ootd-detail-comment-count-text-wrapper'>
+          <div class='ootd-detail-comment-count-text'>댓글</div>
         </div>
-        <div class="ootd-detail-comment-count-real-text-wrapper">
-          <div class="ootd-detail-comment-count-real-text">
+        <div class='ootd-detail-comment-count-real-text-wrapper'>
+          <div class='ootd-detail-comment-count-real-text'>
             {{ totalElements }}
           </div>
         </div>
       </div>
     </div>
-    <div class="ootd-detail-comment-input-box-wrapper">
-      <div class="ootd-detail-comment-input-wrapper">
+    <div class='ootd-detail-comment-input-box-wrapper'>
+      <div class='ootd-detail-comment-input-wrapper'>
         <input
-          class="ootd-detail-comment-input"
-          type="text"
-          v-model="createCommentRequest.description"
-          @keyup.enter="onSubmitComment"
+          class='ootd-detail-comment-input'
+          type='text'
+          v-model='createCommentRequest.description'
+          @keyup.enter='onSubmitComment'
         />
       </div>
-      <div class="ootd-detail-comment-input-box-decoration-wrapper">
+      <div class='ootd-detail-comment-input-box-decoration-wrapper'>
         <div
-          class="ootd-detail-comment-input-box-decoration-text"
+          class='ootd-detail-comment-input-box-decoration-text'
           :class="{ hover: createCommentRequest.description !== '' }"
-          @click="onSubmitComment"
+          @click='onSubmitComment'
         >
           입력
         </div>
       </div>
     </div>
-    <div class="ootd-detail-comment-body-wrapper">
-      <div v-for="comment in comments" :key="comment.id" class="ootd-detail-comment-box-wrapper">
-        <RouterLink :to="`/ootds/profile/${comment.member.id}`">
+    <div class='ootd-detail-comment-body-wrapper'>
+      <div v-for='comment in comments' :key='comment.id' class='ootd-detail-comment-box-wrapper'>
+        <RouterLink :to='`/ootds/profile/${comment.member.id}`'>
           <img
-            class="ootd-detail-comment-profile-image"
-            :src="`${VITE_STATIC_IMG_URL}${comment.member.profileImgUrl}`"
+            class='ootd-detail-comment-profile-image'
+            :src='`${VITE_STATIC_IMG_URL}${comment.member.profileImgUrl}`'
           />
         </RouterLink>
-        <div class="ootd-detail-comment-box-wrapper-2">
-          <div class="ootd-detail-comment-box-header-wrapper">
-            <div class="ootd-detail-comment-box-header-left-wrapper">
-              <div class="ootd-detail-comment-box-header-nickname-wrapper">
+        <div class='ootd-detail-comment-box-wrapper-2'>
+          <div class='ootd-detail-comment-box-header-wrapper'>
+            <div class='ootd-detail-comment-box-header-left-wrapper'>
+              <div class='ootd-detail-comment-box-header-nickname-wrapper'>
                 <RouterLink
-                  :to="`/ootds/profile/${comment.member.id}`"
-                  class="ootd-detail-comment-box-header-nickname-text"
+                  :to='`/ootds/profile/${comment.member.id}`'
+                  class='ootd-detail-comment-box-header-nickname-text'
                 >
                   {{ comment.member.nickname }}
                 </RouterLink>
               </div>
-              <div class="ootd-detail-comment-box-header-content-wrapper">
-                <div v-if="!comment.isDeleted" class="ootd-detail-comment-box-header-content-text">
+              <div class='ootd-detail-comment-box-header-content-wrapper'>
+                <div v-if='!comment.isDeleted' class='ootd-detail-comment-box-header-content-text'>
                   {{ comment.description }}
                 </div>
-                <div v-else class="ootd-detail-comment-box-header-content-text">
+                <div v-else class='ootd-detail-comment-box-header-content-text'>
                   삭제된 댓글입니다.
                 </div>
               </div>
-              <div class="ootd-detail-comment-box-header-content-metadata-wrapper">
-                <div class="ootd-detail-comment-box-header-content-created-date-wrapper">
-                  <div class="ootd-detail-comment-box-header-content-created-date-text">
+              <div class='ootd-detail-comment-box-header-content-metadata-wrapper'>
+                <div class='ootd-detail-comment-box-header-content-created-date-wrapper'>
+                  <div class='ootd-detail-comment-box-header-content-created-date-text'>
                     {{ comment.createdAt }}
                   </div>
                 </div>
-                <div class="ootd-detail-comment-box-header-content-comment-wrapper">
+                <div class='ootd-detail-comment-box-header-content-comment-wrapper'>
                   <div
-                    class="ootd-detail-comment-box-header-content-comment-button"
-                    @click="onOpenReplyCommentInput(comment.id)"
+                    class='ootd-detail-comment-box-header-content-comment-button'
+                    @click='onOpenReplyCommentInput(comment.id)'
                   >
                     답글달기
                   </div>
                 </div>
               </div>
             </div>
-            <div class="ootd-detail-comment-box-header-right-wrapper">
+            <div class='ootd-detail-comment-box-header-right-wrapper'>
               <div
-                v-if="comment.member.id === memberId && !comment.isDeleted"
-                class="ootd-detail-comment-box-delete-text"
-                @click="onDeleteComment(comment.id)"
+                v-if='comment.member.id === memberId && !comment.isDeleted'
+                class='ootd-detail-comment-box-delete-text'
+                @click='onDeleteComment(comment.id)'
               >
                 삭제
               </div>
             </div>
           </div>
-          <div v-if="isOpenReplyCommentInput.has(comment.id)" class="ootd-detail-reply-box-wrapper">
-            <div class="ootd-detail-reply-input-wrapper">
+          <div v-if='isOpenReplyCommentInput.has(comment.id)' class='ootd-detail-reply-box-wrapper'>
+            <div class='ootd-detail-reply-input-wrapper'>
               <input
-                class="ootd-detail-reply-input"
-                v-model="createReplyCommentRequest.description"
-                @keyup.enter="onSubmitReplyComment(comment.id)"
+                class='ootd-detail-reply-input'
+                v-model='createReplyCommentRequest.description'
+                @keyup.enter='onSubmitReplyComment(comment.id)'
               />
             </div>
-            <div class="ootd-detail-reply-input-hint-wrapper">
+            <div class='ootd-detail-reply-input-hint-wrapper'>
               <div
-                class="ootd-detail-reply-input-hint-text"
+                class='ootd-detail-reply-input-hint-text'
                 :class="{ hover: createReplyCommentRequest.description !== '' }"
-                @click="onSubmitReplyComment(comment.id)"
+                @click='onSubmitReplyComment(comment.id)'
               >
                 입력
               </div>
             </div>
           </div>
           <div
-            v-for="replyComment in comment.replyComments"
-            :key="replyComment.id"
-            class="ootd-detail-comment-box-wrapper"
+            v-for='replyComment in comment.replyComments'
+            :key='replyComment.id'
+            class='ootd-detail-comment-box-wrapper'
           >
-            <RouterLink :to="`/ootds/profile/${replyComment.member.id}`">
+            <RouterLink :to='`/ootds/profile/${replyComment.member.id}`'>
               <img
-                class="ootd-detail-comment-profile-image"
-                :src="`${VITE_STATIC_IMG_URL}${replyComment.member.profileImgUrl}`"
+                class='ootd-detail-comment-profile-image'
+                :src='`${VITE_STATIC_IMG_URL}${replyComment.member.profileImgUrl}`'
               />
             </RouterLink>
-            <div class="ootd-detail-comment-box-wrapper-2">
-              <div class="ootd-detail-comment-box-header-wrapper">
-                <div class="ootd-detail-comment-box-header-left-wrapper">
-                  <div class="ootd-detail-comment-box-header-nickname-wrapper">
+            <div class='ootd-detail-comment-box-wrapper-2'>
+              <div class='ootd-detail-comment-box-header-wrapper'>
+                <div class='ootd-detail-comment-box-header-left-wrapper'>
+                  <div class='ootd-detail-comment-box-header-nickname-wrapper'>
                     <RouterLink
-                      :to="`/ootds/profile/${replyComment.member.id}`"
-                      class="ootd-detail-comment-box-header-nickname-text"
+                      :to='`/ootds/profile/${replyComment.member.id}`'
+                      class='ootd-detail-comment-box-header-nickname-text'
                     >
                       {{ replyComment.member.nickname }}
                     </RouterLink>
                   </div>
-                  <div class="ootd-detail-comment-box-header-content-wrapper">
+                  <div class='ootd-detail-comment-box-header-content-wrapper'>
                     <div
-                      v-if="!replyComment.isDeleted"
-                      class="ootd-detail-comment-box-header-content-text"
+                      v-if='!replyComment.isDeleted'
+                      class='ootd-detail-comment-box-header-content-text'
                     >
                       {{ replyComment.description }}
                     </div>
-                    <div v-else class="ootd-detail-comment-box-header-content-text">
+                    <div v-else class='ootd-detail-comment-box-header-content-text'>
                       삭제된 답글입니다.
                     </div>
                   </div>
-                  <div class="ootd-detail-comment-box-header-content-metadata-wrapper">
-                    <div class="ootd-detail-comment-box-header-content-created-date-wrapper">
-                      <div class="ootd-detail-comment-box-header-content-created-date-text">
+                  <div class='ootd-detail-comment-box-header-content-metadata-wrapper'>
+                    <div class='ootd-detail-comment-box-header-content-created-date-wrapper'>
+                      <div class='ootd-detail-comment-box-header-content-created-date-text'>
                         {{ replyComment.createdAt }}
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="ootd-detail-comment-box-header-right-wrapper">
+                <div class='ootd-detail-comment-box-header-right-wrapper'>
                   <div
-                    v-if="replyComment.member.id === memberId && !replyComment.isDeleted"
-                    class="ootd-detail-comment-box-delete-text"
-                    @click="onDeleteReplyComment(replyComment.id)"
+                    v-if='replyComment.member.id === memberId && !replyComment.isDeleted'
+                    class='ootd-detail-comment-box-delete-text'
+                    @click='onDeleteReplyComment(replyComment.id)'
                   >
                     삭제
                   </div>
@@ -319,9 +305,9 @@ const onDeleteReplyComment = async (commentId: number) => {
       </div>
     </div>
     <PaginationComponent
-      :onChangePage="onChangePage"
-      :requestPage="requestPage"
-      :totalPages="totalPages"
+      :onChangePage='onChangePage'
+      :requestPage='requestPage'
+      :totalPages='totalPages'
     />
   </div>
 </template>

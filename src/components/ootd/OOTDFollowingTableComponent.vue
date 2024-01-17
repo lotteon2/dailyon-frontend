@@ -1,15 +1,12 @@
 <script setup lang='ts'>
 
-import { inject, onBeforeMount, ref, watch } from 'vue'
+import { onBeforeMount, ref, watch } from 'vue'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 import type { FollowingResponse } from '@/apis/ootd/FollowDto'
 import { getFollowings } from '@/apis/ootd/FollowService'
 import { useFollowStore } from '@/stores/follow/FollowStore'
 import { storeToRefs } from 'pinia'
 import WhitePageComponent from '@/components/wishcart/WhitePageComponent.vue'
-import { AxiosError } from 'axios'
-
-const openInternalServerErrorNotification: Function | undefined = inject('openInternalServerErrorNotification')
 
 const props = defineProps({
   addedFollowings: {
