@@ -244,6 +244,14 @@ const enrollRestockNotificationHandler = async () => {
     return
   }
 
+  if (selectedProductSize.value.quantity) {
+    infoModal(
+      '알림',
+      '재고가 없는 사이즈의 알림 신청만 가능합니다. \n 재입고 알림을 받고싶은 사이즈 선택 후 눌러주세요.'
+    )
+    return
+  }
+
   if (selectedProductSize.value.productSizeId <= 0) {
     warningModal('알림', '옵션을 지정해주세요.')
     return
