@@ -149,7 +149,7 @@ const handleImageLoad = async () => {
     <div
       v-else-if='
         member.isFollowing === undefined
-          ? true
+          ? false
           : followStore.hasFollowingId(member.id)
             ? !member.isFollowing
             : member.isFollowing
@@ -170,7 +170,7 @@ const handleImageLoad = async () => {
           fill='#C6C6C6'
         />
       </svg>
-      <div class='follow-inactive-btn-text'>팔로우</div>
+      <div class='follow-inactive-btn-text'>팔로잉</div>
     </div>
     <div
       v-else
