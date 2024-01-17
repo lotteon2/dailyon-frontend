@@ -305,7 +305,7 @@ watch(selectedProductSize, () => {
             <!-- TODO : 여기에 할인 적용된 금액 들어가나요? -->
             <h2>{{ bestPromotionalPrice.toLocaleString() }}</h2>
             <!-- TODO : 여기에 최대 할인율? 할인 금액 나오는건가요? -->
-            <h3 v-show="bestPromotionalRate">{{ bestPromotionalRate }}</h3>
+            <h3 v-show="bestPromotionalRate">{{ bestPromotionalRate }}%</h3>
           </div>
           <div class="price-info-row">
             <h1>&nbsp;</h1>
@@ -339,14 +339,14 @@ watch(selectedProductSize, () => {
           </div>
           <div class="price-info-row">
             <span>상품 옵션</span>
-<!--            <Select v-model.lazy.number='selectedProductSize'>-->
-<!--              <SelectOption v-for="(productStock, index) in product.productStocks"-->
-<!--                            :key="index"-->
-<!--                            :value="productStock">-->
-<!--                {{ productStock.productSizeName }}-->
-<!--                {{ productStock.quantity <= 100 ? ' - ' + productStock.quantity + '개' : '' }}-->
-<!--              </SelectOption>-->
-<!--            </Select>-->
+            <!--            <Select v-model.lazy.number='selectedProductSize'>-->
+            <!--              <SelectOption v-for="(productStock, index) in product.productStocks"-->
+            <!--                            :key="index"-->
+            <!--                            :value="productStock">-->
+            <!--                {{ productStock.productSizeName }}-->
+            <!--                {{ productStock.quantity <= 100 ? ' - ' + productStock.quantity + '개' : '' }}-->
+            <!--              </SelectOption>-->
+            <!--            </Select>-->
             <select v-model.lazy.number="selectedProductSize">
               <option
                 v-for="(productStock, index) in product.productStocks"
