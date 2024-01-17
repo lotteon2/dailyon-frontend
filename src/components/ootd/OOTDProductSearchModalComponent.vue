@@ -28,6 +28,7 @@ const products = ref<Array<ProductSearchResponse>>(new Array<ProductSearchRespon
 const hasNext = ref<boolean>(false)
 
 const query = ref<string>('')
+const previousQuery = ref<string>('')
 const lastId = ref<number>(0)
 
 const clearProductData = async () => {
@@ -37,8 +38,14 @@ const clearProductData = async () => {
 
 const isCurrentlySearched = ref<boolean>(false)
 const searchProducts = debounce(async () => {
+  if(query.value === '' && !isCurrentlySearched.value) {
+    infoModal('알림', '검색할 상품을 입력해주세요.')
+    return
+  }
+
   if (query.value !== '' && !isCurrentlySearched.value) {
     isCurrentlySearched.value = true
+    previousQuery.value = query.value
 
     await clearProductData()
 
@@ -46,12 +53,14 @@ const searchProducts = debounce(async () => {
     products.value = productSearchPageResponse.products
     hasNext.value = productSearchPageResponse.hasNext
 
-    isCurrentlySearched.value = false
+    query.value = ''
 
     if(products.value.length === 0) {
       await infoModal('알림', '검색 결과가 없습니다.')
     }
   }
+
+  isCurrentlySearched.value = false
 }, 500)
 
 const isScrollEnd = ref<boolean>(false)
@@ -73,7 +82,7 @@ watch(isScrollEnd, async (afterScrollEnd, beforeScrollEnd) => {
 
 watch(lastId, async (afterLastId, beforeLastId) => {
   if (afterLastId !== 0 && beforeLastId !== afterLastId && hasNext.value) {
-    const productSearchPageResponse = await searchProductFromOOTD(query.value, lastId.value)
+    const productSearchPageResponse = await searchProductFromOOTD(previousQuery.value, lastId.value)
     productSearchPageResponse.products.forEach((product) => {
       products.value?.push(product)
     })
@@ -84,6 +93,7 @@ watch(() => props.isProductModalOpen, (afterIsProductModalOpen, beforeIsProductM
   if (afterIsProductModalOpen !== beforeIsProductModalOpen) {
     clearProductData()
     query.value = ''
+    previousQuery.value = ''
   }
 })
 
