@@ -44,16 +44,16 @@ const closeModal = () => {
 
 const setDefault = async (addressId: number) => {
   setDefaultAddress(addressId)
-  await successModal('알림', '기본 배송지가 저장되었습니다.')
-
   window.location.reload()
+  await successModal('알림', '기본 배송지가 저장되었습니다.')
 }
 
 const deleteAdd = async (addressId: number) => {
   if (await confirmModal('진행 여부 확인', '정말로 삭제하시겠습니까?')) {
     deleteAddress(addressId)
-    await successModal('알림', '배송지가 삭제되었습니다.')
     window.location.reload()
+    await successModal('알림', '배송지가 삭제되었습니다.')
+    
   }
 
 }
@@ -118,8 +118,8 @@ const setMemberInfo = async () => {
   if (await confirmModal('진행 여부 확인', '수정된 정보를 저장하시겠습니까?')) {
     setMember(memberDto)
     await getMember()
-    await successModal('알림', '수정이 완료되었습니다!')
     window.location.reload()
+    await successModal('알림', '수정이 완료되었습니다!')
 
   }
 }
