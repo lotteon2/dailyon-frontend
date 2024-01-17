@@ -31,6 +31,8 @@ const options = ref<SelectProps['options']>([
   }
 ])
 
+const selectedOption = ref<string>('SINGLE')
+
 onBeforeMount(async () => {
   await fetchDefaultData(0, defaultOption.value.value)
 })
@@ -59,8 +61,9 @@ const onChangePage = async (page: number) => {
 
 watch(requestPage, async (afterPage, beforePage) => {
   if (afterPage < totalPages.value!) {
-    fetchDefaultData(requestPage.value, defaultOption.value.value), requestPage.value
+    fetchDefaultData(requestPage.value, selectedOption.value), requestPage.value
   }
+  console.log(defaultOption.value.value)
 })
 
 // TODO: Select 옵션 변경 이벤트
@@ -68,7 +71,8 @@ const handleSelectedOptionChange = async (
   value: SelectValue,
   option: DefaultOptionType | DefaultOptionType[]
 ) => {
-  await fetchDefaultData(0, String(value))
+  selectedOption.value = String(value)
+  await fetchDefaultData(0, selectedOption.value)
 }
 </script>
 <template>
