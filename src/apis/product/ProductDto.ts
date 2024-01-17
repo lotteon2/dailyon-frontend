@@ -22,8 +22,8 @@ export interface CouponInfoItemResponse {
   appliedToId: number
   discountType: string
   discountValue: number
-  maxPurchaseAmount: number | null
-  minPurchaseAmount: number
+  minPurchaseAmount: number // 0이상 number minPurchaseAmount 이상 구매해야 쿠폰 적용가능
+  maxDiscountAmount: number | null // null이면 maxDiscountAmount 한계가 없다는 뜻
 }
 
 export interface ReadProductDetailResponse {
