@@ -46,8 +46,6 @@ const searchProducts = debounce(async () => {
     products.value = productSearchPageResponse.products
     hasNext.value = productSearchPageResponse.hasNext
 
-    query.value = ''
-
     isCurrentlySearched.value = false
 
     if(products.value.length === 0) {
