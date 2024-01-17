@@ -1,14 +1,11 @@
 <script setup lang='ts'>
-import { inject, onBeforeMount, reactive, ref, watch } from 'vue'
+import { onBeforeMount, reactive, ref, watch } from 'vue'
 import type { OOTDPostResponse } from '@/apis/ootd/PostDto'
 import { getMemberPosts } from '@/apis/ootd/PostService'
 import OOTDPostCardComponent from '@/components/ootd/OOTDPostCardComponent.vue'
 import OOTDSortComponent from '@/components/ootd/OOTDSortComponent.vue'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 import WhitePageComponent from '@/components/wishcart/WhitePageComponent.vue'
-import { AxiosError } from 'axios'
-
-const openInternalServerErrorNotification: Function | undefined = inject('openInternalServerErrorNotification')
 
 const props = defineProps({
   postMemberId: {

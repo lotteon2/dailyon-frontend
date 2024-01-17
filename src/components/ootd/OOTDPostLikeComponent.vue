@@ -1,16 +1,12 @@
 <script setup lang='ts'>
 
-import { inject, onBeforeMount, reactive, ref, watch } from 'vue'
-import type { PostLikePageResponse, PostLikeResponse } from '@/apis/ootd/PostDto'
+import { onBeforeMount, reactive, ref, watch } from 'vue'
+import type { PostLikeResponse } from '@/apis/ootd/PostDto'
 import { getPostLikes } from '@/apis/ootd/PostService'
 import OOTDPostCardComponent from '@/components/ootd/OOTDPostCardComponent.vue'
 import OOTDSortComponent from '@/components/ootd/OOTDSortComponent.vue'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 import WhitePageComponent from '@/components/wishcart/WhitePageComponent.vue'
-import { searchProductFromOOTD } from '@/apis/ootd/ProductSearchService'
-import { AxiosError } from 'axios'
-
-const openInternalServerErrorNotification: Function | undefined = inject('openInternalServerErrorNotification')
 
 const sortOptions = reactive([
   { label: '조회순', value: 'viewCount,desc' },
@@ -73,7 +69,7 @@ watch(requestPage, async (afterPage, beforePage) => {
         <div class='blank-gap'></div>
       </div>
     </div>
-    <WhitePageComponent v-if='posts.length === 0' message="좋아요한 게시글이 없습니다" />
+    <WhitePageComponent v-if='posts.length === 0' message='좋아요한 게시글이 없습니다' />
     <div v-else style='width: 100%'>
       <OOTDPostCardComponent :posts='posts' />
       <PaginationComponent :requestPage='requestPage' :totalPages='totalPages' :onChangePage='onChangePage' />

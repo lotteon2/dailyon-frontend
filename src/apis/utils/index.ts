@@ -109,6 +109,42 @@ const axiosAuthApi = (baseURL: string) => {
   return instance
 }
 
+const axiosChatAuthApi = (baseURL: string) => {
+  const instance: AxiosInstance = axios.create({
+    baseURL,
+    withCredentials: true
+  })
+
+  instance.interceptors.request.use((config) => {
+    const data = sessionStorage.getItem('auctions')
+    const jsonObject = JSON.parse(data!)
+    if (jsonObject) {
+      config.headers.Authorization = `Bearer ${jsonObject.chatToken}`
+    }
+
+    return config
+  })
+
+  instance.interceptors.response.use(
+    (response) => {
+      return response
+    },
+    async (error) => {
+      const originalRequest = error.config
+
+      if (error.response.status === 401) {
+        originalRequest._retry = true
+        showAlert('로그인 정보가 만료되었습니다. 다시 로그인해주세요.(code1)')
+        window.location.href = '/login'
+      }
+
+      return Promise.reject(error)
+    }
+  )
+
+  return instance
+}
+
 const refreshToken = async () => {
   try {
     const memberString = localStorage.getItem('member')
@@ -178,3 +214,4 @@ const showAlert = (message: string): void => {
 
 export const defaultAxiosInstance: AxiosInstance = axiosApi(BASE_URL)
 export const authAxiosInstance: AxiosInstance = axiosAuthApi(BASE_URL)
+export const chatAuthAxiosInstance: AxiosInstance = axiosChatAuthApi(BASE_URL)

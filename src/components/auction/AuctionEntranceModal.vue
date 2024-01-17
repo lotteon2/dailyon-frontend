@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { getAuctionDetail } from '@/apis/auction/AuctionClient'
+import { useRouter } from 'vue-router'
+import { useAuctionStore } from '@/stores/auction/AuctionStore'
 import type { ReadAuctionDetailResponse } from '@/apis/auction/AuctionDto'
+const auctionStore = useAuctionStore()
 import { infoModal } from '@/utils/Modal'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
-
+const router = useRouter()
 const props = defineProps({
   showModal: {
     type: Boolean,
@@ -24,6 +27,7 @@ const auctionDetail = ref<ReadAuctionDetailResponse>({
     auctionName: '',
     auctionProductId: 0,
     startBidPrice: 0,
+    askingPrice: 0,
     startAt: '',
     maximumWinner: 0,
     ended: false,
@@ -56,6 +60,8 @@ const closeModal = () => {
 
 const enterAuction = () => {
   infoModal('알림', '경매 입장')
+  auctionStore.setAuctionDetail(auctionDetail.value)
+  router.push({ path: `/chat/${props.auctionId}` })
   emits('close-modal')
 }
 

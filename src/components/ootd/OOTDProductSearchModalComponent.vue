@@ -1,12 +1,9 @@
 <script setup lang='ts'>
 
-import { inject, type PropType, ref, watch } from 'vue'
+import { type PropType, ref, watch } from 'vue'
 import type { ProductSearchResponse } from '@/apis/ootd/PostDto'
 import { searchProductFromOOTD } from '@/apis/ootd/ProductSearchService'
 import { debounce } from 'lodash'
-import { AxiosError } from 'axios'
-
-const openInternalServerErrorNotification: Function | undefined = inject('openInternalServerErrorNotification')
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 

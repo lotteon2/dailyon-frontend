@@ -1,24 +1,15 @@
-<script setup lang="ts">
-import { onBeforeMount, ref, defineEmits, inject } from 'vue'
+<script setup lang='ts'>
+import { defineEmits, onBeforeMount, ref } from 'vue'
 import { getOOTDMemberProfile } from '@/apis/ootd/MemberService'
-import type {
-  OOTDMemberProfileResponse,
-  OOTDMemberProfileResponseWrapper
-} from '@/apis/ootd/MemberDto'
+import type { OOTDMemberProfileResponse } from '@/apis/ootd/MemberDto'
 import { useFollowStore } from '@/stores/follow/FollowStore'
 import { toggleFollow } from '@/apis/ootd/FollowService'
 import { onBeforeRouteLeave } from 'vue-router'
 import { useMemberStore } from '@/stores/member/MemberStore'
 import type { GiftInfo } from '@/apis/order/orderDto'
 import { storeToRefs } from 'pinia'
-import { getComments } from '@/apis/ootd/CommentService'
-import { AxiosError } from 'axios'
 import { infoModal } from '@/utils/Modal'
 import { LOGIN_NEED_MSG } from '@/utils/CommonMessage'
-
-const openInternalServerErrorNotification: Function | undefined = inject(
-  'openInternalServerErrorNotification'
-)
 
 const emit = defineEmits(['fetchData'])
 const memberStore = useMemberStore()
@@ -110,40 +101,40 @@ const handleImageLoad = async () => {
 </script>
 
 <template>
-  <div class="profile-card">
+  <div class='profile-card'>
     <img
-      v-if="imageSize.width === 0 || imageSize.height === 0"
-      class="profile-img"
-      ref="img"
-      @load="getImageSize"
-      src="@/assets/images/loading.gif"
+      v-if='imageSize.width === 0 || imageSize.height === 0'
+      class='profile-img'
+      ref='img'
+      @load='getImageSize'
+      src='@/assets/images/loading.gif'
     />
     <img
       v-else
-      class="profile-img"
-      ref="img"
-      @load="getImageSize"
-      :src="`${VITE_STATIC_IMG_URL}${member.profileImgUrl}?w=${imageSize.width}&h=${imageSize.height}`"
+      class='profile-img'
+      ref='img'
+      @load='getImageSize'
+      :src='`${VITE_STATIC_IMG_URL}${member.profileImgUrl}?w=${imageSize.width}&h=${imageSize.height}`'
     />
-    <div class="nickname">{{ member.nickname }}</div>
-    <div class="follow-wrapper">
+    <div class='nickname'>{{ member.nickname }}</div>
+    <div class='follow-wrapper'>
       팔로워
-      <span class="follow-count">
+      <span class='follow-count'>
         <span
-          v-if="
+          v-if='
             member.isFollowing !== undefined &&
             followStore.hasFollowingId(member.id) &&
             member.isFollowing
-          "
+          '
         >
           {{ member.followerCount - 1 }}
         </span>
         <span
-          v-else-if="
+          v-else-if='
             member.isFollowing !== undefined &&
             followStore.hasFollowingId(member.id) &&
             !member.isFollowing
-          "
+          '
         >
           {{ member.followerCount + 1 }}
         </span>
@@ -152,41 +143,41 @@ const handleImageLoad = async () => {
         </span>
       </span>
       | 팔로우
-      <span class="follow-count">{{ member.followingCount }}</span>
+      <span class='follow-count'>{{ member.followingCount }}</span>
     </div>
-    <div v-if="member.id === memberId"></div>
+    <div v-if='member.id === memberId'></div>
     <div
-      v-else-if="
+      v-else-if='
         member.isFollowing === undefined
           ? true
           : followStore.hasFollowingId(member.id)
             ? !member.isFollowing
             : member.isFollowing
-      "
-      class="follow-inactive-btn"
-      @click="followButtonClickListener(member.id, member.isFollowing)"
+      '
+      class='follow-inactive-btn'
+      @click='followButtonClickListener(member.id, member.isFollowing)'
     >
       <svg
-        class="follow-inactive-check-icon"
-        xmlns="http://www.w3.org/2000/svg"
-        width="13"
-        height="9"
-        viewBox="0 0 13 9"
-        fill="none"
+        class='follow-inactive-check-icon'
+        xmlns='http://www.w3.org/2000/svg'
+        width='13'
+        height='9'
+        viewBox='0 0 13 9'
+        fill='none'
       >
         <path
-          d="M4.22659 9L0 4.77341L0.6072 4.16706L4.22659 7.78645L12.013 0L12.6194 0.60635L4.22659 9Z"
-          fill="#C6C6C6"
+          d='M4.22659 9L0 4.77341L0.6072 4.16706L4.22659 7.78645L12.013 0L12.6194 0.60635L4.22659 9Z'
+          fill='#C6C6C6'
         />
       </svg>
-      <div class="follow-inactive-btn-text">팔로우</div>
+      <div class='follow-inactive-btn-text'>팔로우</div>
     </div>
     <div
       v-else
-      class="follow-active-btn"
-      @click="followButtonClickListener(member.id, member.isFollowing)"
+      class='follow-active-btn'
+      @click='followButtonClickListener(member.id, member.isFollowing)'
     >
-      <div class="follow-active-btn-text">+팔로우</div>
+      <div class='follow-active-btn-text'>+팔로우</div>
     </div>
   </div>
 </template>

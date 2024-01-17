@@ -1,6 +1,6 @@
 <script setup lang='ts'>
 
-import { inject, onBeforeMount, reactive, ref, watch } from 'vue'
+import { onBeforeMount, reactive, ref, watch } from 'vue'
 import type {
   PostImageProductDetailUpdateRequest,
   PostUpdateHashTagRequest,
@@ -12,10 +12,7 @@ import router from '@/router'
 import OOTDProductSearchModalComponent from '@/components/ootd/OOTDProductSearchModalComponent.vue'
 import { usePostStore } from '@/stores/post/PostStore'
 import { useRoute } from 'vue-router'
-import { AxiosError } from 'axios'
 import { confirmModal, successModal, warningModal } from '@/utils/Modal'
-
-const openInternalServerErrorNotification: Function | undefined = inject('openInternalServerErrorNotification')
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -177,10 +174,10 @@ const onSubmit = async () => {
     })
 
     const postUpdateResponse = await updatePost(postId.value, postUpdateRequest.value)
-    await successModal('알림', '게시글 수정이 성공하였습니다.')
     await postStore.clearPostUpdateRequest()
     await postStore.clearTemporaryTagProducts()
     await router.push({ path: `/ootds/${postUpdateResponse.id}` })
+    await successModal('알림', '게시글 수정이 성공하였습니다.')
   }
 }
 
