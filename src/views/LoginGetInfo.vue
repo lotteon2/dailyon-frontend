@@ -34,6 +34,7 @@ onMounted(async () => {
   } else {
     memberStore.setMemberInfo(memberInfo)
 
+    // 로그인시 구독
     notificationStore.subscribeToNotificationsHandler()
     await notificationStore.fetchUnreadNotificationCount()
     await notificationStore.fetchRecentNotifications()
