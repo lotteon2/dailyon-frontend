@@ -85,11 +85,15 @@ export const order = async (orderSheet: OrderSheet): Promise<string> => {
   }
 }
 
-export const getOrders = async (page: number): Promise<OrderPageResponse<OrderResponse>> => {
+export const getOrders = async (
+  page: number,
+  type: string
+): Promise<OrderPageResponse<OrderResponse>> => {
   try {
     const { data } = await authAxiosInstance.get(`${ORDER_SERVICE_PREFIX_PATH}/orders`, {
       params: {
-        page: page
+        page: page,
+        type: type
       }
     })
     return data
