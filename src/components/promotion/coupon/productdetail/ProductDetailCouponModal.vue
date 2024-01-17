@@ -111,6 +111,7 @@ const handleDownloadMultipleCoupons = async () => {
   const downloadableCouponInfoIds = coupons.value
     .filter((coupon) => coupon.isDownloadable)
     .map((coupon) => coupon.couponInfoId)
+
   if (downloadableCouponInfoIds.length === 0) {
     await warningModal('알림', '이미 모든 쿠폰을 다운로드 받았습니다.')
     // console.log('다운로드 가능한 쿠폰이 없습니다.')
@@ -120,6 +121,7 @@ const handleDownloadMultipleCoupons = async () => {
   try {
     const downloadResponse: MultipleCouponDownloadResponse =
       await downloadMultipleCoupons(downloadableCouponInfoIds)
+
     await successModal(
       '알림',
       downloadResponse.successfulIds.length + '개의 쿠폰을 다운로드 했습니다.'
@@ -127,10 +129,10 @@ const handleDownloadMultipleCoupons = async () => {
     console.log('다운로드된 couponInfoId 목록:', downloadResponse.successfulIds)
     console.log('다운로드 실패한 couponInfoId 목록:', downloadResponse.failedIds)
 
-    coupons.value.forEach((coupon) => {
+    coupons.value.forEach((coupon, index) => {
       // 다운로드 된 쿠폰들 상태변경
       if (downloadResponse.successfulIds.includes(coupon.couponInfoId)) {
-        coupon.isDownloadable = false
+        coupons.value[index].isDownloadable = false
       }
     })
   } catch (error) {
