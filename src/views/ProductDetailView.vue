@@ -382,14 +382,6 @@ watch(selectedProductSize, () => {
           </div>
           <div class="price-info-row">
             <span>상품 옵션</span>
-            <!--            <Select v-model.lazy.number='selectedProductSize'>-->
-            <!--              <SelectOption v-for="(productStock, index) in product.productStocks"-->
-            <!--                            :key="index"-->
-            <!--                            :value="productStock">-->
-            <!--                {{ productStock.productSizeName }}-->
-            <!--                {{ productStock.quantity <= 100 ? ' - ' + productStock.quantity + '개' : '' }}-->
-            <!--              </SelectOption>-->
-            <!--            </Select>-->
             <select v-model.lazy.number="selectedProductSize">
               <option
                 v-for="(productStock, index) in sortedProductStocks"
