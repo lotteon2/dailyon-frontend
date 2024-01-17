@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeMount, ref, watch, watchEffect } from 'vue'
+import { onBeforeMount, ref, watch } from 'vue'
 import { getOrders } from '@/apis/order/order'
 import type { OrderResponse } from '@/apis/order/orderDto'
 import PaginationComponent from '../ootd/PaginationComponent.vue'
@@ -17,12 +17,12 @@ const orderNo = ref<string>('')
 const showModal = ref<boolean>(false)
 
 const defaultOption = ref({
-  value: 'NORMAL',
+  value: 'SINGLE',
   label: '일반주문'
 })
 const options = ref<SelectProps['options']>([
   {
-    value: 'NORMAL',
+    value: 'SINGLE',
     label: '일반주문'
   },
   {
@@ -31,12 +31,14 @@ const options = ref<SelectProps['options']>([
   }
 ])
 
+const selectedOption = ref<string>('SINGLE')
+
 onBeforeMount(async () => {
-  await fetchDefaultData(0)
+  await fetchDefaultData(0, defaultOption.value.value)
 })
 
-const fetchDefaultData = async (requestPage: number): Promise<void> => {
-  const data = await getOrders(requestPage)
+const fetchDefaultData = async (requestPage: number, type: string): Promise<void> => {
+  const data = await getOrders(requestPage, type)
   orders.value = data.orders
   totalElements.value = data.totalElements
   totalPages.value = data.totalPages
@@ -57,15 +59,20 @@ const onChangePage = async (page: number) => {
   }
 }
 
-watchEffect(() => {
-  fetchDefaultData(requestPage.value), requestPage.value
+watch(requestPage, async (afterPage, beforePage) => {
+  if (afterPage < totalPages.value!) {
+    fetchDefaultData(requestPage.value, selectedOption.value), requestPage.value
+  }
 })
 
 // TODO: Select 옵션 변경 이벤트
-const handleSelectedOptionChange = (
+const handleSelectedOptionChange = async (
   value: SelectValue,
   option: DefaultOptionType | DefaultOptionType[]
-) => {}
+) => {
+  selectedOption.value = String(value)
+  await fetchDefaultData(0, selectedOption.value)
+}
 </script>
 <template>
   <div class="order-check-container">
