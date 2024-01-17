@@ -33,6 +33,7 @@ export interface CreateBidRequest {
 export interface EnterResponse {
   token: string
   readAuctionDetailResponse: ReadAuctionDetailResponse
+}
 
 export interface ReadAuctionHistoryPageResponse {
   totalElements: number
@@ -56,5 +57,4 @@ export interface ReadAuctionHistoryResponse {
   memberHighestBid: number
   auctionWinnerBid: number
   createdAt: string
-
 }
