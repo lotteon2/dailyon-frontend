@@ -3,6 +3,7 @@ import { AxiosError } from 'axios'
 import { authAxiosInstance } from '@/apis/utils/index'
 import type { Notification } from '@/types/notification'
 import { NotificationType } from '@/types/notification'
+import type { EnrollRestockRequest } from '@/apis/notification/NotificationDto'
 import { EventSourcePolyfill } from 'event-source-polyfill'
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL
@@ -57,6 +58,18 @@ export const deleteNotification = async (notificationId: string): Promise<void> 
 // 모든 알림 삭제
 export const deleteAllNotifications = async (): Promise<void> => {
   await authAxiosInstance.delete(`${NOTIFICATION_PREFIX_PATH}${NOTIFICATION_DOMAIN_PREFIX_PATH}`)
+}
+
+// 재입고 알림 등록
+export const enrollRestockNotificaton = async (
+  enrollRestockRequest: EnrollRestockRequest
+): Promise<string> => {
+  const response = await authAxiosInstance.post<string>(
+    `${NOTIFICATION_PREFIX_PATH}${NOTIFICATION_DOMAIN_PREFIX_PATH}/restock/enroll`,
+    enrollRestockRequest
+  )
+  // 응답으로 return mongoDB string type id
+  return response.data
 }
 
 // 알림 구독
