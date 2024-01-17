@@ -100,7 +100,7 @@ const selectedProductSize = ref<ReadProductStockResponse>({
   productSizeName: '',
   quantity: 1
 })
-const selectedQuantity = ref<number>(1) // 최초개수 1개로 둬서 가격표시되게합니다.
+const selectedQuantity = ref<number>(0) // 최초개수 0개로 두고, init시에 1개 올려서 watch 통한 자동계산 발동
 const selectedOriginalPrice = ref<number>(0)
 
 const initData = async () => {
@@ -274,11 +274,15 @@ const mostStockedProductSize = computed(() => {
 onBeforeMount(initData)
 
 watch(selectedQuantity, () => {
+  // 그 뒤 트리거 2
   selectedOriginalPrice.value = selectedQuantity.value * productPriceValue.value
 })
 
 watch(selectedProductSize, () => {
-  selectedQuantity.value = 0
+  // 먼저 트리거 1
+  if (selectedProductSize.value.quantity >= 0) {
+    selectedQuantity.value = 1
+  }
 })
 </script>
 
