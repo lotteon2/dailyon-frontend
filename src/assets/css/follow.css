@@ -76,6 +76,8 @@
     width: 2.6vw;
     height: 5.1vh;
     margin-right: 20px;
+    border-radius: 6.25rem;
+    background: #FFFFFF;
 }
 
 .follow-img:hover {
