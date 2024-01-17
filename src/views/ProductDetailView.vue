@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeMount, ref, watch } from 'vue'
+import { onBeforeMount, ref, watch, computed } from 'vue'
 import ProductDetailCouponModal from '@/components/promotion/coupon/productdetail/ProductDetailCouponModal.vue'
 import BreadCrumbComponent from '@/components/product/BreadCrumbComponent.vue'
 import { useRoute } from 'vue-router'
@@ -17,6 +17,8 @@ import TOP4OOTDComponent from '@/components/ootd/TOP4OOTDComponent.vue'
 import { Image, Select, SelectOption } from 'ant-design-vue'
 import { errorModal, infoModal, warningModal } from '@/utils/Modal'
 import { LOGIN_NEED_MSG } from '@/utils/CommonMessage'
+import { SizeOrder } from '@/types/enums/SizeOrder'
+import type { ProductStock } from '@/types/product/Product'
 
 const productStore = useProductStore()
 
@@ -98,7 +100,7 @@ const selectedProductSize = ref<ReadProductStockResponse>({
   productSizeName: '',
   quantity: 1
 })
-const selectedQuantity = ref<number>(0)
+const selectedQuantity = ref<number>(0) // 최초개수 0개로 두고, init시에 1개 올려서 watch 통한 자동계산 발동
 const selectedOriginalPrice = ref<number>(0)
 
 const initData = async () => {
@@ -108,6 +110,9 @@ const initData = async () => {
   referralCode.value = route.query.code === null ? null : route.query.code
   if (localStorage.getItem('accessToken')) {
     wishLists.value = (await readWishListFromProduct(Number(route.params.id))).responses
+  }
+  if (mostStockedProductSize.value) {
+    selectedProductSize.value = mostStockedProductSize.value
   }
 }
 
@@ -228,14 +233,56 @@ const bestPromotionalPriceUpdatedHandler = (maxDiscount: number) => {
   }
 }
 
+const getOrder = (size: string): number => {
+  const defaultOrder = 1000
+  const normalizedSize = size.charAt(0).toUpperCase() + size.slice(1).toLowerCase()
+
+  if (normalizedSize in SizeOrder) {
+    return SizeOrder[normalizedSize as keyof typeof SizeOrder]
+  }
+
+  const numericSize = parseInt(size, 10)
+  if (!isNaN(numericSize)) {
+    if (numericSize >= 130) return SizeOrder.ShoeStart + numericSize
+    if (numericSize >= 28 && numericSize <= 99)
+      return SizeOrder.PantsStart + (numericSize - SizeOrder.PantsStart)
+    if (numericSize >= 44 && numericSize <= 99)
+      return SizeOrder.SkirtDressStart + (numericSize - SizeOrder.SkirtDressStart)
+    return defaultOrder + numericSize
+  }
+
+  return defaultOrder
+}
+
+const sortedProductStocks = computed(() => {
+  return product.value.productStocks.slice().sort((a: ProductStock, b: ProductStock) => {
+    const orderA = getOrder(a.productSizeName)
+    const orderB = getOrder(b.productSizeName)
+    return orderA - orderB
+  })
+})
+
+const mostStockedProductSize = computed(() => {
+  if (!product.value || !product.value.productStocks || product.value.productStocks.length === 0) {
+    return null
+  }
+  return product.value.productStocks.reduce((maxStock: ProductStock, stock: ProductStock) =>
+    maxStock.quantity > stock.quantity ? maxStock : stock
+  )
+})
+
 onBeforeMount(initData)
 
 watch(selectedQuantity, () => {
+  // 그 뒤 트리거 2
   selectedOriginalPrice.value = selectedQuantity.value * productPriceValue.value
 })
 
 watch(selectedProductSize, () => {
-  selectedQuantity.value = 0
+  // 먼저 트리거 1
+  if (selectedProductSize.value.quantity >= 0) {
+    selectedQuantity.value = 1
+  }
 })
 </script>
 
@@ -339,17 +386,9 @@ watch(selectedProductSize, () => {
           </div>
           <div class="price-info-row">
             <span>상품 옵션</span>
-            <!--            <Select v-model.lazy.number='selectedProductSize'>-->
-            <!--              <SelectOption v-for="(productStock, index) in product.productStocks"-->
-            <!--                            :key="index"-->
-            <!--                            :value="productStock">-->
-            <!--                {{ productStock.productSizeName }}-->
-            <!--                {{ productStock.quantity <= 100 ? ' - ' + productStock.quantity + '개' : '' }}-->
-            <!--              </SelectOption>-->
-            <!--            </Select>-->
             <select v-model.lazy.number="selectedProductSize">
               <option
-                v-for="(productStock, index) in product.productStocks"
+                v-for="(productStock, index) in sortedProductStocks"
                 :key="index"
                 :value="productStock"
               >
