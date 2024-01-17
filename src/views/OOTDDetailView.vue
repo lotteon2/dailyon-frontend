@@ -237,7 +237,7 @@ const onTagedProductMouseLeave = async (productId: number) => {
                   <div
                     v-else-if='
                       post.member.isFollowing === undefined
-                        ? true
+                        ? false
                         : followStore.hasFollowingId(post.member.id)
                           ? !post.member.isFollowing
                           : post.member.isFollowing
@@ -559,18 +559,13 @@ const onTagedProductMouseLeave = async (productId: number) => {
               <div class='ootd-detail-header-follow-wrapper'>
                 <div v-if='post.member.id === memberId'></div>
                 <div
-                  v-else-if='post.member.isFollowing === undefined
-                        ? true
+                  v-else-if='
+                      post.member.isFollowing === undefined
+                        ? false
                         : followStore.hasFollowingId(post.member.id)
                           ? !post.member.isFollowing
-                          : post.member.isFollowing'
-                  @click='followButtonClickListener(post.member.id, post.member.isFollowing)'
-                  class='ootd-detail-header-follow'
-                >
-                  <div class='ootd-detail-header-follow-text'>+팔로우</div>
-                </div>
-                <div
-                  v-else
+                          : post.member.isFollowing
+                    '
                   class='ootd-detail-header-following'
                   @click='followButtonClickListener(post.member.id, post.member.isFollowing)'
                 >
@@ -586,6 +581,13 @@ const onTagedProductMouseLeave = async (productId: number) => {
                     />
                   </svg>
                   <div class='ootd-detail-header-following-text'>팔로잉</div>
+                </div>
+                <div
+                  v-else
+                  @click='followButtonClickListener(post.member.id, post.member.isFollowing)'
+                  class='ootd-detail-header-follow'
+                >
+                  <div class='ootd-detail-header-follow-text'>+팔로우</div>
                 </div>
               </div>
             </div>
