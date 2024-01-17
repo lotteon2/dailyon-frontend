@@ -54,7 +54,7 @@ export const enter = async (auctionId: string): Promise<EnterResponse> => {
 
 export const startBid = async (): Promise<AxiosResponse> => {
   try {
-    const response = await authAxiosInstance.post(`${AUCTION_SERVICE_PREFIX_PATH}/admin/bids/`)
+    const response = await authAxiosInstance.get(`${AUCTION_SERVICE_PREFIX_PATH}/admin/bids/start`)
     return response
   } catch (error) {
     if (error instanceof AxiosError) {

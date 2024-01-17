@@ -282,6 +282,17 @@
   cursor: pointer;
 }
 
+.disabled-button {
+  width: 100%;
+  margin: 5px;
+  background: grey;
+  color: #fff;
+  border-radius: 5px;
+  border: none;
+  font-size: 20px;
+  cursor: not-allowed;
+}
+
 .input-btn {
   width: 100%;
   margin: 5px;
@@ -290,6 +301,16 @@
   border: none;
   font-size: 20px;
   cursor: pointer;
+}
+
+.disabled-button2 {
+  width: 100%;
+  margin: 5px;
+  background: gray;
+  border-radius: 5px;
+  border: none;
+  font-size: 20px;
+  cursor: not-allowed;
 }
 
 /* 채팅 보내기 */

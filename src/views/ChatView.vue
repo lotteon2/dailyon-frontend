@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, nextTick, computed } from 'vue'
-import { StatisticCountdown, message, Image, ImagePreviewGroup } from 'ant-design-vue'
+import { onMounted, onUnmounted, ref, nextTick } from 'vue'
+import { StatisticCountdown, message, Image, ImagePreviewGroup, Modal } from 'ant-design-vue'
 import type { CreateBidRequest, ReadAuctionResponse } from '@/apis/auction/AuctionDto'
 import type { ReadProductDetailResponse } from '@/apis/product/ProductDto'
 import { createBid, enter, startBid } from '@/apis/auction/Auction'
@@ -8,6 +8,7 @@ import { useRoute } from 'vue-router'
 import { useAuctionStore } from '@/stores/auction/AuctionStore'
 import { useMemberStore } from '@/stores/member/MemberStore'
 import { storeToRefs } from 'pinia'
+import router from '@/router'
 const VITE_AUCTION_WS_URL: string = import.meta.env.VITE_AUCTION_WS_URL
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 const mebmerStore = useMemberStore()
@@ -26,42 +27,23 @@ interface Message extends userInfo {
 }
 
 interface Bid {
-  rank: number
+  memberId: number
   nickname: string
-  amount: number
+  bidAmount: number
 }
 
-const bids = ref<Bid[]>([
-  {
-    rank: 1,
-    nickname: 'test1232131231',
-    amount: 500000
-  },
-  {
-    rank: 2,
-    nickname: 'test2',
-    amount: 400000
-  },
-  {
-    rank: 3,
-    nickname: 'test3',
-    amount: 300000
-  }
-])
+const bids = ref<Bid[]>([])
 // const showModal = ref(false)
 const currentBid = ref<number>(0)
 const myBidPrice = ref<number>(0)
-const roundDeadline = ref(0)
-const countDeadline = ref(0)
 const deadLine = ref(0)
 const round = ref<string>('1')
 const isEnd = ref(false)
+const isButtonDisabled = ref(false)
 const onFinish = async () => {
   isEnd.value = true
-  roundDeadline.value = 0
-  countDeadline.value = 0
+  isButtonDisabled.value = true
   deadLine.value = 0
-  round.value = ''
 }
 // 더미데이터 끝
 const userInfo = ref<userInfo>({
@@ -82,7 +64,42 @@ const intervalId = ref<any>(null)
 const minutes = ref(Math.floor(totalSeconds.value / 60))
 const seconds = ref(totalSeconds.value % 60)
 
-const isRoundEnd = ref(false)
+const open = ref<boolean>(false)
+const biddingInput = ref<number>(0)
+
+const showModal = () => {
+  biddingInput.value = 0
+  open.value = true
+}
+
+const handleOk = async () => {
+  if (biddingInput.value < currentBid.value) {
+    message.error('입찰 금액은 현재 낙찰 금액보다 작을 수 없습니다.')
+    return
+  }
+  if (biddingInput.value > productDetail.value!.price) {
+    message.error('상품 가격보다 높게 입찰 할 수 없습니다.')
+  }
+  if (!auctionDetail.value?.started) {
+    message.error('아직 경매가 시작되지 않았습니다.')
+    open.value = false
+    return
+  }
+  isButtonDisabled.value = true
+  const data: CreateBidRequest = {
+    auctionId: auctionDetail.value!.id,
+    round: round.value,
+    bidAmount: biddingInput.value,
+    nickname: nickname.value ? nickname.value : ''
+  }
+  const response = await createBid(data)
+  myBidPrice.value = response
+
+  setTimeout(() => {
+    isButtonDisabled.value = false // 3초 후에 버튼을 다시 활성화합니다.
+  }, 2000)
+  open.value = false
+}
 
 const startTimer = () => {
   intervalId.value = setInterval(() => {
@@ -112,8 +129,9 @@ onUnmounted(() => {
 })
 
 const connect = async () => {
-  const websocketUrl = `${VITE_AUCTION_WS_URL}/chat?id=${userInfo.value.userId}`
+  const websocketUrl = `${VITE_AUCTION_WS_URL}/chat`
   socket.value = new WebSocket(websocketUrl)
+
   socket.value.onopen = () => {
     console.log(`connected`)
     connected.value = true
@@ -128,7 +146,6 @@ const connect = async () => {
 
   socket.value.onmessage = (payload) => {
     const data = JSON.parse(payload.data)
-    console.log(data)
     switch (data.command) {
       case 'MESSAGE':
         messages.value.push(data.data)
@@ -136,6 +153,9 @@ const connect = async () => {
       case 'START':
         start()
         break
+      case 'BIDDING':
+        bids.value = data.data
+        currentBid.value = bids.value[bids.value.length - 1].bidAmount
     }
     scrollDown()
   }
@@ -159,27 +179,8 @@ const disconnect = () => {
 }
 const start = () => {
   startTimer()
-  isRoundEnd.value = false
+  auctionDetail.value!.started = true
   deadLine.value = Date.now() + 1000 * 60 * 5
-  roundDeadline.value = Date.now() + 1000 * 30
-}
-
-const roundFinish = () => {
-  roundEnd()
-}
-
-const roundEnd = () => {
-  isRoundEnd.value = true
-  round.value = String(Number(round.value) + 1)
-  countDeadline.value = Date.now() + 1000 * 30
-}
-
-const countFinish = () => {
-  if (isEnd.value) {
-    return
-  }
-  isRoundEnd.value = false
-  roundDeadline.value = Date.now() + 1000 * 30
 }
 
 const send = () => {
@@ -203,15 +204,24 @@ const send = () => {
 }
 
 const bidding = async () => {
-  const dummyBidAmount: number = 10000
+  const bidAmount: number = currentBid.value + auctionDetail.value!.askingPrice
+  if (!validation(bidAmount)) {
+    return
+  }
+  isButtonDisabled.value = true
   const data: CreateBidRequest = {
     auctionId: auctionDetail.value!.id,
     round: round.value,
-    bidAmount: dummyBidAmount
+    bidAmount: bidAmount,
+    nickname: nickname.value ? nickname.value : ''
   }
-
+  console.log(data)
   const response = await createBid(data)
-  console.log(response)
+  myBidPrice.value = response
+
+  setTimeout(() => {
+    isButtonDisabled.value = false
+  }, 2000)
 }
 
 const scrollDown = () => {
@@ -224,7 +234,25 @@ const scrollDown = () => {
 
 const test = async () => {
   const response = await startBid()
-  console.log(response)
+}
+
+const validation = (bidAmount: number): boolean => {
+  if (bidAmount > productDetail.value!.price) {
+    message.error('상품 가격보다 높은 가격으로 입찰할 수 없습니다')
+    return false
+  }
+
+  if (!auctionDetail.value?.started) {
+    message.error('아직 경매가 시작되지 않았습니다.')
+    return false
+  }
+
+  if (auctionDetail.value?.ended) {
+    message.error('이미 끝난 경매 입니다.')
+    router.push('/')
+    return false
+  }
+  return true
 }
 </script>
 
@@ -259,10 +287,8 @@ const test = async () => {
             시작가 {{ auctionDetail?.startBidPrice.toLocaleString() }} 원
           </span>
           <span class="current-bid"> 현재 입찰가 {{ currentBid.toLocaleString() }} 원 </span>
-          <span class="remain-time">
-            <span class="remain-time-span"> 남은 시간 : </span>
-            <StatisticCountdown :value="deadLine" @finish="onFinish" />
-          </span>
+          <span>상품 정가 : {{ productDetail?.price }}</span>
+          <span>최대 낙찰 인원 : {{ auctionDetail?.maximumWinner }} 명</span>
           <button @click="test">start</button>
         </div>
         <!-- 경매 정보 끝 -->
@@ -293,20 +319,14 @@ const test = async () => {
               <div class="bid-rank" v-for="(bid, index) in bids" :key="index">
                 <span class="rank-index">{{ index + 1 }}등 </span>
                 <span class="rank-user"> {{ bid.nickname }}</span>
-                <span class="rank-user-amount"> {{ bid.amount.toLocaleString() }} 원</span>
+                <span class="rank-user-amount"> {{ bid.bidAmount.toLocaleString() }} 원</span>
               </div>
             </div>
           </div>
-          <div class="next-round-timer-wrap" v-if="!isRoundEnd">
-            <div class="next-round-timer-text">{{ `${round}` }} 라운드 종료까지</div>
+          <div class="next-round-timer-wrap">
+            <div class="next-round-timer-text">남은 시간</div>
             <div class="next-round-timer">
-              <span><StatisticCountdown :value="roundDeadline" @finish="roundFinish" /></span>
-            </div>
-          </div>
-          <div class="next-round-timer-wrap" v-else>
-            <div class="next-round-timer-text">집계 시간</div>
-            <div class="next-round-timer">
-              <span><StatisticCountdown :value="countDeadline" @finish="countFinish" /></span>
+              <StatisticCountdown :value="deadLine" @finish="onFinish" />
             </div>
           </div>
         </div>
@@ -314,8 +334,24 @@ const test = async () => {
 
       <!-- 현재 낙찰가 + 버튼 , 사용자 입력 금액 버튼 -->
       <div class="bid-button-wrap">
-        <button class="currnt-winning-bid-btn" @click="bidding">현재 낙찰 가의 {{}}원</button>
-        <button class="input-btn">사용자 입력 금액</button>
+        <button
+          :disabled="isButtonDisabled"
+          :class="{ 'disabled-button': isButtonDisabled }"
+          class="currnt-winning-bid-btn"
+          @click="bidding"
+        >
+          현재 낙찰 가의 {{ auctionDetail?.askingPrice.toLocaleString() }} 원
+        </button>
+        <button
+          @click="showModal"
+          class="input-btn"
+          :class="{ 'disabled-button2': isButtonDisabled }"
+        >
+          사용자 입력 금액
+        </button>
+        <Modal v-model:open="open" title="입찰 가격 입력" @ok="handleOk">
+          <input type="number" v-model="biddingInput" />
+        </Modal>
       </div>
       <!-- 채팅 입력창 들어갈 자리 -->
       <div class="chat-input">

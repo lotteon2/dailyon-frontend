@@ -16,6 +16,7 @@ export interface ReadAuctionResponse {
   auctionProductId: number
   auctionName: string
   startBidPrice: number
+  askingPrice: number
   maximumWinner: number
   startAt: string
   started: boolean
@@ -26,6 +27,7 @@ export interface CreateBidRequest {
   auctionId: string
   round: string
   bidAmount: number
+  nickname: string
 }
 
 export interface EnterResponse {
