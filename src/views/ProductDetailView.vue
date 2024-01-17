@@ -25,6 +25,9 @@ const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 const route = useRoute()
 const product = ref()
 
+const bestPromotionalPrice = ref<number>(0)
+const bestPromotionalRate = ref<number>(0)
+
 const referralCode = ref()
 
 const isDescribeImages = ref<boolean>(true)
@@ -101,6 +104,7 @@ const selectedOriginalPrice = ref<number>(0)
 const initData = async () => {
   product.value = await getProductDetail(Number(route.params.id))
   productPriceValue.value = product.value.price
+  bestPromotionalPrice.value = product.value.price // product가 any라서 기본값 0으로 두고 초기화시 같이 init
   referralCode.value = route.query.code === null ? null : route.query.code
   if (localStorage.getItem('accessToken')) {
     wishLists.value = (await readWishListFromProduct(Number(route.params.id))).responses
@@ -214,6 +218,16 @@ const validation = (): boolean => {
   return true
 }
 
+const bestPromotionalPriceUpdatedHandler = (maxDiscount: number) => {
+  // ProductDetailCouponModal 모달에서 computed 변화시 함수 발동
+  // -> life cycle상 bestPromotionalPrice가 init에서 product.value.price로 업데이트된 뒤에 다시 업데이트.
+  if (bestPromotionalPrice && product.value.price) {
+    // product.value.price로 zero division error 방지
+    bestPromotionalPrice.value = product.value.price - maxDiscount
+    bestPromotionalRate.value = Math.floor((maxDiscount / product.value.price) * 100)
+  }
+}
+
 onBeforeMount(initData)
 
 watch(selectedQuantity, () => {
@@ -229,6 +243,7 @@ watch(selectedProductSize, () => {
   <ProductDetailCouponModal
     @close-coupon-modal="closeCouponModal"
     @total-price-updated="handleTotalPriceUpdated"
+    @best-promotional-price-updated="bestPromotionalPriceUpdatedHandler"
     :showModal="showCouponModal"
     :productId="productId"
     :categoryId="product.categoryId"
@@ -288,13 +303,15 @@ watch(selectedProductSize, () => {
           <div class="price-info-row">
             <h1>데일리온가</h1>
             <!-- TODO : 여기에 할인 적용된 금액 들어가나요? -->
-            <h2>{{ productPriceValue.toLocaleString() }}</h2>
+            <h2>{{ bestPromotionalPrice.toLocaleString() }}</h2>
             <!-- TODO : 여기에 최대 할인율? 할인 금액 나오는건가요? -->
-            <h3>할인율</h3>
+            <h3 v-show="bestPromotionalRate">{{ bestPromotionalRate }}</h3>
           </div>
           <div class="price-info-row">
             <h1>&nbsp;</h1>
-            <div class="dash">{{ productPriceValue.toLocaleString() }}</div>
+            <div v-show="productPriceValue !== bestPromotionalPrice" class="dash">
+              {{ productPriceValue.toLocaleString() }}
+            </div>
           </div>
           <div class="price-info-row">
             <h1>프로모션</h1>
@@ -322,24 +339,24 @@ watch(selectedProductSize, () => {
           </div>
           <div class="price-info-row">
             <span>상품 옵션</span>
-            <Select v-model.lazy.number='selectedProductSize'>
-              <SelectOption v-for="(productStock, index) in product.productStocks"
-                            :key="index"
-                            :value="productStock">
-                {{ productStock.productSizeName }}
-                {{ productStock.quantity <= 100 ? ' - ' + productStock.quantity + '개' : '' }}
-              </SelectOption>
-            </Select>
-<!--            <select v-model.lazy.number="selectedProductSize">-->
-<!--              <option-->
-<!--                v-for="(productStock, index) in product.productStocks"-->
-<!--                :key="index"-->
-<!--                :value="productStock"-->
-<!--              >-->
+<!--            <Select v-model.lazy.number='selectedProductSize'>-->
+<!--              <SelectOption v-for="(productStock, index) in product.productStocks"-->
+<!--                            :key="index"-->
+<!--                            :value="productStock">-->
 <!--                {{ productStock.productSizeName }}-->
 <!--                {{ productStock.quantity <= 100 ? ' - ' + productStock.quantity + '개' : '' }}-->
-<!--              </option>-->
-<!--            </select>-->
+<!--              </SelectOption>-->
+<!--            </Select>-->
+            <select v-model.lazy.number="selectedProductSize">
+              <option
+                v-for="(productStock, index) in product.productStocks"
+                :key="index"
+                :value="productStock"
+              >
+                {{ productStock.productSizeName }}
+                {{ productStock.quantity <= 100 ? ' - ' + productStock.quantity + '개' : '' }}
+              </option>
+            </select>
           </div>
           <div class="option-container">
             <div class="plus-minus-wrapper">
