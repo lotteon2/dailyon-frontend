@@ -1,9 +1,8 @@
-<script setup lang="ts">
-import { inject, ref } from 'vue'
+<script setup lang='ts'>
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCategoryStore } from '@/stores/category/CategoryStore'
 import type { Category } from '@/apis/category/CategoryDto'
-import { AxiosError } from 'axios'
 
 const props = defineProps({
   showDropdown: {
@@ -22,25 +21,9 @@ const categoryStore = useCategoryStore()
 const childCategories = ref<Category[]>([])
 const router = useRouter()
 
-const openInternalServerErrorNotification: Function | undefined = inject(
-  'openInternalServerErrorNotification'
-)
 const mouseOver = (id: number) => {
   showChildDropdown.value = true
-  try {
-    categoryStore.setCategoryTree(id)
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      if (error.response !== undefined) {
-        if (error.response.status >= 500) {
-          if (openInternalServerErrorNotification !== undefined) {
-            openInternalServerErrorNotification()
-          }
-        }
-      }
-    }
-  }
-
+  categoryStore.setCategoryTree(id)
   childCategories.value = categoryStore.findCategoryTree(id)!.categories
 }
 
@@ -50,24 +33,24 @@ const toProductList = (id: number) => {
 </script>
 
 <template>
-  <div v-if="props.categories.length > 0" class="category-dropdown-content">
+  <div v-if='props.categories.length > 0' class='category-dropdown-content'>
     <div
-      class="category-content"
-      v-for="category in props.categories"
-      :key="category.id"
-      @mouseover="mouseOver(category.id)"
-      @mouseleave="showChildDropdown = false"
-      @click="toProductList(category.id)"
+      class='category-content'
+      v-for='category in props.categories'
+      :key='category.id'
+      @mouseover='mouseOver(category.id)'
+      @mouseleave='showChildDropdown = false'
+      @click='toProductList(category.id)'
     >
-      <a :href="`/product-list?category=${category.id}&type=NORMAL`">
+      <a :href='`/product-list?category=${category.id}&type=NORMAL`'>
         {{ category.name }}
       </a>
     </div>
     <HeaderCategoryComponent
-      class="child-category"
+      class='child-category'
       :style="{ left: 100 + '%' }"
-      :show-dropdown="showChildDropdown"
-      :categories="childCategories"
+      :show-dropdown='showChildDropdown'
+      :categories='childCategories'
     />
   </div>
 </template>
