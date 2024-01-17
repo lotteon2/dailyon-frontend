@@ -27,6 +27,7 @@ const auctionDetail = ref<ReadAuctionDetailResponse>({
     auctionName: '',
     auctionProductId: 0,
     startBidPrice: 0,
+    askingPrice: 0,
     startAt: '',
     maximumWinner: 0,
     ended: false,
