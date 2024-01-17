@@ -127,11 +127,15 @@
 }
 
 .product-name {
+    width: 130px;
     color: var(--Grayscale7, #202027);
     font-family: The Jamsil;
     font-size: 0.9375rem;
     font-style: normal;
     font-weight: 300;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .product-size {
