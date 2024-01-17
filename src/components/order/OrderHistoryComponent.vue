@@ -63,7 +63,6 @@ watch(requestPage, async (afterPage, beforePage) => {
   if (afterPage < totalPages.value!) {
     fetchDefaultData(requestPage.value, selectedOption.value), requestPage.value
   }
-  console.log(defaultOption.value.value)
 })
 
 // TODO: Select 옵션 변경 이벤트
