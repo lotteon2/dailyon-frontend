@@ -255,7 +255,6 @@ const onTagedProductMouseLeave = async (productId: number) => {
                 </RouterLink>
                 <div class="ootd-detail-header-follow-wrapper">
                   <div v-if="post.member.id === memberId"></div>
-
                   <div
                     v-else-if="
                       post.member.isFollowing === undefined
@@ -581,7 +580,11 @@ const onTagedProductMouseLeave = async (productId: number) => {
               <div class="ootd-detail-header-follow-wrapper">
                 <div v-if="post.member.id === memberId"></div>
                 <div
-                  v-else-if="!post.member.isFollowing"
+                  v-else-if="post.member.isFollowing === undefined
+                        ? true
+                        : followStore.hasFollowingId(post.member.id)
+                          ? !post.member.isFollowing
+                          : post.member.isFollowing"
                   @click="followButtonClickListener(post.member.id, post.member.isFollowing)"
                   class="ootd-detail-header-follow"
                 >
