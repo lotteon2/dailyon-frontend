@@ -165,6 +165,11 @@ const getProductDiscount = (product: ReadProductResponse) => {
         />
         <h1>{{ product.brandName }}</h1>
         <h2>{{ product.name }}</h2>
+        <PriceDisplay
+          :original-price="product.price"
+          :discount-percentage="getFloorDiscountPercentage(product)"
+          :final-price="getFinalPrice(product)"
+        />
         <div class="product-third-info">
           <div class="product-aggregate">
             <svg
@@ -184,11 +189,6 @@ const getProductDiscount = (product: ReadProductResponse) => {
           <!-- <div class="product-price">
             <h3>{{ product.price.toLocaleString() }}원</h3>
           </div> -->
-          <PriceDisplay
-            :original-price="product.price"
-            :discount-percentage="getFloorDiscountPercentage(product)"
-            :final-price="getFinalPrice(product)"
-          />
         </div>
       </RouterLink>
     </div>
