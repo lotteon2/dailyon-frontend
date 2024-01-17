@@ -5,6 +5,7 @@ import { useRoute } from 'vue-router'
 import type { ReadProductResponse, ReadProductSliceResponse } from '@/apis/product/ProductDto'
 import { getProductSlice } from '@/apis/product/ProductClient'
 import BreadCrumbComponent from '@/components/product/BreadCrumbComponent.vue'
+import ProductListPriceDisplay from '@/components/product/ProductListPriceDisplay.vue'
 import { Image } from 'ant-design-vue'
 import { errorModal } from '@/utils/Modal'
 
@@ -80,7 +81,7 @@ const getImageSize = async () => {
   if (img.value[0]) {
     await handleImageLoad()
   } else {
-    (img.value[0] as HTMLImageElement).onload = handleImageLoad
+    ;(img.value[0] as HTMLImageElement).onload = handleImageLoad
   }
 }
 
@@ -91,6 +92,48 @@ const handleImageLoad = async () => {
       height: img.value[0]!.height
     }
   }
+}
+
+/**
+ 혜택가 관련 계산입니다.
+ */
+const getFloorDiscountPercentage = (product: ReadProductResponse) => {
+  const discount = getProductDiscount(product)
+  return Math.floor(discount)
+}
+
+const getFinalPrice = (product: ReadProductResponse) => {
+  const discount = getProductDiscount(product)
+  return product.price - (product.price * discount) / 100
+}
+
+const getProductDiscount = (product: ReadProductResponse) => {
+  let maxDiscountPercentage = 0
+
+  product.coupons.forEach((coupon) => {
+    if (product.price >= coupon.minPurchaseAmount) {
+      // Listview에서는 일단 1개 구매를 기준으로 display
+      // N개 이상 구매했을때를 가정한 최적 할인율과 해당 쿠폰 적용환경의 최소개수도 구할까 고민중임.
+      let discountPercentage = 0
+
+      if (coupon.discountType === 'PERCENTAGE') {
+        discountPercentage = coupon.discountValue
+      } else if (coupon.discountType === 'FIXED_AMOUNT') {
+        discountPercentage = (coupon.discountValue / product.price) * 100
+      }
+
+      // 쿠폰별 maxDiscount cap 적용해서 갱신
+      if (coupon.maxDiscountAmount !== null) {
+        const maxDiscountValue = (coupon.maxDiscountAmount / product.price) * 100
+        discountPercentage = Math.min(discountPercentage, maxDiscountValue)
+      }
+
+      // 직전 iteration과 비교 갱신
+      maxDiscountPercentage = Math.max(maxDiscountPercentage, Math.floor(discountPercentage))
+    }
+  })
+
+  return maxDiscountPercentage
 }
 </script>
 
@@ -138,9 +181,14 @@ const handleImageLoad = async () => {
             </svg>
             <h1>{{ product.avgRating.toFixed(1) }} | ({{ product.reviewCount }})</h1>
           </div>
-          <div class="product-price">
+          <!-- <div class="product-price">
             <h3>{{ product.price.toLocaleString() }}원</h3>
-          </div>
+          </div> -->
+          <PriceDisplay
+            :original-price="product.price"
+            :discount-percentage="getFloorDiscountPercentage(product)"
+            :final-price="getFinalPrice(product)"
+          />
         </div>
       </RouterLink>
     </div>
