@@ -11,3 +11,7 @@ export interface CategoryTree {
   id: number
   categories: Array<Category>
 }
+
+export interface ReadBreadCrumbResponse {
+  breadCrumbs: Category[]
+}

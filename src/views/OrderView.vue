@@ -11,10 +11,15 @@ import type { DeliveryInfo, OrderSheet, OrderItem, GiftInfo } from '@/apis/order
 import { storeToRefs } from 'pinia'
 import { useProductStore } from '@/stores/product/ProductStore'
 import { useMemberStore } from '@/stores/member/MemberStore'
+import { useNotificationStore } from '@/stores/notification/NotificationStore'
 import router from '@/router'
+import { warningModal } from '@/utils/Modal'
 const productStore = useProductStore()
-const { products, orderType, giftInfo } = storeToRefs(productStore)
+const { products, orderType, giftInfo, referralCode } = storeToRefs(productStore)
 const { point } = storeToRefs(useMemberStore())
+
+const notificationStore = useNotificationStore()
+const { shouldSubscribeToSSE } = storeToRefs(notificationStore)
 
 const redirectUrl = ref('')
 const newWindow = ref<any>()
@@ -76,7 +81,7 @@ const changeReceiver = async (input: string) => {
 
 const doOrder = async () => {
   if (orderType.value !== 'GIFT' && !validation()) {
-    alert('배송지 정보는 필수 입니다.')
+    await warningModal('알림', '배송지 정보는 필수 입니다.')
     return
   }
   const orderItems: OrderItem[] = []
@@ -87,8 +92,7 @@ const doOrder = async () => {
       couponInfoId: product.couponInfoId,
       sizeId: product.sizeId,
       orderPrice: product.orderPrice,
-      quantity: product.quantity,
-      referralCode: product.referralCode
+      quantity: product.quantity
     }
     orderItems.push(orderItem)
   })
@@ -103,7 +107,8 @@ const doOrder = async () => {
     totalCouponDiscountPrice: null,
     orderItems: orderItems,
     deliveryInfo: orderType.value === 'GIFT' ? null : deliveryInfo.value,
-    paymentType: 'KAKAOPAY'
+    paymentType: 'KAKAOPAY',
+    referralCode: referralCode.value
   }
   redirectUrl.value = await order(orderSheet)
 
@@ -113,11 +118,19 @@ const doOrder = async () => {
     const left = window.screen.width / 2 - width / 2
     const top = window.screen.height / 2 - height / 2
 
+    shouldSubscribeToSSE.value = false // 새창 열기 전에 sessionStorage pinia값을 false로 만들고 new window에게 물려줌.
+
     newWindow.value = window.open(
       redirectUrl.value,
       'order',
       `width=${width},height=${height},top=${top},left=${left}`
     )
+
+    if (!newWindow.value) {
+      // 새 창이 차단되었거나 열리지 않았을 경우. SSE 재연결.
+      shouldSubscribeToSSE.value = true
+      notificationStore.subscribeToNotificationsHandler()
+    }
   }
 }
 
@@ -136,6 +149,13 @@ const validation = (): boolean => {
 const handleMessage = (event: MessageEvent) => {
   const { routeName, params } = event.data
   window.scrollTo(0, 0)
+
+  if (routeName) {
+    // polling시 계속 발동하지 않고, 실제 이벤트 발생했을때 발동
+    shouldSubscribeToSSE.value = true
+    notificationStore.subscribeToNotificationsHandler() // 구독 재활성화. 문제없을시 코드 삭제 😀
+  }
+
   router.replace({ name: routeName, params: params })
 }
 
@@ -147,6 +167,8 @@ const fetchDefaultAddress = (address: any) => {
 }
 
 onMounted(async () => {
+  // eventListener는 window가 아직 열리기 전이어도 해당 이벤트가 발생했는지 해당 이벤트에 대해 polling을 계속 합니다.
+  // handleMessage 함수는 계속 발동됩니다.
   window.addEventListener('message', handleMessage)
 })
 

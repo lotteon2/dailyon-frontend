@@ -1,9 +1,12 @@
 <script setup lang='ts'>
 
-import { type PropType, ref, watch } from 'vue'
-import type { ProductSearchPageResponse, ProductSearchResponse } from '@/apis/ootd/PostDto'
+import { inject, type PropType, ref, watch } from 'vue'
+import type { ProductSearchResponse } from '@/apis/ootd/PostDto'
 import { searchProductFromOOTD } from '@/apis/ootd/ProductSearchService'
 import { debounce } from 'lodash'
+import { AxiosError } from 'axios'
+
+const openInternalServerErrorNotification: Function | undefined = inject('openInternalServerErrorNotification')
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -34,8 +37,11 @@ const clearProductData = async () => {
   lastId.value = 0
 }
 
-const searchProducts = async () => {
-  if(query.value !== '') {
+const isCurrentlySearched = ref<boolean>(false)
+const searchProducts = debounce(async () => {
+  if (query.value !== '' && !isCurrentlySearched.value) {
+    isCurrentlySearched.value = true
+
     await clearProductData()
 
     const productSearchPageResponse = await searchProductFromOOTD(query.value, lastId.value)
@@ -43,8 +49,10 @@ const searchProducts = async () => {
     hasNext.value = productSearchPageResponse.hasNext
 
     query.value = ''
+
+    isCurrentlySearched.value = false
   }
-}
+}, 500)
 
 const isScrollEnd = ref<boolean>(false)
 const onScroll = debounce(async (event: any) => {

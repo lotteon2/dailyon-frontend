@@ -6,3 +6,12 @@ export interface CreateDeliveryDto {
   detailAddress: string
   phoneNumber: string
 }
+
+export interface DeliveryResponse {
+  receiver: string
+  postCode: string
+  roadAddress: string
+  detailAddress: string
+  phoneNumber: string | null
+  status: string
+}

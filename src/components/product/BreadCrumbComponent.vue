@@ -1,11 +1,8 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
 import { onMounted, ref } from 'vue'
 import type { Category } from '@/apis/category/CategoryDto'
 import { getBreadCrumbs } from '@/apis/category/CategoryClient'
-import type { AxiosResponse } from 'axios'
 
-const route = useRoute()
 const breadCrumbs = ref<Category[]>([])
 
 const props = defineProps({
@@ -14,14 +11,9 @@ const props = defineProps({
     required: true
   }
 })
-const initData = () => {
-  getBreadCrumbs(props.category)
-    .then((axiosResponse: AxiosResponse) => {
-      breadCrumbs.value = axiosResponse.data.breadCrumbs
-    })
-    .catch((error: any) => {
-      alert(error.response!.data!.message)
-    })
+const initData = async () => {
+  const response = await getBreadCrumbs(props.category)
+  breadCrumbs.value = response.breadCrumbs
 }
 
 onMounted(initData)

@@ -5,6 +5,7 @@ import { useRoute } from 'vue-router'
 import { onMounted } from 'vue'
 import { useMemberStore } from '@/stores/member/MemberStore'
 import { useNotificationStore } from '@/stores/notification/NotificationStore'
+import { warningModal } from '@/utils/Modal'
 
 const getMember = async () => {
   try {
@@ -28,11 +29,12 @@ onMounted(async () => {
 
   if (deletedValue) {
     localStorage.clear()
-    alert('이미 탈퇴한 계정입니다.')
+    await warningModal('알림', '이미 탈퇴한 계정입니다.')
     router.push({ name: 'login' })
   } else {
     memberStore.setMemberInfo(memberInfo)
 
+    // 로그인시 구독
     notificationStore.subscribeToNotificationsHandler()
     await notificationStore.fetchUnreadNotificationCount()
     await notificationStore.fetchRecentNotifications()

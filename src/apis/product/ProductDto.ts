@@ -56,5 +56,18 @@ export interface ProductInfo {
   quantity: number
   couponInfoId: number | null
   discountAmount: number | null
-  referralCode: String | null
+}
+
+export interface ReadCacheProductListResponse {
+  responses: ReadCacheProductResponse[]
+}
+
+export interface ReadCacheProductResponse {
+  id: number
+  brandName: string
+  categoryName: string
+  price: number
+  name: string
+  code: string
+  imgUrl: string
 }

@@ -1,12 +1,15 @@
 <script setup lang='ts'>
 
-import { onBeforeMount, reactive, ref, watch } from 'vue'
-import type { OOTDPostPageResponse, OOTDPostResponse } from '@/apis/ootd/PostDto'
+import { inject, onBeforeMount, reactive, ref, watch } from 'vue'
+import type { OOTDPostResponse } from '@/apis/ootd/PostDto'
 import { getMyPosts } from '@/apis/ootd/PostService'
 import OOTDPostCardComponent from '@/components/ootd/OOTDPostCardComponent.vue'
 import OOTDSortComponent from '@/components/ootd/OOTDSortComponent.vue'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 import WhitePageComponent from '@/components/wishcart/WhitePageComponent.vue'
+import { AxiosError } from 'axios'
+
+const openInternalServerErrorNotification: Function | undefined = inject('openInternalServerErrorNotification')
 
 const sortOptions = reactive([
   { label: '조회순', value: 'viewCount,desc' },
@@ -20,13 +23,11 @@ const posts = ref<Array<OOTDPostResponse>>(new Array<OOTDPostResponse>())
 const totalPages = ref<number>()
 const totalElements = ref<number>()
 
-const fetchDefaultData = async (): Promise<OOTDPostPageResponse<OOTDPostResponse>> => {
+const fetchDefaultData = async () => {
   const postPageResponse = await getMyPosts(0, 6, sortOptions[0].value)
   posts.value = postPageResponse.posts
   totalPages.value = postPageResponse.totalPages
   totalElements.value = postPageResponse.totalElements
-
-  return postPageResponse
 }
 
 onBeforeMount(async () => {
@@ -74,8 +75,8 @@ watch(requestPage, async (afterPage, beforePage) => {
         </div>
       </div>
     </div>
-    <WhitePageComponent v-if='posts.length === 0' message="작성한 게시글이 없습니다" />
-    <div v-else>
+    <WhitePageComponent v-if='posts.length === 0' message='작성한 게시글이 없습니다' />
+    <div v-else style='width: 100%'>
       <OOTDPostCardComponent :posts='posts' />
       <PaginationComponent :requestPage='requestPage' :totalPages='totalPages' :onChangePage='onChangePage' />
     </div>

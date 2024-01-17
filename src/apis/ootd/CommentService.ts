@@ -6,6 +6,8 @@ import type {
   CreateCommentRequest,
   CreateReplyCommentRequest
 } from '@/apis/ootd/CommentDto'
+import { openInternalServerErrorNotification } from '@/utils/Toast'
+import { warningModal } from '@/utils/Modal'
 
 const SNS_SERVICE_PREFIX_PATH = '/sns-service'
 
@@ -24,11 +26,11 @@ export const getComments = async (postId: number, page: number, size: number, so
     if (error instanceof AxiosError) {
       if (error.response) {
         if (error.response.status >= 400 && error.response.status < 500) {
-          alert(error.response.data.message)
+          await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
-          alert('서버 내부 오류')
+          openInternalServerErrorNotification()
           console.error('Internal Server Error')
         }
       }
@@ -45,11 +47,11 @@ export const createComment = async (postId: number, createCommentRequest: Create
     if (error instanceof AxiosError) {
       if (error.response) {
         if (error.response.status >= 400 && error.response.status < 500) {
-          alert(error.response.data.message)
+          await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
-          alert('서버 내부 오류')
+          openInternalServerErrorNotification()
           console.error('Internal Server Error')
         }
       }
@@ -66,11 +68,11 @@ export const createReplyComment = async (postId: number, commentId: number, crea
     if (error instanceof AxiosError) {
       if (error.response) {
         if (error.response.status >= 400 && error.response.status < 500) {
-          alert(error.response.data.message)
+          await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
-          alert('서버 내부 오류')
+          openInternalServerErrorNotification()
           console.error('Internal Server Error')
         }
       }
@@ -87,11 +89,11 @@ export const deleteComment = async (postId: number, commentId: number)
     if (error instanceof AxiosError) {
       if (error.response) {
         if (error.response.status >= 400 && error.response.status < 500) {
-          alert(error.response.data.message)
+          await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
-          alert('서버 내부 오류')
+          openInternalServerErrorNotification()
           console.error('Internal Server Error')
         }
       }

@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { inject, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCategoryStore } from '@/stores/category/CategoryStore'
 import type { Category } from '@/apis/category/CategoryDto'
+import { AxiosError } from 'axios'
 
 const props = defineProps({
   showDropdown: {
@@ -21,9 +22,25 @@ const categoryStore = useCategoryStore()
 const childCategories = ref<Category[]>([])
 const router = useRouter()
 
+const openInternalServerErrorNotification: Function | undefined = inject(
+  'openInternalServerErrorNotification'
+)
 const mouseOver = (id: number) => {
   showChildDropdown.value = true
-  categoryStore.setCategoryTree(id)
+  try {
+    categoryStore.setCategoryTree(id)
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      if (error.response !== undefined) {
+        if (error.response.status >= 500) {
+          if (openInternalServerErrorNotification !== undefined) {
+            openInternalServerErrorNotification()
+          }
+        }
+      }
+    }
+  }
+
   childCategories.value = categoryStore.findCategoryTree(id)!.categories
 }
 
@@ -66,32 +83,39 @@ const toProductList = (id: number) => {
   border-bottom: #808080 solid 1px;
   border-right: #808080 solid 1px;
   border-left: #808080 solid 1px;
-  padding: 12px 16px;
+  padding: 12px 20px;
   z-index: 1;
 
   position: absolute;
   top: 100%;
   left: 0;
 
-  width: 200px;
-  height: 600px;
+  width: 12vw;
+  height: 64vh;
 }
 
 .category-content {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding-top: 5px;
-  padding-bottom: 5px;
+  align-items: flex-start;
+
+  padding: 10px 5px 10px 5px;
+  width: 100%;
 
   cursor: pointer;
 
+  font-size: 1vw;
   font-family: TheJamsil;
+  font-weight: 500;
 }
 
 .category-content > a {
   color: inherit;
   text-decoration: none;
+}
+
+.category-content:hover {
+  color: #c22727;
 }
 
 .child-category {

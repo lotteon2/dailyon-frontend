@@ -1,6 +1,6 @@
 <script setup lang='ts'>
 
-import { onBeforeMount, reactive, ref, watch } from 'vue'
+import { inject, onBeforeMount, reactive, ref, watch } from 'vue'
 import type {
   PostImageProductDetailUpdateRequest,
   PostUpdateHashTagRequest,
@@ -12,6 +12,10 @@ import router from '@/router'
 import OOTDProductSearchModalComponent from '@/components/ootd/OOTDProductSearchModalComponent.vue'
 import { usePostStore } from '@/stores/post/PostStore'
 import { useRoute } from 'vue-router'
+import { AxiosError } from 'axios'
+import { confirmModal, successModal, warningModal } from '@/utils/Modal'
+
+const openInternalServerErrorNotification: Function | undefined = inject('openInternalServerErrorNotification')
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -89,13 +93,13 @@ const updateHashTag = async (hashTagId: number) => {
 const finishUpdateHashTag = async (hashTagId: number, name: string) => {
   let isValidHashTagName = true
   postUpdateRequest.value.hashTags.forEach((hashTag) => {
-    if(hashTag.id !== hashTagId && hashTag.name === name) {
-      alert("이미 존재하는 해시태그 입니다.")
+    if (hashTag.id !== hashTagId && hashTag.name === name) {
+      warningModal('알림', '이미 존재하는 해시태그 입니다.')
       isValidHashTagName = false
       return
     }
   })
-  if(isValidHashTagName) {
+  if (isValidHashTagName) {
     if (name.length < 1 || name.length > 10) {
       validationMessage.hashTag.size.isValid = false
     } else if (name.length >= 1 && name.length <= 10) {
@@ -117,10 +121,10 @@ const onSelectBtnClick = async (
   const temporaryTagProductIndex = temporaryTagProducts.value
     .findIndex((temporaryTagProduct) =>
       ((temporaryTagProduct.productId === productId && temporaryTagProduct.sizeName === sizeName
-        && temporaryTagProduct.id === temporaryUpdateTagProductId.value)
+          && temporaryTagProduct.id === temporaryUpdateTagProductId.value)
         || (temporaryTagProduct.productId === productId && temporaryTagProduct.id !== temporaryUpdateTagProductId.value)))
   if (temporaryTagProductIndex !== -1) {
-    alert('이미 태그된 상품입니다.')
+    await warningModal('알림', '이미 태그된 상품입니다.')
   } else {
     temporaryTagProducts.value.forEach((temporaryTagProduct) => {
       if (temporaryTagProduct.id === temporaryUpdateTagProductId.value) {
@@ -141,23 +145,23 @@ const updateTagProduct = async (id: number) => {
 }
 
 const onSubmit = async () => {
-  const isConfirmed = confirm("작성을 완료하시겠습니까?")
-  if(isConfirmed) {
+  const isConfirmed = await confirmModal('진행 여부 확인', '작성을 완료하시겠습니까?')
+  if (isConfirmed) {
     const title = postUpdateRequest.value.title
     const description = postUpdateRequest.value.description
 
-    if(isHashTagInputOpen.value.size !== 0) {
-      alert("해시태그 작성을 완성해주세요.")
+    if (isHashTagInputOpen.value.size !== 0) {
+      await warningModal('알림', '해시태그 작성을 완성해주세요.')
       return
     }
 
     if (title.length < 5 || title.length > 50) {
-      alert('게시글 제목은 최소 5글자에서 최대 50글자 사이로 입력할 수 있습니다.')
+      await warningModal('알림', '게시글 제목은 최소 5글자에서 최대 50글자 사이로 입력할 수 있습니다.')
       return
     }
 
     if (description.length > 300) {
-      alert('게시글 본문은 최대 300글자 까지 입력할 수 있습니다.')
+      await warningModal('알림', '게시글 본문은 최대 300글자 까지 입력할 수 있습니다.')
       return
     }
 
@@ -173,7 +177,7 @@ const onSubmit = async () => {
     })
 
     const postUpdateResponse = await updatePost(postId.value, postUpdateRequest.value)
-    alert('게시글 수정이 성공하였습니다.')
+    await successModal('알림', '게시글 수정이 성공하였습니다.')
     await postStore.clearPostUpdateRequest()
     await postStore.clearTemporaryTagProducts()
     await router.push({ path: `/ootds/${postUpdateResponse.id}` })
@@ -181,8 +185,8 @@ const onSubmit = async () => {
 }
 
 const onCancel = async () => {
-  const isConfirmed = confirm("작성을 취소하시겠습니까?")
-  if(isConfirmed) {
+  const isConfirmed = await confirmModal('진행 여부 확인', '작성을 취소하시겠습니까?')
+  if (isConfirmed) {
     router.go(-1)
   }
 }

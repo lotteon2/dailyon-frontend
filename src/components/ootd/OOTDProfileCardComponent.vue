@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeMount, ref, defineEmits } from 'vue'
+import { onBeforeMount, ref, defineEmits, inject } from 'vue'
 import { getOOTDMemberProfile } from '@/apis/ootd/MemberService'
 import type {
   OOTDMemberProfileResponse,
@@ -11,13 +11,21 @@ import { onBeforeRouteLeave } from 'vue-router'
 import { useMemberStore } from '@/stores/member/MemberStore'
 import type { GiftInfo } from '@/apis/order/orderDto'
 import { storeToRefs } from 'pinia'
+import { getComments } from '@/apis/ootd/CommentService'
+import { AxiosError } from 'axios'
+import { infoModal } from '@/utils/Modal'
+import { LOGIN_NEED_MSG } from '@/utils/CommonMessage'
+
+const openInternalServerErrorNotification: Function | undefined = inject(
+  'openInternalServerErrorNotification'
+)
 
 const emit = defineEmits(['fetchData'])
 const memberStore = useMemberStore()
 const memberId = memberStore.getMemberInfo().memberId
 const nickname = memberStore.nickname ? memberStore.nickname : ''
 const followStore = useFollowStore()
-const {follows} = storeToRefs(followStore)
+const { follows } = storeToRefs(followStore)
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -37,9 +45,7 @@ const member = ref<OOTDMemberProfileResponse>({
   isFollowing: undefined
 })
 
-const fetchDefaultData = async (): Promise<
-  OOTDMemberProfileResponseWrapper<OOTDMemberProfileResponse>
-> => {
+const fetchDefaultData = async () => {
   const memberResponse = await getOOTDMemberProfile(props.postMemberId!)
   member.value = memberResponse.member
   const giftInfo: GiftInfo = {
@@ -48,7 +54,6 @@ const fetchDefaultData = async (): Promise<
     senderName: nickname
   }
   emit('fetchData', giftInfo)
-  return memberResponse
 }
 
 onBeforeMount(async () => {
@@ -56,16 +61,11 @@ onBeforeMount(async () => {
 })
 
 const followButtonClickListener = (followingId: number, isFollowing: boolean | undefined) => {
-  if(isFollowing === undefined) {
-    alert('로그인이 필요합니다.')
+  if (isFollowing === undefined) {
+    infoModal('알림', LOGIN_NEED_MSG)
   } else {
-    // member.value!.isFollowing
-    //   ? (member.value!.followerCount -= 1)
-    //   : (member.value!.followerCount += 1)
-    // member.value!.isFollowing = !isFollowing
     followStore.toggleFollows(followingId)
   }
-
 }
 
 const flushFollowStore = async () => {
@@ -129,21 +129,40 @@ const handleImageLoad = async () => {
     <div class="follow-wrapper">
       팔로워
       <span class="follow-count">
-        <span v-if='member.isFollowing !== undefined && followStore.hasFollowingId(member.id) && member.isFollowing'>
+        <span
+          v-if="
+            member.isFollowing !== undefined &&
+            followStore.hasFollowingId(member.id) &&
+            member.isFollowing
+          "
+        >
           {{ member.followerCount - 1 }}
         </span>
-        <span v-else-if='member.isFollowing !== undefined && followStore.hasFollowingId(member.id) && !member.isFollowing'>
+        <span
+          v-else-if="
+            member.isFollowing !== undefined &&
+            followStore.hasFollowingId(member.id) &&
+            !member.isFollowing
+          "
+        >
           {{ member.followerCount + 1 }}
         </span>
         <span v-else>
           {{ member.followerCount }}
         </span>
-      </span> | 팔로우
+      </span>
+      | 팔로우
       <span class="follow-count">{{ member.followingCount }}</span>
     </div>
     <div v-if="member.id === memberId"></div>
     <div
-      v-else-if='member.isFollowing === undefined ? true : (followStore.hasFollowingId(member.id) ? !member.isFollowing : member.isFollowing)'
+      v-else-if="
+        member.isFollowing === undefined
+          ? true
+          : followStore.hasFollowingId(member.id)
+            ? !member.isFollowing
+            : member.isFollowing
+      "
       class="follow-inactive-btn"
       @click="followButtonClickListener(member.id, member.isFollowing)"
     >

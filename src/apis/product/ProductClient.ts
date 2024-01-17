@@ -1,7 +1,12 @@
-import type { AxiosResponse } from 'axios'
 import { AxiosError } from 'axios'
 import { defaultAxiosInstance } from '@/apis/utils'
-import type { ReadProductDetailResponse, ReadProductSliceResponse } from './ProductDto'
+import type {
+  ReadCacheProductListResponse,
+  ReadProductDetailResponse,
+  ReadProductSliceResponse
+} from '@/apis/product/ProductDto'
+import { openInternalServerErrorNotification } from '@/utils/Toast'
+import { warningModal } from '@/utils/Modal'
 
 const PRODUCT_SERVICE_PREFIX: string = '/product-service'
 const PRODUCT_PREFIX: string = '/products'
@@ -12,15 +17,32 @@ export const getProductSlice = async (
   categoryId: number | null,
   gender: string | null,
   type: string | null
-): Promise<AxiosResponse> => {
-  const params: any = { lastId: lastId }
-  if (brandId !== null) params.brandId = brandId
-  if (categoryId !== null) params.categoryId = categoryId
-  if (gender !== null) params.gender = gender
-  if (type !== null) params.type = type
-  return await defaultAxiosInstance.get(`${PRODUCT_SERVICE_PREFIX}${PRODUCT_PREFIX}`, {
-    params: params
-  })
+): Promise<ReadProductSliceResponse> => {
+  try {
+    const params: any = { lastId: lastId }
+    if (brandId !== null) params.brandId = brandId
+    if (categoryId !== null) params.categoryId = categoryId
+    if (gender !== null) params.gender = gender
+    if (type !== null) params.type = type
+    const { data } = await defaultAxiosInstance.get(`${PRODUCT_SERVICE_PREFIX}${PRODUCT_PREFIX}`, {
+      params: params
+    })
+    return data
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      if (error.response) {
+        if (error.response.status >= 400 && error.response.status < 500) {
+          await warningModal('알림', error.response.data.message)
+          console.error(`Client Error=${error.response.data.message}`)
+        }
+        if (error.response.status >= 500) {
+          openInternalServerErrorNotification()
+          console.error('Internal Server Error')
+        }
+      }
+    }
+    throw error
+  }
 }
 export const getProductDetail = async (productId: number): Promise<ReadProductDetailResponse> => {
   try {
@@ -31,11 +53,12 @@ export const getProductDetail = async (productId: number): Promise<ReadProductDe
   } catch (error) {
     if (error instanceof AxiosError) {
       if (error.response) {
-        if (error.response.status >= 400) {
-          alert(error.response.data.message)
+        if (error.response.status >= 400 && error.response.status < 500) {
+          await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
-        } else if (error.response.status < 500) {
-          alert('서버 내부 오류')
+        }
+        if (error.response.status >= 500) {
+          openInternalServerErrorNotification()
           console.error('Internal Server Error')
         }
       }
@@ -59,11 +82,58 @@ export const searchProduct = async (
   } catch (error) {
     if (error instanceof AxiosError) {
       if (error.response) {
-        if (error.response.status >= 400) {
-          alert(error.response.data.message)
+        if (error.response.status >= 400 && error.response.status < 500) {
+          await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
-        } else if (error.response.status < 500) {
-          alert('서버 내부 오류')
+        }
+        if (error.response.status >= 500) {
+          openInternalServerErrorNotification()
+          console.error('Internal Server Error')
+        }
+      }
+    }
+    throw error
+  }
+}
+
+export const getNewProducts = async (): Promise<ReadCacheProductListResponse> => {
+  try {
+    const { data } = await defaultAxiosInstance.get(
+      `${PRODUCT_SERVICE_PREFIX}${PRODUCT_PREFIX}/new`
+    )
+    return data
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      if (error.response) {
+        if (error.response.status >= 400 && error.response.status < 500) {
+          await warningModal('알림', error.response.data.message)
+          console.error(`Client Error=${error.response.data.message}`)
+        }
+        if (error.response.status >= 500) {
+          openInternalServerErrorNotification()
+          console.error('Internal Server Error')
+        }
+      }
+    }
+    throw error
+  }
+}
+
+export const getBestProducts = async (): Promise<ReadCacheProductListResponse> => {
+  try {
+    const { data } = await defaultAxiosInstance.get(
+      `${PRODUCT_SERVICE_PREFIX}${PRODUCT_PREFIX}/best`
+    )
+    return data
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      if (error.response) {
+        if (error.response.status >= 400 && error.response.status < 500) {
+          await warningModal('알림', error.response.data.message)
+          console.error(`Client Error=${error.response.data.message}`)
+        }
+        if (error.response.status >= 500) {
+          openInternalServerErrorNotification()
           console.error('Internal Server Error')
         }
       }

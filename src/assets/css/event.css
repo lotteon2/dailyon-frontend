@@ -1,6 +1,6 @@
 .container-title {
     color: var(--Grayscale7, #000);
-    font-family: The Jamsil;
+    font-family: TheJamsil;
     font-size: 30px;
     font-style: normal;
     font-weight: 700;
@@ -14,39 +14,53 @@
     background: #000;
 }
 
-.event-table-data1 > td {
-    color: var(--Grayscale7, #202027);
-    font-family: The Jamsil;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 70px; /* 500% */
-    border-bottom: 1px solid #202027;
-}
+.table-block {
+    padding-bottom: 10px;
 
-.event-table-data2 > td {
-    color: var(--Grayscale7, #202027);
-    font-family: The Jamsil;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 70px; /* 500% */
-    border-bottom: 1px solid #808080;
-}
+    & table {
+        width: 100%;
 
-.left-margin {
-    padding-left: 20px;
+        & thead {
+            font-size: 1.25vw;
+            font-weight: bold;
+            border-top: black 2px solid;
+            border-bottom: black 1px solid;
+
+            & tr {
+                & th {
+                    padding-top: 10px;
+                    padding-bottom: 10px;
+                }
+            }
+        }
+
+        & tbody {
+            & tr {
+                border-bottom: 1px solid #c6c6c6;
+
+                & td {
+                    font-size: 1vw;
+                    padding-top: 10px;
+                    padding-bottom: 10px;
+                    text-align: center;
+                }
+            }
+
+            & tr:hover {
+                background-color: rgba(0, 0, 0, 0.1);
+            }
+        }
+    }
 }
 
 .event-container {
     display: flex;
     flex-direction: column;
-    margin-bottom: 69px;
+    width: 54vw;
+    padding: 10px;
+    font-family: TheJamsil;
 }
 
-.left-align {
-    text-align: start;
-}
 
 .use-button {
     width: 67px;
@@ -62,6 +76,7 @@
     font-style: normal;
     font-weight: 400;
     line-height: 30px; /* 250% */
+    cursor: pointer;
 }
 
 .use-button-disable {

@@ -1,12 +1,16 @@
 <script setup lang='ts'>
 
-import { onBeforeMount, reactive, ref, watch } from 'vue'
+import { inject, onBeforeMount, reactive, ref, watch } from 'vue'
 import type { PostLikePageResponse, PostLikeResponse } from '@/apis/ootd/PostDto'
 import { getPostLikes } from '@/apis/ootd/PostService'
 import OOTDPostCardComponent from '@/components/ootd/OOTDPostCardComponent.vue'
 import OOTDSortComponent from '@/components/ootd/OOTDSortComponent.vue'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 import WhitePageComponent from '@/components/wishcart/WhitePageComponent.vue'
+import { searchProductFromOOTD } from '@/apis/ootd/ProductSearchService'
+import { AxiosError } from 'axios'
+
+const openInternalServerErrorNotification: Function | undefined = inject('openInternalServerErrorNotification')
 
 const sortOptions = reactive([
   { label: '조회순', value: 'viewCount,desc' },
@@ -20,12 +24,10 @@ const posts = ref<Array<PostLikeResponse>>(new Array<PostLikeResponse>())
 const totalPages = ref<number>()
 const totalElements = ref<number>()
 
-const fetchDefaultData = async (): Promise<PostLikePageResponse<PostLikeResponse>> => {
+const fetchDefaultData = async () => {
   const postPageResponse = await getPostLikes(0, 6, sortOptions[0].value)
   posts.value = postPageResponse.posts
   totalPages.value = postPageResponse.totalPages
-
-  return postPageResponse
 }
 
 onBeforeMount(async () => {
@@ -72,7 +74,7 @@ watch(requestPage, async (afterPage, beforePage) => {
       </div>
     </div>
     <WhitePageComponent v-if='posts.length === 0' message="좋아요한 게시글이 없습니다" />
-    <div v-else>
+    <div v-else style='width: 100%'>
       <OOTDPostCardComponent :posts='posts' />
       <PaginationComponent :requestPage='requestPage' :totalPages='totalPages' :onChangePage='onChangePage' />
     </div>

@@ -2,6 +2,7 @@
 import { getTOP4OOTD } from '@/apis/ootd/PostService'
 import { onMounted, ref } from 'vue'
 import type { TOP4OOTDResponse } from '@/apis/ootd/PostDto'
+import WhitePageComponent from '@/components/wishcart/WhitePageComponent.vue'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -24,7 +25,8 @@ onMounted(async () => {
     <div class="top4-ootd-title-wrapper">
       <div class="top4-ootd-title-text">TOP 4 OOTD</div>
     </div>
-    <div class="top4-ootd-list-wrapper">
+    <WhitePageComponent v-if='top4.length === 0' message="등록된 OOTD가 없습니다" />
+    <div v-else class="top4-ootd-list-wrapper">
       <RouterLink
         class="top4-ootd-post-card-image-wrapper"
         v-for="(ootd, index) in top4"

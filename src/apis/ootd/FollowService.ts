@@ -6,6 +6,8 @@ import type {
   FollowingPageResponse,
   FollowingResponse
 } from '@/apis/ootd/FollowDto'
+import { openInternalServerErrorNotification } from '@/utils/Toast'
+import { warningModal } from '@/utils/Modal'
 
 const SNS_SERVICE_PREFIX_PATH = '/sns-service'
 
@@ -23,11 +25,11 @@ export const getFollowers = async (page: number, size: number, sort: string): Pr
     if (error instanceof AxiosError) {
       if (error.response) {
         if (error.response.status >= 400 && error.response.status < 500) {
-          alert(error.response.data.message)
+          await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
-          alert('서버 내부 오류')
+          openInternalServerErrorNotification()
           console.error('Internal Server Error')
         }
       }
@@ -50,11 +52,11 @@ export const getFollowings = async (page: number, size: number, sort: string): P
     if (error instanceof AxiosError) {
       if (error.response) {
         if (error.response.status >= 400 && error.response.status < 500) {
-          alert(error.response.data.message)
+          await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
-          alert('서버 내부 오류')
+          openInternalServerErrorNotification()
           console.error('Internal Server Error')
         }
       }
@@ -74,11 +76,11 @@ export const toggleFollow = async (followingIds: Array<number>): Promise<void> =
     if (error instanceof AxiosError) {
       if (error.response) {
         if (error.response.status >= 400 && error.response.status < 500) {
-          alert(error.response.data.message)
+          await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
         }
         if (error.response.status >= 500) {
-          alert('서버 내부 오류')
+          openInternalServerErrorNotification()
           console.error('Internal Server Error')
         }
       }

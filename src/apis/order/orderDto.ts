@@ -39,6 +39,7 @@ export interface OrderSheet {
   orderItems: OrderItem[]
   deliveryInfo: DeliveryInfo | null
   paymentType: String
+  referralCode: String | null
 }
 
 export interface OrderItem {
@@ -48,7 +49,6 @@ export interface OrderItem {
   orderPrice: Number
   quantity: Number
   couponInfoId: Number | null
-  referralCode: String | null
 }
 
 export interface DeliveryInfo {

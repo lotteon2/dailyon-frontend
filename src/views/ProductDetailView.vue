@@ -14,7 +14,9 @@ import type { ReadWishListFromProduct } from '@/apis/wishcart/WishListDto'
 import { readWishListFromProduct, toggleWishList } from '@/apis/wishcart/WishListClient'
 import type { AxiosResponse } from 'axios'
 import TOP4OOTDComponent from '@/components/ootd/TOP4OOTDComponent.vue'
-import { Image } from 'ant-design-vue'
+import { Image, Select, SelectOption } from 'ant-design-vue'
+import { errorModal, infoModal, warningModal } from '@/utils/Modal'
+import { LOGIN_NEED_MSG } from '@/utils/CommonMessage'
 
 const productStore = useProductStore()
 
@@ -44,7 +46,7 @@ const checkWishList = (): boolean => {
 
 const executeToggle = () => {
   if (selectedProductSize.value.productSizeId === 0 || productId.value === 0) {
-    alert('치수를 선택해주세요')
+    warningModal('알림', '치수를 선택해주세요')
     return
   }
 
@@ -52,7 +54,7 @@ const executeToggle = () => {
     isWishBtnEnabled.value = false
 
     if (!localStorage.getItem('accessToken')) {
-      alert('로그인 후 이용해 주세요')
+      infoModal('알림', LOGIN_NEED_MSG)
       isWishBtnEnabled.value = true
       return
     }
@@ -78,7 +80,7 @@ const executeToggle = () => {
         }
       })
       .catch((error: any) => {
-        alert(error.response!.data!.message)
+        errorModal('오류', error.response!.data!.message)
       })
       .finally(() => {
         isWishBtnEnabled.value = true
@@ -110,7 +112,7 @@ const closeCouponModal = () => {
 }
 const openCouponModal = () => {
   if (!localStorage.getItem('accessToken')) {
-    alert('로그인 후 이용해주세요.')
+    infoModal('알림', LOGIN_NEED_MSG)
   } else {
     showCouponModal.value = true
   }
@@ -150,18 +152,18 @@ const addToCart = () => {
     isCartBtnEnabled.value = false
 
     if (!localStorage.getItem('accessToken')) {
-      alert('로그인 후 이용해 주세요')
+      warningModal('알림', LOGIN_NEED_MSG)
       isCartBtnEnabled.value = true
       return
     }
 
     if (selectedProductSize.value.productSizeId === 0) {
-      alert('옵션을 지정해주세요')
+      warningModal('알림', '옵션을 지정해주세요')
       isCartBtnEnabled.value = true
       return
     }
     if (selectedQuantity.value === 0) {
-      alert('개수를 추가해주세요')
+      warningModal('알림', '개수를 추가해주세요')
       isCartBtnEnabled.value = true
       return
     }
@@ -172,10 +174,10 @@ const addToCart = () => {
       lastMemberCode: referralCode.value
     })
       .then(() => {
-        alert('장바구니에 상품이 담겼습니다')
+        infoModal('알림', '장바구니에 상품이 담겼습니다')
       })
       .catch((error: any) => {
-        alert(error.response!.data!.message)
+        errorModal('오류', error.response!.data!.message)
       })
       .finally(() => {
         isCartBtnEnabled.value = true
@@ -196,18 +198,17 @@ const routeOrderSheet = async () => {
         orderPrice: selectedOriginalPrice.value,
         quantity: selectedQuantity.value,
         couponInfoId: null,
-        discountAmount: 0,
-        referralCode: referralCode.value
+        discountAmount: 0
       }
     ]
-    productStore.setProducts(productInfos, 'SINGLE')
+    productStore.setProducts(productInfos, 'SINGLE', referralCode.value)
     router.push('/orders')
   }
 }
 
 const validation = (): boolean => {
   if (selectedQuantity.value === 0 || selectedOriginalPrice.value === 0) {
-    alert('상품옵션과 수량을 선택해 주세요.')
+    warningModal('알림', '상품옵션과 수량을 선택해 주세요.')
     return false
   }
   return true
@@ -246,7 +247,7 @@ watch(selectedProductSize, () => {
           <template #placeholder>
             <Image
               class="img-big"
-              :src='`${VITE_STATIC_IMG_URL}${product.imgUrl}?w=480&h=480&q=0`'
+              :src="`${VITE_STATIC_IMG_URL}${product.imgUrl}?w=480&h=480&q=0`"
               :preview="true"
             />
           </template>

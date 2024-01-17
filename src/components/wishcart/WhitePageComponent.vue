@@ -27,7 +27,7 @@ const props = defineProps({
 
 .white-page > h1 {
   font-family: TheJamsil;
-  font-size: 2.5vw;
+  font-size: 1.5vw;
   font-style: normal;
   font-weight: 400;
   color: #808080;
