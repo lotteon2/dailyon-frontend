@@ -76,7 +76,7 @@ const submitForm = async () => {
     }
 
     props.closeModal()
-    window.location.reload()
+    
     await successModal('알림', '배송지 저장이 완료되었습니다.')
   } catch (error) {
     console.error('API 호출 중 오류 발생:', error)
@@ -207,7 +207,7 @@ watch(() => props.selectedAddress, (newValue: any) => {
 .modal-card {
   position: relative;
   max-width: 30%;
-  max-height: 90%;
+  max-height: 95%;
   margin: auto;
   margin-top: 1%;
   background-color: #f5f5f5;
@@ -215,7 +215,7 @@ watch(() => props.selectedAddress, (newValue: any) => {
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 10;
   color: #333;
-  overflow-y: scroll;
+
 }
 
 
@@ -283,7 +283,7 @@ td {
 
 .post-box {
   overflow-y: auto;
-  max-height: 300px;
+  max-height: 250px;
   padding: 1em;
   border: 1px solid #ccc;
   border-radius: 5px;
