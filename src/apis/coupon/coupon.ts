@@ -1,11 +1,13 @@
 import axios, { AxiosError } from 'axios'
-import { authAxiosInstance } from '@/apis/utils/index'
+import { authAxiosInstance, defaultAxiosInstance } from '@/apis/utils/index'
 import type {
   CouponInfoItemWithAvailabilityResponse,
   ProductCategoryPair,
   CheckoutCouponApplicationResponse,
   CouponInfoItemResponse,
-  MultipleCouponDownloadResponse
+  MultipleCouponDownloadResponse,
+  MultipleProductsCouponRequest,
+  MultipleProductCouponsResponse
 } from '@/apis/coupon/CouponItemDto'
 import { openInternalServerErrorNotification } from '@/utils/Toast'
 import { warningModal } from '@/utils/Modal'
@@ -129,6 +131,32 @@ export const getMyCoupons = async (page: Number) => {
           size: 10
         }
       }
+    )
+    return response.data
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      if (error.response) {
+        if (error.response.status >= 400 && error.response.status < 500) {
+          await warningModal('알림', error.response.data.message)
+          console.error(`Client Error=${error.response.data.message}`)
+        }
+        if (error.response.status >= 500) {
+          openInternalServerErrorNotification()
+          console.error('Internal Server Error')
+        }
+      }
+    }
+    throw error
+  }
+}
+
+export const getMultipleProductsCoupons = async (
+  requestPayload: MultipleProductsCouponRequest
+): Promise<MultipleProductCouponsResponse> => {
+  try {
+    const response = await defaultAxiosInstance.post(
+      `${PROMOTION_PREFIX_PATH}${COUPON_DOMAIN_PREFIX_PATH}/multiple-products`,
+      requestPayload
     )
     return response.data
   } catch (error) {

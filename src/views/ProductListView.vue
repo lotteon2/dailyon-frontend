@@ -113,7 +113,7 @@ const getProductMaxDiscountPercentage = (product: ReadProductResponse) => {
   let maxDiscountPercentageBeforeFlooring = 0 // 가격을 따로 정확히 보여주기 위한 보존값
   let maxDiscountPercentageAfterFlooring = 0
 
-  product.coupons.forEach((coupon) => {
+  product.coupons?.forEach((coupon) => {
     if (product.price >= coupon.minPurchaseAmount) {
       // Listview에서는 일단 1개 구매를 기준으로 display
       // N개 이상 구매했을때를 가정한 최적 할인율과 해당 쿠폰 적용환경의 최소개수도 구할까 고민중임.
@@ -197,9 +197,6 @@ const getProductMaxDiscountPercentage = (product: ReadProductResponse) => {
             </svg>
             <h1>{{ product.avgRating.toFixed(1) }} | ({{ product.reviewCount }})</h1>
           </div>
-          <!-- <div class="product-price">
-            <h3>{{ product.price.toLocaleString() }}원</h3>
-          </div> -->
         </div>
       </RouterLink>
     </div>
