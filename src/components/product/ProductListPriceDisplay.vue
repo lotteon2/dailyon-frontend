@@ -1,12 +1,12 @@
 <template>
   <div class="product-price">
     <template v-if="hasDiscount">
-      <span class="s-goods-price__original">
+      <span class="product-price__original">
         <del>{{ originalPrice?.toLocaleString() }}원</del>
       </span>
-      <span class="s-goods-price__discount">{{ discountPercentage }}%</span>
+      <span class="product-price__discount">{{ discountPercentage }}%</span>
     </template>
-    <strong class="s-goods-price__final">{{ finalPrice?.toLocaleString() }}원</strong>
+    <strong class="product-price__final">{{ finalPrice?.toLocaleString() }}원</strong>
   </div>
 </template>
 
