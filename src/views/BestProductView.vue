@@ -12,6 +12,7 @@ const bestProducts = ref<ReadCacheProductResponse[]>([
     id: 0,
     brandName: '',
     code: '',
+    categoryId: 0,
     categoryName: '',
     imgUrl: '',
     name: '',

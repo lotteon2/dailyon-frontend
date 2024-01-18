@@ -65,6 +65,7 @@ export interface ReadCacheProductListResponse {
 export interface ReadCacheProductResponse {
   id: number
   brandName: string
+  categoryId: number
   categoryName: string
   price: number
   name: string
