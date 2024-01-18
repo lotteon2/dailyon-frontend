@@ -45,7 +45,9 @@ const markNotificationAsRead = async (notificationId: string) => {
 }
 
 const markAllNotificationsAsRead = async () => {
-  await notificationStore.markAllAsRead()
+  if(notifications.value.length !== 0) {
+    await notificationStore.markAllAsRead()
+  }
 }
 
 const deleteNotification = async (notificationId: string) => {
@@ -53,7 +55,9 @@ const deleteNotification = async (notificationId: string) => {
 }
 
 const deleteAllNotifications = async () => {
-  await notificationStore.deleteAllNotifs()
+  if(notifications.value.length !== 0) {
+    await notificationStore.deleteAllNotifs()
+  }
 }
 
 const notificationClickHandler = (clickedNotification: Notification) => {
