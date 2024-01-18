@@ -10,6 +10,7 @@ import { useNotificationStore } from '@/stores/notification/NotificationStore'
 import router from '@/router'
 import { infoModal } from '@/utils/Modal'
 import { LOGIN_NEED_MSG } from '@/utils/CommonMessage'
+import { useBrandStore } from '@/stores/brand/BrandStore'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -19,6 +20,7 @@ const { notifications, unreadNotificationCount } = storeToRefs(notificationStore
 const memberStore = useMemberStore()
 // const {  } = storeToRefs(memberStore)
 const categoryStore = useCategoryStore()
+const brandStore = useBrandStore()
 
 const isLoggedIn = () => {
   const token = localStorage.getItem('accessToken')
@@ -76,6 +78,7 @@ const hideNotificationDropdownHandler = () => {
 
 onBeforeMount(() => {
   categoryStore.setCategoryTree(null)
+  brandStore.setBrands()
 })
 
 onMounted(async () => {

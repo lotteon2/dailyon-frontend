@@ -1,25 +1,30 @@
 <script setup lang="ts">
 import { inject, onBeforeMount, type Ref, ref, watch } from 'vue'
-import type { AxiosResponse } from 'axios'
 import { useRoute } from 'vue-router'
 import type { ReadProductResponse, ReadProductSliceResponse } from '@/apis/product/ProductDto'
 import { getProductSlice } from '@/apis/product/ProductClient'
 import BreadCrumbComponent from '@/components/product/BreadCrumbComponent.vue'
 import ProductListPriceDisplay from '@/components/product/ProductListPriceDisplay.vue'
-import { Image } from 'ant-design-vue'
-import { errorModal } from '@/utils/Modal'
+import { useBrandStore } from '@/stores/brand/BrandStore'
+import WhitePageComponent from '@/components/wishcart/WhitePageComponent.vue'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
 const route = useRoute()
+const brandStore = useBrandStore()
 
-const categoryId = ref<number>(0)
+const categoryId = ref<number | null>(null)
 const brandId = ref<number | null>(null)
 const gender = ref<string | null>(null)
-const type = ref<string | null>(null)
 
+const lowPrice = ref<number | null>(null)
+const highPrice = ref<number | null>(null)
+const query = ref<string | null>(null)
+const sort = ref<string>('createdAt')
+const direction = ref<string>('desc')
+
+const lastVal = ref<string | null>(null)
 const hasNext = ref<boolean>(true)
-const lastId = ref<number>(0)
 const products = ref<ReadProductResponse[]>([])
 
 const initData = async () => {
@@ -27,47 +32,268 @@ const initData = async () => {
     brandId.value = Number(route.query.brand)
   }
 
-  if (route.query.gender) {
-    gender.value = String(route.query.gender)
-  }
-
-  if (route.query.type) {
-    type.value = String(route.query.type)
-  }
-
   if (route.query.category) {
     categoryId.value = Number(route.query.category)
   }
 
+  if (route.query.query) {
+    query.value = String(route.query.query)
+  }
+
   const response: ReadProductSliceResponse = await getProductSlice(
-    lastId.value,
+    lastVal.value,
     brandId.value,
     categoryId.value,
     gender.value,
-    type.value
+    lowPrice.value,
+    highPrice.value,
+    query.value,
+    sort.value,
+    direction.value
   )
 
   hasNext.value = response.hasNext
-  lastId.value = response.productResponses[response.productResponses.length - 1].id
+  lastVal.value = response.productResponses[response.productResponses.length - 1].createdAt
   products.value = [...products.value, ...response.productResponses]
 }
 
 onBeforeMount(initData)
 
+const changeBrand = (idx: number) => {
+  // 한 번 누른거 또 누르면 브랜드 선택 해제
+  if (brandId.value === brandStore.brandList[idx].id) {
+    brandId.value = null
+  } else {
+    brandId.value = brandStore.brandList[idx].id
+  }
+}
+
+const changeSort = (sortVal: string) => {
+  sort.value = sortVal
+  if (sortVal === 'createdAt') {
+    lastVal.value = null
+  } else {
+    lastVal.value = '1000000000'
+  }
+}
+
+const changeSortAndDir = (sortVal: string, dirVal: string) => {
+  dirVal === 'desc' ? (lastVal.value = '1000000000') : (lastVal.value = '0')
+  sort.value = sortVal
+  direction.value = dirVal
+}
+
+const changeGender = (genderVal: string) => {
+  if (gender.value === genderVal) {
+    gender.value = null
+  } else {
+    gender.value = genderVal
+  }
+}
+
+// 검색 버튼 클릭 시 다시 조회
+const changeQuery = async () => {
+  const response: ReadProductSliceResponse = await getProductSlice(
+    lastVal.value,
+    brandId.value,
+    categoryId.value,
+    gender.value,
+    lowPrice.value,
+    highPrice.value,
+    query.value,
+    sort.value,
+    direction.value
+  )
+
+  hasNext.value = response.hasNext
+  products.value = response.productResponses
+
+  if (sort.value === 'price') {
+    lastVal.value = String(response.productResponses[response.productResponses.length - 1].price)
+  } else if (sort.value === 'review') {
+    // 리뷰 많은 순
+    lastVal.value = String(
+      response.productResponses[response.productResponses.length - 1].reviewCount
+    )
+  } else if (sort.value === 'rating') {
+    // 별점 높은 순
+    lastVal.value = String(
+      response.productResponses[response.productResponses.length - 1].avgRating
+    )
+  } else {
+    lastVal.value = response.productResponses[response.productResponses.length - 1].createdAt
+  }
+}
+
+// 정렬 기준 변경 시 다시 조회
+watch(sort, async (newSort, oldSort) => {
+  const response: ReadProductSliceResponse = await getProductSlice(
+    lastVal.value,
+    brandId.value,
+    categoryId.value,
+    gender.value,
+    lowPrice.value,
+    highPrice.value,
+    query.value,
+    newSort,
+    direction.value
+  )
+
+  hasNext.value = response.hasNext
+  products.value = response.productResponses
+
+  if (sort.value === 'price') {
+    lastVal.value = String(response.productResponses[response.productResponses.length - 1].price)
+  } else if (sort.value === 'review') {
+    // 리뷰 많은 순
+    lastVal.value = String(
+      response.productResponses[response.productResponses.length - 1].reviewCount
+    )
+  } else if (sort.value === 'rating') {
+    // 별점 높은 순
+    lastVal.value = String(
+      response.productResponses[response.productResponses.length - 1].avgRating
+    )
+  } else {
+    lastVal.value = response.productResponses[response.productResponses.length - 1].createdAt
+  }
+})
+
+watch(direction, async (newDirection, oldDirection) => {
+  const response: ReadProductSliceResponse = await getProductSlice(
+    lastVal.value,
+    brandId.value,
+    categoryId.value,
+    gender.value,
+    lowPrice.value,
+    highPrice.value,
+    query.value,
+    sort.value,
+    newDirection
+  )
+
+  hasNext.value = response.hasNext
+  products.value = response.productResponses
+
+  if (sort.value === 'price') {
+    lastVal.value = String(response.productResponses[response.productResponses.length - 1].price)
+  } else if (sort.value === 'review') {
+    // 리뷰 많은 순
+    lastVal.value = String(
+      response.productResponses[response.productResponses.length - 1].reviewCount
+    )
+  } else if (sort.value === 'rating') {
+    // 별점 높은 순
+    lastVal.value = String(
+      response.productResponses[response.productResponses.length - 1].avgRating
+    )
+  } else {
+    lastVal.value = response.productResponses[response.productResponses.length - 1].createdAt
+  }
+})
+
+// 브랜드 변경 시 다시 조회
+watch(brandId, async (newBrand, oldBrand) => {
+  const response: ReadProductSliceResponse = await getProductSlice(
+    lastVal.value,
+    newBrand,
+    categoryId.value,
+    gender.value,
+    lowPrice.value,
+    highPrice.value,
+    query.value,
+    sort.value,
+    direction.value
+  )
+
+  hasNext.value = response.hasNext
+  products.value = response.productResponses
+
+  if (sort.value === 'price') {
+    lastVal.value = String(response.productResponses[response.productResponses.length - 1].price)
+  } else if (sort.value === 'review') {
+    // 리뷰 많은 순
+    lastVal.value = String(
+      response.productResponses[response.productResponses.length - 1].reviewCount
+    )
+  } else if (sort.value === 'rating') {
+    // 별점 높은 순
+    lastVal.value = String(
+      response.productResponses[response.productResponses.length - 1].avgRating
+    )
+  } else {
+    lastVal.value = response.productResponses[response.productResponses.length - 1].createdAt
+  }
+})
+
+// 성별 변경 시 다시 조회
+watch(gender, async (newGender, oldGender) => {
+  const response: ReadProductSliceResponse = await getProductSlice(
+    lastVal.value,
+    brandId.value,
+    categoryId.value,
+    newGender,
+    lowPrice.value,
+    highPrice.value,
+    query.value,
+    sort.value,
+    direction.value
+  )
+
+  hasNext.value = response.hasNext
+  products.value = response.productResponses
+
+  if (sort.value === 'price') {
+    lastVal.value = String(response.productResponses[response.productResponses.length - 1].price)
+  } else if (sort.value === 'review') {
+    // 리뷰 많은 순
+    lastVal.value = String(
+      response.productResponses[response.productResponses.length - 1].reviewCount
+    )
+  } else if (sort.value === 'rating') {
+    // 별점 높은 순
+    lastVal.value = String(
+      response.productResponses[response.productResponses.length - 1].avgRating
+    )
+  } else {
+    lastVal.value = response.productResponses[response.productResponses.length - 1].createdAt
+  }
+})
+
+// 무한 스크롤
 const isScrollEnd = inject<Ref<boolean | undefined>>('isScrollEnd') as Ref<boolean | undefined>
 watch(isScrollEnd, async (after, before) => {
   if (after !== before && hasNext.value) {
     const response: ReadProductSliceResponse = await getProductSlice(
-      lastId.value,
+      lastVal.value,
       brandId.value,
       categoryId.value,
       gender.value,
-      type.value
+      lowPrice.value,
+      highPrice.value,
+      query.value,
+      sort.value,
+      direction.value
     )
 
     hasNext.value = response.hasNext
-    lastId.value = response.productResponses[response.productResponses.length - 1].id
     products.value = [...products.value, ...response.productResponses]
+
+    if (sort.value === 'price') {
+      lastVal.value = String(response.productResponses[response.productResponses.length - 1].price)
+    } else if (sort.value === 'review') {
+      // 리뷰 많은 순
+      lastVal.value = String(
+        response.productResponses[response.productResponses.length - 1].reviewCount
+      )
+    } else if (sort.value === 'rating') {
+      // 별점 높은 순
+      lastVal.value = String(
+        response.productResponses[response.productResponses.length - 1].avgRating
+      )
+    } else {
+      lastVal.value = response.productResponses[response.productResponses.length - 1].createdAt
+    }
   }
 })
 
@@ -151,7 +377,115 @@ const getProductMaxDiscountPercentage = (product: ReadProductResponse) => {
 <template>
   <div style="width: 50vw">
     <BreadCrumbComponent :category="categoryId" />
-    <div class="product-list-container">
+    <div class="sort-container">
+      <div
+        class="sort-item"
+        :class="{ selected: sort === 'createdAt' }"
+        @click="changeSort('createdAt')"
+      >
+        최신 등록 순
+      </div>
+      <div class="sort-item" :class="{ selected: sort === 'review' }" @click="changeSort('review')">
+        리뷰 많은 순
+      </div>
+      <div class="sort-item" :class="{ selected: sort === 'rating' }" @click="changeSort('rating')">
+        별점 높은 순
+      </div>
+      <div
+        class="sort-item"
+        :class="{ selected: sort === 'price' && direction === 'asc' }"
+        @click="changeSortAndDir('price', 'asc')"
+      >
+        낮은 가격 순
+      </div>
+      <div
+        class="sort-item"
+        :class="{ selected: sort === 'price' && direction === 'desc' }"
+        @click="changeSortAndDir('price', 'desc')"
+      >
+        높은 가격 순
+      </div>
+    </div>
+    <div class="filter-container">
+      <div class="brand-filter-item">
+        <div class="brand-filter-item-key">브랜드</div>
+        <div class="brand-filter-item-value">
+          <div
+            class="brand-info"
+            :class="{ selected: brandId === brand.id }"
+            v-for="(brand, index) in brandStore.brandList"
+            @click="changeBrand(index)"
+          >
+            {{ brand.name }}
+          </div>
+        </div>
+      </div>
+      <div class="filter-item">
+        <div class="filter-item-key">성별</div>
+        <div class="filter-item-value">
+          <div
+            class="sort-item"
+            :class="{ selected: gender === 'MALE' }"
+            @click="changeGender('MALE')"
+          >
+            남성
+          </div>
+          <div
+            class="sort-item"
+            :class="{ selected: gender === 'FEMALE' }"
+            @click="changeGender('FEMALE')"
+          >
+            여성
+          </div>
+          <div
+            class="sort-item"
+            :class="{ selected: gender === 'COMMON' }"
+            @click="changeGender('COMMON')"
+          >
+            공용
+          </div>
+        </div>
+      </div>
+      <div class="filter-item">
+        <div class="filter-item-key">가격</div>
+        <div class="filter-item-value">
+          <div style="padding-right: 10px" />
+          <input
+            class="select-block-input"
+            v-model.lazy.number="lowPrice"
+            placeholder="최소 가격"
+          />
+          <div style="padding-right: 10px" />
+          <input
+            class="select-block-input"
+            v-model.lazy.number="highPrice"
+            placeholder="최대 가격"
+          />
+        </div>
+      </div>
+      <div class="filter-item">
+        <div class="filter-item-key">검색</div>
+        <div class="filter-item-value">
+          <div style="padding-right: 10px" />
+          <div>
+            <input
+              class="select-block-input"
+              type="text"
+              v-model.lazy="query"
+              placeholder="상품명 또는 코드로 검색"
+              @keyup.enter="changeQuery"
+            />
+          </div>
+          <div style="padding-right: 10px" />
+          <div>
+            <button class="search-button" @click="changeQuery">검색</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="padding: 1vh" />
+    <div class="product-list-container" v-if="products.length > 0">
       <RouterLink
         class="prod-info"
         v-for="(product, index) in products"
@@ -200,6 +534,7 @@ const getProductMaxDiscountPercentage = (product: ReadProductResponse) => {
         </div>
       </RouterLink>
     </div>
+    <WhitePageComponent v-else message="상품이 존재하지 않습니다" />
   </div>
 </template>
 
@@ -211,6 +546,125 @@ const getProductMaxDiscountPercentage = (product: ReadProductResponse) => {
   width: 100%;
   height: 100%;
   justify-content: flex-start;
+}
+
+.sort-container {
+  display: flex;
+  padding-bottom: 20px;
+}
+
+.sort-item {
+  font-family: 'TheJamsil2Light';
+  font-size: 1vw;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.sort-item:hover {
+  color: #c22727;
+}
+
+.sort-item.selected {
+  color: #c22727;
+}
+
+.filter-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 500px;
+}
+
+.brand-filter-item {
+  display: flex;
+  height: 70%;
+  justify-content: space-between;
+}
+
+.brand-filter-item-key {
+  width: 15%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #c6c6c6;
+
+  font-family: 'TheJamsil4Medium';
+  font-size: 1vw;
+}
+
+.brand-filter-item-value {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  font-family: 'TheJamsil3Regular';
+
+  overflow-x: auto;
+  width: 100%;
+  height: 100%;
+}
+
+.brand-info {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  flex: 0 0 calc(20% - 40px);
+  margin-left: 10px;
+  margin-right: 10px;
+  height: 10%;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.brand-info:hover {
+  color: #c22727;
+}
+
+.brand-info.selected {
+  color: #c22727;
+}
+
+.filter-item {
+  display: flex;
+  height: 10%;
+  justify-content: flex-start;
+}
+
+.filter-item-key {
+  display: flex;
+  width: 13%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  background-color: #c6c6c6;
+  font-family: 'TheJamsil4Medium';
+  font-size: 1vw;
+}
+
+.filter-item-value {
+  display: flex;
+  width: 87%;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.select-block-input {
+  font-family: 'The Jamsil 3 Regular';
+  font-size: 12px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.search-button {
+  width: 60px;
+  height: 30px;
+  font-size: 16px;
+  color: white;
+  border: none;
+  background-color: black;
+  cursor: pointer;
+  font-family: 'The Jamsil 3 Regular';
 }
 
 .prod-info {
@@ -227,9 +681,9 @@ const getProductMaxDiscountPercentage = (product: ReadProductResponse) => {
   text-overflow: ellipsis;
   overflow: hidden;
   color: var(--Grayscale7, #000);
-  font-family: TheJamsil;
+  font-family: 'TheJamsil3Regular';
   font-size: 1.1vw;
-  font-style: normal;
+  /*font-style: normal;*/
   font-weight: 400;
   line-height: 30px;
 }
@@ -240,9 +694,9 @@ const getProductMaxDiscountPercentage = (product: ReadProductResponse) => {
   text-overflow: ellipsis;
   overflow: hidden;
   color: var(--Grayscale7, #000);
-  font-family: TheJamsil;
+  font-family: 'TheJamsil2Light';
   font-size: 1.1vw;
-  font-style: normal;
+  /*font-style: normal;*/
   font-weight: 300;
   line-height: 30px;
 }
@@ -253,7 +707,7 @@ const getProductMaxDiscountPercentage = (product: ReadProductResponse) => {
   justify-content: space-between;
   align-items: end;
   color: var(--Grayscale7, #000);
-  font-family: TheJamsil;
+  font-family: 'TheJamsil2Light';
   font-size: 0.9vw;
   font-style: normal;
   font-weight: 400;
@@ -263,12 +717,6 @@ const getProductMaxDiscountPercentage = (product: ReadProductResponse) => {
 .product-aggregate {
   display: flex;
   align-items: center;
-}
-
-.product-price {
-  display: flex;
-  align-items: center;
-  text-align: end;
 }
 
 .product-img {

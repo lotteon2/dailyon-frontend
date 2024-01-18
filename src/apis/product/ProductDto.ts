@@ -17,6 +17,7 @@ export interface ReadProductResponse {
   imgUrl: string
   avgRating: number
   reviewCount: number
+  createdAt: string
   coupons?: CouponInfoItemResponse[]
 }
 

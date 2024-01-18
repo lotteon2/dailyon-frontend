@@ -38,12 +38,17 @@ export const getChildCategories = async (
   }
 }
 
-export const getBreadCrumbs = async (categoryId: number): Promise<ReadBreadCrumbResponse> => {
+export const getBreadCrumbs = async (
+  categoryId: number | null
+): Promise<ReadBreadCrumbResponse | null> => {
   try {
-    const { data } = await defaultAxiosInstance.get(
-      `${PRODUCT_SERVICE_PREFIX}${CATEGORY_PREFIX}/breadcrumb/${categoryId}`
-    )
-    return data
+    if (categoryId !== null) {
+      const { data } = await defaultAxiosInstance.get(
+        `${PRODUCT_SERVICE_PREFIX}${CATEGORY_PREFIX}/breadcrumb/${categoryId}`
+      )
+      return data
+    }
+    return null
   } catch (error) {
     if (error instanceof AxiosError) {
       if (error.response) {
