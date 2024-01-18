@@ -69,7 +69,8 @@ watchEffect(() => {
           </div>
         </div>
         <div class="review-row-right">
-          <img class="review-prod-img" :src="`${VITE_STATIC_IMG_URL}${review.imgUrl}`" alt="" />
+          <div v-if='review.imgUrl === null' class="review-prod-img">이미지 없음</div>
+          <img v-else class="review-prod-img" :src="`${VITE_STATIC_IMG_URL}${review.imgUrl}`" alt="" />
         </div>
       </div>
     </div>
