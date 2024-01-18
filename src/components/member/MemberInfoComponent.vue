@@ -40,6 +40,7 @@ const openModal = () => {
 
 const closeModal = async () => {
   const response = await getMemberAddress(0);
+  defaultAddress.value = await getDefaultAddress()
   addresses.value = response.content;
   isModalVisible.value = false
 }
@@ -59,17 +60,7 @@ const deleteAdd = async (addressId: number) => {
     addresses.value = response.content;
     await successModal('알림', '배송지가 삭제되었습니다.');
   }
-  
-  
 }
-
-
-
-onMounted(async () => {
-  await getMember()
-  const addressData = await getDefaultAddress()
-  defaultAddress.value = await getDefaultAddress()
-})
 
 const formattedAddresses = computed(() => {
   return (addresses.value as any[]).map((address) => {
@@ -86,12 +77,11 @@ const onChangePage = async (page: number) => {
 
 onBeforeMount(async () => {
   const response = await getMemberAddress(0)
+  defaultAddress.value = await getDefaultAddress()
   addresses.value = response.content
   totalPages.value = response.totalPages
   totalElements.value = response.totalElements
 })
-
-
 
 watch(requestPage, async (afterPage, beforePage) => {
   if (afterPage < totalPages.value!) {
@@ -102,13 +92,7 @@ watch(requestPage, async (afterPage, beforePage) => {
   }
 })
 
-onMounted(async () => {
-  await getMember()
-  defaultAddress.value = await getDefaultAddress()
-})
-
 const selectedAddress = ref({})
-
 
 const openModalWithAddress = (address: any) => {
   selectedAddress.value = address
@@ -124,11 +108,10 @@ const setMemberInfo = async () => {
   }
 
   if (await confirmModal('진행 여부 확인', '수정된 정보를 저장하시겠습니까?')) {
-    setMember(memberDto)
+    await setMember(memberDto)
     await getMember()
     memberInfo = useMemberStore()
     await successModal('알림', '수정이 완료되었습니다!')
-    
   }
 }
 
