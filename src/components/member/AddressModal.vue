@@ -76,7 +76,7 @@ const submitForm = async () => {
     }
 
     props.closeModal()
-    window.location.reload()
+    
     await successModal('알림', '배송지 저장이 완료되었습니다.')
   } catch (error) {
     console.error('API 호출 중 오류 발생:', error)

@@ -16,8 +16,8 @@ import type { MemberInfoDto } from '@/apis/member/MemberDto'
 import { deleteAddress } from '@/apis/member/member'
 import { uploadImageToS3 } from '@/apis/s3/S3Client'
 import { confirmModal, successModal } from '@/utils/Modal'
-import { Select, SelectOption } from 'ant-design-vue'
-import type { SelectValue } from 'ant-design-vue/es/select'
+import { Select} from 'ant-design-vue'
+
 
 
 const isModalVisible = ref(false)
@@ -38,25 +38,32 @@ const openModal = () => {
   isModalVisible.value = true
 }
 
-const closeModal = () => {
+const closeModal = async () => {
+  const response = await getMemberAddress(0);
+  addresses.value = response.content;
   isModalVisible.value = false
 }
 
 const setDefault = async (addressId: number) => {
-  setDefaultAddress(addressId)
-  window.location.reload()
+  await setDefaultAddress(addressId)
+  const response = await getMemberAddress(0)
+  addresses.value = response.content
+  defaultAddress.value = await getDefaultAddress();
   await successModal('알림', '기본 배송지가 저장되었습니다.')
 }
 
 const deleteAdd = async (addressId: number) => {
   if (await confirmModal('진행 여부 확인', '정말로 삭제하시겠습니까?')) {
-    deleteAddress(addressId)
-    window.location.reload()
-    await successModal('알림', '배송지가 삭제되었습니다.')
-    
+    await deleteAddress(addressId);
+    const response = await getMemberAddress(0);
+    addresses.value = response.content;
+    await successModal('알림', '배송지가 삭제되었습니다.');
   }
-
+  
+  
 }
+
+
 
 onMounted(async () => {
   await getMember()
@@ -84,6 +91,8 @@ onBeforeMount(async () => {
   totalElements.value = response.totalElements
 })
 
+
+
 watch(requestPage, async (afterPage, beforePage) => {
   if (afterPage < totalPages.value!) {
     const response = await getMemberAddress(afterPage)
@@ -95,7 +104,6 @@ watch(requestPage, async (afterPage, beforePage) => {
 
 onMounted(async () => {
   await getMember()
-  const addressData = await getDefaultAddress()
   defaultAddress.value = await getDefaultAddress()
 })
 
@@ -135,7 +143,6 @@ const leave = async () => {
 
 const fileInput = ref<HTMLInputElement | null>(null)
 const inputPostImgFile = ref<File>()
-const formData = new FormData()
 const requestImage = ref<string>("")
 
 const openFileInput = () => {
