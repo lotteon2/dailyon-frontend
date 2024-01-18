@@ -182,8 +182,10 @@ const maxDiscountAmount = computed(() => {
 
   emit('best-promotional-price-updated', maxDiscount) // computed로 변경시 emit
 
-  return maxDiscount
+  return floorToTens(maxDiscount)
 })
+
+const floorToTens = (n: number): number => Math.floor(n / 10) * 10
 
 const formattedMaxDiscountAmount = computed(() => {
   return maxDiscountAmount.value.toLocaleString() + '원'
