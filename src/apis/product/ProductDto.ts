@@ -3,6 +3,10 @@ export interface ReadProductSliceResponse {
   productResponses: ReadProductResponse[]
 }
 
+export interface ExtendedReadProductResponse extends ReadProductResponse {
+  categoryId: number
+}
+
 export interface ReadProductResponse {
   id: number
   brandName: string
@@ -13,7 +17,7 @@ export interface ReadProductResponse {
   imgUrl: string
   avgRating: number
   reviewCount: number
-  coupons: CouponInfoItemResponse[]
+  coupons?: CouponInfoItemResponse[]
 }
 
 export interface CouponInfoItemResponse {
@@ -60,6 +64,12 @@ export interface ProductInfo {
 
 export interface ReadCacheProductListResponse {
   responses: ReadCacheProductResponse[]
+}
+
+export interface ExtendedReadCacheProductResponse extends ReadCacheProductResponse {
+  avgRating: number
+  reviewCount: number
+  coupons: CouponInfoItemResponse[]
 }
 
 export interface ReadCacheProductResponse {
