@@ -78,7 +78,7 @@ const handleSelectedOptionChange = async (
   <div class="order-check-container">
     <div class="container-title">주문/배송 조회</div>
     <div class="container-line"></div>
-    <div v-if="orders.length !== 0">
+    <div>
       <div class="container-inner-line"></div>
       <div class="inner-title-container">
         <div class="container-inner-title">주문 내역&nbsp;&nbsp;</div>
@@ -105,8 +105,12 @@ const handleSelectedOptionChange = async (
           <th>주문상태</th>
           <th>결제일시</th>
         </tr>
-        <OrderComponent :orders="orders" @showModal="(index) => open(index)" />
+        <OrderComponent v-if="orders.length !== 0"  :orders="orders" @showModal="(index) => open(index)" />
+        <td v-else colspan='5' style='width: 100%; text-align: center'>
+          <WhitePageComponent message="주문 내역이 없습니다" />
+        </td>
       </table>
+
       <div v-if="showModal" class="modal" @click="closeModal">
         <div class="modal-content" @click.stop>
           <span class="close" @click="closeModal">&times;</span>
@@ -118,9 +122,6 @@ const handleSelectedOptionChange = async (
         :requestPage="requestPage"
         :totalPages="totalPages"
       />
-    </div>
-    <div v-else>
-      <WhitePageComponent message="주문 내역이 없습니다" />
     </div>
   </div>
 </template>
