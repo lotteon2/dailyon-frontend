@@ -1,21 +1,21 @@
-import type { ReadProductResponse, ReadProductSliceResponse } from '@/apis/product/ProductDto'
+import type {ExtendedReadCacheProductResponse} from '@/apis/product/ProductDto'
 
 /**
  혜택가 관련 계산입니다.
  */
-export const getFloorDiscountPercentage = (product: ReadProductResponse) => {
+export const getFloorDiscountPercentage = (product: ExtendedReadCacheProductResponse) => {
   const { maxDiscountPercentageBeforeFlooring, maxDiscountPercentageAfterFlooring } =
     getProductMaxDiscountPercentage(product)
   return Math.floor(maxDiscountPercentageAfterFlooring)
 }
 
-export const getFinalPrice = (product: ReadProductResponse) => {
+export const getFinalPrice = (product: ExtendedReadCacheProductResponse) => {
   const { maxDiscountPercentageBeforeFlooring, maxDiscountPercentageAfterFlooring } =
     getProductMaxDiscountPercentage(product)
   return Math.floor(product.price - (product.price * maxDiscountPercentageBeforeFlooring) / 100)
 }
 
-const getProductMaxDiscountPercentage = (product: ReadProductResponse) => {
+const getProductMaxDiscountPercentage = (product: ExtendedReadCacheProductResponse) => {
   let maxDiscountPercentageBeforeFlooring = 0 // 가격을 따로 정확히 보여주기 위한 보존값
   let maxDiscountPercentageAfterFlooring = 0
 

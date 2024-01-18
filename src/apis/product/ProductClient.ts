@@ -12,18 +12,25 @@ const PRODUCT_SERVICE_PREFIX: string = '/product-service'
 const PRODUCT_PREFIX: string = '/products'
 
 export const getProductSlice = async (
-  lastId: number,
+  lastVal: string | null,
   brandId: number | null,
   categoryId: number | null,
   gender: string | null,
-  type: string | null
+  lowPrice: number | null,
+  highPrice: number | null,
+  query: string | null,
+  sort: string,
+  direction: string
 ): Promise<ReadProductSliceResponse> => {
   try {
-    const params: any = { lastId: lastId }
+    const params: any = { sort: sort, direction: direction }
+    if (lastVal !== null) params.lastVal = lastVal
     if (brandId !== null) params.brandId = brandId
     if (categoryId !== null) params.categoryId = categoryId
     if (gender !== null) params.gender = gender
-    if (type !== null) params.type = type
+    if (lowPrice !== null) params.lowPrice = lowPrice
+    if (highPrice !== null) params.highPrice = highPrice
+    if (query !== null) params.query = query
     const { data } = await defaultAxiosInstance.get(`${PRODUCT_SERVICE_PREFIX}${PRODUCT_PREFIX}`, {
       params: params
     })
@@ -48,35 +55,6 @@ export const getProductDetail = async (productId: number): Promise<ReadProductDe
   try {
     const { data } = await defaultAxiosInstance.get(
       `${PRODUCT_SERVICE_PREFIX}${PRODUCT_PREFIX}/id/${productId}`
-    )
-    return data
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      if (error.response) {
-        if (error.response.status >= 400 && error.response.status < 500) {
-          await warningModal('알림', error.response.data.message)
-          console.error(`Client Error=${error.response.data.message}`)
-        }
-        if (error.response.status >= 500) {
-          openInternalServerErrorNotification()
-          console.error('Internal Server Error')
-        }
-      }
-    }
-    throw error
-  }
-}
-
-export const searchProduct = async (
-  lastId: number,
-  query: string | null
-): Promise<ReadProductSliceResponse> => {
-  try {
-    const { data } = await defaultAxiosInstance.get(
-      `${PRODUCT_SERVICE_PREFIX}${PRODUCT_PREFIX}/search`,
-      {
-        params: { lastId: lastId, query: query }
-      }
     )
     return data
   } catch (error) {

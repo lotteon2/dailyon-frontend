@@ -1,4 +1,4 @@
-<script setup lang='ts'>
+<script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCategoryStore } from '@/stores/category/CategoryStore'
@@ -33,24 +33,24 @@ const toProductList = (id: number) => {
 </script>
 
 <template>
-  <div v-if='props.categories.length > 0' class='category-dropdown-content'>
+  <div v-if="props.categories.length > 0" class="category-dropdown-content">
     <div
-      class='category-content'
-      v-for='category in props.categories'
-      :key='category.id'
-      @mouseover='mouseOver(category.id)'
-      @mouseleave='showChildDropdown = false'
-      @click='toProductList(category.id)'
+      class="category-content"
+      v-for="category in props.categories"
+      :key="category.id"
+      @mouseover="mouseOver(category.id)"
+      @mouseleave="showChildDropdown = false"
+      @click="toProductList(category.id)"
     >
-      <a :href='`/product-list?category=${category.id}&type=NORMAL`'>
+      <a :href="`/product-list?category=${category.id}`">
         {{ category.name }}
       </a>
     </div>
     <HeaderCategoryComponent
-      class='child-category'
+      class="child-category"
       :style="{ left: 100 + '%' }"
-      :show-dropdown='showChildDropdown'
-      :categories='childCategories'
+      :show-dropdown="showChildDropdown"
+      :categories="childCategories"
     />
   </div>
 </template>
@@ -88,8 +88,7 @@ const toProductList = (id: number) => {
   cursor: pointer;
 
   font-size: 1vw;
-  font-family: TheJamsil;
-  font-weight: 500;
+  font-family: 'The Jamsil 3 Regular';
 }
 
 .category-content > a {
@@ -105,6 +104,7 @@ const toProductList = (id: number) => {
   top: 0;
   position: absolute;
 
-  font-family: TheJamsil;
+  font-family: 'The Jamsil 3 Regular';
+  font-size: 1vw;
 }
 </style>

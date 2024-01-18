@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterView, useRoute } from 'vue-router'
-import { provide, ref, computed } from 'vue'
+import { computed, provide, ref } from 'vue'
 import HeaderComponent from '@/components/HeaderComponent.vue'
 import FooterComponent from '@/components/FooterComponent.vue'
 import { debounce } from 'lodash'
@@ -12,7 +12,7 @@ const displayHeader = computed(() => !route.path.startsWith('/order-success'))
 const onScroll = debounce(async (event: any) => {
   const { scrollHeight, scrollTop, clientHeight } = event.target
   // 스크롤이 끝에 닿으면 데이터를 추가로 로드
-  if (scrollHeight - 10 <= scrollTop + clientHeight) {
+  if (scrollHeight - 800 <= scrollTop + clientHeight) {
     isScrollEnd.value = !isScrollEnd.value
   }
 }, 200)

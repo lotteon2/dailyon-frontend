@@ -7,13 +7,14 @@ const breadCrumbs = ref<Category[]>([])
 
 const props = defineProps({
   category: {
-    type: Number,
-    required: true
+    required: false
   }
 })
 const initData = async () => {
-  const response = await getBreadCrumbs(props.category)
-  breadCrumbs.value = response.breadCrumbs
+  if (!!props.category) {
+    const response = await getBreadCrumbs(Number(props.category))
+    breadCrumbs.value = response === null ? [] : response.breadCrumbs
+  }
 }
 
 onMounted(initData)
@@ -21,7 +22,7 @@ onMounted(initData)
 
 <template>
   <div class="breadcrumb-container">
-    <a href="/" style="font-family: TheJamsil">홈</a>
+    <a href="/" style="font-family: 'TheJamsil1Thin'">홈</a>
     <div class="breadcrumbs" v-for="category in breadCrumbs">
       <p style="padding-right: 5px; padding-left: 5px">></p>
       <a :href="`/product-list?category=${category.id}&type=NORMAL`">
@@ -38,7 +39,6 @@ onMounted(initData)
   align-items: flex-start;
   justify-items: center;
 
-  padding-left: 10px;
   padding-bottom: 20px;
 
   width: 100%;
@@ -54,7 +54,7 @@ onMounted(initData)
   align-items: flex-start;
   justify-items: center;
 
-  font-family: TheJamsil;
+  font-family: 'TheJamsil1Thin';
 }
 
 .breadcrumbs > a {

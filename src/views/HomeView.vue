@@ -2,17 +2,17 @@
 import { onBeforeMount, ref } from 'vue'
 import { getBestProducts, getNewProducts } from '@/apis/product/ProductClient'
 import type {
-  ProductCategoryPair,
+  CouponInfoItemResponse,
   MultipleProductsCouponRequest,
-  CouponInfoItemResponse
+  ProductCategoryPair
 } from '@/apis/coupon/CouponItemDto'
 import type {
-  ReadCacheProductResponse,
-  ExtendedReadCacheProductResponse
+  ExtendedReadCacheProductResponse,
+  ReadCacheProductResponse
 } from '@/apis/product/ProductDto'
 import { getMultipleProductsCoupons } from '@/apis/coupon/coupon'
 import ProductListPriceDisplay from '@/components/product/ProductListPriceDisplay.vue'
-import { getFloorDiscountPercentage, getFinalPrice } from '@/utils/UtilFunc'
+import { getFinalPrice, getFloorDiscountPercentage } from '@/utils/UtilFunc'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
