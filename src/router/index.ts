@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import { infoModal, warningModal } from '@/utils/Modal'
-import { NOTFOUND_MSG, LOGIN_NEED_MSG } from '@/utils/CommonMessage'
+import { LOGIN_NEED_MSG, NOTFOUND_MSG } from '@/utils/CommonMessage'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -25,11 +25,6 @@ const router = createRouter({
       path: '/product-list',
       name: 'productList',
       component: () => import('@/views/ProductListView.vue')
-    },
-    {
-      path: '/product-search',
-      name: 'productSearch',
-      component: () => import('@/views/ProductSearchView.vue')
     },
     {
       path: '/products/:id',
@@ -228,8 +223,8 @@ router.beforeEach((to, from, next) => {
 })
 
 const isLoggedIn = () => {
-  const token = localStorage.getItem('accessToken')
-  return !!token
+    const token = localStorage.getItem('accessToken')
+    return !!token
 }
 
 export default router

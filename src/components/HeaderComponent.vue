@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
-import { computed, onBeforeMount, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, onBeforeMount, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import HeaderCategoryComponent from '@/components/HeaderCategoryComponent.vue'
 import NotificationComponent from '@/components/notification/NotificationComponent.vue'
@@ -10,6 +10,7 @@ import { useNotificationStore } from '@/stores/notification/NotificationStore'
 import router from '@/router'
 import { infoModal } from '@/utils/Modal'
 import { LOGIN_NEED_MSG } from '@/utils/CommonMessage'
+import { useBrandStore } from '@/stores/brand/BrandStore'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -19,6 +20,7 @@ const { notifications, unreadNotificationCount } = storeToRefs(notificationStore
 const memberStore = useMemberStore()
 // const {  } = storeToRefs(memberStore)
 const categoryStore = useCategoryStore()
+const brandStore = useBrandStore()
 
 const isLoggedIn = () => {
   const token = localStorage.getItem('accessToken')
@@ -45,7 +47,7 @@ const routeSearch = () => {
   if (searchQuery.value === null) {
     infoModal('알림', '검색 키워드를 입력해주세요.')
   } else {
-    router.push({ name: 'productSearch', query: { query: searchQuery.value } })
+    router.push({ name: 'productList', query: { query: searchQuery.value } })
   }
 }
 
@@ -76,6 +78,7 @@ const hideNotificationDropdownHandler = () => {
 
 onBeforeMount(() => {
   categoryStore.setCategoryTree(null)
+  brandStore.setBrands()
 })
 
 onMounted(async () => {
