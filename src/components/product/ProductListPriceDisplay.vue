@@ -4,9 +4,6 @@
     :class="hasDiscount ? 'product-price--has-discount' : 'product-price--no-discount'"
   >
     <div v-if="hasDiscount" class="product-price__original-and-discount">
-      <div class="product-price__original">
-        <del>{{ originalPrice?.toLocaleString() }}원</del>
-      </div>
       <div class="product-price__discount-and-final">
         <span class="product-price__discount">{{ discountPercentage }}%</span>
         <strong class="product-price__final">{{ finalPrice?.toLocaleString() }}원</strong>
@@ -46,8 +43,9 @@ const hasDiscount = computed(() => props.discountPercentage > 0)
 
 .product-price__discount-and-final {
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
   align-items: center;
+  width: 100%;
   /* margin-left: auto; */
   /* margin-left 안넣는게 좋을까요? 😀 */
 }
@@ -57,6 +55,8 @@ const hasDiscount = computed(() => props.discountPercentage > 0)
 .product-price__final {
   font-size: 18px;
   line-height: 24px;
+  width: 100%;
+  text-align: start;
 }
 
 .product-price__original {
