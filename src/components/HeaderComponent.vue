@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
-import { computed, onBeforeMount, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, onBeforeMount, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import HeaderCategoryComponent from '@/components/HeaderCategoryComponent.vue'
 import NotificationComponent from '@/components/notification/NotificationComponent.vue'
@@ -45,7 +45,7 @@ const routeSearch = () => {
   if (searchQuery.value === null) {
     infoModal('알림', '검색 키워드를 입력해주세요.')
   } else {
-    router.push({ name: 'productSearch', query: { query: searchQuery.value } })
+    router.push({ name: 'productList', query: { query: searchQuery.value } })
   }
 }
 
