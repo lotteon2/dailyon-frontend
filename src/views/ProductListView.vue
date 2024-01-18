@@ -176,7 +176,7 @@ const getProductMaxDiscountPercentage = (product: ReadProductResponse) => {
         />
         <h1>{{ product.brandName }}</h1>
         <h2>{{ product.name }}</h2>
-        <PriceDisplay
+        <ProductListPriceDisplay
           :original-price="product.price"
           :discount-percentage="getFloorDiscountPercentage(product)"
           :final-price="getFinalPrice(product)"
