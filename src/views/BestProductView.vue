@@ -1,30 +1,78 @@
 <script setup lang="ts">
 import { onBeforeMount, ref } from 'vue'
 import { getBestProducts } from '@/apis/product/ProductClient'
-import type { ReadCacheProductResponse } from '@/apis/product/ProductDto'
+import type {
+  ProductCategoryPair,
+  MultipleProductsCouponRequest,
+  CouponInfoItemResponse
+} from '@/apis/coupon/CouponItemDto'
+import type {
+  ReadCacheProductResponse,
+  ExtendedReadCacheProductResponse
+} from '@/apis/product/ProductDto'
 import { Image } from 'ant-design-vue'
 import WhitePageComponent from '@/components/wishcart/WhitePageComponent.vue'
+import ProductListPriceDisplay from '@/components/product/ProductListPriceDisplay.vue'
+import { getFloorDiscountPercentage, getFinalPrice } from '@/utils/UtilFunc'
+import { getMultipleProductsCoupons } from '@/apis/coupon/coupon'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
-const bestProducts = ref<ReadCacheProductResponse[]>([
+const bestProducts = ref<ExtendedReadCacheProductResponse[]>([
   {
     id: 0,
     brandName: '',
     code: '',
+    categoryId: 0,
     categoryName: '',
     imgUrl: '',
     name: '',
-    price: 0
+    price: 0,
+    avgRating: 0,
+    reviewCount: 0,
+    coupons: []
   }
 ])
 
-const fetchNewProduct = async () => {
-  const bestProductData = await getBestProducts()
-  bestProducts.value = bestProductData.responses
+const fetchCoupons = async (
+  products: ReadCacheProductResponse[]
+): Promise<ExtendedReadCacheProductResponse[]> => {
+  // product-service에서 조회해온 products를 이용해서 productCategoryPairs 가공
+  const productCategoryPairs = products.map<ProductCategoryPair>((product) => ({
+    productId: product.id,
+    categoryId: product.categoryId
+  }))
+
+  // request payload 가공
+  const couponRequest: MultipleProductsCouponRequest = {
+    products: productCategoryPairs
+  }
+
+  // promotion-service 조회요청
+  const couponsResponse = await getMultipleProductsCoupons(couponRequest)
+  const couponsMap = couponsResponse.coupons
+
+  // products결과와 coupons 결과 합쳐서 ReadProductResponse 가공
+  return products.map<ExtendedReadCacheProductResponse>((product: ReadCacheProductResponse) => {
+    const productCoupons: CouponInfoItemResponse[] = couponsMap[product.id] || []
+    return {
+      ...product,
+      coupons: productCoupons,
+      avgRating: 0, // 상품 캐싱정보에는 avgRating, reviewCount 정보가 없음.
+      reviewCount: 0
+    } as ExtendedReadCacheProductResponse
+  })
 }
 
-onBeforeMount(fetchNewProduct)
+const fetchBestProductsAndCoupons = async () => {
+  const bestProductData = await getBestProducts()
+  if (bestProductData.responses) {
+    const productsWithCoupons = await fetchCoupons(bestProductData.responses)
+    bestProducts.value = productsWithCoupons
+  }
+}
+
+onBeforeMount(fetchBestProductsAndCoupons)
 </script>
 
 <template>
@@ -55,9 +103,11 @@ onBeforeMount(fetchNewProduct)
         </Image>
         <h1>{{ product.brandName }}</h1>
         <h2>{{ product.name }}</h2>
-        <div class="product-third-info">
-          <h3>{{ product.price.toLocaleString() }}원</h3>
-        </div>
+        <ProductListPriceDisplay
+          :original-price="product.price"
+          :discount-percentage="getFloorDiscountPercentage(product)"
+          :final-price="getFinalPrice(product)"
+        />
       </RouterLink>
     </div>
     <WhitePageComponent v-else message="결과가 없습니다" />

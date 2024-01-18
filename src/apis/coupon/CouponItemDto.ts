@@ -63,3 +63,13 @@ export interface Coupons {
   memberCouponInfoReadItemResponse: Coupon[]
   totalCounts: number
 }
+
+export interface MultipleProductsCouponRequest {
+  products: ProductCategoryPair[]
+}
+
+export interface MultipleProductCouponsResponse {
+  coupons: {
+    [productId: number]: CouponInfoItemResponse[]
+  }
+}

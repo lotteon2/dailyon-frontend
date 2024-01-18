@@ -1,12 +1,18 @@
 <template>
-  <div class="product-price">
-    <template v-if="hasDiscount">
-      <span class="product-price__original">
+  <div
+    class="product-price"
+    :class="hasDiscount ? 'product-price--has-discount' : 'product-price--no-discount'"
+  >
+    <div v-if="hasDiscount" class="product-price__original-and-discount">
+      <div class="product-price__original">
         <del>{{ originalPrice?.toLocaleString() }}원</del>
-      </span>
-      <span class="product-price__discount">{{ discountPercentage }}%</span>
-    </template>
-    <strong class="product-price__final">{{ finalPrice?.toLocaleString() }}원</strong>
+      </div>
+      <div class="product-price__discount-and-final">
+        <span class="product-price__discount">{{ discountPercentage }}%</span>
+        <strong class="product-price__final">{{ finalPrice?.toLocaleString() }}원</strong>
+      </div>
+    </div>
+    <strong v-else class="product-price__final">{{ finalPrice?.toLocaleString() }}원</strong>
   </div>
 </template>
 
@@ -27,43 +33,51 @@ const hasDiscount = computed(() => props.discountPercentage > 0)
 
 <style scoped>
 .product-price {
-  width: auto;
-  height: auto;
-  /* display: flex;
+  display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: end; */
-  font-family: 'TheJamsil';
 }
 
-.product-price {
+.product-price__original-and-discount {
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.product-price__discount-and-final {
+  display: flex;
+  justify-content: flex-end;
   align-items: center;
-  font-size: 0; /* inline-block elements간의 의도하지않은 spacing방지용 */
+  /* margin-left: auto; */
+  /* margin-left 안넣는게 좋을까요? 😀 */
 }
 
 .product-price__original,
 .product-price__discount,
 .product-price__final {
-  font-size: 18px; /* 이 컴포넌트의 기본 폰트크기 */
-  line-height: 24px; /* 가격은 좀 더 크게 뒀음. */
-  display: inline-block;
+  font-size: 18px;
+  line-height: 24px;
 }
 
 .product-price__original {
-  color: #888;
-  text-decoration: line-through; /* 긋는 효과 */
-  margin-right: 6px;
   font-size: 16px;
+  color: #888;
+  text-decoration: line-through;
 }
 
 .product-price__discount {
   color: #c22727;
-  margin-right: 7px;
+  font-size: 18px;
+  font-weight: bold;
+  margin-right: 10px; /* Adjust spacing between discount and final price */
 }
 
 .product-price__final {
   font-weight: 700;
   color: #000;
+}
+
+.product-price--no-discount .product-price__final {
+  margin-left: auto;
 }
 </style>
