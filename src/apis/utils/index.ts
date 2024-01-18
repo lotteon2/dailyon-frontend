@@ -1,6 +1,7 @@
 import axios, { type AxiosInstance } from 'axios'
 import { infoModal } from '@/utils/Modal'
 import { useNotificationStore } from '@/stores/notification/NotificationStore'
+import router from '@/router'
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL
 
@@ -100,6 +101,10 @@ const axiosAuthApi = (baseURL: string) => {
           console.error('Error while refreshing token:', refreshError)
           return Promise.reject(error)
         }
+      }
+
+      if(error.response && error.response.status === 404) {
+        router.go(-1)
       }
 
       return Promise.reject(error)
