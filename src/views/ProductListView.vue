@@ -98,17 +98,20 @@ const handleImageLoad = async () => {
  혜택가 관련 계산입니다.
  */
 const getFloorDiscountPercentage = (product: ReadProductResponse) => {
-  const discount = getProductDiscount(product)
-  return Math.floor(discount)
+  const { maxDiscountPercentageBeforeFlooring, maxDiscountPercentageAfterFlooring } =
+    getProductMaxDiscountPercentage(product)
+  return Math.floor(maxDiscountPercentageAfterFlooring)
 }
 
 const getFinalPrice = (product: ReadProductResponse) => {
-  const discount = getProductDiscount(product)
-  return product.price - (product.price * discount) / 100
+  const { maxDiscountPercentageBeforeFlooring, maxDiscountPercentageAfterFlooring } =
+    getProductMaxDiscountPercentage(product)
+  return Math.floor(product.price - (product.price * maxDiscountPercentageBeforeFlooring) / 100)
 }
 
-const getProductDiscount = (product: ReadProductResponse) => {
-  let maxDiscountPercentage = 0
+const getProductMaxDiscountPercentage = (product: ReadProductResponse) => {
+  let maxDiscountPercentageBeforeFlooring = 0 // 가격을 따로 정확히 보여주기 위한 보존값
+  let maxDiscountPercentageAfterFlooring = 0
 
   product.coupons.forEach((coupon) => {
     if (product.price >= coupon.minPurchaseAmount) {
@@ -129,11 +132,19 @@ const getProductDiscount = (product: ReadProductResponse) => {
       }
 
       // 직전 iteration과 비교 갱신
-      maxDiscountPercentage = Math.max(maxDiscountPercentage, Math.floor(discountPercentage))
+      maxDiscountPercentageBeforeFlooring = Math.max(
+        // 가격을 따로 정확히 보여주기 위한 보존값
+        maxDiscountPercentageBeforeFlooring,
+        discountPercentage
+      )
+      maxDiscountPercentageAfterFlooring = Math.max(
+        maxDiscountPercentageAfterFlooring,
+        Math.floor(discountPercentage)
+      )
     }
   })
 
-  return maxDiscountPercentage
+  return { maxDiscountPercentageBeforeFlooring, maxDiscountPercentageAfterFlooring }
 }
 </script>
 
