@@ -23,7 +23,7 @@ import type { SelectValue } from 'ant-design-vue/es/select'
 const isModalVisible = ref(false)
 const addresses = ref([])
 
-const memberInfo = useMemberStore()
+let memberInfo = useMemberStore()
 
 const defaultAddress = ref()
 
@@ -118,9 +118,9 @@ const setMemberInfo = async () => {
   if (await confirmModal('진행 여부 확인', '수정된 정보를 저장하시겠습니까?')) {
     setMember(memberDto)
     await getMember()
-   
+    memberInfo = useMemberStore()
     await successModal('알림', '수정이 완료되었습니다!')
-
+    
   }
 }
 
