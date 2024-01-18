@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { PostUpdateRequest, TemporaryUpdateTagProduct } from '@/apis/ootd/PostDto'
 import type {
   PostImageProductDetailUpdateRequest,
-  PostUpdateHashTagRequest
+  PostUpdateHashTagRequest,
+  PostUpdateRequest,
+  TemporaryUpdateTagProduct
 } from '@/apis/ootd/PostDto'
 
 export const usePostStore = defineStore('post', () => {
@@ -22,7 +23,10 @@ export const usePostStore = defineStore('post', () => {
     new Array<TemporaryUpdateTagProduct>()
   )
 
-  const postViews = ref<Array<number>>([])
+  const postViews = ref({
+    value: [] as number[],
+    expiry: new Date(Date.now() + 24 * 60 * 60 * 1000)
+  })
 
   const setPostUpdateRequest = async (post: PostUpdateRequest) => {
     postUpdateRequest.value = post
@@ -35,7 +39,23 @@ export const usePostStore = defineStore('post', () => {
   }
 
   const addPostView = async (postId: number) => {
-    postViews.value.push(postId)
+    postViews.value.value.push(postId)
+  }
+
+  const hasPostView = async (postId: number) => {
+    return postViews.value.value.includes(postId)
+  }
+
+  const renewPostView = async () => {
+    const expiryDate: Date = postViews.value.expiry
+    if (expiryDate < new Date()) {
+      const newPostViews = {
+        value: [] as number[],
+        expiry: new Date(Date.now() + 24 * 60 * 60 * 1000)
+      }
+      postViews.value.value = []
+      postViews.value.expiry = new Date(Date.now() + 24 * 60 * 60 * 1000)
+    }
   }
 
   const getPostUpdateRequest = async () => {
@@ -56,32 +76,6 @@ export const usePostStore = defineStore('post', () => {
     return temporaryUpdateTagProducts
   }
 
-  const getPostViews = async () => {
-    if(localStorage.getItem("postViews") === null) {
-      const newPostViews = {
-        value: [] as number[],
-        expiry: new Date(Date.now() + 24 * 60 * 60 * 1000)
-      }
-      localStorage.setItem("postViews", JSON.stringify(postViews))
-      postViews.value = newPostViews.value
-      return postViews
-    }
-
-    const postViewsStorage
-      = JSON.parse(localStorage.getItem("postViews")!) as {value: number[], expiry: Date}
-    const expiryDate: Date = postViewsStorage.expiry
-    if(expiryDate < new Date()) {
-      const newPostViews = {
-        value: [] as number[],
-        expiry: new Date(Date.now() + 24 * 60 * 60 * 1000)
-      }
-      localStorage.setItem('postViews', JSON.stringify(postViews))
-      postViews.value = newPostViews.value
-    }
-
-    return postViews
-  }
-
   const clearPostUpdateRequest = async () => {
     sessionStorage.removeItem('postUpdateRequest')
   }
@@ -91,13 +85,21 @@ export const usePostStore = defineStore('post', () => {
   }
 
   return {
+    postViews,
     setPostUpdateRequest,
     getPostUpdateRequest,
     setTemporaryTagProducts,
+    hasPostView,
     addPostView,
+    renewPostView,
     getTemporaryTagProducts,
     clearPostUpdateRequest,
-    clearTemporaryTagProducts,
-    getPostViews
+    clearTemporaryTagProducts
+  }
+}, {
+  persist: {
+    key: 'postViews',
+    storage: localStorage,
+    paths: ['postViews']
   }
 })

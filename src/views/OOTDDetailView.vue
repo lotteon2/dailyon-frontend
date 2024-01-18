@@ -67,8 +67,9 @@ const formatDate = async () => {
 }
 
 const onAddViewCount = async () => {
-  const postViews = await postStore.getPostViews()
-  if (postViews.value.indexOf(postId.value) === -1) {
+  await postStore.renewPostView()
+  const hasPostViews = await postStore.hasPostView(postId.value)
+  if (!hasPostViews) {
     await addViewCount(postId.value)
     await postStore.addPostView(postId.value)
   }
