@@ -3,6 +3,7 @@ import { defineProps, ref, watch } from 'vue'
 import { VueDaumPostcode } from 'vue-daum-postcode'
 import { authAxiosInstance } from '@/apis/utils'
 import { successModal, warningModal } from '@/utils/Modal'
+import router from '@/router'
 
 const props = defineProps(['closeModal', 'selectedAddress'])
 
@@ -76,7 +77,7 @@ const submitForm = async () => {
     }
 
     props.closeModal()
-    
+
     await successModal('알림', '배송지 저장이 완료되었습니다.')
   } catch (error) {
     console.error('API 호출 중 오류 발생:', error)
