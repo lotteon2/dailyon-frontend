@@ -23,8 +23,8 @@ import type { SelectValue } from 'ant-design-vue/es/select'
 const isModalVisible = ref(false)
 const addresses = ref([])
 
-const memberStore = useMemberStore()
-const memberInfo = memberStore.getMemberInfo()
+const memberInfo = useMemberStore()
+
 const defaultAddress = ref()
 
 const requestPage = ref<number>(0)
@@ -118,7 +118,7 @@ const setMemberInfo = async () => {
   if (await confirmModal('진행 여부 확인', '수정된 정보를 저장하시겠습니까?')) {
     setMember(memberDto)
     await getMember()
-    window.location.reload()
+   
     await successModal('알림', '수정이 완료되었습니다!')
 
   }
@@ -157,13 +157,12 @@ const handleFileChange = async (event: Event) => {
 
     await uploadImageToS3(imgPreSignedUrl, inputPostImgFile.value)
     await getMember()
-    window.location.reload()
+
+
+
   }
 }
 
-const handleGenderSelectedOptionChange = (value: SelectValue, option: any) => {
-
-}
 
 </script>
 
@@ -186,7 +185,7 @@ const handleGenderSelectedOptionChange = (value: SelectValue, option: any) => {
             <circle cx='75' cy='75' r='75' fill='white' />
           </mask>
           <image
-            :href='`${VITE_STATIC_IMG_URL}${memberInfo.profileImgUrl}` || undefined'
+            :href='`${VITE_STATIC_IMG_URL}${memberInfo.profileImgUrl}?${new Date().getTime()}` || undefined'
             x='0'
             y='0'
             width='150'
