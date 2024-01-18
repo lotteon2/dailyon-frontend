@@ -235,6 +235,8 @@ const bestPromotionalPriceUpdatedHandler = (maxDiscount: number) => {
   }
 }
 
+const floorToTens = (n: number): number => Math.floor(n / 10) * 10
+
 /**
  * 재입고 알림신청 관련
  */
@@ -398,7 +400,7 @@ watch(selectedProductSize, () => {
           <div class="price-info-row">
             <h1>데일리온가</h1>
             <!-- TODO : 여기에 할인 적용된 금액 들어가나요? -->
-            <h2>{{ bestPromotionalPrice.toLocaleString() }}</h2>
+            <h2>{{ floorToTens(bestPromotionalPrice).toLocaleString() }}</h2>
             <!-- TODO : 여기에 최대 할인율? 할인 금액 나오는건가요? -->
             <h3 v-show="bestPromotionalRate">{{ bestPromotionalRate }}%</h3>
           </div>
