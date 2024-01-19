@@ -172,7 +172,7 @@ input::-webkit-inner-spin-button {
 
 .div-wrapper {
     display: flex;
-    width: fit-content;
+    width: 10vw;
     height: 2vh;
     padding: 0.3vw;
     justify-content: center;
@@ -191,6 +191,11 @@ input::-webkit-inner-spin-button {
     font-style: normal;
     font-weight: 300;
     line-height: normal;
+
+    display: block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .div-8 {
@@ -283,7 +288,7 @@ input::-webkit-inner-spin-button {
 .text-wrapper-7 {
     color: var(--Grayscale1, #FFF);
     font-family: The Jamsil;
-    font-size: 0.8vw;
+    font-size: 0.7vw;
     font-style: normal;
     font-weight: 300;
     line-height: normal;
