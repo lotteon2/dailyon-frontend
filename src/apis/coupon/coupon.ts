@@ -15,12 +15,44 @@ import { warningModal } from '@/utils/Modal'
 const PROMOTION_PREFIX_PATH = '/promotion-service'
 const COUPON_DOMAIN_PREFIX_PATH = '/coupons'
 
-export const getCouponsWithAvailibilityForProductDetail = async (
+export const getCouponsWithAvailibilityForProductDetailLoggedIn = async (
   productId: number,
   categoryId: number
 ): Promise<CouponInfoItemWithAvailabilityResponse[]> => {
   try {
     const response = await authAxiosInstance.get(
+      `${PROMOTION_PREFIX_PATH}${COUPON_DOMAIN_PREFIX_PATH}/single-product/with-availability`,
+      {
+        params: {
+          productId,
+          categoryId
+        }
+      }
+    )
+    return response.data
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      if (error.response) {
+        if (error.response.status >= 400 && error.response.status < 500) {
+          await warningModal('알림', error.response.data.message)
+          console.error(`Client Error=${error.response.data.message}`)
+        }
+        if (error.response.status >= 500) {
+          openInternalServerErrorNotification()
+          console.error('Internal Server Error')
+        }
+      }
+    }
+    throw error
+  }
+}
+
+export const getCouponsWithAvailibilityForProductDetailNotLoggedIn = async (
+  productId: number,
+  categoryId: number
+): Promise<CouponInfoItemWithAvailabilityResponse[]> => {
+  try {
+    const response = await defaultAxiosInstance.get(
       `${PROMOTION_PREFIX_PATH}${COUPON_DOMAIN_PREFIX_PATH}/single-product/with-availability`,
       {
         params: {
