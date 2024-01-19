@@ -66,6 +66,7 @@ const hasDiscount = computed(() => props.discountPercentage > 0)
 }
 
 .product-price__discount {
+  width: 20%;
   color: #c22727;
   font-size: 18px;
   font-weight: bold;
