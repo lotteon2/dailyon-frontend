@@ -252,7 +252,7 @@
     display: flex;
     padding: 0.3125rem;
     align-items: flex-start;
-    justify-content: space-between;
+    justify-content: flex-start;
     width: 99%;
 
     margin-bottom: 1vh;
@@ -263,12 +263,14 @@
 
 .ootd-detail-reply-input-wrapper {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
+    width: 97%;
     gap: 0.625rem;
 }
 
 .ootd-detail-reply-input {
+    width: 97%;
     font-family: The Jamsil;
     font-size: 0.9rem;
     font-style: normal;
