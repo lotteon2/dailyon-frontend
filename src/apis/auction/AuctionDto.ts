@@ -28,6 +28,7 @@ export interface CreateBidRequest {
   round: string
   bidAmount: number
   nickname: string
+  inputCheck: boolean
 }
 
 export interface EnterResponse {

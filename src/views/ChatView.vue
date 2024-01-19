@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, nextTick } from 'vue'
+import { onMounted, onUnmounted, ref, nextTick, setBlockTracking } from 'vue'
 import { StatisticCountdown, message, Image, ImagePreviewGroup, Modal } from 'ant-design-vue'
 import type { CreateBidRequest, ReadAuctionResponse } from '@/apis/auction/AuctionDto'
 import type { ReadProductDetailResponse } from '@/apis/product/ProductDto'
-import { createBid, enter, startBid } from '@/apis/auction/Auction'
+import { createBid, enter, startBid, endBid } from '@/apis/auction/Auction'
 import { useRoute } from 'vue-router'
 import { useAuctionStore } from '@/stores/auction/AuctionStore'
 import { useMemberStore } from '@/stores/member/MemberStore'
@@ -45,7 +45,6 @@ const onFinish = async () => {
   isButtonDisabled.value = true
   deadLine.value = 0
 }
-// 더미데이터 끝
 const userInfo = ref<userInfo>({
   userId: Math.floor(Math.random() * 10000),
   nickname: nickname.value
@@ -66,6 +65,8 @@ const seconds = ref(totalSeconds.value % 60)
 
 const open = ref<boolean>(false)
 const biddingInput = ref<number>(0)
+const openModal = ref<boolean>(false)
+const closeCount = ref(5)
 
 const showModal = () => {
   biddingInput.value = 0
@@ -90,8 +91,10 @@ const handleOk = async () => {
     auctionId: auctionDetail.value!.id,
     round: round.value,
     bidAmount: biddingInput.value,
-    nickname: nickname.value ? nickname.value : ''
+    nickname: nickname.value ? nickname.value : '',
+    inputCheck: true
   }
+  console.log(data)
   const response = await createBid(data)
   myBidPrice.value = response
 
@@ -117,6 +120,12 @@ const startTimer = () => {
 }
 onMounted(async () => {
   const res = await enter(String(route.params.auctionId))
+
+  if (res.readAuctionDetailResponse.auctionResponse.ended) {
+    message.error('이미 종료된 경매입니다.')
+    router.replace('/')
+    return
+  }
   auctionDetail.value = res.readAuctionDetailResponse.auctionResponse
   productDetail.value = res.readAuctionDetailResponse.productDetailResponse
   auctionStore.setToken(res.token)
@@ -156,6 +165,11 @@ const connect = async () => {
       case 'BIDDING':
         bids.value = data.data
         currentBid.value = bids.value[bids.value.length - 1].bidAmount
+        break
+      case 'AUCTION_CLOSE':
+        message.info('경매가 종료되었습니다')
+        router.replace('/')
+        break
     }
     scrollDown()
   }
@@ -197,8 +211,8 @@ const send = () => {
       command: 'MESSAGE',
       data: message
     }
-    socket.value.send(JSON.stringify(payload))
     newMessage.value = ''
+    socket.value.send(JSON.stringify(payload))
     scrollDown()
   }
 }
@@ -213,7 +227,8 @@ const bidding = async () => {
     auctionId: auctionDetail.value!.id,
     round: round.value,
     bidAmount: bidAmount,
-    nickname: nickname.value ? nickname.value : ''
+    nickname: nickname.value ? nickname.value : '',
+    inputCheck: false
   }
   console.log(data)
   const response = await createBid(data)
@@ -230,10 +245,6 @@ const scrollDown = () => {
       chatMessages.value.scrollTop = chatMessages.value.scrollHeight
     }
   })
-}
-
-const test = async () => {
-  const response = await startBid()
 }
 
 const validation = (bidAmount: number): boolean => {
@@ -253,6 +264,14 @@ const validation = (bidAmount: number): boolean => {
     return false
   }
   return true
+}
+
+const test = async () => {
+  const response = await startBid(auctionDetail.value!.id)
+}
+
+const end = async () => {
+  await endBid(auctionDetail.value!.id)
 }
 </script>
 
@@ -280,16 +299,17 @@ const validation = (bidAmount: number): boolean => {
 
         <!-- 경매 정보 (시작가, 현재 입찰가, 내 입찰 가격, 남은시간) -->
         <div class="auction-bid-detail-wrap">
-          <span class="my-current-bid" v-if="myBidPrice"
-            >내 입찰 가격 : {{ myBidPrice.toLocaleString() }}</span
-          >
           <span class="auction-starting-price">
             시작가 {{ auctionDetail?.startBidPrice.toLocaleString() }} 원
           </span>
           <span class="current-bid"> 현재 입찰가 {{ currentBid.toLocaleString() }} 원 </span>
-          <span>상품 정가 : {{ productDetail?.price }}</span>
+          <span class="my-current-bid" v-if="myBidPrice"
+            >내 입찰 가격 : {{ myBidPrice.toLocaleString() }} 원</span
+          >
+          <span>상품 정가 : {{ productDetail?.price.toLocaleString() }} 원</span>
           <span>최대 낙찰 인원 : {{ auctionDetail?.maximumWinner }} 명</span>
           <button @click="test">start</button>
+          <button @click="end">end</button>
         </div>
         <!-- 경매 정보 끝 -->
       </div>
@@ -360,10 +380,10 @@ const validation = (bidAmount: number): boolean => {
       </div>
     </div>
   </div>
-  <!-- <div v-if="showModal" class="modal">
+  <div v-if="openModal" class="modal">
     <div class="modal-content" @click.stop>
       <div class="timer-header">
-        <StatisticCountdown :value="countDeadline" @finish="countFinish" />
+        {{ closeCount }}
       </div>
       <div class="loader">
         <div class="circle" id="a"></div>
@@ -371,10 +391,10 @@ const validation = (bidAmount: number): boolean => {
         <div class="circle" id="c"></div>
       </div>
       <div class="caption">
-        <span>집계 중입니다...</span>
+        <span></span>
       </div>
     </div>
-  </div> -->
+  </div>
 </template>
 
 <style scoped>
