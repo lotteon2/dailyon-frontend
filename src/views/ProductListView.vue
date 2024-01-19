@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang='ts'>
 import { inject, onBeforeMount, type Ref, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import type { ReadProductResponse, ReadProductSliceResponse } from '@/apis/product/ProductDto'
@@ -375,70 +375,70 @@ const getProductMaxDiscountPercentage = (product: ReadProductResponse) => {
 </script>
 
 <template>
-  <div style="width: 50vw">
-    <BreadCrumbComponent :category="categoryId" />
-    <div class="sort-container">
+  <div style='width: 50vw'>
+    <BreadCrumbComponent :category='categoryId' />
+    <div class='sort-container'>
       <div
-        class="sort-item"
+        class='sort-item'
         :class="{ selected: sort === 'createdAt' }"
         @click="changeSort('createdAt')"
       >
         최신 등록 순
       </div>
-      <div class="sort-item" :class="{ selected: sort === 'review' }" @click="changeSort('review')">
+      <div class='sort-item' :class="{ selected: sort === 'review' }" @click="changeSort('review')">
         리뷰 많은 순
       </div>
-      <div class="sort-item" :class="{ selected: sort === 'rating' }" @click="changeSort('rating')">
+      <div class='sort-item' :class="{ selected: sort === 'rating' }" @click="changeSort('rating')">
         별점 높은 순
       </div>
       <div
-        class="sort-item"
+        class='sort-item'
         :class="{ selected: sort === 'price' && direction === 'asc' }"
         @click="changeSortAndDir('price', 'asc')"
       >
         낮은 가격 순
       </div>
       <div
-        class="sort-item"
+        class='sort-item'
         :class="{ selected: sort === 'price' && direction === 'desc' }"
         @click="changeSortAndDir('price', 'desc')"
       >
         높은 가격 순
       </div>
     </div>
-    <div class="filter-container">
-      <div class="brand-filter-item">
-        <div class="brand-filter-item-key">브랜드</div>
-        <div class="brand-filter-item-value">
+    <div class='filter-container'>
+      <div class='brand-filter-item'>
+        <div class='brand-filter-item-key'>브랜드</div>
+        <div class='brand-filter-item-value'>
           <div
-            class="brand-info"
-            :class="{ selected: brandId === brand.id }"
-            v-for="(brand, index) in brandStore.brandList"
-            @click="changeBrand(index)"
+            class='brand-info'
+            :class='{ selected: brandId === brand.id }'
+            v-for='(brand, index) in brandStore.brandList'
+            @click='changeBrand(index)'
           >
             {{ brand.name }}
           </div>
         </div>
       </div>
-      <div class="filter-item">
-        <div class="filter-item-key">성별</div>
-        <div class="filter-item-value">
+      <div class='filter-item'>
+        <div class='filter-item-key'>성별</div>
+        <div class='filter-item-value'>
           <div
-            class="sort-item"
+            class='sort-item'
             :class="{ selected: gender === 'MALE' }"
             @click="changeGender('MALE')"
           >
             남성
           </div>
           <div
-            class="sort-item"
+            class='sort-item'
             :class="{ selected: gender === 'FEMALE' }"
             @click="changeGender('FEMALE')"
           >
             여성
           </div>
           <div
-            class="sort-item"
+            class='sort-item'
             :class="{ selected: gender === 'COMMON' }"
             @click="changeGender('COMMON')"
           >
@@ -446,87 +446,87 @@ const getProductMaxDiscountPercentage = (product: ReadProductResponse) => {
           </div>
         </div>
       </div>
-      <div class="filter-item">
-        <div class="filter-item-key">가격</div>
-        <div class="filter-item-value">
-          <div style="padding-right: 10px" />
+      <div class='filter-item'>
+        <div class='filter-item-key'>가격</div>
+        <div class='filter-item-value'>
+          <div style='padding-right: 10px' />
           <input
-            class="select-block-input"
-            v-model.lazy.number="lowPrice"
-            placeholder="최소 가격"
+            class='select-block-input'
+            v-model.lazy.number='lowPrice'
+            placeholder='최소 가격'
           />
-          <div style="padding-right: 10px" />
+          <div style='padding-right: 10px' />
           <input
-            class="select-block-input"
-            v-model.lazy.number="highPrice"
-            placeholder="최대 가격"
+            class='select-block-input'
+            v-model.lazy.number='highPrice'
+            placeholder='최대 가격'
           />
         </div>
       </div>
-      <div class="filter-item">
-        <div class="filter-item-key">검색</div>
-        <div class="filter-item-value">
-          <div style="padding-right: 10px" />
+      <div class='filter-item'>
+        <div class='filter-item-key'>검색</div>
+        <div class='filter-item-value'>
+          <div style='padding-right: 10px' />
           <div>
             <input
-              class="select-block-input"
-              type="text"
-              v-model.lazy="query"
-              placeholder="상품명 또는 코드로 검색"
-              @keyup.enter="changeQuery"
+              class='select-block-input'
+              type='text'
+              v-model.lazy='query'
+              placeholder='상품명 또는 코드로 검색'
+              @keyup.enter='changeQuery'
             />
           </div>
-          <div style="padding-right: 10px" />
+          <div style='padding-right: 10px' />
           <div>
-            <button class="search-button" @click="changeQuery">검색</button>
+            <button class='search-button' @click='changeQuery'>검색</button>
           </div>
         </div>
       </div>
     </div>
 
-    <div style="padding: 1vh" />
-    <div class="product-list-container" v-if="products.length > 0">
+    <div style='padding: 1vh' />
+    <div class='product-list-container' v-if='products.length > 0'>
       <RouterLink
-        class="prod-info"
-        v-for="(product, index) in products"
-        :to="`/products/${product.id}`"
-        :key="product.id"
+        class='prod-info'
+        v-for='(product, index) in products'
+        :to='`/products/${product.id}`'
+        :key='product.id'
       >
         <img
-          v-if="imageSize.width === 0 || imageSize.height === 0"
-          class="product-img"
-          ref="img"
-          @load="getImageSize"
-          src="@/assets/images/loading.gif"
-          alt="상품 이미지"
+          v-if='imageSize.width === 0 || imageSize.height === 0'
+          class='product-img'
+          ref='img'
+          @load='getImageSize'
+          src='@/assets/images/loading.gif'
+          alt='상품 이미지'
         />
         <img
           v-else
-          class="product-img"
-          ref="img"
-          @load="getImageSize"
-          :src="`${VITE_STATIC_IMG_URL}${product.imgUrl}?w=${imageSize.width}&h=${imageSize.height}&q=95`"
-          alt="상품 이미지"
+          class='product-img'
+          ref='img'
+          @load='getImageSize'
+          :src='`${VITE_STATIC_IMG_URL}${product.imgUrl}?w=${imageSize.width}&h=${imageSize.height}&q=95`'
+          alt='상품 이미지'
         />
         <h1>{{ product.brandName }}</h1>
         <h2>{{ product.name }}</h2>
         <ProductListPriceDisplay
-          :original-price="product.price"
-          :discount-percentage="getFloorDiscountPercentage(product)"
-          :final-price="getFinalPrice(product)"
+          :original-price='product.price'
+          :discount-percentage='getFloorDiscountPercentage(product)'
+          :final-price='getFinalPrice(product)'
         />
-        <div class="product-third-info">
-          <div class="product-aggregate">
+        <div class='product-third-info'>
+          <div class='product-aggregate'>
             <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 576 512"
-              width="20"
-              height="20"
-              style="padding-right: 3px"
+              xmlns='http://www.w3.org/2000/svg'
+              viewBox='0 0 576 512'
+              width='20'
+              height='20'
+              style='padding-right: 3px'
             >
               <path
-                fill="black"
-                d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"
+                fill='black'
+                d='M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z'
               />
             </svg>
             <h1>{{ product.avgRating.toFixed(1) }} | ({{ product.reviewCount }})</h1>
@@ -534,7 +534,9 @@ const getProductMaxDiscountPercentage = (product: ReadProductResponse) => {
         </div>
       </RouterLink>
     </div>
-    <WhitePageComponent v-else message="상품이 존재하지 않습니다" />
+    <div class='product-list-container' v-else>
+      <WhitePageComponent message='상품이 존재하지 않습니다' />
+    </div>
   </div>
 </template>
 
@@ -544,7 +546,6 @@ const getProductMaxDiscountPercentage = (product: ReadProductResponse) => {
   flex-direction: row;
   flex-wrap: wrap;
   width: 100%;
-  height: 100%;
   justify-content: flex-start;
 }
 
