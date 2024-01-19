@@ -238,9 +238,9 @@ const onDeleteReplyComment = async (commentId: number) => {
                 @keyup.enter='onSubmitReplyComment(comment.id)'
               />
             </div>
-            <div class='ootd-detail-reply-input-hint-wrapper'>
+            <div class='ootd-detail-comment-input-box-decoration-wrapper'>
               <div
-                class='ootd-detail-reply-input-hint-text'
+                class='ootd-detail-comment-input-box-decoration-text'
                 :class="{ hover: createReplyCommentRequest.description !== '' }"
                 @click='onSubmitReplyComment(comment.id)'
               >

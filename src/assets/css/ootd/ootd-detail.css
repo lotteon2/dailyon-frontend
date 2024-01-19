@@ -348,7 +348,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: fit-content;
+    width: 12vw;
 }
 
 .ootd-detail-fashion-size-info-text {
@@ -369,6 +369,11 @@
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+
+    display: block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .ootd-detail-tag-info-wrapper {
