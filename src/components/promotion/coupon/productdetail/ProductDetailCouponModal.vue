@@ -52,7 +52,8 @@ import type {
   MultipleCouponDownloadResponse
 } from '@/apis/coupon/CouponItemDto'
 import {
-  getCouponsWithAvailibilityForProductDetail,
+  getCouponsWithAvailibilityForProductDetailLoggedIn,
+  getCouponsWithAvailibilityForProductDetailNotLoggedIn,
   downloadMultipleCoupons,
   downloadCoupon
 } from '@/apis/coupon/coupon'
@@ -88,14 +89,25 @@ const productPrice = ref(productPriceValue) // Using the prop value
 const coupons = ref<CouponInfoItemWithAvailabilityResponse[]>([])
 
 onMounted(async () => {
+  // 로그인 여부에 따라 axios intance 종류 분기
   if (!localStorage.getItem('accessToken')) {
-    return
-  }
-
-  try {
-    coupons.value = await getCouponsWithAvailibilityForProductDetail(productId, categoryId)
-  } catch (error) {
-    console.error('Failed to fetch coupons for product detail:', error)
+    try {
+      coupons.value = await getCouponsWithAvailibilityForProductDetailNotLoggedIn(
+        productId,
+        categoryId
+      )
+    } catch (error) {
+      console.error('Failed to fetch coupons for product detail:', error)
+    }
+  } else {
+    try {
+      coupons.value = await getCouponsWithAvailibilityForProductDetailLoggedIn(
+        productId,
+        categoryId
+      )
+    } catch (error) {
+      console.error('Failed to fetch coupons for product detail:', error)
+    }
   }
 })
 

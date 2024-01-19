@@ -296,7 +296,7 @@
     display: flex;
     align-items: flex-start;
     width: 100%;
-    gap: 17vw;
+    gap: 15vw;
 }
 
 .ootd-detail-info-wrapper {
@@ -344,6 +344,12 @@
     gap: 1.6875rem;
 }
 
+.ootd-detail-fashion-size-info-text-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
 .ootd-detail-fashion-size-info-text-wrapper {
     display: flex;
     justify-content: center;
@@ -359,7 +365,7 @@
     font-weight: 300;
     line-height: normal;
 
-    width: 40px;
+    width: 55px;
 }
 
 .ootd-detail-fashion-size-real-info-text {

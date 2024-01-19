@@ -2,7 +2,7 @@
   <div class="order-item-list">
     <OrderItem
       v-for="(orderItem, index) in orderItems"
-      :key="(orderItem.productId as number)"
+      :key="orderItem.productId as number"
       :orderItem="orderItem"
       :coupons="nestedCoupons[index]"
       :selectedCouponId="selectedCoupons[index]?.couponInfoId ?? null"
@@ -31,15 +31,26 @@ const props = defineProps<{
 const emit = defineEmits(['update-coupons'])
 
 // OrderItem개수만큼의 array. couponId선택되었으면 해당 index는 CouponInfoItemCheckoutResponse, 선택안되었으면 null을 갖게 됨. 😀 여기서 관리
-const selectedCoupons = ref<(CouponInfoItemCheckoutResponse | null)[]>(new Array(props.orderItems.length).fill(null))
+const selectedCoupons = ref<(CouponInfoItemCheckoutResponse | null)[]>(
+  new Array(props.orderItems.length).fill(null)
+)
 
-const handleApplyCoupon = (orderItemIndex: number, couponItem: CouponInfoItemCheckoutResponse | null) => {
+const handleApplyCoupon = (
+  orderItemIndex: number,
+  couponItem: CouponInfoItemCheckoutResponse | null
+) => {
   // 다른 orderItem에 현재 선택하려는 couponId가 선택되어 있는 경우, 해당 index의 값을 null로.(deselect)
+  const couponId = couponItem ? couponItem.couponInfoId : null
   for (let i = 0; i < selectedCoupons.value.length; i++) {
-    if (selectedCoupons.value[i] === couponItem && i !== orderItemIndex) {
+    if (
+      selectedCoupons.value[i] &&
+      selectedCoupons.value[i]?.couponInfoId === couponId &&
+      i !== orderItemIndex
+    ) {
       selectedCoupons.value[i] = null
     }
   }
+
   // 선택하고 있는 orderItem의 값을 바꿈. (couponId, null 들어올 수 있음.)
   selectedCoupons.value[orderItemIndex] = couponItem ? couponItem : null
   emit('update-coupons', selectedCoupons.value) // 바꾼 뒤 전달. 계속 동기화시켜줌.

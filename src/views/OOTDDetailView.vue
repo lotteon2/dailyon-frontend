@@ -193,7 +193,7 @@ const onTagedProductMouseLeave = async (productId: number) => {
 </script>
 
 <template>
-  <div class='ootd-detail-container'>
+  <div v-if='post.id !== 0' class='ootd-detail-container'>
     <div class='ootd-detail-content-body'>
       <div class='ootd-detail-header'>
         <div class='ootd-detail-header-top'>
@@ -337,22 +337,22 @@ const onTagedProductMouseLeave = async (productId: number) => {
               </div>
             </div>
             <div class='ootd-detail-fashion-size-info-wrapper'>
-              <div class='ootd-detail-fashion-size-info-text-wrapper'>
-                <div class='ootd-detail-fashion-size-info-text'>사이즈</div>
-              </div>
-              <div
-                v-for='postImageProductDetail in post.postImageProductDetails'
-                :key='postImageProductDetail.id'
-                class='ootd-detail-fashion-size-info-text-wrapper'
-              >
+              <div class='ootd-detail-fashion-size-info-text'>사이즈</div>
+              <div class='ootd-detail-fashion-size-info-text-container'>
                 <div
-                  v-if='postImageProductDetail.name !== undefined'
-                  class='ootd-detail-fashion-size-real-info-text'
+                  v-for='postImageProductDetail in post.postImageProductDetails'
+                  :key='postImageProductDetail.id'
+                  class='ootd-detail-fashion-size-info-text-wrapper'
                 >
-                  {{ postImageProductDetail.name }} - {{ postImageProductDetail.size }}
-                </div>
-                <div v-else class='ootd-detail-fashion-size-real-info-text'>
-                  상품 정보를 불러올 수 없습니다.
+                  <div
+                    v-if='postImageProductDetail.name !== undefined'
+                    class='ootd-detail-fashion-size-real-info-text'
+                  >
+                    {{ postImageProductDetail.name }} - {{ postImageProductDetail.size }}
+                  </div>
+                  <div v-else class='ootd-detail-fashion-size-real-info-text'>
+                    상품 정보를 불러올 수 없습니다.
+                  </div>
                 </div>
               </div>
             </div>
