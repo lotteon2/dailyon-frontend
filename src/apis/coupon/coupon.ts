@@ -160,6 +160,16 @@ export const getMultipleProductsCoupons = async (
     )
     return response.data
   } catch (error) {
+    const defaultResponse: MultipleProductCouponsResponse = {
+      coupons: requestPayload.products.reduce(
+        (acc, productCategoryPair) => {
+          acc[productCategoryPair.productId] = []
+          return acc
+        },
+        {} as MultipleProductCouponsResponse['coupons']
+      )
+    }
+
     if (error instanceof AxiosError) {
       if (error.response) {
         if (error.response.status >= 400 && error.response.status < 500) {
@@ -172,6 +182,7 @@ export const getMultipleProductsCoupons = async (
         }
       }
     }
-    throw error
+
+    return defaultResponse
   }
 }
