@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, nextTick, setBlockTracking } from 'vue'
+import { onMounted, onUnmounted, ref, nextTick, computed } from 'vue'
 import { StatisticCountdown, message, Image, ImagePreviewGroup, Modal } from 'ant-design-vue'
 import type { CreateBidRequest, ReadAuctionResponse } from '@/apis/auction/AuctionDto'
 import type { ReadProductDetailResponse } from '@/apis/product/ProductDto'
@@ -36,15 +36,9 @@ const bids = ref<Bid[]>([])
 // const showModal = ref(false)
 const currentBid = ref<number>(0)
 const myBidPrice = ref<number>(0)
-const deadLine = ref(0)
 const round = ref<string>('1')
-const isEnd = ref(false)
 const isButtonDisabled = ref(false)
-const onFinish = async () => {
-  isEnd.value = true
-  isButtonDisabled.value = true
-  deadLine.value = 0
-}
+
 const userInfo = ref<userInfo>({
   userId: Math.floor(Math.random() * 10000),
   nickname: nickname.value
@@ -57,11 +51,10 @@ const messages = ref<Message[]>([])
 const newMessage = ref<string>('')
 
 // timer
-const totalSeconds = ref(300) // 5분
-const intervalId = ref<any>(null)
+const countdown = ref(0) // 5분
 
-const minutes = ref(Math.floor(totalSeconds.value / 60))
-const seconds = ref(totalSeconds.value % 60)
+const minutes = computed(() => Math.floor(countdown.value / 60000))
+const seconds = computed(() => Math.floor((countdown.value % 60000) / 1000))
 
 const open = ref<boolean>(false)
 const biddingInput = ref<number>(0)
@@ -104,20 +97,6 @@ const handleOk = async () => {
   open.value = false
 }
 
-const startTimer = () => {
-  intervalId.value = setInterval(() => {
-    if (totalSeconds.value > 0) {
-      totalSeconds.value--
-      minutes.value = Math.floor(totalSeconds.value / 60)
-      seconds.value = totalSeconds.value % 60
-    } else {
-      clearInterval(intervalId.value)
-    }
-  }, 1000)
-  totalSeconds.value--
-  minutes.value = Math.floor(totalSeconds.value / 60)
-  seconds.value = totalSeconds.value % 60
-}
 onMounted(async () => {
   const res = await enter(String(route.params.auctionId))
 
@@ -160,7 +139,10 @@ const connect = async () => {
         messages.value.push(data.data)
         break
       case 'START':
-        start()
+        console.log('경매가 시작되었습니다.')
+        break
+      case 'TIME_SYNC':
+        countdown.value = data.data
         break
       case 'BIDDING':
         bids.value = data.data
@@ -190,11 +172,6 @@ const disconnect = () => {
     console.log('소켓 연결 해제중....')
     socket.value.close()
   }
-}
-const start = () => {
-  startTimer()
-  auctionDetail.value!.started = true
-  deadLine.value = Date.now() + 1000 * 60 * 5
 }
 
 const send = () => {
@@ -230,7 +207,6 @@ const bidding = async () => {
     nickname: nickname.value ? nickname.value : '',
     inputCheck: false
   }
-  console.log(data)
   const response = await createBid(data)
   myBidPrice.value = response
 
@@ -346,7 +322,7 @@ const end = async () => {
           <div class="next-round-timer-wrap">
             <div class="next-round-timer-text">남은 시간</div>
             <div class="next-round-timer">
-              <StatisticCountdown :value="deadLine" @finish="onFinish" />
+              <span>{{ minutes }}: {{ seconds }}</span>
             </div>
           </div>
         </div>
