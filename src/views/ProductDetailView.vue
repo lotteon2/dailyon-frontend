@@ -404,10 +404,17 @@ watch(selectedProductSize, () => {
             <!-- TODO : 여기에 최대 할인율? 할인 금액 나오는건가요? -->
             <h3 v-show="bestPromotionalRate">{{ bestPromotionalRate }}%</h3>
           </div>
-          <div class="price-info-row">
+          <div v-if='bestPromotionalRate' class="price-info-row">
+            <h1>&nbsp;</h1>
+            <div v-show="productPriceValue !== bestPromotionalPrice" class="dash"
+                 style='text-decoration: line-through;'>
+              {{ productPriceValue.toLocaleString() }}
+            </div>
+          </div>
+          <div v-else class="price-info-row">
             <h1>&nbsp;</h1>
             <div v-show="productPriceValue !== bestPromotionalPrice" class="dash">
-              {{ productPriceValue.toLocaleString() }}
+              <s>{{ productPriceValue.toLocaleString() }}</s>
             </div>
           </div>
           <div class="price-info-row">
