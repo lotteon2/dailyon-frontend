@@ -94,10 +94,11 @@
 .div-4 {
     display: flex;
     align-items: center;
-    gap: 4.0625rem;
+    gap: 1rem;
 }
 
 .text-wrapper-4 {
+    width: 60px;
     color: #000;
     font-family: The Jamsil;
     font-size: 0.9vw;
@@ -155,18 +156,19 @@ input::-webkit-inner-spin-button {
 .div-5 {
     display: flex;
     align-items: center;
-    gap: 2.3125rem;
+    gap: 1rem;
 }
 
 .div-6 {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1rem;
 }
 
 .div-7 {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 0.5625rem;
 }
 
@@ -201,13 +203,12 @@ input::-webkit-inner-spin-button {
 .div-8 {
     display: flex;
     align-items: center;
-    gap: 3.1875rem;
+    gap: 1rem;
 }
 
 .div-9 {
     display: flex;
     align-items: center;
-    gap: 0.8125rem;
 }
 
 .div-10 {
