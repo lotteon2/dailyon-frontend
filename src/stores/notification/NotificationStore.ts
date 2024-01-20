@@ -90,7 +90,7 @@ export const useNotificationStore = defineStore(
     }
 
     const subscribeToNotificationsHandler = () => {
-      console.log('subscribeToNotificationsHandler를 발동')
+      // console.log('subscribeToNotificationsHandler를 발동')
 
       if (!shouldSubscribeToSSE.value) {
         // orderSuccessView에서 SSE연결을 하지 않게 제어. 뒤로가기 누를 수 있으니 사이드이펙트 방지용으로 1회성 차단으로 설정
@@ -109,7 +109,7 @@ export const useNotificationStore = defineStore(
 
       eventSourceUnsubscribe = notificationApi.subscribeToNotifications(
         (notification: Notification) => {
-          console.log('구독 후 의미있는 알림을 받았습니다.')
+          // console.log('구독 후 의미있는 알림을 받았습니다.')
           // console.log('토스트 알림을 띄웁니다.')
           notifications.value.unshift(notification)
           unreadNotificationCount.value++
