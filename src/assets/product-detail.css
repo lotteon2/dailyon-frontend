@@ -79,13 +79,14 @@ time,
 mark,
 audio,
 video {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font-size: 100%;
-  font: inherit;
-  vertical-align: baseline;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
 }
+
 /* HTML5 display-role reset for older browsers */
 article,
 aside,
@@ -98,529 +99,534 @@ hgroup,
 menu,
 nav,
 section {
-  display: block;
+    display: block;
 }
+
 body {
-  line-height: 1;
+    line-height: 1;
 }
+
 ol,
 ul {
-  list-style: none;
+    list-style: none;
 }
+
 blockquote,
 q {
-  quotes: none;
+    quotes: none;
 }
+
 blockquote:before,
 blockquote:after,
 q:before,
 q:after {
-  content: '';
-  content: none;
+    content: '';
+    content: none;
 }
+
 table {
-  border-collapse: collapse;
-  border-spacing: 0;
+    border-collapse: collapse;
+    border-spacing: 0;
 }
 
 .main-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 0 auto;
-  margin-top: 41px;
-  width: 60vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    margin-top: 41px;
+    width: 60vw;
 }
 
 .category {
-  color: var(--Grayscale7, #000);
-  text-align: center;
-  font-family: TheJamsil;
-  font-size: 15px;
-  font-style: normal;
-  font-weight: 300;
-  line-height: normal;
-  width: 100%;
-  text-align: left;
+    color: var(--Grayscale7, #000);
+    text-align: center;
+    font-family: TheJamsil;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+    width: 100%;
+    text-align: left;
 }
 
 .first-wrapper {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  margin-top: 24px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 24px;
 }
 
 .prod-first-col {
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-  margin-right: 35px;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    margin-right: 35px;
 }
 
 .bell-container {
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 33px;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 33px;
 }
 
 .prod-second-col {
-  width: 50%;
-  display: flex;
-  flex-direction: column;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
 }
 
 .bell-box {
-  width: 20%;
-  height: 10vh;
-  background: var(--Grayscale7, #000);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
+    width: 20%;
+    height: 10vh;
+    background: var(--Grayscale7, #000);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
 }
 
 .second-col-first-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 29px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 29px;
 }
 
 .brand-prod-name {
-  margin-left: 25px;
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
+    width: 90%;
 }
 
 .brand-prod-name > h1 {
-  color: var(--Grayscale5, #808080);
-  font-family: TheJamsil;
-  font-size: 40px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 50px; /* 125% */
+    color: var(--Grayscale5, #808080);
+    font-family: TheJamsil;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 50px; /* 125% */
 }
 
 .brand-prod-name > h2 {
-  color: var(--Grayscale5, #808080);
-  font-family: TheJamsil;
-  font-size: 40px;
-  font-style: normal;
-  font-weight: 300;
-  line-height: 50px;
+    color: var(--Grayscale5, #808080);
+    font-family: TheJamsil;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 50px;
 }
 
 .sold-out {
-  width: 329px;
-  height: 100px;
-  flex-shrink: 0;
-  background: var(--Dark-Red, #c22727);
-  color: var(--Grayscale1, #fff);
-  text-align: center;
-  font-family: TheJamsil;
-  font-size: 40px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 80px; /* 200% */
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    width: 329px;
+    height: 100px;
+    flex-shrink: 0;
+    background: var(--Dark-Red, #c22727);
+    color: var(--Grayscale1, #fff);
+    text-align: center;
+    font-family: TheJamsil;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 80px; /* 200% */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .second-col-first-row > svg {
-  margin-right: 42px;
+    margin-right: 42px;
 }
 
 .line {
-  width: 100%;
-  height: 1px;
-  margin-top: 5px;
-  margin-bottom: 10px;
+    width: 100%;
+    height: 1px;
+    margin-top: 5px;
+    margin-bottom: 10px;
 
-  background: #c6c6c6;
+    background: #c6c6c6;
 }
 
 .price-info-container {
-  display: flex;
-  flex-direction: column;
-  margin-top: 70px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 70px;
 }
 
 .price-info-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .price-info-row > h1 {
-  width: 230px;
-  color: var(--Grayscale7, #000);
-  font-family: TheJamsil;
-  font-size: 30px;
-  font-style: normal;
-  font-weight: 500;
+    width: 230px;
+    color: var(--Grayscale7, #000);
+    font-family: TheJamsil;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 500;
 }
 
 .price-info-row > span {
-  width: 230px;
-  color: var(--Grayscale7, #000);
-  font-family: TheJamsil;
-  font-size: 30px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 80px;
+    width: 230px;
+    color: var(--Grayscale7, #000);
+    font-family: TheJamsil;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 80px;
 }
 
 .price-info-row > h2 {
-  color: var(--Grayscale7, #000);
-  font-family: TheJamsil;
-  font-size: 40px;
-  font-style: normal;
-  font-weight: 700;
-  /* line-height: 80px; */
+    color: var(--Grayscale7, #000);
+    font-family: TheJamsil;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 700;
+    /* line-height: 80px; */
 }
 
 .price-info-row > h3 {
-  color: var(--Dark-Red, #c22727);
-  font-family: TheJamsil;
-  font-size: 30px;
-  font-style: normal;
-  font-weight: 400;
-  /* line-height: 80px; */
+    color: var(--Dark-Red, #c22727);
+    font-family: TheJamsil;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 400;
+    /* line-height: 80px; */
 }
 
 .price-info-row > h4 {
-  color: var(--Grayscale7, #000);
-  font-family: TheJamsil;
-  font-size: 25px;
-  font-style: normal;
-  font-weight: 300;
-  line-height: 80px;
+    color: var(--Grayscale7, #000);
+    font-family: TheJamsil;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 80px;
 }
 
 .price-info-row > h5 {
-  color: var(--Grayscale7, #000);
-  font-family: TheJamsil;
-  font-size: 25px;
-  font-style: normal;
-  font-weight: 400;
+    color: var(--Grayscale7, #000);
+    font-family: TheJamsil;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 400;
 }
 
 .dash {
-  color: var(--Grayscale5, #808080);
-  font-family: TheJamsil;
-  font-size: 25px;
-  font-style: normal;
-  font-weight: 300;
-  line-height: 60px;
-  text-decoration-line: strikethrough;
-  margin-bottom: 40px;
+    color: var(--Grayscale5, #808080);
+    font-family: TheJamsil;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 60px;
+    text-decoration-line: strikethrough;
+    margin-bottom: 40px;
 }
 
 .black-button {
-  width: 218px;
-  height: 43px;
-  flex-shrink: 0;
-  background: var(--Grayscale7, #000);
-  color: var(--Grayscale1, #fff);
-  font-family: TheJamsil;
-  font-size: 25px;
-  font-style: normal;
-  font-weight: 300;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 5px 10px;
-  margin: 5px 0;
-  cursor: pointer;
+    width: 218px;
+    height: 43px;
+    flex-shrink: 0;
+    background: var(--Grayscale7, #000);
+    color: var(--Grayscale1, #fff);
+    font-family: TheJamsil;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 300;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 10px;
+    margin: 5px 0;
+    cursor: pointer;
 }
 
 .price-info-row > select {
-  width: 350px;
-  height: 44px;
-  border: 1px solid var(--Grayscale4, #c6c6c6);
-  background: var(--Grayscale1, #fff);
-  color: var(--Grayscale7, #000);
-  font-family: TheJamsil;
-  font-size: 25px;
-  font-style: normal;
-  font-weight: 300;
+    width: 350px;
+    height: 44px;
+    border: 1px solid var(--Grayscale4, #c6c6c6);
+    background: var(--Grayscale1, #fff);
+    color: var(--Grayscale7, #000);
+    font-family: TheJamsil;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 300;
 }
 
 .product-option-select {
-  width: 238px;
+    width: 238px;
 }
 
 .option-container {
-  /*width: 678px;*/
-  height: 52px;
-  background: var(--Grayscale2, #f3f3f3);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 30px;
+    /*width: 678px;*/
+    height: 52px;
+    background: var(--Grayscale2, #f3f3f3);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
 }
 
 .option-container > h1 {
-  color: var(--Grayscale7, #000);
-  font-family: TheJamsil;
-  font-size: 25px;
-  font-style: normal;
-  font-weight: 300;
-  margin-left: 10px;
-  margin-right: 121px;
+    color: var(--Grayscale7, #000);
+    font-family: TheJamsil;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 300;
+    margin-left: 10px;
+    margin-right: 121px;
 }
 
 .option-container > h2 {
-  color: var(--Grayscale7, #000);
-  font-family: TheJamsil;
-  font-size: 25px;
-  font-style: normal;
-  font-weight: 700;
-  margin-left: 120px;
-  margin-right: 5px;
+    color: var(--Grayscale7, #000);
+    font-family: TheJamsil;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 700;
+    margin-left: 120px;
+    margin-right: 5px;
 }
 
 .plus-minus-wrapper {
-  display: flex;
-  width: 150px;
-  height: 38px;
+    display: flex;
+    width: 150px;
+    height: 38px;
 }
 
 .plus-minus-wrapper > span {
-  width: 74px;
-  height: 38px;
-  background: var(--Grayscale1, #fff);
-  color: var(--Grayscale7, #000);
-  font-family: TheJamsil;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 300;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    width: 74px;
+    height: 38px;
+    background: var(--Grayscale1, #fff);
+    color: var(--Grayscale7, #000);
+    font-family: TheJamsil;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .count-button {
-  width: 38px;
-  height: 38px;
-  background: var(--Grayscale7, #000);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    width: 38px;
+    height: 38px;
+    background: var(--Grayscale7, #000);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .price-wrapper {
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 25px;
-  margin-left: 19px;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 25px;
+    margin-left: 19px;
 }
 
 .price-wrapper > h1 {
-  color: var(--Grayscale7, #000);
-  font-family: TheJamsil;
-  font-size: 30px;
-  font-style: normal;
-  font-weight: 300;
-  line-height: 80px; /* 266.667% */
+    color: var(--Grayscale7, #000);
+    font-family: TheJamsil;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 80px; /* 266.667% */
 }
 
 .price-wrapper > h2 {
-  color: var(--Grayscale7, #000);
-  font-family: TheJamsil;
-  font-size: 40px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 80px; /* 200% */
-  margin-right: 39px;
-  margin-left: 120px;
+    color: var(--Grayscale7, #000);
+    font-family: TheJamsil;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 80px; /* 200% */
+    margin-right: 39px;
+    margin-left: 120px;
 }
 
 .buttons-wrapper {
-  display: flex;
-  justify-content: space-between;
-  flex-direction: row;
-  width: 100%;
-  gap: 5px;
-  margin-top: 27px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    width: 100%;
+    gap: 5px;
+    margin-top: 27px;
 }
 
 .bucket-button {
-  width: 40%;
-  height: 10vh;
-  border: 1px solid var(--Grayscale6, #4d4d4d);
-  background: var(--Grayscale1, #fff);
-  color: var(--Grayscale7, #000);
-  text-align: center;
-  font-family: TheJamsil;
-  font-size: 30px;
-  font-style: normal;
-  font-weight: 300;
-  line-height: 80px; /* 266.667% */
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    width: 40%;
+    height: 10vh;
+    border: 1px solid var(--Grayscale6, #4d4d4d);
+    background: var(--Grayscale1, #fff);
+    color: var(--Grayscale7, #000);
+    text-align: center;
+    font-family: TheJamsil;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 80px; /* 266.667% */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .purchase-button {
-  width: 40%;
-  height: 10vh;
-  border: 1px solid var(--Grayscale6, #4d4d4d);
-  background: var(--Grayscale1, #000);
-  color: var(--Grayscale7, #fff);
-  text-align: center;
-  font-family: TheJamsil;
-  font-size: 30px;
-  font-style: normal;
-  font-weight: 300;
-  line-height: 80px; /* 266.667% */
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    width: 40%;
+    height: 10vh;
+    border: 1px solid var(--Grayscale6, #4d4d4d);
+    background: var(--Grayscale1, #000);
+    color: var(--Grayscale7, #fff);
+    text-align: center;
+    font-family: TheJamsil;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 80px; /* 266.667% */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .second-wrapper {
-  margin-top: 63px;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
+    margin-top: 63px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 
 .select-button-wrapper {
-  display: flex;
-  justify-content: center;
+    display: flex;
+    justify-content: center;
 }
 
 .select-button-wrapper div:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .selected-button {
-  width: 10vw;
-  height: 10vh;
-  border: 1px solid var(--Grayscale6, #4d4d4d);
-  background: var(--Grayscale7, #000);
-  color: var(--Grayscale1, #fff);
-  text-align: center;
-  font-family: TheJamsil;
-  font-size: 30px;
-  font-style: normal;
-  font-weight: 300;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    width: 10vw;
+    height: 10vh;
+    border: 1px solid var(--Grayscale6, #4d4d4d);
+    background: var(--Grayscale7, #000);
+    color: var(--Grayscale1, #fff);
+    text-align: center;
+    font-family: TheJamsil;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 300;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .non-selected-button {
-  width: 10vw;
-  height: 10vh;
-  border: 1px solid var(--Grayscale6, #4d4d4d);
-  background: var(--Grayscale7, #fff);
-  color: var(--Grayscale1, #000);
-  text-align: center;
-  font-family: TheJamsil;
-  font-size: 30px;
-  font-style: normal;
-  font-weight: 300;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    width: 10vw;
+    height: 10vh;
+    border: 1px solid var(--Grayscale6, #4d4d4d);
+    background: var(--Grayscale7, #fff);
+    color: var(--Grayscale1, #000);
+    text-align: center;
+    font-family: TheJamsil;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 300;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .second-wrapper > span {
-  color: var(--Grayscale7, #000);
-  text-align: center;
-  font-family: TheJamsil;
-  font-size: 30px;
-  font-style: normal;
-  font-weight: 300;
-  line-height: 80px; /* 266.667% */
-  margin-top: 103px;
-  margin-bottom: 142px;
+    color: var(--Grayscale7, #000);
+    text-align: center;
+    font-family: TheJamsil;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 80px; /* 266.667% */
+    margin-top: 103px;
+    margin-bottom: 142px;
 }
 
 .third-wrapper {
-  margin-top: 63px;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  /*margin-bottom: 256px;*/
+    margin-top: 63px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    /*margin-bottom: 256px;*/
 }
 
 .third-wrapper > h1 {
-  color: var(--Grayscale7, #000);
-  font-family: TheJamsil;
-  font-size: 40px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 80px; /* 200% */
-  margin-top: 15px;
-  margin-bottom: 8px;
+    color: var(--Grayscale7, #000);
+    font-family: TheJamsil;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 80px; /* 200% */
+    margin-top: 15px;
+    margin-bottom: 8px;
 }
 
 .thick-line {
-  width: 1483.057px;
-  height: 2px;
-  background: #000;
+    width: 1483.057px;
+    height: 2px;
+    background: #000;
 }
 
 .star-container {
-  display: flex;
-  align-items: flex-end;
-  margin-top: 30px;
+    display: flex;
+    align-items: flex-end;
+    margin-top: 30px;
 }
 
 .star-text {
-  color: var(--Grayscale7, #000);
-  font-family: TheJamsil;
-  font-size: 30px;
-  font-style: normal;
-  font-weight: 500;
-  /* line-height: 100px; 266.667% */
-  margin-right: 15px;
+    color: var(--Grayscale7, #000);
+    font-family: TheJamsil;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 500;
+    /* line-height: 100px; 266.667% */
+    margin-right: 15px;
 }
 
 .star-wrapper {
-  display: flex;
-  align-items: center;
-  margin-right: 20px;
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
 }
 
 .star-wrapper > svg {
-  margin: 0 2px;
+    margin: 0 2px;
 }
 
 .star-container > h1 {
-  color: var(--Grayscale7, #000);
-  font-family: TheJamsil;
-  font-size: 30px;
-  font-style: normal;
-  font-weight: 500;
+    color: var(--Grayscale7, #000);
+    font-family: TheJamsil;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 500;
 }
 
 .star-container > h2 {
-  color: var(--Grayscale4, #c6c6c6);
-  font-family: TheJamsil;
-  font-size: 25px;
-  font-style: normal;
-  font-weight: 500;
+    color: var(--Grayscale4, #c6c6c6);
+    font-family: TheJamsil;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 500;
 }
 
 .summary-img {
-  width: 1191px;
-  height: 154px;
-  flex-shrink: 0;
-  margin: 0 auto;
-  margin-top: 55px;
+    width: 1191px;
+    height: 154px;
+    flex-shrink: 0;
+    margin: 0 auto;
+    margin-top: 55px;
 }

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { deleteCart, readCart, updateCart } from '@/apis/wishcart/CartClient'
 import { computed, onBeforeMount, ref, watch } from 'vue'
-import type { AxiosResponse } from 'axios'
 import type {
   DeleteCartRequest,
   ReadCartPageResponse,
@@ -27,7 +26,9 @@ const cartItems = ref<ReadCartResponse[]>([])
 const checkedCartItems = ref<ReadCartResponse[]>([])
 
 const isUpdateBtnEnabled = ref<boolean>(true)
-const allChecked = ref<boolean>(false)
+const allChecked = computed(() => {
+  return checkedCartItems.value.length === Math.min(requestSize, cartItems.value.length)
+})
 
 const sumOfCartItemPrice = computed(() => {
   let sum = 0
@@ -110,7 +111,6 @@ const toggleAll = () => {
   } else {
     checkedCartItems.value = cartItems.value.map((cartItem) => cartItem)
   }
-  allChecked.value = !allChecked.value
 }
 
 const deleteChecked = async () => {

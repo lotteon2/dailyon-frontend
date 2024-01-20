@@ -4,8 +4,11 @@ import { getAuctionDetail } from '@/apis/auction/AuctionClient'
 import { useRouter } from 'vue-router'
 import { useAuctionStore } from '@/stores/auction/AuctionStore'
 import type { ReadAuctionDetailResponse } from '@/apis/auction/AuctionDto'
+import { confirmModal, warningModal } from '@/utils/Modal'
+import { useMemberStore } from '@/stores/member/MemberStore'
+
 const auctionStore = useAuctionStore()
-import { infoModal } from '@/utils/Modal'
+const memberStore = useMemberStore()
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 const router = useRouter()
@@ -36,6 +39,7 @@ const auctionDetail = ref<ReadAuctionDetailResponse>({
   },
   productDetailResponse: {
     gender: '',
+    brandId: 0,
     categoryId: 0,
     brandName: '',
     avgRating: 0,
@@ -58,11 +62,23 @@ const closeModal = () => {
   emits('close-modal')
 }
 
-const enterAuction = () => {
-  infoModal('알림', '경매 입장')
-  auctionStore.setAuctionDetail(auctionDetail.value)
-  router.push({ path: `/chat/${props.auctionId}` })
-  emits('close-modal')
+const enterAuction = async () => {
+  if (
+    await confirmModal(
+      '경매에 입장하시겠습니까?\n악성 입찰 방지를 위해 경매에 낙찰될 경우 포인트로 즉시 5%가 결제됩니다\n'
+    )
+  ) {
+    if (
+      memberStore.getMemberInfo().point! >
+      auctionDetail.value.productDetailResponse.price * 0.05
+    ) {
+      auctionStore.setAuctionDetail(auctionDetail.value)
+      router.push({ path: `/chat/${props.auctionId}` })
+      emits('close-modal')
+    } else {
+      await warningModal('포인트가 부족합니다')
+    }
+  }
 }
 
 watch(
@@ -86,7 +102,7 @@ watch(
         <div class="modal-container">
           <div class="modal-main">
             <div class="modal-sub">
-              <div class="modal-sub-items">
+              <div class="modal-sub-items" style="justify-content: center">
                 <img
                   :src="`${VITE_STATIC_IMG_URL}${auctionDetail.productDetailResponse.imgUrl}?w=200&h=200&q=70`"
                   alt="auction_product_img"
@@ -129,7 +145,14 @@ watch(
             </div>
           </div>
           <div class="modal-button">
-            <button class="createBtn" @click="enterAuction">경매 입장</button>
+            <button
+              class="createBtn"
+              v-if="auctionDetail.auctionResponse.ended === false"
+              @click="enterAuction"
+            >
+              경매 입장
+            </button>
+            <button class="disabledBtn" v-else>경매 종료</button>
           </div>
         </div>
       </div>
@@ -240,6 +263,13 @@ button {
   height: 50px;
   font-size: 25px;
   background-color: black;
+}
+
+.disabledBtn {
+  width: 150px;
+  height: 50px;
+  font-size: 25px;
+  background-color: #808080;
 }
 
 .modal-label {

@@ -1,10 +1,14 @@
 <script setup lang="ts">
-import { onBeforeMount, ref, watch, computed } from 'vue'
+import { computed, onBeforeMount, ref, watch } from 'vue'
 import ProductDetailCouponModal from '@/components/promotion/coupon/productdetail/ProductDetailCouponModal.vue'
 import BreadCrumbComponent from '@/components/product/BreadCrumbComponent.vue'
 import { useRoute } from 'vue-router'
 import { getProductDetail } from '@/apis/product/ProductClient'
-import type { ProductInfo, ReadProductStockResponse } from '@/apis/product/ProductDto'
+import type {
+  ProductInfo,
+  ReadProductDetailResponse,
+  ReadProductStockResponse
+} from '@/apis/product/ProductDto'
 import DescribeImageComponent from '@/components/product/DescribeImageComponent.vue'
 import ReviewComponent from '@/components/product/ReviewComponent.vue'
 import { useProductStore } from '@/stores/product/ProductStore'
@@ -14,8 +18,8 @@ import type { ReadWishListFromProduct } from '@/apis/wishcart/WishListDto'
 import { readWishListFromProduct, toggleWishList } from '@/apis/wishcart/WishListClient'
 import type { AxiosResponse } from 'axios'
 import TOP4OOTDComponent from '@/components/ootd/TOP4OOTDComponent.vue'
-import { Image, Select, SelectOption } from 'ant-design-vue'
-import { errorModal, infoModal, warningModal, confirmModal } from '@/utils/Modal'
+import { Image, Select } from 'ant-design-vue'
+import { confirmModal, errorModal, infoModal, warningModal } from '@/utils/Modal'
 import { LOGIN_NEED_MSG } from '@/utils/CommonMessage'
 import { SizeOrder } from '@/types/enums/SizeOrder'
 import type { ProductStock } from '@/types/product/Product'
@@ -27,7 +31,19 @@ const productStore = useProductStore()
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
 const route = useRoute()
-const product = ref()
+const product = ref<ReadProductDetailResponse>({
+  name: '',
+  gender: '',
+  categoryId: 0,
+  imgUrl: '',
+  productStocks: [{ productSizeId: 0, productSizeName: '', quantity: 0 }],
+  describeImgUrls: [],
+  avgRating: 0,
+  reviewCount: 0,
+  brandName: '',
+  brandId: 0,
+  price: 0
+})
 
 const bestPromotionalPrice = ref<number>(0)
 const bestPromotionalRate = ref<number>(0)
@@ -217,6 +233,10 @@ const routeOrderSheet = async () => {
   }
 }
 
+const routeToProductList = () => {
+  router.push({ name: 'productList', query: { brand: product.value.brandId } })
+}
+
 const validation = (): boolean => {
   if (selectedQuantity.value === 0 || selectedOriginalPrice.value === 0) {
     warningModal('알림', '상품옵션과 수량을 선택해 주세요.')
@@ -265,11 +285,11 @@ const enrollRestockNotificationHandler = async () => {
   )
 
   if (confirmed) {
-    await postEnrollRestockNotificaton()
+    await postEnrollRestockNotification()
   }
 }
 
-const postEnrollRestockNotificaton = async () => {
+const postEnrollRestockNotification = async () => {
   const enrollRestockRequest: EnrollRestockRequest = {
     productId: productId.value,
     sizeId: selectedProductSize.value.productSizeId
@@ -368,7 +388,9 @@ watch(selectedProductSize, () => {
       <div class="prod-second-col">
         <div class="second-col-first-row">
           <div class="brand-prod-name">
-            <h1>{{ product.brandName }}</h1>
+            <h1 @click="routeToProductList">
+              {{ product.brandName }}
+            </h1>
             <h2>{{ product.name }}</h2>
           </div>
           <div v-if="selectedProductSize.quantity === 0" class="sold-out">품절</div>
@@ -399,15 +421,16 @@ watch(selectedProductSize, () => {
         <div class="price-info-container">
           <div class="price-info-row">
             <h1>데일리온가</h1>
-            <!-- TODO : 여기에 할인 적용된 금액 들어가나요? -->
             <h2>{{ Math.floor(bestPromotionalPrice).toLocaleString() }}</h2>
-            <!-- TODO : 여기에 최대 할인율? 할인 금액 나오는건가요? -->
             <h3 v-show="bestPromotionalRate">{{ bestPromotionalRate }}%</h3>
           </div>
-          <div v-if='bestPromotionalRate' class="price-info-row">
+          <div v-if="bestPromotionalRate" class="price-info-row">
             <h1>&nbsp;</h1>
-            <div v-show="productPriceValue !== bestPromotionalPrice" class="dash"
-                 style='text-decoration: line-through;'>
+            <div
+              v-show="productPriceValue !== bestPromotionalPrice"
+              class="dash"
+              style="text-decoration: line-through"
+            >
               {{ productPriceValue.toLocaleString() }}
             </div>
           </div>
@@ -493,7 +516,6 @@ watch(selectedProductSize, () => {
           <div class="line"></div>
           <div class="price-wrapper">
             <h1>총 합계금액</h1>
-            <!-- TODO : 할인률 적용된 금액 -->
             <h2>{{ selectedOriginalPrice.toLocaleString() }} 원</h2>
           </div>
 
@@ -512,9 +534,7 @@ watch(selectedProductSize, () => {
                 />
               </svg>
             </div>
-            <!-- TODO : 장바구니 개발 이후 추가 동작 개발 -->
             <div class="bucket-button" @click="addToCart">장바구니</div>
-            <!-- TODO : 버튼 클릭 시 주문 페이지  (가주문 X) 생성 -->
             <div class="purchase-button" @click="routeOrderSheet">바로 구매</div>
           </div>
         </div>
