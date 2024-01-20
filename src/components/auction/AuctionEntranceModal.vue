@@ -86,7 +86,7 @@ watch(
         <div class="modal-container">
           <div class="modal-main">
             <div class="modal-sub">
-              <div class="modal-sub-items">
+              <div class="modal-sub-items" style="justify-content: center">
                 <img
                   :src="`${VITE_STATIC_IMG_URL}${auctionDetail.productDetailResponse.imgUrl}?w=200&h=200&q=70`"
                   alt="auction_product_img"
@@ -129,7 +129,14 @@ watch(
             </div>
           </div>
           <div class="modal-button">
-            <button class="createBtn" @click="enterAuction">경매 입장</button>
+            <button
+              class="createBtn"
+              v-if="auctionDetail.auctionResponse.ended === false"
+              @click="enterAuction"
+            >
+              경매 입장
+            </button>
+            <button class="disabledBtn" v-else>경매 종료</button>
           </div>
         </div>
       </div>
@@ -240,6 +247,13 @@ button {
   height: 50px;
   font-size: 25px;
   background-color: black;
+}
+
+.disabledBtn {
+  width: 150px;
+  height: 50px;
+  font-size: 25px;
+  background-color: #808080;
 }
 
 .modal-label {
