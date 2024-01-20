@@ -9,6 +9,7 @@ import { useAuctionStore } from '@/stores/auction/AuctionStore'
 import { useMemberStore } from '@/stores/member/MemberStore'
 import { storeToRefs } from 'pinia'
 import router from '@/router'
+
 const VITE_AUCTION_WS_URL: string = import.meta.env.VITE_AUCTION_WS_URL
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 const mebmerStore = useMemberStore()
@@ -73,6 +74,7 @@ const handleOk = async () => {
   }
   if (biddingInput.value > productDetail.value!.price) {
     message.error('상품 가격보다 높게 입찰 할 수 없습니다.')
+    return
   }
   if (!auctionDetail.value?.started) {
     message.error('아직 경매가 시작되지 않았습니다.')
@@ -87,7 +89,6 @@ const handleOk = async () => {
     nickname: nickname.value ? nickname.value : '',
     inputCheck: true
   }
-  console.log(data)
   const response = await createBid(data)
   myBidPrice.value = response
 
@@ -106,6 +107,7 @@ onMounted(async () => {
     return
   }
   auctionDetail.value = res.readAuctionDetailResponse.auctionResponse
+  console.log(auctionDetail.value)
   productDetail.value = res.readAuctionDetailResponse.productDetailResponse
   auctionStore.setToken(res.token)
   currentBid.value = auctionDetail.value.startBidPrice
@@ -139,6 +141,7 @@ const connect = async () => {
         messages.value.push(data.data)
         break
       case 'START':
+        auctionDetail.value!.started = true
         console.log('경매가 시작되었습니다.')
         break
       case 'TIME_SYNC':

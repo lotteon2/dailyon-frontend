@@ -134,6 +134,11 @@ const cancel = async (orderDetailNo: string) => {
     return
   }
 }
+
+const formatPrice = (price: number | null | undefined) => {
+  if (!price) return '0원'
+  return `${new Intl.NumberFormat('ko-KR').format(price)}원`
+}
 </script>
 <template v-if="orderDetails.length">
   <div v-for="(orderDetail, index) in orderDetails" :key="index" class="order-detail-container">
@@ -153,7 +158,7 @@ const cancel = async (orderDetailNo: string) => {
             {{ orderDetail.productQuantity }}개
           </div>
           <div>쿠폰이름 : {{ orderDetail.couponName }}</div>
-          <div>쿠폰 적용 금액 : {{ orderDetail.couponDiscountPrice }}</div>
+          <div>쿠폰 적용 금액 : {{ formatPrice(orderDetail.couponDiscountPrice) }}</div>
         </div>
       </div>
       <div class="left-inner-empty"></div>
