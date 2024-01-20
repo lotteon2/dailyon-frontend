@@ -4,7 +4,7 @@ import { getAuctionDetail } from '@/apis/auction/AuctionClient'
 import { useRouter } from 'vue-router'
 import { useAuctionStore } from '@/stores/auction/AuctionStore'
 import type { ReadAuctionDetailResponse } from '@/apis/auction/AuctionDto'
-import { confirmModal, infoModal, warningModal } from '@/utils/Modal'
+import { confirmModal, warningModal } from '@/utils/Modal'
 import { useMemberStore } from '@/stores/member/MemberStore'
 
 const auctionStore = useAuctionStore()
@@ -63,22 +63,22 @@ const closeModal = () => {
 }
 
 const enterAuction = async () => {
-  await confirmModal(
-    '경매에 입장하시겠습니까?\n악성 입찰 방지를 위해 경매에 낙찰될 경우 포인트로 즉시 5%가 결제됩니다\n'
-  ).then(async () => {
+  if (
+    await confirmModal(
+      '경매에 입장하시겠습니까?\n악성 입찰 방지를 위해 경매에 낙찰될 경우 포인트로 즉시 5%가 결제됩니다\n'
+    )
+  ) {
     if (
       memberStore.getMemberInfo().point! >
       auctionDetail.value.productDetailResponse.price * 0.05
     ) {
-      await infoModal('알림', '경매 입장').then(() => {
-        auctionStore.setAuctionDetail(auctionDetail.value)
-        router.push({ path: `/chat/${props.auctionId}` })
-        emits('close-modal')
-      })
+      auctionStore.setAuctionDetail(auctionDetail.value)
+      router.push({ path: `/chat/${props.auctionId}` })
+      emits('close-modal')
     } else {
       await warningModal('포인트가 부족합니다')
     }
-  })
+  }
 }
 
 watch(
