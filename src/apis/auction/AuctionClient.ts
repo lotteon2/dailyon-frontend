@@ -30,8 +30,7 @@ export const getAuctionPage = async (
         if (error.response.status >= 400 && error.response.status < 500) {
           await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
-        }
-        if (error.response.status >= 500) {
+        } else if (error.response.status >= 500) {
           openInternalServerErrorNotification()
           console.error('Internal Server Error')
         }
@@ -53,8 +52,7 @@ export const getAuctionDetail = async (auctionId: string): Promise<ReadAuctionDe
         if (error.response.status >= 400 && error.response.status < 500) {
           await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
-        }
-        if (error.response.status >= 500) {
+        } else if (error.response.status >= 500) {
           openInternalServerErrorNotification()
           console.error('Internal Server Error')
         }
@@ -82,8 +80,7 @@ export const getAuctionHistory = async (
         if (error.response.status >= 400 && error.response.status < 500) {
           await warningModal('알림', error.response.data.message)
           console.error(`Client Error=${error.response.data.message}`)
-        }
-        if (error.response.status >= 500) {
+        } else if (error.response.status >= 500) {
           openInternalServerErrorNotification()
           console.error('Internal Server Error')
         }
