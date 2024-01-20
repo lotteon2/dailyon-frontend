@@ -28,7 +28,7 @@ const mouseOver = (id: number) => {
 }
 
 const toProductList = (id: number) => {
-  router.push({ name: 'productList', query: { category: id, type: 'NORMAL' } })
+  router.push({ name: 'productList', query: { category: id } })
 }
 </script>
 

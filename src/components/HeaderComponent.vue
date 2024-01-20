@@ -7,7 +7,6 @@ import NotificationComponent from '@/components/notification/NotificationCompone
 import { useMemberStore } from '@/stores/member/MemberStore'
 import { useCategoryStore } from '@/stores/category/CategoryStore'
 import { useNotificationStore } from '@/stores/notification/NotificationStore'
-import router from '@/router'
 import { infoModal } from '@/utils/Modal'
 import { LOGIN_NEED_MSG } from '@/utils/CommonMessage'
 import { useBrandStore } from '@/stores/brand/BrandStore'
@@ -47,7 +46,8 @@ const routeSearch = () => {
   if (searchQuery.value === null) {
     infoModal('알림', '검색 키워드를 입력해주세요.')
   } else {
-    router.push({ name: 'productList', query: { query: searchQuery.value } })
+    window.location.href = `/product-list?query=${searchQuery.value}`
+    searchQuery.value = null
   }
 }
 
