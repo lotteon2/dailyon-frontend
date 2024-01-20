@@ -9,8 +9,8 @@ import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 import WhitePageComponent from '@/components/wishcart/WhitePageComponent.vue'
 
 const sortOptions = reactive([
-  { label: '조회순', value: 'viewCount,desc' },
   { label: '최신순', value: 'createdAt,desc' },
+  { label: '조회순', value: 'viewCount,desc' },
   { label: '인기순', value: 'likeCount,desc' }
 ])
 const requestPage = ref<number>(0)
