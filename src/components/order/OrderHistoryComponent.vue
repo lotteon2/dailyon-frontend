@@ -71,6 +71,7 @@ const handleSelectedOptionChange = async (
   option: DefaultOptionType | DefaultOptionType[]
 ) => {
   selectedOption.value = String(value)
+  requestPage.value = 0
   await fetchDefaultData(0, selectedOption.value)
 }
 </script>
