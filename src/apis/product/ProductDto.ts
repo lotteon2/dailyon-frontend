@@ -33,6 +33,7 @@ export interface CouponInfoItemResponse {
 
 export interface ReadProductDetailResponse {
   categoryId: number
+  brandId: number
   brandName: string
   name: string
   imgUrl: string
