@@ -12,19 +12,18 @@ const PRODUCT_SERVICE_PREFIX: string = '/product-service'
 const PRODUCT_PREFIX: string = '/products'
 
 export const getProductSlice = async (
-  lastVal: string | null,
   brandId: number | null,
   categoryId: number | null,
   gender: string | null,
   lowPrice: number | null,
   highPrice: number | null,
   query: string | null,
+  page: number,
   sort: string,
   direction: string
 ): Promise<ReadProductSliceResponse> => {
   try {
-    const params: any = { sort: sort, direction: direction }
-    if (lastVal !== null) params.lastVal = lastVal
+    const params: any = { page: page, sort: sort, direction: direction }
     if (brandId !== null) params.brandId = brandId
     if (categoryId !== null) params.categoryId = categoryId
     if (gender !== null) params.gender = gender
