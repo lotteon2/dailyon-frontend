@@ -145,11 +145,12 @@ const handleDownloadMultipleCoupons = async () => {
     console.log('다운로드된 couponInfoId 목록:', downloadResponse.successfulIds)
     console.log('다운로드 실패한 couponInfoId 목록:', downloadResponse.failedIds)
 
-    coupons.value.forEach((coupon, index) => {
-      // 다운로드 된 쿠폰들 상태변경
+    // 다운로드 된 쿠폰들 상태변경
+    coupons.value = coupons.value.map((coupon) => {
       if (downloadResponse.successfulIds.includes(coupon.couponInfoId)) {
-        coupons.value[index].isDownloadable = false
+        return { ...coupon, isDownloadable: false } // 상태 업데이트
       }
+      return coupon
     })
   } catch (error) {
     console.error('모든 쿠폰 다운로드 중 에러 발생:', error)
