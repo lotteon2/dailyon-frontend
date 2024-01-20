@@ -138,15 +138,15 @@ const handleDownloadMultipleCoupons = async () => {
     const downloadResponse: MultipleCouponDownloadResponse =
       await downloadMultipleCoupons(downloadableCouponInfoIds)
 
-    // 다운로드 된 쿠폰들 상태변경
-    coupons.value = coupons.value.map((coupon) => {
+    coupons.value.forEach((coupon, index) => {
+      // 다운로드 된 쿠폰들 상태변경
       if (downloadResponse.successfulIds.includes(coupon.couponInfoId)) {
-        return { ...coupon, isDownloadable: false } // 상태 업데이트
+        coupons.value[index].isDownloadable = false
       }
-      return coupon
     })
-    console.log('다운로드된 couponInfoId 목록:', downloadResponse.successfulIds)
-    console.log('다운로드 실패한 couponInfoId 목록:', downloadResponse.failedIds)
+
+    // console.log('다운로드된 couponInfoId 목록:', downloadResponse.successfulIds)
+    // console.log('다운로드 실패한 couponInfoId 목록:', downloadResponse.failedIds)
 
     await successModal(
       '알림',
@@ -170,28 +170,28 @@ const maxDiscountAmount = computed(() => {
 
   for (const coupon of coupons.value) {
     let discountAmount = 0
-    console.log(`임시 discountAmount 초기화:${discountAmount}`)
+    // console.log(`임시 discountAmount 초기화:${discountAmount}`)
 
     // 할인 타입에 따라 분기
     if (coupon.discountType === 'PERCENTAGE') {
       discountAmount = (productPriceValue * coupon.discountValue) / 100
-      console.log(`PERCENTAGE:${coupon}`)
-      console.log(`discountAmount:${discountAmount}`)
+      // console.log(`PERCENTAGE:${coupon}`)
+      // console.log(`discountAmount:${discountAmount}`)
     } else if (coupon.discountType === 'FIXED_AMOUNT') {
       discountAmount = coupon.discountValue
-      console.log(`FIXED_AMOUNT:${coupon}`)
-      console.log(`discountAmount:${discountAmount}`)
+      // console.log(`FIXED_AMOUNT:${coupon}`)
+      // console.log(`discountAmount:${discountAmount}`)
     }
 
     // maxDiscountAmount가 있다면 해당 쿠폰 할인이 해당 limit을 안넘는지 확인
     discountAmount = Math.min(discountAmount, coupon.maxDiscountAmount ?? Infinity)
-    console.log(`max처리 후 임시 discountAmount:${discountAmount}`)
+    // console.log(`max처리 후 임시 discountAmount:${discountAmount}`)
 
     // max값 갱신
     maxDiscount = Math.max(maxDiscount, discountAmount)
-    console.log(`갱신 후 임시 maxDiscount:${maxDiscount}`)
+    // console.log(`갱신 후 임시 maxDiscount:${maxDiscount}`)
   }
-  console.log(`최종 계산완료 된 maxDiscount:${maxDiscount}`)
+  // console.log(`최종 계산완료 된 maxDiscount:${maxDiscount}`)
 
   emit('best-promotional-price-updated', maxDiscount) // computed로 변경시 emit
 

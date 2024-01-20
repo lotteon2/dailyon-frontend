@@ -112,9 +112,9 @@ export const subscribeToNotifications = (
       // console.log('하트비트 외 모든 메세지 수신')
     }
 
-    console.log('새로운 메세지가 도착했습니다.')
-    console.log(event.data)
-    console.log(event)
+    // console.log('새로운 메세지가 도착했습니다.')
+    // console.log(event.data)
+    // console.log(event)
 
     onMessage(notification)
   }
