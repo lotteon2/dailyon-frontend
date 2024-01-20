@@ -61,7 +61,7 @@ const onChangePage = async (page: number) => {
 
 watch(requestPage, async (afterPage, beforePage) => {
   if (afterPage < totalPages.value!) {
-    fetchDefaultData(requestPage.value, selectedOption.value), requestPage.value
+    await fetchDefaultData(afterPage, selectedOption.value)
   }
 })
 
