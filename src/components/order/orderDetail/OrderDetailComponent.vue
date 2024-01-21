@@ -19,6 +19,10 @@ const props = defineProps({
   orderNo: {
     type: String,
     required: true
+  },
+  type: {
+    type: String,
+    required: true
   }
 })
 
@@ -163,7 +167,7 @@ const formatPrice = (price: number | null | undefined) => {
       </div>
       <div class="left-inner-empty"></div>
     </div>
-    <div class="right-section">
+    <div class="right-section" v-if="type !== '경매'">
       <div v-if="orderDetail.reviewCheck === false">
         <div class="right-section-buttons">
           <div v-if="orderDetail.status !== '취소완료'" class="right-inner-button">

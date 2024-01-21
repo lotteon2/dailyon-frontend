@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import OrderDetailComponent from '@/components/order/orderDetail/OrderDetailComponent.vue'
-import type { OrderDetailResponse } from '@/apis/order/orderDto'
+import type { OrderDetailResponse, OrderResponse } from '@/apis/order/orderDto'
 
 const emit = defineEmits(['showModal'])
 const props = defineProps({
@@ -14,8 +14,8 @@ const props = defineProps({
 
 const selectedRowIndex = ref<any>(null)
 
-const toggleCard = async (orderNo: string) => {
-  emit('showModal', orderNo)
+const toggleCard = async (order: OrderResponse) => {
+  emit('showModal', order)
 }
 </script>
 
@@ -24,7 +24,7 @@ const toggleCard = async (orderNo: string) => {
     <tr
       v-for="(order, index) in props.orders"
       :key="'row-' + index"
-      @click="toggleCard(order.orderNo)"
+      @click="toggleCard(order)"
       class="table-inner-header"
     >
       <td>{{ order.orderNo }}</td>
@@ -34,14 +34,6 @@ const toggleCard = async (orderNo: string) => {
       <td>{{ order.status }}</td>
       <td>{{ order.createdAt }}</td>
     </tr>
-
-    <!-- <tr v-if="selectedRowIndex === order.orderNo" :key="'card-' + index">
-      <td colspan="6">
-        <div class="order-history">
-          <OrderDetailComponent :orderNo="order.orderNo" />
-        </div>
-      </td>
-    </tr> -->
   </tbody>
 </template>
 
