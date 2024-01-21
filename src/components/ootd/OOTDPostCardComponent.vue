@@ -7,6 +7,7 @@ import { storeToRefs } from 'pinia'
 import { togglePostLike } from '@/apis/ootd/PostLikeService'
 import { infoModal } from '@/utils/Modal'
 import { LOGIN_NEED_MSG } from '@/utils/CommonMessage'
+import { usePostStore } from '@/stores/post/PostStore'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -19,6 +20,7 @@ const props = defineProps({
 })
 
 const postLikeStore = usePostLikeStore()
+const postStore = usePostStore()
 const { postLikes } = storeToRefs(postLikeStore)
 
 const likeButtonClickListener = async (postId: number, isLike: boolean | undefined) => {
@@ -47,6 +49,7 @@ const flushLikeStore = async () => {
 // 페이지 이동 시 이벤트
 onBeforeRouteLeave(async (to, from) => {
   await flushLikeStore()
+  await postStore.renewPostView()
 })
 
 const img = ref<Array<HTMLImageElement>>(new Array<HTMLImageElement>())
