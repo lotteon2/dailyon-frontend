@@ -127,7 +127,8 @@ onBeforeMount(initData)
   flex-direction: column;
   padding: 10px;
 
-  font-family: 'The Jamsil 2 Light';
+  font-family: 'TheJamsil';
+  font-weight: 300;
 }
 
 .table-block {

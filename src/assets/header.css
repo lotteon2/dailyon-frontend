@@ -22,7 +22,7 @@
 
   color: #000;
   text-align: center;
-  font-family: Baskerville Old Face;
+  font-family: 'Baskerville';
   font-size: 3.5vw;
   font-style: normal;
   font-weight: 400;
@@ -35,7 +35,7 @@
 
 .logo-text-highlight {
   color: #c22727;
-  font-family: Baskerville Old Face;
+  font-family: 'Baskerville';
   font-size: 3.75vw;
   font-style: normal;
   font-weight: 400;
@@ -65,7 +65,8 @@
   width: 100%;
   color: #808080;
   text-align: start;
-  font-family: Baskerville Old Face;
+  /* font-family: 'Baskerville'; */
+  font-family: 'TheJamsil';
   font-size: 1vw;
   font-style: normal;
   font-weight: 400;
@@ -104,7 +105,7 @@
 .logout-text {
   color: var(--Grayscale7, #000);
   text-align: center;
-  font-family: The Jamsil;
+  font-family: '' TheJamsil '';
   font-size: 0.9vw;
   font-style: normal;
   font-weight: 300;
@@ -212,7 +213,7 @@
 
 .nav-tab-text {
   color: var(--Grayscale7, #000);
-  font-family: The Jamsil;
+  font-family: 'TheJamsil';
   font-size: 1.1vw;
   font-style: normal;
   font-weight: 700;
@@ -288,7 +289,7 @@
 }
 
 .notification-badge {
-  font-family: TheJamsil;
+  font-family: 'TheJamsil';
   position: absolute;
   top: -5px; /* Tweak as necessary */
   right: -5px; /* Tweak as necessary */
@@ -301,4 +302,12 @@
   justify-content: center;
   align-items: center;
   font-size: 12px;
+}
+
+.nickname {
+  font-family: 'TheJamsil';
+}
+
+.welcome {
+  font-family: 'TheJamsil';
 }

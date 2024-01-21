@@ -1,6 +1,6 @@
 .container-title {
   color: var(--Grayscale7, #000);
-  font-family: The Jamsil;
+  font-family: 'TheJamsil';
   font-size: 30px;
   font-style: normal;
   font-weight: 700;
@@ -16,7 +16,7 @@
 
 .coupon-table-data1 > td {
   color: var(--Grayscale7, #202027);
-  font-family: The Jamsil;
+  font-family: 'TheJamsil';
   font-size: 20px;
   font-style: normal;
   font-weight: 400;
@@ -26,7 +26,7 @@
 
 .coupon-table-data1 > th {
   color: var(--Grayscale7, #202027);
-  font-family: The Jamsil;
+  font-family: 'TheJamsil';
   font-size: 20px;
   font-style: normal;
   font-weight: 400;
@@ -39,7 +39,7 @@
 }
 .coupon-table-data2 > td {
   color: var(--Grayscale7, #202027);
-  font-family: The Jamsil;
+  font-family: 'TheJamsil';
   font-size: 20px;
   font-style: normal;
   font-weight: 400;

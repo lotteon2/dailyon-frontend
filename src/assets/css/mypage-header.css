@@ -27,7 +27,7 @@
 .user-name-container-first-line {
   display: flex;
   color: var(--Grayscale7, #000);
-  font-family: The Jamsil;
+  font-family: 'TheJamsil';
   font-size: 30px;
   font-style: normal;
   font-weight: 500;
@@ -37,7 +37,7 @@
 .user-name-container-first-line > h1 {
   display: flex;
   color: var(--Grayscale7, #000);
-  font-family: The Jamsil;
+  font-family: 'TheJamsil';
   font-size: 1.1vw;
   font-style: normal;
   font-weight: 500;
@@ -46,7 +46,7 @@
 
 .user-name-container-first-line > h2 {
   color: var(--Grayscale7, #000);
-  font-family: The Jamsil;
+  font-family: 'TheJamsil';
   font-size: 1vw;
   font-style: normal;
   font-weight: 300;
@@ -55,7 +55,7 @@
 
 .user-name-container > h3 {
   color: var(--Grayscale5, #808080);
-  font-family: The Jamsil;
+  font-family: 'TheJamsil';
   font-size: 0.9vw;
   font-style: normal;
   font-weight: 300;
@@ -77,18 +77,18 @@
   justify-content: center;
   color: var(--Grayscale7, #000);
   text-align: center;
-  font-family: The Jamsil;
+  font-family: 'TheJamsil';
   font-size: 1vw;
   font-style: normal;
   font-weight: 500;
   line-height: 50px;
 
-  gap: 0.2vw
+  gap: 0.2vw;
 }
 
 .point-wrapper > h1 {
   color: var(--Dark-Red, #c22727);
-  font-family: The Jamsil;
+  font-family: 'TheJamsil';
   font-size: 1.1vw;
   font-style: normal;
   font-weight: 500;
@@ -109,7 +109,7 @@
   justify-content: center;
   align-items: center;
   color: var(--Grayscale7, #000);
-  font-family: The Jamsil;
+  font-family: 'TheJamsil';
   font-size: 0.8vw;
   font-style: normal;
   font-weight: 300;
@@ -125,7 +125,7 @@
   justify-content: center;
   align-items: center;
   color: var(--Grayscale7, #fff);
-  font-family: The Jamsil;
+  font-family: 'TheJamsil';
   font-size: 0.8vw;
   font-style: normal;
   font-weight: 300;

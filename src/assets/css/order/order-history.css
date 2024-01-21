@@ -1,6 +1,6 @@
 .container-title {
   color: var(--Grayscale7, #000);
-  font-family: The Jamsil;
+  font-family: 'TheJamsil';
   font-size: 30px;
   font-style: normal;
   font-weight: 700;
@@ -18,7 +18,7 @@
 
 .container-inner-title {
   color: var(--Grayscale7, #000);
-  font-family: The Jamsil;
+  font-family: 'TheJamsil';
   font-size: 25px;
   font-style: normal;
   font-weight: 400;
@@ -27,7 +27,7 @@
 
 .container-inner-title2 {
   color: var(--Grayscale7, #000);
-  font-family: The Jamsil;
+  font-family: 'TheJamsil';
   font-size: 20px;
   font-style: normal;
   font-weight: 400;
@@ -63,7 +63,7 @@
 
 .process-column > h1 {
   color: var(--Grayscale4, #c6c6c6);
-  font-family: The Jamsil;
+  font-family: 'TheJamsil';
   font-size: 80px;
   font-style: normal;
   font-weight: 700;
@@ -73,7 +73,7 @@
 }
 .process-column > h2 {
   color: var(--Grayscale7, #000);
-  font-family: The Jamsil;
+  font-family: 'TheJamsil';
   font-size: 20px;
   font-style: normal;
   font-weight: 400;
@@ -83,7 +83,7 @@
 }
 .process-column > h3 {
   color: var(--Grayscale5, #808080);
-  font-family: The Jamsil;
+  font-family: 'TheJamsil';
   font-size: 15px;
   font-style: normal;
   font-weight: 400;
@@ -91,7 +91,7 @@
 }
 .process-column > h4 {
   color: var(--Grayscale7, #000);
-  font-family: The Jamsil;
+  font-family: 'TheJamsil';
   font-size: 15px;
   font-style: normal;
   font-weight: 400;
@@ -106,7 +106,7 @@
 
 .container-inner-title3 {
   color: var(--Grayscale4, #c6c6c6);
-  font-family: The Jamsil;
+  font-family: 'TheJamsil';
   font-size: 15px;
   font-style: normal;
   font-weight: 400;
@@ -115,7 +115,7 @@
 
 .table-header > th {
   color: var(--Grayscale7, #202027);
-  font-family: The Jamsil;
+  font-family: 'TheJamsil';
   font-size: 18px;
   font-style: normal;
   font-weight: 400;
@@ -125,7 +125,7 @@
 
 .table-inner-header > th {
   color: var(--Grayscale7, #202027);
-  font-family: The Jamsil;
+  font-family: 'TheJamsil';
   font-size: 18px;
   font-style: normal;
   font-weight: 300;
@@ -148,7 +148,7 @@
   flex-shrink: 0;
   background: var(--Grayscale7, #000);
   color: var(--Grayscale1, #fff);
-  font-family: The Jamsil;
+  font-family: 'TheJamsil';
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
@@ -165,7 +165,7 @@
   flex-shrink: 0;
   background: var(--Grayscale4, #c6c6c6);
   color: var(--Grayscale1, #fff);
-  font-family: The Jamsil;
+  font-family: 'TheJamsil';
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
@@ -182,7 +182,7 @@
   flex-shrink: 0;
   background: var(--Grayscale5, #808080);
   color: var(--Grayscale1, #fff);
-  font-family: The Jamsil;
+  font-family: 'TheJamsil';
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
@@ -199,7 +199,7 @@
   flex-shrink: 0;
   background: var(--Grayscale6, #4d4d4d);
   color: var(--Grayscale1, #fff);
-  font-family: The Jamsil;
+  font-family: 'TheJamsil';
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
@@ -247,7 +247,7 @@
   flex-shrink: 0;
   background: var(--Grayscale7, #000);
   color: var(--Grayscale1, #fff);
-  font-family: The Jamsil;
+  font-family: 'TheJamsil';
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
