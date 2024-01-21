@@ -176,7 +176,7 @@ const routeOrderSheet = () => {
     }
     productInfos.push(info)
   })
-  productStore.setProducts(productInfos, 'CART', null)
+  productStore.setProducts(productInfos, 'CART', null, null)
   router.push('/orders')
 }
 </script>

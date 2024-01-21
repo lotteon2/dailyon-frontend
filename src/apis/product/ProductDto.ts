@@ -55,7 +55,7 @@ export interface ProductInfo {
   productId: Number
   productName: String
   imgUrl: String
-  categoryId: Number
+  categoryId: Number | null
   sizeId: Number
   sizeName: String
   orderPrice: number

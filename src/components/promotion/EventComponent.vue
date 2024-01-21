@@ -5,9 +5,12 @@ import type {
   ReadAuctionHistoryPageResponse,
   ReadAuctionHistoryResponse
 } from '@/apis/auction/AuctionDto'
+import type { ProductInfo } from '@/apis/product/ProductDto'
 import WhitePageComponent from '@/components/wishcart/WhitePageComponent.vue'
 import { getAuctionHistory } from '@/apis/auction/AuctionClient'
-
+import { useProductStore } from '@/stores/product/ProductStore'
+import router from '@/router'
+const productStore = useProductStore()
 const requestSize: number = 4
 const requestPage = ref<number>(0)
 const totalPages = ref<number>(0)
@@ -22,63 +25,6 @@ const fetchData = async () => {
   totalPages.value = response.totalPages
   totalElements.value = response.totalElements
   histories.value = response.responses
-
-  // dummy data
-  // totalElements.value = 3
-  // totalPages.value = 1
-  // histories.value = [
-  //   {
-  //     id: 'AH1',
-  //     memberId: '1',
-  //     auctionId: 'A1',
-  //     auctionName: 'A1',
-  //     auctionProductId: 101,
-  //     auctionProductImg: 'https://dummyimage.com/200',
-  //     auctionProductName: '상품A',
-  //     auctionProductSizeId: 1,
-  //     auctionProductSizeName: '소형',
-  //     winner: true,
-  //     paid: false,
-  //     amountToPay: 10000,
-  //     memberHighestBid: 12000,
-  //     auctionWinnerBid: 10000,
-  //     createdAt: '2024-02-01T00:00:00'
-  //   },
-  //   {
-  //     id: 'AH2',
-  //     memberId: '1',
-  //     auctionId: 'A2',
-  //     auctionName: 'A2',
-  //     auctionProductId: 102,
-  //     auctionProductImg: 'https://dummyimage.com/200',
-  //     auctionProductName: '상품B',
-  //     auctionProductSizeId: 2,
-  //     auctionProductSizeName: '중형',
-  //     winner: false,
-  //     paid: false,
-  //     amountToPay: 20000,
-  //     memberHighestBid: 22000,
-  //     auctionWinnerBid: 20000,
-  //     createdAt: '2024-02-01T00:00:00'
-  //   },
-  //   {
-  //     id: 'AH3',
-  //     memberId: '1',
-  //     auctionId: 'A3',
-  //     auctionName: 'A3',
-  //     auctionProductId: 103,
-  //     auctionProductImg: 'https://dummyimage.com/200',
-  //     auctionProductName: '상품C',
-  //     auctionProductSizeId: 3,
-  //     auctionProductSizeName: '대형',
-  //     winner: true,
-  //     paid: true,
-  //     amountToPay: 30000,
-  //     memberHighestBid: 33000,
-  //     auctionWinnerBid: 30000,
-  //     createdAt: '2024-02-01T00:00:00'
-  //   }
-  // ]
 }
 
 const onChangePage = async (page: number) => {
@@ -96,8 +42,23 @@ watch(requestPage, async (afterPage: number, beforePage: number) => {
   }
 })
 
-const orderAuctionProduct = (history: ReadAuctionHistoryResponse) => {
-  console.log(history)
+const orderAuctionProduct = async (history: ReadAuctionHistoryResponse) => {
+  const productInfo: ProductInfo[] = [
+    {
+      productId: history.auctionProductId,
+      productName: history.auctionProductName,
+      categoryId: null,
+      imgUrl: history.auctionProductImg,
+      sizeId: history.auctionProductSizeId,
+      sizeName: history.auctionProductSizeName,
+      orderPrice: history.auctionWinnerBid,
+      quantity: 1,
+      couponInfoId: null,
+      discountAmount: 0
+    }
+  ]
+  await productStore.setProducts(productInfo, 'AUCTION', null, history.auctionId)
+  router.push('/orders')
 }
 
 const formatDate = (localDateTime: string) => {

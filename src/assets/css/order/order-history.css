@@ -4,34 +4,8 @@
   font-size: 30px;
   font-style: normal;
   font-weight: 700;
-  line-height: 50px;
+  line-height: 50px; /* 166.667% */
   margin-bottom: 10px;
-}
-
-.inner-title-container {
-  display: flex;
-  margin-top: 10px;
-  margin-bottom: 37px;
-  align-items: flex-end;
-  height: 50px;
-}
-
-.container-inner-title {
-  color: var(--Grayscale7, #000);
-  font-family: 'TheJamsil';
-  font-size: 25px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 50px;
-}
-
-.container-inner-title2 {
-  color: var(--Grayscale7, #000);
-  font-family: 'TheJamsil';
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 45px;
 }
 
 .container-line {
@@ -40,9 +14,100 @@
   background: #000;
 }
 
+.table-block {
+  padding-bottom: 10px;
+
+  & table {
+    width: 100%;
+
+    & thead {
+      font-size: 1.25vw;
+      font-weight: bold;
+      border-top: black 2px solid;
+      border-bottom: black 1px solid;
+
+      & tr {
+        & th {
+          padding-top: 10px;
+          padding-bottom: 10px;
+        }
+      }
+    }
+
+    & tbody {
+      & tr {
+        border-bottom: 1px solid #c6c6c6;
+
+        & td {
+          font-size: 1vw;
+          padding-top: 10px;
+          padding-bottom: 10px;
+          text-align: center;
+        }
+      }
+
+      & tr:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
+}
+
+& tbody {
+  & tr {
+    border-bottom: 1px solid #c6c6c6;
+
+    & td {
+      font-size: 1vw;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      text-align: center;
+    }
+  }
+
+  & tr:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+}
 .order-check-container {
   display: flex;
   flex-direction: column;
+  width: 54vw;
+  padding: 10px;
+  font-family: TheJamsil;
+}
+
+.use-button {
+  width: 67px;
+  height: 29px;
+  background: var(--Grayscale7, #000);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--Grayscale1, #fff);
+  text-align: center;
+  font-family: The Jamsil;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 30px; /* 250% */
+  cursor: pointer;
+}
+
+.use-button-disable {
+  width: 67px;
+  height: 29px;
+  /* background: var(--Grayscale7, #000); */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--Grayscale1, #fff);
+  text-align: center;
+  font-family: The Jamsil;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 30px; /* 250% */
 }
 
 .process-container {
