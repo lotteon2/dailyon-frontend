@@ -12,7 +12,7 @@ const props = defineProps({
 
 <template>
   <tr v-for="(payment, idx) in payments" :key="idx" class="point-table-data2">
-    <td class="left-margin">{{ payment.totalAmount }}원</td>
+    <td class="left-margin">{{ payment.totalAmount.toLocaleString() }}원</td>
     <td>{{ payment.method }}</td>
     <td>{{ payment.status }}</td>
     <td>{{ payment.createdAt }}</td>
