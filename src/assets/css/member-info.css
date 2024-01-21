@@ -1,305 +1,301 @@
 .container-title {
-    color: var(--Grayscale7, #000);
-    font-family: The Jamsil;
-    font-size: 30px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 50px; /* 166.667% */
-    margin-bottom: 10px;
+  color: var(--Grayscale7, #000);
+  font-family: 'TheJamsil';
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 50px; /* 166.667% */
+  margin-bottom: 10px;
 }
 
 .container-line {
-    width: 100%;
-    height: 2px;
-    background: #000;
+  width: 100%;
+  height: 2px;
+  background: #000;
 }
 
 .container-inner-title {
-    color: var(--Grayscale7, #000);
-    font-family: The Jamsil;
-    font-size: 25px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 50px; /* 200% */
+  color: var(--Grayscale7, #000);
+  font-family: 'TheJamsil';
+  font-size: 25px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 50px; /* 200% */
 }
 
 .memberinfo-table-data1 > td {
-    color: var(--Grayscale7, #202027);
-    font-family: The Jamsil;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 70px; /* 500% */
-    border-bottom: 1px solid #202027;
+  color: var(--Grayscale7, #202027);
+  font-family: 'TheJamsil';
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 70px; /* 500% */
+  border-bottom: 1px solid #202027;
 }
 
 .memberinfo-table-data2 > td {
-    color: var(--Grayscale7, #202027);
-    font-family: The Jamsil;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 70px; /* 500% */
-    border-bottom: 1px solid #808080;
+  color: var(--Grayscale7, #202027);
+  font-family: 'TheJamsil';
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 70px; /* 500% */
+  border-bottom: 1px solid #808080;
 }
 
 .user-info-container {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 69px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 69px;
 }
 
 .user-info-first-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 5px;
 }
 
 .modify-button-wrapper {
-    height: 29px;
-    display: flex;
+  height: 29px;
+  display: flex;
 }
 
 .modify-white {
-    width: 67px;
-    height: 29px;
-    flex-shrink: 0;
-    border: 1px solid #000;
-    background: var(--Grayscale1, #fff);
-    color: var(--Grayscale7, #000);
-    text-align: center;
-    font-family: The Jamsil;
-    font-size: 12px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 30px; /* 250% */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-left: 7px;
-    cursor: pointer;
+  width: 67px;
+  height: 29px;
+  flex-shrink: 0;
+  border: 1px solid #000;
+  background: var(--Grayscale1, #fff);
+  color: var(--Grayscale7, #000);
+  text-align: center;
+  font-family: 'TheJamsil';
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 30px; /* 250% */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 7px;
+  cursor: pointer;
 }
 
 .modify-black {
-    background: var(--Grayscale1, #000);
-    color: var(--Grayscale7, #fff);
-    cursor: pointer;
+  background: var(--Grayscale1, #000);
+  color: var(--Grayscale7, #fff);
+  cursor: pointer;
 }
 
 .leave-red {
-    background: var(--Grayscale1,  #C22727);
-    color: var(--Grayscale7, #fff);
-    cursor: pointer;
+  background: var(--Grayscale1, #c22727);
+  color: var(--Grayscale7, #fff);
+  cursor: pointer;
 }
 
 .user-info-second-row {
-    display: flex;
-    margin-top: 10px;
-    margin-bottom: 42px;
+  display: flex;
+  margin-top: 10px;
+  margin-bottom: 42px;
 }
 
 .user-info-second-row-first-col {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-right: 49px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 49px;
 }
 
 .profile-circle {
-    margin-bottom: 14px;
+  margin-bottom: 14px;
 }
 
 .profile-change-button {
-    width: 79px;
-    height: 22px;
-    flex-shrink: 0;
-    background: var(--Grayscale7, #000);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: var(--Grayscale1, #fff);
-    font-family: The Jamsil;
-    font-size: 12px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 30px; /* 250% */
-    cursor: pointer;
+  width: 79px;
+  height: 22px;
+  flex-shrink: 0;
+  background: var(--Grayscale7, #000);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--Grayscale1, #fff);
+  font-family: 'TheJamsil';
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 30px; /* 250% */
+  cursor: pointer;
 }
 
 .user-info-second-row-second-col {
-    display: flex;
-    flex-direction: column;
-    margin-right: 48px;
+  display: flex;
+  flex-direction: column;
+  margin-right: 48px;
 }
 
 .user-info-second-row-second-col > span {
-    color: var(--Grayscale7, #000);
-    font-family: The Jamsil;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 300;
-    line-height: 50px; /* 250% */
+  color: var(--Grayscale7, #000);
+  font-family: 'TheJamsil';
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 50px; /* 250% */
 }
 
 .user-info-second-row-third-col {
-    display: flex;
-    flex-direction: column;
-    margin-right: 14px;
+  display: flex;
+  flex-direction: column;
+  margin-right: 14px;
 }
 
 .user-info-second-row-third-col > span {
-    color: var(--Grayscale5, #808080);
-    font-family: The Jamsil;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 300;
-    line-height: 30px; /* 250% */
-    margin-bottom: 24px;
+  color: var(--Grayscale5, #808080);
+  font-family: 'TheJamsil';
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 30px; /* 250% */
+  margin-bottom: 24px;
 }
 
 .user-info-second-row-third-col > input {
-    color: var(--Grayscale5, #000);
-    width: 97%; 
-    font-family: The Jamsil;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 200;
-    line-height: 30px; /* 250% */
-    margin-bottom: 24px;
+  color: var(--Grayscale5, #000);
+  width: 97%;
+  font-family: 'TheJamsil';
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 200;
+  line-height: 30px; /* 250% */
+  margin-bottom: 24px;
 }
 
 .user-info-second-row-third-col > select {
-    color: var(--Grayscale5, #000);
-    font-family: The Jamsil;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 300;
-    line-height: 30px; /* 250% */
-    margin-bottom: 24px;
+  color: var(--Grayscale5, #000);
+  font-family: 'TheJamsil';
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 30px; /* 250% */
+  margin-bottom: 24px;
 }
 .info-underline {
-    width: 300px;
-    border-bottom: 2px solid #000;
+  width: 300px;
+  border-bottom: 2px solid #000;
 }
 
 .user-info-second-row-fourth-col {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .place-choice-button {
-    width: 67px;
-    height: 29px;
-    flex-shrink: 0;
-    background: var(--Grayscale7, #000);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: var(--Grayscale1, #fff);
-    text-align: center;
-    font-family: The Jamsil;
-    font-size: 12px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 30px; /* 250% */
-    margin-top: 109px;
+  width: 67px;
+  height: 29px;
+  flex-shrink: 0;
+  background: var(--Grayscale7, #000);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--Grayscale1, #fff);
+  text-align: center;
+  font-family: 'TheJamsil';
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 30px; /* 250% */
+  margin-top: 109px;
 }
 
 .place-add-button {
-    width: 80px;
-    height: 30px;
-    flex-shrink: 0;
-    background: var(--Grayscale7, #000);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: var(--Grayscale1, #fff);
-    text-align: center;
-    font-family: The Jamsil;
-    font-size: 12px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 30px; /* 250% */
-    align-self: flex-end;
-    cursor: pointer;
+  width: 80px;
+  height: 30px;
+  flex-shrink: 0;
+  background: var(--Grayscale7, #000);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--Grayscale1, #fff);
+  text-align: center;
+  font-family: 'TheJamsil';
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 30px; /* 250% */
+  align-self: flex-end;
+  cursor: pointer;
 }
 
 .place-font > td {
-    color: var(--Grayscale7, #202027);
-    font-family: The Jamsil;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 65px; /* 325% */
-    text-align: left;
+  color: var(--Grayscale7, #202027);
+  font-family: 'TheJamsil';
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 65px; /* 325% */
+  text-align: left;
 }
 
 .padding-left-10 {
-    padding-left: 10px;
+  padding-left: 10px;
 }
 
 .place-choice-button-wrapper {
-    display: flex;
-    width: 100%;
-    justify-content: flex-end;
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
 }
 
 .place-white-button {
-    width: 69px;
-    height: 22px;
-    flex-shrink: 0;
-    border: 1px solid var(--Grayscale5, #808080);
-    background: var(--Grayscale1, #fff);
-    color: var(--Grayscale5, #808080);
-    font-family: The Jamsil;
-    font-size: 12px;
-    font-style: normal;
-    font-weight: 400;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-left: 7px;
-    padding-top: 2px;
-    
+  width: 69px;
+  height: 22px;
+  flex-shrink: 0;
+  border: 1px solid var(--Grayscale5, #808080);
+  background: var(--Grayscale1, #fff);
+  color: var(--Grayscale5, #808080);
+  font-family: 'TheJamsil';
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 7px;
+  padding-top: 2px;
 }
 
 .close-button-div {
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-    cursor: pointer;
-    
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  cursor: pointer;
 }
 
 .margin-right-10 {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
-
 .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-  }
-  
-  .pagination-button {
-    background-color: black;
-    color: white;
-    border: 1px solid white;
-    padding: 8px 16px;
-    margin: 0 4px;
-    cursor: pointer;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
 
+.pagination-button {
+  background-color: black;
+  color: white;
+  border: 1px solid white;
+  padding: 8px 16px;
+  margin: 0 4px;
+  cursor: pointer;
+}
 
- .default-button {
-    background-color: #e0e0e0;
-    color: #777777;
-    cursor: not-allowed;
- }
+.default-button {
+  background-color: #e0e0e0;
+  color: #777777;
+  cursor: not-allowed;
+}
 
- div[hidden] {
-    display: none;
-  }
+div[hidden] {
+  display: none;
+}

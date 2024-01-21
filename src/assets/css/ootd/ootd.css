@@ -1,64 +1,64 @@
 .ootd-container {
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    width: 72vw;
-    gap: 1vh;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  width: 72vw;
+  gap: 1vh;
 
-    overflow-y: hidden;
+  overflow-y: hidden;
 }
 
 .ootd-header-container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    width: 100%;
-    gap: 2vh;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  gap: 2vh;
 }
 
 .ootd-header-title-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .ootd-header-title-text {
-    color: var(--Dark-Red, #C22727);
-    font-family: The Jamsil;
-    font-size: 2.3vw;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
+  color: var(--Dark-Red, #c22727);
+  font-family: 'TheJamsil';
+  font-size: 2.3vw;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
 }
 
 .ootd-header-bar-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .ootd-header-write-btn-wrapper {
-    display: flex;
-    padding: 0.5vw;
-    margin-right: 1vw;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  padding: 0.5vw;
+  margin-right: 1vw;
+  justify-content: center;
+  align-items: center;
 
-    border-radius: 5px;
+  border-radius: 5px;
 
-    background: #000;
+  background: #000;
 }
 
 .ootd-header-write-btn {
-    color: var(--Grayscale1, #FFF);
-    font-family: The Jamsil;
-    font-size: 1vw;
-    font-style: normal;
-    font-weight: 300;
-    line-height: normal;
+  color: var(--Grayscale1, #fff);
+  font-family: 'TheJamsil';
+  font-size: 1vw;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
 }
 
 .ootd-header-write-btn-wrapper:hover {
-    cursor: pointer;
+  cursor: pointer;
 }

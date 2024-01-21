@@ -25,7 +25,8 @@ import AuctionPageComponent from '@/components/auction/AuctionPageComponent.vue'
   display: flex;
   width: 54vw;
   justify-items: left;
-  font-family: 'The Jamsil 3 Regular';
+  font-family: 'TheJamsil';
+  font-weight: 400;
   font-size: 1.5vw;
   padding-top: 4vh;
 }

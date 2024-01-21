@@ -79,12 +79,12 @@ time,
 mark,
 audio,
 video {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    font-size: 100%;
-    font: inherit;
-    vertical-align: baseline;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
 article,
@@ -98,256 +98,257 @@ hgroup,
 menu,
 nav,
 section {
-    display: block;
+  display: block;
 }
 body {
-    line-height: 1;
+  line-height: 1;
 }
 ol,
 ul {
-    list-style: none;
+  list-style: none;
 }
 blockquote,
 q {
-    quotes: none;
+  quotes: none;
 }
 blockquote:before,
 blockquote:after,
 q:before,
 q:after {
-    content: "";
-    content: none;
+  content: '';
+  content: none;
 }
 table {
-    border-collapse: collapse;
-    border-spacing: 0;
+  border-collapse: collapse;
+  border-spacing: 0;
 }
 
 .main-container {
-    display: flex;
-    flex-direction: column;
-    width: 1600px;
-    align-items: center;
-    margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  width: 1600px;
+  align-items: center;
+  margin: 0 auto;
 }
 
 .md-container {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    align-items: center;
-    margin-bottom: 90px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  margin-bottom: 90px;
 }
 
 .md-container > h1 {
-    color: var(--Grayscale7, #000);
-    font-family: The Jamsil;
-    font-size: 40px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-    margin-bottom: 36px;
+  color: var(--Grayscale7, #000);
+  font-family: 'TheJamsil';
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  margin-bottom: 36px;
 }
 
 .md-prod-container {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
 }
 
-.back-btn:hover,.front-btn:hover {
-    cursor: pointer;
+.back-btn:hover,
+.front-btn:hover {
+  cursor: pointer;
 }
 
 .info-wrapper {
-    display: flex;
-    width: 80vw;
-    height: 50vh;
-    justify-content: space-between;
+  display: flex;
+  width: 80vw;
+  height: 50vh;
+  justify-content: space-between;
 }
 
 .md-prod-info {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .md-prod-info > h1 {
-    color: var(--Grayscale7, #000);
-    font-family: The Jamsil;
-    font-size: 40px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-    margin: 0;
-    margin-top: 28px;
+  color: var(--Grayscale7, #000);
+  font-family: 'TheJamsil';
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  margin: 0;
+  margin-top: 28px;
 }
 
 .md-prod-info > h2 {
-    color: var(--Grayscale7, #000);
-    font-family: The Jamsil;
-    font-size: 40px;
-    font-style: normal;
-    font-weight: 300;
-    line-height: normal;
-    margin: 0;
+  color: var(--Grayscale7, #000);
+  font-family: 'TheJamsil';
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
+  margin: 0;
 }
 
 .new-container {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    align-items: center;
-    margin-bottom: 127px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  margin-bottom: 127px;
 }
 
 .new-container > h1 {
-    color: var(--Grayscale7, #000);
-    text-align: center;
-    font-family: The Jamsil;
-    font-size: 40px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    margin-bottom: 55px;
+  color: var(--Grayscale7, #000);
+  text-align: center;
+  font-family: 'TheJamsil';
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-bottom: 55px;
 }
 
 .line-wrapper {
-    width: 253px;
-    display: flex;
-    justify-content: flex-start;
+  width: 253px;
+  display: flex;
+  justify-content: flex-start;
 }
 
 .new-more-wrapper {
-    display: flex;
-    justify-content: flex-end;
-    width: 100%;
-    align-items: center;
-    padding-right: 240px;
-    padding-bottom: 20px;
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  align-items: center;
+  padding-right: 240px;
+  padding-bottom: 20px;
 }
 
 .new-more-btn-wrapper {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .new-more-btn-wrapper > span {
-    color: var(--Grayscale4, #c6c6c6);
-    font-family: The Jamsil;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 30px; /* 150% */
-    margin-right: 5px;
+  color: var(--Grayscale4, #c6c6c6);
+  font-family: 'TheJamsil';
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 30px; /* 150% */
+  margin-right: 5px;
 }
 
 .new-more-btn-wrapper:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .new-prod-wrapper {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .new-prod-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-gap: 40px;
-    margin: 0 12px;
-    /* display: flex;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 40px;
+  margin: 0 12px;
+  /* display: flex;
     width: 100%;
     flex-wrap: wrap; */
 }
 
 .new-prod-info {
-    display: flex;
-    flex-direction: column;
-    width: 15vw;
+  display: flex;
+  flex-direction: column;
+  width: 15vw;
 }
 
 .new-prod-info > h1 {
-    display: block;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    color: var(--Grayscale7, #000);
-    font-family: The Jamsil;
-    font-size: 1.2vw;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 30px; /* 150% */
+  display: block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  color: var(--Grayscale7, #000);
+  font-family: 'TheJamsil';
+  font-size: 1.2vw;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 30px; /* 150% */
 }
 
 .new-prod-info > h2 {
-    display: block;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    color: var(--Grayscale7, #000);
-    font-family: The Jamsil;
-    font-size: 1.2vw;
-    font-style: normal;
-    font-weight: 300;
-    line-height: 30px;
+  display: block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  color: var(--Grayscale7, #000);
+  font-family: 'TheJamsil';
+  font-size: 1.2vw;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 30px;
 }
 
 .new-prod-info > h3 {
-    display: flex;
-    width: 100%;
-    justify-content: end;
-    color: var(--Grayscale7, #000);
-    text-align: right;
-    font-family: The Jamsil;
-    font-size: 1.2vw;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 30px; /* 120% */
+  display: flex;
+  width: 100%;
+  justify-content: end;
+  color: var(--Grayscale7, #000);
+  text-align: right;
+  font-family: 'TheJamsil';
+  font-size: 1.2vw;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 30px; /* 120% */
 }
 
 .new-prod-info-highlight {
-    color: #c22727;
-    margin-right: 20px;
+  color: #c22727;
+  margin-right: 20px;
 }
 
 .new-prod-more-wrapper {
-    margin-top: 42px;
-    width: 172px;
-    height: 75px;
-    flex-shrink: 0;
-    border-radius: 50px;
-    border: 1px solid var(--Grayscale5, #808080);
-    background: var(--Grayscale1, #fff);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  margin-top: 42px;
+  width: 172px;
+  height: 75px;
+  flex-shrink: 0;
+  border-radius: 50px;
+  border: 1px solid var(--Grayscale5, #808080);
+  background: var(--Grayscale1, #fff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .new-prod-more-wrapper > span {
-    color: var(--Grayscale7, #000);
-    text-align: center;
-    font-family: The Jamsil;
-    font-size: 25px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    margin-right: 10px;
+  color: var(--Grayscale7, #000);
+  text-align: center;
+  font-family: 'TheJamsil';
+  font-size: 25px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-right: 10px;
 }
 
 .banner {
-    width: 49%;
-    height: 100%;
+  width: 49%;
+  height: 100%;
 }
 
 .banner:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .banner-img {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 }

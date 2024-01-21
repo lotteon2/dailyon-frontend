@@ -4,7 +4,7 @@
 
 .container-title {
   color: var(--Grayscale7, #202027);
-  font-family: TheJamsil;
+  font-family: 'TheJamsil';
   width: 120px;
   font-size: 20px;
   font-style: normal;
@@ -33,7 +33,7 @@
 
 .shop-name-div > span {
   color: #000;
-  font-family: TheJamsil;
+  font-family: 'TheJamsil';
   font-size: 20px;
   font-style: normal;
   font-weight: 300;
@@ -67,7 +67,7 @@
 
 .shop-prod-inner-div > h1 {
   color: #000;
-  font-family: TheJamsil;
+  font-family: 'TheJamsil';
   font-size: 20px;
   font-style: normal;
   font-weight: 400;
@@ -98,7 +98,7 @@
   display: flex;
   align-items: center;
   color: var(--Grayscale7, #202027);
-  font-family: TheJamsil;
+  font-family: 'TheJamsil';
   font-size: 17px;
   font-style: normal;
   font-weight: 300;
@@ -116,7 +116,7 @@
   padding: 0 10px;
 
   color: var(--Grayscale5, #808080);
-  font-family: TheJamsil;
+  font-family: 'TheJamsil';
   font-size: 17px;
   font-style: normal;
   font-weight: 300;
@@ -130,7 +130,7 @@
   border: 1px solid var(--Grayscale4, #c6c6c6);
   background: var(--Grayscale1, #fff);
   color: var(--Grayscale5, #808080);
-  font-family: TheJamsil;
+  font-family: 'TheJamsil';
   font-size: 17px;
   font-style: normal;
   font-weight: 300;
@@ -150,7 +150,7 @@
 
 .info-second-col > span {
   color: var(--Grayscale7, #202027);
-  font-family: TheJamsil;
+  font-family: 'TheJamsil';
   font-size: 17px;
   font-style: normal;
   font-weight: 300;
@@ -165,7 +165,7 @@
 
 .info-third-col > span {
   color: var(--Grayscale7, #202027);
-  font-family: TheJamsil;
+  font-family: 'TheJamsil';
   font-size: 17px;
   font-style: normal;
   font-weight: 300;

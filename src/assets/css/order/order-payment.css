@@ -1,6 +1,6 @@
 .container-title {
   color: var(--Grayscale7, #202027);
-  font-family: TheJamsil;
+  font-family: 'TheJamsil';
   width: 120px;
   font-size: 20px;
   font-style: normal;
@@ -18,7 +18,7 @@
   border: 1px solid var(--Grayscale4, #c6c6c6);
   background: #fff;
   color: #202027;
-  font-family: TheJamsil;
+  font-family: 'TheJamsil';
   font-size: 20px;
   font-style: normal;
   font-weight: 300;
@@ -61,7 +61,7 @@
 .pay-second-col2 > h1 {
   color: var(--Dark-Red, #c22727);
   text-align: right;
-  font-family: TheJamsil;
+  font-family: 'TheJamsil';
   font-size: 30px;
   font-style: normal;
   font-weight: 700;
@@ -81,7 +81,7 @@
 
 .pay-inner-second-block > span {
   color: var(--Grayscale7, #000);
-  font-family: TheJamsil;
+  font-family: 'TheJamsil';
   font-size: 30px;
   font-style: normal;
   font-weight: 500;
@@ -101,7 +101,7 @@
 
 .pay-method-first-row > span {
   color: #000;
-  font-family: TheJamsil;
+  font-family: 'TheJamsil';
   font-size: 15px;
   font-style: normal;
   font-weight: 300;
@@ -126,7 +126,7 @@
 .kakao-pay > span {
   color: #181600;
   text-align: center;
-  font-family: TheJamsil;
+  font-family: 'TheJamsil';
   font-size: 32px;
   font-style: normal;
   font-weight: 400;

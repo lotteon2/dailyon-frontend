@@ -1,68 +1,68 @@
 .main-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    width: 72vw;
-    margin: 0 auto;
-    margin-bottom: 100px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 72vw;
+  margin: 0 auto;
+  margin-bottom: 100px;
 }
 
 .left-container {
-    width: 16vw;
+  width: 16vw;
 }
 
 .profile-card {
-    width: 100%;
+  width: 100%;
 }
 
 .right-container {
-    display: flex;
-    flex-direction: column;
-    width: 54vw;
+  display: flex;
+  flex-direction: column;
+  width: 54vw;
 
-    gap: 1rem;
+  gap: 1rem;
 }
 
 .content-header-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 
-    width: 100%;
+  width: 100%;
 }
 
 .ootd-header-container {
-    width: 100%;
+  width: 100%;
 }
 
 .ootd-body-container {
-    width: 100%;
+  width: 100%;
 }
 
 .content-nav-wrapper {
-    padding: 0.5rem;
+  padding: 0.5rem;
 }
 
 .content-nav-wrapper:hover {
-    cursor: pointer;
-    color: #C22727;
+  cursor: pointer;
+  color: #c22727;
 }
 
 .content-nav-text {
-    width: fit-content;
-    text-align: center;
+  width: fit-content;
+  text-align: center;
 
-    font-family: The Jamsil;
-    font-size: 1.5vw;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
+  font-family: 'TheJamsil';
+  font-size: 1.5vw;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }
 
 .content-nav-text.selected {
-    color: var(--Dark-Red, #C22727);
+  color: var(--Dark-Red, #c22727);
 }
 
 .content-nav-divide-line {
-    color: var(--Grayscale7, #000);
+  color: var(--Grayscale7, #000);
 }

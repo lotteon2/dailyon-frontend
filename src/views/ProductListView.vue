@@ -564,7 +564,8 @@ const getProductMaxDiscountPercentage = (product: ReadProductResponse) => {
 }
 
 .select-block-input {
-  font-family: 'The Jamsil 3 Regular';
+  font-family: 'TheJamsil';
+  font-weight: 400;
   font-size: 12px;
   padding-top: 5px;
   padding-bottom: 5px;
@@ -578,7 +579,8 @@ const getProductMaxDiscountPercentage = (product: ReadProductResponse) => {
   border: none;
   background-color: black;
   cursor: pointer;
-  font-family: 'The Jamsil 3 Regular';
+  font-family: 'TheJamsil';
+  font-weight: 400;
 }
 
 .prod-info {
