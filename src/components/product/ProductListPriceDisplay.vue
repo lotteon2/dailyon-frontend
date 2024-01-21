@@ -53,6 +53,7 @@ const hasDiscount = computed(() => props.discountPercentage > 0)
 .product-price__original,
 .product-price__discount,
 .product-price__final {
+  font-family: 'TheJamsil';
   font-size: 18px;
   line-height: 24px;
   width: 100%;
@@ -66,6 +67,7 @@ const hasDiscount = computed(() => props.discountPercentage > 0)
 }
 
 .product-price__discount {
+  font-family: 'TheJamsil';
   width: 20%;
   color: #c22727;
   font-size: 18px;

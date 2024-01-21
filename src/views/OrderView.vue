@@ -15,7 +15,7 @@ import { useNotificationStore } from '@/stores/notification/NotificationStore'
 import router from '@/router'
 import { warningModal } from '@/utils/Modal'
 const productStore = useProductStore()
-const { products, orderType, giftInfo, referralCode } = storeToRefs(productStore)
+const { products, orderType, giftInfo, referralCode, auctionId } = storeToRefs(productStore)
 const { point } = storeToRefs(useMemberStore())
 
 const notificationStore = useNotificationStore()
@@ -108,7 +108,8 @@ const doOrder = async () => {
     orderItems: orderItems,
     deliveryInfo: orderType.value === 'GIFT' ? null : deliveryInfo.value,
     paymentType: 'KAKAOPAY',
-    referralCode: referralCode.value
+    referralCode: referralCode.value,
+    auctionId: auctionId.value
   }
   redirectUrl.value = await order(orderSheet)
 
@@ -197,7 +198,7 @@ onBeforeUnmount(() => {
           @changePhoneNumber="(phone) => (deliveryInfo.phoneNumber = phone)"
           @fetchDefaultAddress="(address) => fetchDefaultAddress(address)"
         />
-        <div class="discount-container">
+        <div class="discount-container" v-if="orderType !== 'AUCTION'">
           <div class="container-title">할인</div>
           <div class="line"></div>
           <div class="discount-info-container">

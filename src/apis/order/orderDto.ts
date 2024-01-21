@@ -40,6 +40,7 @@ export interface OrderSheet {
   deliveryInfo: DeliveryInfo | null
   paymentType: String
   referralCode: String | null
+  auctionId: String | null
 }
 
 export interface OrderItem {
