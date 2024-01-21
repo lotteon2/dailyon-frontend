@@ -341,7 +341,9 @@ const mostStockedProductSize = computed(() => {
   )
 })
 
-onBeforeMount(initData)
+onBeforeMount(async () => {
+  await initData()
+})
 
 watch(selectedQuantity, () => {
   // 그 뒤 트리거 2
