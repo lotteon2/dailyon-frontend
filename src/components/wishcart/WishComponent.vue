@@ -3,7 +3,6 @@ import { readWishListPage, toggleWishList } from '@/apis/wishcart/WishListClient
 import { onBeforeMount, ref, watch } from 'vue'
 import { useProductStore } from '@/stores/product/ProductStore'
 import { message } from 'ant-design-vue'
-import type { AxiosResponse } from 'axios'
 import type { ReadWishListPageResponse, ReadWishListResponse } from '@/apis/wishcart/WishListDto'
 import type { ProductInfo } from '@/apis/product/ProductDto'
 import type { GiftInfo } from '@/apis/order/orderDto'
@@ -57,9 +56,7 @@ const executeDelete = async (index: number, event: any) => {
       productId: wishLists.value[index].productId,
       productSizeId: wishLists.value[index].productSizeId
     })
-      .then((axiosResponse: AxiosResponse) => {
-        wishLists.value.splice(index, 1)
-      })
+      .then(initData)
       .catch((error: any) => {
         errorModal('오류', error.response!.data!.message)
       })
