@@ -1,85 +1,87 @@
 .notification-dropdown {
-  position: absolute;
-  font-family: 'TheJamsil3Regular';
-  top: 100%;
-  left: 0;
-  width: 17vw; /* 드롭다운의 너비 */
-  background-color: white; /* 배경색 */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* 그림자 효과 */
-  border-radius: 5px; /* 둥근 모서리 */
-  z-index: 100; /* 다른 요소들 위에 나타나도록 z-index 설정 */
-  padding: 1rem; /* 여백 */
-  box-sizing: border-box;
+    position: absolute;
+    font-family: 'TheJamsil';
+    font-weight: 300;
+    top: 100%;
+    left: 0;
+    width: 17vw; /* 드롭다운의 너비 */
+    background-color: white; /* 배경색 */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* 그림자 효과 */
+    border-radius: 5px; /* 둥근 모서리 */
+    z-index: 100; /* 다른 요소들 위에 나타나도록 z-index 설정 */
+    padding: 1rem; /* 여백 */
+    box-sizing: border-box;
 }
 
 .notification-list {
-  max-height: 400px;
-  overflow-y: auto; /* 내용이 많을 경우 스크롤 */
+    max-height: 400px;
+    overflow-y: auto; /* 내용이 많을 경우 스크롤 */
 }
 
 .notification-item {
-  padding: 0.5rem 0;
-  border-bottom: 1px solid #eee;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
 }
 
 .notification-message {
-  margin: 0.5rem 0;
+    margin: 0.5rem 0;
 }
 
 .notification-actions {
-  display: flex;
-  justify-content: flex-end; /* 오른쪽 정렬 */
-  gap: 0.5rem; /* 버튼 사이의 간격 */
+    display: flex;
+    justify-content: flex-end; /* 오른쪽 정렬 */
+    gap: 0.5rem; /* 버튼 사이의 간격 */
 }
 
 .notification-footer {
-  display: flex;
-  justify-content: flex-end; /* 오른쪽 정렬 */
-  margin-top: 1rem;
+    display: flex;
+    justify-content: flex-end; /* 오른쪽 정렬 */
+    margin-top: 1rem;
 }
 
 .notification-empty {
-  margin-top: 1vh;
-  text-align: center;
-  padding: 1rem;
+    margin-top: 1vh;
+    text-align: center;
+    padding: 1rem;
 }
 
 /* 재사용 가능한 버튼 스타일 */
 button {
-  cursor: pointer;
-  color: #c8c8c8;
-  font-family: 'TheJamsil3Regular';
-  font-size: 1rem;
-  /* background-color: #000; */
-  background-color: #fff;
-  /* color: #fff; */
-  border: none;
-  padding: 0.5rem 0.5rem 0rem 0.5rem;
-  border-radius: 5px;
-  transition: background-color 0.2s;
+    cursor: pointer;
+    color: #c8c8c8;
+    font-family: 'TheJamsil';
+    font-weight: 300;
+    font-size: 1rem;
+    /* background-color: #000; */
+    background-color: #fff;
+    /* color: #fff; */
+    border: none;
+    padding: 0.5rem 0.5rem 0rem 0.5rem;
+    border-radius: 5px;
+    transition: background-color 0.2s;
 
-  &:hover {
-    /* background-color: #333; */
-  }
+    &:hover {
+        /* background-color: #333; */
+    }
 }
 
 .flex-row-space-btw {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .notification-read {
-  color: #b7b7b7;
-  cursor: pointer;
+    color: #b7b7b7;
+    cursor: pointer;
 }
 
 .close {
-  color: #000;
-  cursor: pointer;
+    color: #000;
+    cursor: pointer;
 }
 
 .notification-unread {
-  color: #000;
-  cursor: pointer;
+    color: #000;
+    cursor: pointer;
 }

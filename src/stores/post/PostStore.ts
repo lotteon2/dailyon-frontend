@@ -47,14 +47,14 @@ export const usePostStore = defineStore('post', () => {
   }
 
   const renewPostView = async () => {
-    const expiryDate: Date = postViews.value.expiry
-    if (expiryDate < new Date()) {
-      const newPostViews = {
-        value: [] as number[],
-        expiry: new Date(Date.now() + 24 * 60 * 60 * 1000)
-      }
+    const expiryDate: Date = new Date(postViews.value.expiry)
+
+    const seoulTime = new Date().toLocaleString('en-US', { timeZone: 'Asia/Seoul' })
+    const currentSeoulTime = new Date(seoulTime)
+    if (expiryDate < currentSeoulTime) {
+      const newExpiryDate = new Date(currentSeoulTime.getTime() + 24 * 60 * 60 * 1000)
       postViews.value.value = []
-      postViews.value.expiry = new Date(Date.now() + 24 * 60 * 60 * 1000)
+      postViews.value.expiry = newExpiryDate
     }
   }
 
