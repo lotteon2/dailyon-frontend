@@ -78,12 +78,7 @@ const handleSelectedOptionChange = async (
 <template>
   <div class="order-check-container">
     <div class="container-title">주문/배송 조회</div>
-    <div class="container-line"></div>
     <div>
-      <div class="container-inner-line"></div>
-      <div class="inner-title-container">
-        <div class="container-inner-title">주문 내역&nbsp;&nbsp;</div>
-      </div>
       <div class="order-type-select-wrapper">
         <Select
           class="order-type-select"
@@ -93,24 +88,30 @@ const handleSelectedOptionChange = async (
         >
         </Select>
       </div>
-      <table>
-        <col width="200px" />
-        <col width="200px" />
-        <col width="200px" />
-        <col width="200px" />
-        <col width="200px" />
-        <tr class="table-header">
-          <th>주문번호</th>
-          <th>상품명</th>
-          <th>결제금액</th>
-          <th>주문상태</th>
-          <th>결제일시</th>
-        </tr>
-        <OrderComponent v-if="orders.length !== 0"  :orders="orders" @showModal="(index) => open(index)" />
-        <td v-else colspan='5' style='width: 100%; text-align: center'>
-          <WhitePageComponent message="주문 내역이 없습니다" />
-        </td>
-      </table>
+      <div class="table-block">
+        <table>
+          <thead>
+            <tr>
+              <th>주문번호</th>
+              <th>상품명</th>
+              <th v-if="selectedOption === 'AUCTION'">낙찰금액</th>
+              <th v-else>결제금액</th>
+              <th>포인트 차감액</th>
+              <th>주문상태</th>
+              <th>결제일시</th>
+              <th></th>
+            </tr>
+          </thead>
+          <OrderComponent
+            v-if="orders.length !== 0"
+            :orders="orders"
+            @showModal="(index) => open(index)"
+          />
+          <td v-else colspan="5" style="width: 100%; text-align: center">
+            <WhitePageComponent message="주문 내역이 없습니다" />
+          </td>
+        </table>
+      </div>
 
       <div v-if="showModal" class="modal" @click="closeModal">
         <div class="modal-content" @click.stop>
