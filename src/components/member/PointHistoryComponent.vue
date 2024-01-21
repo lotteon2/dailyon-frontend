@@ -58,7 +58,7 @@ const updatePoints = (response: any) => {
           <td>{{ point.createdAt }}</td>
           <td>{{ point.source }}</td>
           <td>{{ point.utilize }}</td>
-          <td>{{ point.amount }}</td>
+          <td>{{ point.amount.toLocaleString() }} 원</td>
           <td>{{ point.status ? '사용' : '적립' }}</td>
         </tr>
       </table>

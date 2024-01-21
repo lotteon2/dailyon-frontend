@@ -388,7 +388,7 @@ watch(selectedProductSize, () => {
       <div class="prod-second-col">
         <div class="second-col-first-row">
           <div class="brand-prod-name">
-            <h1 @click="routeToProductList">
+            <h1 style="cursor: pointer" @click="routeToProductList">
               {{ product.brandName }}
             </h1>
             <h2>{{ product.name }}</h2>
