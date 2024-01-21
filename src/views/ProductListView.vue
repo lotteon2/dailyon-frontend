@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, onBeforeMount, onMounted, onUnmounted, type Ref, ref, watch } from 'vue'
+import { inject, onBeforeMount, type Ref, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import type { ReadProductResponse, ReadProductSliceResponse } from '@/apis/product/ProductDto'
 import { getProductSlice } from '@/apis/product/ProductClient'
@@ -468,8 +468,9 @@ const getProductMaxDiscountPercentage = (product: ReadProductResponse) => {
 }
 
 .sort-item {
-  font-family: 'TheJamsil2Light';
+  font-family: 'TheJamsil';
   font-size: 1vw;
+  font-weight: 300;
   padding: 10px;
   cursor: pointer;
 }
@@ -503,7 +504,8 @@ const getProductMaxDiscountPercentage = (product: ReadProductResponse) => {
   align-items: center;
   background-color: #c6c6c6;
 
-  font-family: 'TheJamsil4Medium';
+  font-family: 'TheJamsil';
+  font-weight: 400;
   font-size: 1vw;
 }
 
@@ -511,7 +513,8 @@ const getProductMaxDiscountPercentage = (product: ReadProductResponse) => {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
-  font-family: 'TheJamsil3Regular';
+  font-family: 'TheJamsil';
+  font-weight: 300;
 
   overflow-x: auto;
   width: 100%;
@@ -552,7 +555,8 @@ const getProductMaxDiscountPercentage = (product: ReadProductResponse) => {
   justify-content: center;
   align-items: center;
   background-color: #c6c6c6;
-  font-family: 'TheJamsil4Medium';
+  font-family: 'TheJamsil';
+  font-weight: 400;
   font-size: 1vw;
 }
 
@@ -597,10 +601,10 @@ const getProductMaxDiscountPercentage = (product: ReadProductResponse) => {
   text-overflow: ellipsis;
   overflow: hidden;
   color: var(--Grayscale7, #000);
-  font-family: 'TheJamsil3Regular';
+  font-family: 'TheJamsil';
   font-size: 1.1vw;
   /*font-style: normal;*/
-  font-weight: 400;
+  font-weight: 300;
   line-height: 30px;
 }
 
@@ -610,10 +614,10 @@ const getProductMaxDiscountPercentage = (product: ReadProductResponse) => {
   text-overflow: ellipsis;
   overflow: hidden;
   color: var(--Grayscale7, #000);
-  font-family: 'TheJamsil2Light';
+  font-family: 'TheJamsil';
   font-size: 1.1vw;
   /*font-style: normal;*/
-  font-weight: 300;
+  font-weight: 200;
   line-height: 30px;
 }
 
@@ -623,10 +627,10 @@ const getProductMaxDiscountPercentage = (product: ReadProductResponse) => {
   justify-content: space-between;
   align-items: end;
   color: var(--Grayscale7, #000);
-  font-family: 'TheJamsil2Light';
+  font-family: 'TheJamsil';
   font-size: 0.9vw;
   font-style: normal;
-  font-weight: 400;
+  font-weight: 200;
   line-height: 30px;
 }
 
