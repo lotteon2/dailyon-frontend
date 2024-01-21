@@ -180,7 +180,8 @@ watch(
 }
 
 .modal-name {
-  font-family: 'The Jamsil 4 Medium';
+  font-family: 'TheJamsil';
+  font-weight: 500;
   font-size: 20px;
 }
 
@@ -247,7 +248,7 @@ button {
   border: none;
   color: white;
   cursor: pointer;
-  font-family: 'The Jamsil 3 Regular';
+  font-family: 'TheJamsil';
 }
 
 .modal-button {

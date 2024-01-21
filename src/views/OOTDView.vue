@@ -52,12 +52,6 @@ watch(requestPage, async (afterPage, beforePage) => {
     postPageResponse.posts.forEach((post) => {
       posts.value?.push(post)
     })
-
-    if(requestSort.value === 'viewCount') {
-      posts.value.sort((a, b) => b.viewCount - a.viewCount)
-    } else if(requestSort.value === 'likeCount') {
-      posts.value.sort((a, b) => b.likeCount - a.likeCount)
-    }
   }
 })
 

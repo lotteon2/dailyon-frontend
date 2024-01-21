@@ -1,6 +1,6 @@
 .container-title {
   color: var(--Grayscale7, #000);
-  font-family: The Jamsil;
+  font-family: 'TheJamsil';
   font-size: 20px;
   font-style: normal;
   font-weight: 700;
@@ -18,7 +18,7 @@
   flex-direction: column;
   margin-top: 15px;
   margin-bottom: 20px;
-  width: 72vw;
+  width: 60vw;
 }
 
 .review-row {
@@ -40,7 +40,7 @@
 
 .review-first-column > span {
   color: var(--Grayscale7, #000);
-  font-family: The Jamsil;
+  font-family: 'TheJamsil';
   font-size: 15px;
   font-style: normal;
   font-weight: 300;
@@ -59,7 +59,7 @@
 
 .review-second-column > span {
   color: var(--Grayscale7, #000);
-  font-family: The Jamsil;
+  font-family: 'TheJamsil';
   font-size: 15px;
   font-style: normal;
   font-weight: 300;
@@ -77,7 +77,7 @@
   height: 19px;
   flex-shrink: 0;
   color: var(--Grayscale7, #000);
-  font-family: The Jamsil;
+  font-family: 'TheJamsil';
   font-size: 12px;
   font-style: normal;
   font-weight: 300;
@@ -97,7 +97,7 @@
 
 .review-text-container1 > h1 {
   color: var(--Grayscale5, #808080);
-  font-family: The Jamsil;
+  font-family: 'TheJamsil';
   font-size: 15px;
   font-style: normal;
   font-weight: 300;
@@ -106,7 +106,7 @@
 
 .review-text-container1 > h2 {
   color: var(--Grayscale5, #808080);
-  font-family: The Jamsil;
+  font-family: 'TheJamsil';
   font-size: 10px;
   font-style: normal;
   font-weight: 300;
@@ -129,7 +129,7 @@
 .review-last-column > span {
   color: var(--Grayscale4, #c6c6c6);
   text-align: right;
-  font-family: The Jamsil;
+  font-family: 'TheJamsil';
   font-size: 15px;
   font-style: normal;
   font-weight: 300;

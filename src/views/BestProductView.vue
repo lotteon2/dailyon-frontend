@@ -131,9 +131,9 @@ onBeforeMount(fetchBestProductsAndCoupons)
 }
 
 .search-label {
-  font-family: TheJamsil;
+  font-family: 'TheJamsil';
   font-style: normal;
-  font-weight: bold;
+  font-weight: 700;
   font-size: 2vw;
 }
 
@@ -160,7 +160,7 @@ onBeforeMount(fetchBestProductsAndCoupons)
   text-overflow: ellipsis;
   overflow: hidden;
   color: var(--Grayscale7, #000);
-  font-family: TheJamsil;
+  font-family: 'TheJamsil';
   font-size: 1.1vw;
   font-style: normal;
   font-weight: 400;
@@ -173,7 +173,7 @@ onBeforeMount(fetchBestProductsAndCoupons)
   text-overflow: ellipsis;
   overflow: hidden;
   color: var(--Grayscale7, #000);
-  font-family: TheJamsil;
+  font-family: 'TheJamsil';
   font-size: 1.1vw;
   font-style: normal;
   font-weight: 300;
@@ -185,7 +185,7 @@ onBeforeMount(fetchBestProductsAndCoupons)
   width: 100%;
   justify-content: end;
   color: var(--Grayscale7, #000);
-  font-family: TheJamsil;
+  font-family: 'TheJamsil';
   font-size: 0.9vw;
   font-style: normal;
   font-weight: 400;

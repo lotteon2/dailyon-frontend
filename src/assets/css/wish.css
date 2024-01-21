@@ -1,135 +1,135 @@
 .container-title {
-    color: var(--Grayscale7, #000);
-    font-family: TheJamsil;
-    font-size: 30px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 50px; /* 166.667% */
-    margin-bottom: 10px;
+  color: var(--Grayscale7, #000);
+  font-family: 'TheJamsil';
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 50px; /* 166.667% */
+  margin-bottom: 10px;
 }
 
 .container-line {
-    width: 100%;
-    height: 2px;
-    background: #000;
+  width: 100%;
+  height: 2px;
+  background: #000;
 }
 
 .basket-top-button-container {
-    display: flex;
-    width: 100%;
-    justify-content: flex-end;
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
 }
 
 .left-margin {
-    padding-left: 20px;
+  padding-left: 20px;
 }
 
 .top-button {
-    width: 66px;
-    height: 20px;
-    border: 1px solid var(--Grayscale5, #808080);
-    background: var(--Grayscale1, #fff);
-    padding-top: 2px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: var(--Grayscale5, #808080);
-    font-family: TheJamsil;
-    font-size: 12px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 30px; /* 250% */
-    margin-left: 7px;
-    margin-bottom: 8px;
-    margin-top: -28px;
+  width: 66px;
+  height: 20px;
+  border: 1px solid var(--Grayscale5, #808080);
+  background: var(--Grayscale1, #fff);
+  padding-top: 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--Grayscale5, #808080);
+  font-family: 'TheJamsil';
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 30px; /* 250% */
+  margin-left: 7px;
+  margin-bottom: 8px;
+  margin-top: -28px;
 }
 
 .wish-table-data1 > td {
-    color: var(--Grayscale7, #202027);
-    font-family: TheJamsil;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 400;
-    border-bottom: 1px solid #202027;
-    padding-top: 10px;
-    padding-bottom: 10px;
+  color: var(--Grayscale7, #202027);
+  font-family: 'TheJamsil';
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  border-bottom: 1px solid #202027;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .wish-table-data2 {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .wish-table-data2:hover {
-    background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .wish-table-data2 > td {
-    color: var(--Grayscale7, #202027);
-    font-family: TheJamsil;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 400;
-    border-bottom: 1px solid #808080;
+  color: var(--Grayscale7, #202027);
+  font-family: 'TheJamsil';
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  border-bottom: 1px solid #808080;
 }
 
 .basket-img {
-    flex-shrink: 0;
-    margin: 20px 0;
-    width: 100px;
-    height: 100px;
+  flex-shrink: 0;
+  margin: 20px 0;
+  width: 100px;
+  height: 100px;
 }
 
 .basket-column {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .basket-column > h1 {
-    color: var(--Grayscale7, #202027);
-    font-family: TheJamsil;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 40px; /* 500% */
+  color: var(--Grayscale7, #202027);
+  font-family: 'TheJamsil';
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 40px; /* 500% */
 }
 
 .basket-column > h2 {
-    color: var(--Grayscale5, #808080);
-    font-family: TheJamsil;
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 40px; /* 666.667% */
+  color: var(--Grayscale5, #808080);
+  font-family: 'TheJamsil';
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 40px; /* 666.667% */
 }
 
 td {
-    vertical-align: middle;
+  vertical-align: middle;
 }
 
 .center-text {
-    text-align: center;
-    width: 20%;
+  text-align: center;
+  width: 20%;
 }
 
 .jjim-prod-container {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 
 .wishBtn {
-    width: 50px;
-    height: 30px;
-    background: var(--Grayscale7, #000);
-    color: var(--Grayscale1, #fff);
-    text-align: center;
-    font-family: TheJamsil;
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 300;
-    line-height: 80px; /* 266.667% */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
+  width: 50px;
+  height: 30px;
+  background: var(--Grayscale7, #000);
+  color: var(--Grayscale1, #fff);
+  text-align: center;
+  font-family: 'TheJamsil';
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 80px; /* 266.667% */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 }

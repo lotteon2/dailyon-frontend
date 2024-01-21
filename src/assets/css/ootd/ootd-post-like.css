@@ -1,51 +1,51 @@
 .ootd-container {
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.1875rem;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1875rem;
 
-    overflow-y: hidden;
+  overflow-y: hidden;
 }
 
 .ootd-body-container {
-    width: 95%;
-    min-height: 930px;
-    justify-content: flex-start;
+  width: 95%;
+  min-height: 930px;
+  justify-content: flex-start;
 }
 
 .ootd-header-container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    width: 95%;
-    gap: 2.8125rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 95%;
+  gap: 2.8125rem;
 }
 
 .ootd-header-bar-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 45rem;
+  display: flex;
+  align-items: center;
+  gap: 45rem;
 }
 
 .ootd-header-write-btn-wrapper {
-    display: flex;
-    height: 1.5rem;
-    padding: 0.625rem;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  height: 1.5rem;
+  padding: 0.625rem;
+  justify-content: center;
+  align-items: center;
 
-    background: #000;
+  background: #000;
 }
 
 .ootd-header-write-btn {
-    color: var(--Grayscale1, #FFF);
-    font-family: The Jamsil;
-    font-size: 1.25rem;
-    font-style: normal;
-    font-weight: 300;
-    line-height: normal;
+  color: var(--Grayscale1, #fff);
+  font-family: 'TheJamsil';
+  font-size: 1.25rem;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
 }
 
 .ootd-header-write-btn-wrapper:hover {
-    cursor: pointer;
+  cursor: pointer;
 }

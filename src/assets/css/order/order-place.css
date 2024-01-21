@@ -1,6 +1,6 @@
 .container-title {
   color: var(--Grayscale7, #202027);
-  font-family: TheJamsil;
+  font-family: 'TheJamsil';
   width: 120px;
   font-size: 20px;
   font-style: normal;
@@ -20,7 +20,7 @@
   height: 40px;
   background: var(--Grayscale7, #000);
   color: var(--Grayscale1, #fff);
-  font-family: TheJamsil;
+  font-family: 'TheJamsil';
   font-size: 20px;
   font-style: normal;
   font-weight: 300;
@@ -49,7 +49,7 @@
 
 .user-info-first-col > span {
   color: var(--Grayscale7, #202027);
-  font-family: TheJamsil;
+  font-family: 'TheJamsil';
   font-size: 20px;
   font-style: normal;
   font-weight: 300;
@@ -67,7 +67,7 @@
   height: 3.75vh;
   /* height: 36px; */
   color: var(--Grayscale7, #202027);
-  font-family: TheJamsil;
+  font-family: 'TheJamsil';
   font-size: 20px;
   font-style: normal;
   font-weight: 300;

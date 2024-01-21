@@ -88,7 +88,8 @@ const toProductList = (id: number) => {
   cursor: pointer;
 
   font-size: 1vw;
-  font-family: 'The Jamsil 3 Regular';
+  font-family: 'TheJamsil';
+  font-weight: 400;
 }
 
 .category-content > a {
@@ -104,7 +105,8 @@ const toProductList = (id: number) => {
   top: 0;
   position: absolute;
 
-  font-family: 'The Jamsil 3 Regular';
+  font-family: 'TheJamsil';
+  font-weight: 400;
   font-size: 1vw;
 }
 </style>

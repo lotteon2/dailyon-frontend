@@ -1,76 +1,76 @@
 .container-title {
-    color: var(--Grayscale7, #000);
-    font-family: The Jamsil;
-    font-size: 1.5vw;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 50px;
-    margin-bottom: 10px;
+  color: var(--Grayscale7, #000);
+  font-family: 'TheJamsil';
+  font-size: 1.5vw;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 50px;
+  margin-bottom: 10px;
 }
 
 .container-line {
-    width: 100%;
-    height: 2px;
-    background: #000;
+  width: 100%;
+  height: 2px;
+  background: #000;
 
-    margin-bottom: 1vh;
+  margin-bottom: 1vh;
 }
 
 .ootd-container {
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1vh;
-    width: 100%;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1vh;
+  width: 100%;
 
-    overflow-y: hidden;
+  overflow-y: hidden;
 }
 
 .ootd-body-container {
-    width: 100%;
-    min-height: 97vh;
-    justify-content: flex-start;
+  width: 100%;
+  min-height: 97vh;
+  justify-content: flex-start;
 }
 
 .ootd-header-container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
 }
 
 .ootd-header-bar-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .ootd-header-write-btn-wrapper {
-    display: flex;
-    width: 3vw;
-    height: 1.5vh;
-    padding: 0.5vw;
-    justify-content: center;
-    align-items: center;
-    margin-right: 1vw;
+  display: flex;
+  width: 3vw;
+  height: 1.5vh;
+  padding: 0.5vw;
+  justify-content: center;
+  align-items: center;
+  margin-right: 1vw;
 
-    background: #000;
+  background: #000;
 }
 
 .ootd-header-write-btn {
-    color: var(--Grayscale1, #FFF);
-    font-family: The Jamsil;
-    font-size: 0.8vw;
-    font-style: normal;
-    font-weight: 300;
-    line-height: normal;
+  color: var(--Grayscale1, #fff);
+  font-family: 'TheJamsil';
+  font-size: 0.8vw;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
 }
 
 .ootd-header-write-btn-wrapper:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .blank-gap {
-    margin-left: 5rem;
+  margin-left: 5rem;
 }

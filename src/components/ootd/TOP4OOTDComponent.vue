@@ -25,7 +25,7 @@ onMounted(async () => {
     <div class="top4-ootd-title-wrapper">
       <div class="top4-ootd-title-text">TOP 4 OOTD</div>
     </div>
-    <WhitePageComponent v-if='top4.length === 0' message="등록된 OOTD가 없습니다" />
+    <WhitePageComponent v-if="top4.length === 0" message="등록된 OOTD가 없습니다" />
     <div v-else class="top4-ootd-list-wrapper">
       <RouterLink
         class="top4-ootd-post-card-image-wrapper"
@@ -63,7 +63,7 @@ onMounted(async () => {
 
 .top4-ootd-title-text {
   color: var(--Grayscale7, #000);
-  font-family: TheJamsil;
+  font-family: 'TheJamsil';
   font-size: 1.85rem;
   font-style: normal;
   font-weight: 400;
