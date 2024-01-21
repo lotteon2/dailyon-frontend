@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { getMemberPoints } from '@/apis/member/member'
-import { ref, onMounted, watch, onBeforeMount } from 'vue'
+import { onBeforeMount, ref, watch } from 'vue'
 import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 import type { Point } from '@/apis/member/MemberDto'
 import WhitePageComponent from '@/components/wishcart/WhitePageComponent.vue'
@@ -33,6 +33,14 @@ const updatePoints = (response: any) => {
   totalPages.value = response.totalPages
   totalElements.value = response.totalElements
 }
+
+const formatDate = (localDateTime: string) => {
+  // Assuming localDateTime is in ISO string format, adjust as necessary
+  return localDateTime.replace(
+    /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}).*$/,
+    '$1년 $2월 $3일 $4:$5'
+  )
+}
 </script>
 
 <template>
@@ -55,7 +63,7 @@ const updatePoints = (response: any) => {
           <td>상태</td>
         </tr>
         <tr v-for="(point, index) in points" :key="index" class="point-table-data2">
-          <td>{{ point.createdAt }}</td>
+          <td>{{ formatDate(point.createdAt) }}</td>
           <td>{{ point.source }}</td>
           <td>{{ point.utilize }}</td>
           <td>{{ point.amount.toLocaleString() }} 원</td>
@@ -72,7 +80,7 @@ const updatePoints = (response: any) => {
       </div>
     </template>
     <template v-else>
-      <WhitePageComponent message="포인트 내역이 없습니다"/>
+      <WhitePageComponent message="포인트 내역이 없습니다" />
     </template>
   </div>
 </template>

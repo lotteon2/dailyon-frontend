@@ -1,1386 +1,1385 @@
 .ootd-detail-container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: 62vw;
-  gap: 2.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 62vw;
+    gap: 2.75rem;
 }
 
 .ootd-detail-like-button-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 2.5vw;
-  height: 7vh;
-  gap: 0.4625rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 2.5vw;
+    height: 7vh;
+    gap: 0.4625rem;
 }
 
 .ootd-detail-like-button {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
 
-  border-radius: 5.625rem;
-  border: 1px solid #c6c6c6;
+    border-radius: 5.625rem;
+    border: 1px solid #c6c6c6;
 }
 
 .ootd-detail-like-button:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .ootd-detail-like-button-icon {
-  width: 1.2vw;
+    width: 1.2vw;
 
-  fill: var(--Grayscale4, #c6c6c6);
+    fill: var(--Grayscale4, #c6c6c6);
 }
 
 .ootd-detail-like-button-icon.selected {
-  fill: #f00;
+    fill: #f00;
 }
 
 .ootd-detail-like-text-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .ootd-detail-like-text {
-  color: var(--Grayscale5, #808080);
-  font-family: 'TheJamsil';
-  font-size: 0.7vw;
-  font-style: normal;
-  font-weight: 300;
-  line-height: normal;
+    color: var(--Grayscale5, #808080);
+    font-family: 'TheJamsil';
+    font-size: 0.7vw;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
 }
 
 .ootd-detail-body {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 2.5625rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2.5625rem;
 }
 
 .ootd-detail-content-body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  gap: 2.5625rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 2.5625rem;
 }
 
 .ootd-detail-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  gap: 0.6875rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 0.6875rem;
 }
 
 .ootd-detail-header-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
 }
 
 .ootd-detail-header-title-wrapper {
-  display: flex;
-  padding: 5px;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    padding: 5px;
+    justify-content: center;
+    align-items: center;
 }
 
 .ootd-detail-header-title-text {
-  color: var(--Grayscale7, #000);
-  font-family: 'TheJamsil';
-  font-size: 2.3vw;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
+    color: var(--Grayscale7, #000);
+    font-family: 'TheJamsil';
+    font-size: 2.3vw;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
 }
 
 .ootd-detail-header-control-button-wrapper {
-  display: flex;
-  align-items: flex-start;
-  width: fit-content;
-  gap: 0.75vw;
+    display: flex;
+    align-items: flex-start;
+    width: fit-content;
+    gap: 0.75vw;
 }
 
 .ootd-detail-header-edit-button-wrapper {
-  display: flex;
-  width: 4vw;
-  height: 3vh;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    width: 4vw;
+    height: 3vh;
+    justify-content: center;
+    align-items: center;
 
-  border-radius: 0.3125rem;
-  background: #000;
+    border-radius: 0.3125rem;
+    background: #000;
 }
 
 .ootd-detail-header-edit-button-text {
-  color: var(--Grayscale1, #fff);
-  font-family: 'TheJamsil';
-  font-size: 0.8vw;
-  font-style: normal;
-  font-weight: 300;
-  line-height: normal;
+    color: var(--Grayscale1, #fff);
+    font-family: 'TheJamsil';
+    font-size: 0.8vw;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
 }
 
 .ootd-detail-header-delete-button-wrapper {
-  display: flex;
-  width: 4vw;
-  height: 3vh;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    width: 4vw;
+    height: 3vh;
+    justify-content: center;
+    align-items: center;
 
-  border-radius: 0.3125rem;
-  background: #c22727;
+    border-radius: 0.3125rem;
+    background: #c22727;
 }
 
 .ootd-detail-header-delete-button-text {
-  color: var(--Grayscale1, #fff);
-  text-align: center;
-  font-family: 'TheJamsil';
-  font-size: 0.8vw;
-  font-style: normal;
-  font-weight: 300;
-  line-height: normal;
+    color: var(--Grayscale1, #fff);
+    text-align: center;
+    font-family: 'TheJamsil';
+    font-size: 0.8vw;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
 }
 
 .ootd-detail-header-edit-button-wrapper:hover,
 .ootd-detail-header-delete-button-wrapper:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .ootd-detail-header-middle {
-  display: flex;
-  width: 100%;
-  align-items: center;
-  justify-content: space-between;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .member-info-wrapper {
-  display: flex;
-  align-items: center;
-  width: 22%;
-  gap: 0.625rem;
+    display: flex;
+    align-items: center;
+    width: 22%;
+    gap: 0.625rem;
 }
 
 .ootd-detail-header-writer-profile-image-wrapper {
-  display: flex;
-  align-items: flex-start;
-  width: 3vw;
-  gap: 0.625rem;
+    display: flex;
+    align-items: flex-start;
+    width: 3vw;
+    gap: 0.625rem;
 }
 
 .ootd-detail-header-writer-profile-image {
-  width: 100%;
-  height: 100%;
+    width: 100%;
+    height: 100%;
 
-  border-radius: 6.25rem;
-  background: #ffffff;
+    border-radius: 6.25rem;
+    background: #ffffff;
 }
 
 .ootd-detail-header-writer-info-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: 100%;
-  gap: 0.4375rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    gap: 0.4375rem;
 }
 
 .ootd-detail-header-writer-nickname-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .ootd-detail-header-writer-nickname-text {
-  color: var(--Grayscale7, #000);
-  font-family: 'TheJamsil';
-  font-size: 1vw;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
+    color: var(--Grayscale7, #000);
+    font-family: 'TheJamsil';
+    font-size: 1vw;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
 }
 
 .ootd-detail-header-content-created-date-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .ootd-detail-header-content-created-date-text {
-  color: var(--Grayscale5, #808080);
-  font-family: 'TheJamsil';
-  font-size: 0.75vw;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
+    color: var(--Grayscale5, #808080);
+    font-family: 'TheJamsil';
+    font-size: 0.75vw;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
 }
 
 .ootd-detail-header-follow-wrapper {
-  display: flex;
-  align-items: flex-start;
+    display: flex;
+    align-items: flex-start;
 }
 
 .ootd-detail-header-follow {
-  display: flex;
-  width: 4vw;
-  height: 3vh;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    width: 4vw;
+    height: 3vh;
+    justify-content: center;
+    align-items: center;
 
-  border-radius: 0.3125rem;
-  background: #c22727;
+    border-radius: 0.3125rem;
+    background: #c22727;
 }
 
 .ootd-detail-header-follow-text {
-  color: var(--Grayscale1, #fff);
-  font-family: 'TheJamsil';
-  font-size: 0.8vw;
-  font-style: normal;
-  font-weight: 300;
-  line-height: normal;
+    color: var(--Grayscale1, #fff);
+    font-family: 'TheJamsil';
+    font-size: 0.8vw;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
 }
 
 .ootd-detail-header-following {
-  display: flex;
-  width: 4vw;
-  height: 3vh;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    width: 4vw;
+    height: 3vh;
+    justify-content: center;
+    align-items: center;
 
-  border-radius: 0.3125rem;
-  border: 1px solid #e9e9e9;
-  background: #fff;
+    border-radius: 0.3125rem;
+    border: 1px solid #e9e9e9;
+    background: #fff;
 }
 
 .ootd-detail-header-follow:hover,
 .ootd-detail-header-following:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .ootd-detail-header-following-icon {
-  width: 0.7vw;
-  height: 0.5625rem;
+    width: 0.7vw;
+    height: 0.5625rem;
 
-  fill: var(--Grayscale4, #c6c6c6);
+    fill: var(--Grayscale4, #c6c6c6);
 }
 
 .ootd-detail-header-following-text {
-  color: var(--Grayscale4, #c6c6c6);
-  font-family: 'TheJamsil';
-  font-size: 0.8vw;
-  font-style: normal;
-  font-weight: 300;
-  line-height: normal;
+    color: var(--Grayscale4, #c6c6c6);
+    font-family: 'TheJamsil';
+    font-size: 0.8vw;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
 }
 
 .ootd-detail-header-bottom {
-  display: flex;
-  width: 100%;
-  height: 6.25rem;
-  padding: 0.9375rem 0.625rem;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-around;
-  align-self: stretch;
+    display: flex;
+    width: 100%;
+    height: 6.25rem;
+    padding: 0.9375rem 0.625rem;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-around;
+    align-self: stretch;
 
-  border-radius: 0.3125rem;
-  background: #f3f3f3;
+    border-radius: 0.3125rem;
+    background: #f3f3f3;
 }
 
 .ootd-detail-fashion-info-wrapper {
-  display: flex;
-  align-items: flex-start;
-  width: 100%;
-  gap: 15vw;
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    gap: 15vw;
 }
 
 .ootd-detail-info-wrapper {
-  display: flex;
-  align-items: flex-start;
-  gap: 21rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 21rem;
 }
 
 .ootd-detail-size-info-wrapper {
-  display: flex;
-  align-items: flex-start;
-  width: fit-content;
-  gap: 0.9375rem;
+    display: flex;
+    align-items: flex-start;
+    width: fit-content;
+    gap: 0.9375rem;
 }
 
 .ootd-detail-size-info-text-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
 }
 
 .ootd-detail-size-info-text {
-  color: var(--Grayscale7, #000);
-  font-family: 'TheJamsil';
-  font-size: 0.8vw;
-  font-style: normal;
-  font-weight: 300;
-  line-height: normal;
+    color: var(--Grayscale7, #000);
+    font-family: 'TheJamsil';
+    font-size: 0.8vw;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
 }
 
 .ootd-detail-size-real-info-text {
-  color: var(--Grayscale7, #000);
-  font-family: 'TheJamsil';
-  font-size: 0.8vw;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
+    color: var(--Grayscale7, #000);
+    font-family: 'TheJamsil';
+    font-size: 0.8vw;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
 }
 
 .ootd-detail-fashion-size-info-wrapper {
-  display: flex;
-  align-items: flex-start;
-  width: fit-content;
-  gap: 1.6875rem;
+    display: flex;
+    align-items: flex-start;
+    width: fit-content;
+    gap: 1.6875rem;
 }
 
 .ootd-detail-fashion-size-info-text-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
 }
 
 .ootd-detail-fashion-size-info-text-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 11vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 11vw;
 }
 
 .ootd-detail-fashion-size-info-text {
-  color: var(--Grayscale7, #000);
-  font-family: 'TheJamsil';
-  font-size: 0.8vw;
-  font-style: normal;
-  font-weight: 300;
-  line-height: normal;
+    color: var(--Grayscale7, #000);
+    font-family: 'TheJamsil';
+    font-size: 0.8vw;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
 
-  width: 55px;
+    width: 55px;
 }
 
 .ootd-detail-fashion-size-real-info-text {
-  color: var(--Grayscale7, #000);
-  font-family: 'TheJamsil';
-  font-size: 0.8vw;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
+    color: var(--Grayscale7, #000);
+    font-family: 'TheJamsil';
+    font-size: 0.8vw;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
 
-  display: block;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
+    display: block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .ootd-detail-tag-info-wrapper {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  gap: 1.375rem;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 1.375rem;
 }
 
 .ootd-detail-tag-title-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
 }
 
 .ootd-detail-tag-title-text {
-  color: var(--Grayscale7, #000);
-  font-family: 'TheJamsil';
-  font-size: 0.8vw;
-  font-style: normal;
-  font-weight: 300;
-  line-height: normal;
+    color: var(--Grayscale7, #000);
+    font-family: 'TheJamsil';
+    font-size: 0.8vw;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
 }
 
 .ootd-detail-tag-content-wrapper {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.4vw;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.4vw;
 }
 
 .ootd-detail-tag-button-wrapper {
-  display: flex;
-  width: fit-content;
-  height: 2.5vh;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    width: fit-content;
+    height: 2.5vh;
+    justify-content: center;
+    align-items: center;
 
-  padding-left: 0.5vw;
-  padding-right: 0.5vw;
+    padding-left: 0.5vw;
+    padding-right: 0.5vw;
 
-  border-radius: 0.3125rem;
-  background: #000;
+    border-radius: 0.3125rem;
+    background: #000;
 }
 
 .ootd-detail-tag-button-text {
-  color: var(--Grayscale1, #fff);
-  font-family: 'TheJamsil';
-  font-size: 0.7vw;
-  font-style: normal;
-  font-weight: 300;
-  line-height: normal;
+    color: var(--Grayscale1, #fff);
+    font-family: 'TheJamsil';
+    font-size: 0.7vw;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
 }
 
 .ootd-detail-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  gap: 3vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 3vh;
 }
 
 .ootd-detail-content-description-wrapper {
-  display: flex;
-  padding: 0.625rem;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
+    display: flex;
+    padding: 0.625rem;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
 }
 
 .ootd-detail-content-description-text {
-  color: var(--Grayscale7, #000);
-  font-family: 'TheJamsil';
-  font-size: 1.3vw;
-  font-style: normal;
-  font-weight: 300;
-  line-height: normal;
+    color: var(--Grayscale7, #000);
+    font-family: 'TheJamsil';
+    font-size: 1.3vw;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
 }
 
 .ootd-detail-content-image-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  min-width: 10vw;
-  max-width: 30vw;
-  min-height: 30vh;
-  max-height: 90vh;
-  gap: 0.625rem;
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-width: 10vw;
+    max-width: 30vw;
+    min-height: 30vh;
+    max-height: 90vh;
+    gap: 0.625rem;
 }
 
 .ootd-detail-content-image {
-  width: 100%;
-  height: 100%;
+    width: 100%;
+    height: 100%;
 }
 
 .ootd-detail-content-product-list-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .ootd-detail-content-product-list-back-button-wrapper {
-  display: flex;
-  width: fit-content;
-  gap: 0.625rem;
+    display: flex;
+    width: fit-content;
+    gap: 0.625rem;
 }
 
 .ootd-detail-content-product-list-back-button-wrapper:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .ootd-detail-content-product-list-forward-button-wrapper {
-  display: flex;
-  width: fit-content;
-  gap: 0.625rem;
+    display: flex;
+    width: fit-content;
+    gap: 0.625rem;
 }
 
 .ootd-detail-content-product-list-forward-button-wrapper:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .ootd-detail-content-product-list-back-button {
-  width: 0.6vw;
-  height: 2vh;
+    width: 0.6vw;
+    height: 2vh;
 
-  fill: var(--Grayscale7, #000);
+    fill: var(--Grayscale7, #000);
 }
 
 .ootd-detail-content-product-list-forward-button {
-  width: 0.6vw;
-  height: 1.5vh;
+    width: 0.6vw;
+    height: 1.5vh;
 
-  fill: var(--Grayscale7, #000);
+    fill: var(--Grayscale7, #000);
 }
 
 .ootd-detail-content-product-list-image-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  width: fit-content;
-  height: 100%;
-  gap: 1vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: fit-content;
+    height: 100%;
+    gap: 1vh;
 }
 
 .ootd-detail-content-product-image-wrapper {
-  display: flex;
-  align-items: flex-start;
-  width: 5vw;
-  height: 10vh;
-  gap: 0.625rem;
+    display: flex;
+    align-items: flex-start;
+    width: 5vw;
+    height: 10vh;
+    gap: 0.625rem;
 
-  border-radius: 0.3125rem;
+    border-radius: 0.3125rem;
 }
 
 .ootd-detail-content-product-image-wrapper:hover {
-  cursor: pointer;
-  border: 0.5px solid #c6c6c6;
-  box-shadow: 4px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    border: 0.5px solid #c6c6c6;
+    box-shadow: 4px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
 
 .ootd-detail-content-product-image {
-  width: 5vw;
-  height: 10vh;
+    width: 5vw;
+    height: 10vh;
 
-  border: 1px solid #c6c6c6;
-  border-radius: 0.3125rem;
+    border: 1px solid #c6c6c6;
+    border-radius: 0.3125rem;
 }
 
 .ootd-detail-footer-left {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: 100%;
-  gap: 0.4375rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    gap: 0.4375rem;
 }
 
 .ootd-detail-footer-right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.4375rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4375rem;
 }
 
 .ootd-detail-footer-count-wrapper {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.3vw;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.3vw;
 }
 
 .ootd-detail-footer-like-count-wrapper,
 .ootd-detail-footer-comment-count-wrapper,
 .ootd-detail-footer-view-count-wrapper {
-  display: flex;
-  padding: 0.325rem;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    padding: 0.325rem;
+    justify-content: center;
+    align-items: center;
 }
 
 .ootd-detail-footer-like-count,
 .ootd-detail-footer-comment-count,
 .ootd-detail-footer-view-count {
-  color: var(--Grayscale7, #000);
-  font-family: 'TheJamsil';
-  font-size: 0.8vw;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 1.875rem; /* 150% */
+    color: var(--Grayscale7, #000);
+    font-family: 'TheJamsil';
+    font-size: 0.8vw;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.875rem; /* 150% */
 }
 
 .count-wrapper {
-  color: var(--Dark-Red, #c22727);
-  font-family: 'TheJamsil';
-  font-size: 0.8vw;
-  font-style: normal;
-  font-weight: 500;
+    color: var(--Dark-Red, #c22727);
+    font-family: 'TheJamsil';
+    font-size: 0.8vw;
+    font-style: normal;
+    font-weight: 500;
 }
 
 .ootd-detail-footer-writer-detail-wrapper {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  gap: 1.3125rem;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 1.3125rem;
 }
 
 .ootd-detail-footer-writer-detail-left-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 0.925rem;
+    display: flex;
+    align-items: center;
+    gap: 0.925rem;
 }
 
 .ootd-detail-footer-writer-profile-image {
-  width: 4.25rem;
-  height: 4.25rem;
+    width: 4.25rem;
+    height: 4.25rem;
 
-  border-radius: 6.25rem;
+    border-radius: 6.25rem;
 }
 
 .ootd-detail-footer-writer-detail-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.1875rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.1875rem;
 }
 
 .ootd-detail-footer-writer-nickname-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.625rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
 }
 
 .ootd-detail-footer-writer-nickname {
-  color: var(--Grayscale7, #000);
-  font-family: 'TheJamsil';
-  font-size: 1.275rem;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
+    color: var(--Grayscale7, #000);
+    font-family: 'TheJamsil';
+    font-size: 1.275rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
 }
 
 .ootd-detail-footer-created-date-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.625rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
 }
 
 .ootd-detail-footer-created-date {
-  color: var(--Grayscale5, #808080);
-  font-family: 'TheJamsil';
-  font-size: 1rem;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
+    color: var(--Grayscale5, #808080);
+    font-family: 'TheJamsil';
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
 }
 
 .ootd-detail-footer-follow-wrapper {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
 }
 
 .ootd-detail-footer-follow {
-  display: flex;
-  width: 5rem;
-  height: 2rem;
-  justify-content: center;
-  align-items: center;
-  gap: 0.625rem;
+    display: flex;
+    width: 5rem;
+    height: 2rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
 
-  border-radius: 0.3125rem;
-  background: #c22727;
+    border-radius: 0.3125rem;
+    background: #c22727;
 }
 
 .ootd-detail-footer-follow:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .ootd-detail-footer-follow-text {
-  color: var(--Grayscale1, #fff);
-  font-family: 'TheJamsil';
-  font-size: 1rem;
-  font-style: normal;
-  font-weight: 300;
-  line-height: normal;
+    color: var(--Grayscale1, #fff);
+    font-family: 'TheJamsil';
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
 }
 
 .ootd-detail-footer-following {
-  display: flex;
-  width: 5rem;
-  height: 2rem;
-  justify-content: center;
-  align-items: center;
-  gap: 0.0625rem;
+    display: flex;
+    width: 5rem;
+    height: 2rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.0625rem;
 
-  border-radius: 0.3125rem;
-  border: 1px solid #e9e9e9;
-  background: #fff;
+    border-radius: 0.3125rem;
+    border: 1px solid #e9e9e9;
+    background: #fff;
 }
 
 .ootd-detail-footer-following:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .ootd-detail-footer-following-icon {
-  width: 0.78869rem;
-  height: 0.5625rem;
-  flex-shrink: 0;
+    width: 0.78869rem;
+    height: 0.5625rem;
+    flex-shrink: 0;
 
-  fill: var(--Grayscale4, #c6c6c6);
+    fill: var(--Grayscale4, #c6c6c6);
 }
 
 .ootd-detail-footer-following-text {
-  color: var(--Grayscale4, #c6c6c6);
-  font-family: 'TheJamsil';
-  font-size: 1rem;
-  font-style: normal;
-  font-weight: 300;
-  line-height: normal;
+    color: var(--Grayscale4, #c6c6c6);
+    font-family: 'TheJamsil';
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
 }
 
 .ootd-detail-divide-line-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
 
-  gap: 0.625rem;
+    gap: 0.625rem;
 }
 
 .ootd-detail-divide-line {
-  display: flex;
-  width: 100%;
-  height: 0.0625rem;
+    display: flex;
+    width: 100%;
+    height: 0.0625rem;
 
-  background: #c6c6c6;
+    background: #c6c6c6;
 }
 
 .ootd-detail-comment-wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  gap: 1.5vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: 1.5vh;
 }
 
 .ootd-detail-comment-header-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: 85%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 85%;
 
-  gap: 0.375rem;
+    gap: 0.375rem;
 }
 
 .ootd-detail-comment-count-wrapper {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.25rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.25rem;
 }
 
 .ootd-detail-comment-count-text-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.625rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
 }
 
 .ootd-detail-comment-count-text {
-  color: var(--Grayscale7, #000);
-  font-family: 'TheJamsil';
-  font-size: 1rem;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 1.875rem; /* 150% */
+    color: var(--Grayscale7, #000);
+    font-family: 'TheJamsil';
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.875rem; /* 150% */
 }
 
 .ootd-detail-comment-count-real-text-wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 0.625rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
 }
 
 .ootd-detail-comment-count-real-text {
-  color: var(--Dark-Red, #c22727);
-  font-family: 'TheJamsil';
-  font-size: 1rem;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 1.875rem; /* 150% */
+    color: var(--Dark-Red, #c22727);
+    font-family: 'TheJamsil';
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 1.875rem; /* 150% */
 }
 
 .ootd-detail-comment-input-box-wrapper {
-  display: flex;
-  padding: 0.3125rem;
-  width: 85%;
+    display: flex;
+    padding: 0.3125rem;
+    width: 85%;
 
-  border-radius: 0.3125rem;
-  border: 1px solid #c6c6c6;
+    border-radius: 0.3125rem;
+    border: 1px solid #c6c6c6;
 }
 
 .ootd-detail-comment-input-wrapper {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  width: 96%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 96%;
 
-  gap: 0.625rem;
+    gap: 0.625rem;
 }
 
 .ootd-detail-comment-input {
-  color: var(--Grayscale4, #c6c6c6);
-  font-family: 'TheJamsil';
-  font-size: 1.25rem;
-  font-style: normal;
-  font-weight: 300;
-  line-height: normal;
-  width: 95%;
+    color: var(--Grayscale4, #c6c6c6);
+    font-family: 'TheJamsil';
+    font-size: 1.25rem;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+    width: 95%;
 
-  outline: none;
-  border: none;
+    outline: none;
+    border: none;
 }
 
 .ootd-detail-comment-input-box-decoration-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.625rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
 }
 
 .ootd-detail-comment-input-box-decoration-text {
-  color: var(--Grayscale4, #c6c6c6);
-  font-family: 'TheJamsil';
-  font-size: 1rem;
-  font-style: normal;
-  font-weight: 300;
-  line-height: normal;
+    color: var(--Grayscale4, #c6c6c6);
+    font-family: 'TheJamsil';
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
 }
 
 .ootd-detail-comment-body-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.625rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.625rem;
 }
 
 .ootd-detail-comment-box-wrapper {
-  display: flex;
-  align-items: flex-start;
-  width: 100%;
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
 
-  gap: 0.5625rem;
+    gap: 0.5625rem;
 }
 
 .ootd-detail-comment-profile-image {
-  width: 2.5rem;
-  height: 2.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
 
-  border-radius: 2.5rem;
+    border-radius: 2.5rem;
 }
 
 .ootd-detail-comment-box-wrapper-2 {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 
-  width: 100%;
+    width: 100%;
 }
 
 .ootd-detail-comment-box-header-wrapper {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  position: relative;
-  width: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    position: relative;
+    width: 100%;
 }
 
 .ootd-detail-comment-box-header-left-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 .ootd-detail-comment-box-header-nickname-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.625rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
 }
 
 .ootd-detail-comment-box-header-nickname-text {
-  color: var(--Grayscale7, #000);
-  font-family: 'TheJamsil';
-  font-size: 0.9rem;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 1.875rem; /* 150% */
+    color: var(--Grayscale7, #000);
+    font-family: 'TheJamsil';
+    font-size: 0.9rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.875rem; /* 150% */
 }
 
 .ootd-detail-comment-box-header-content-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.625rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
 }
 
 .ootd-detail-comment-box-header-content-text {
-  color: var(--Grayscale7, #000);
-  font-family: 'TheJamsil';
-  font-size: 0.9rem;
-  font-style: normal;
-  font-weight: 300;
-  line-height: 1.875rem; /* 150% */
+    color: var(--Grayscale7, #000);
+    font-family: 'TheJamsil';
+    font-size: 0.9rem;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 1.875rem; /* 150% */
 }
 
 .ootd-detail-comment-box-header-content-metadata-wrapper {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
 }
 
 .ootd-detail-comment-box-header-content-created-date-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.625rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
 }
 
 .ootd-detail-comment-box-header-content-created-date-text {
-  color: var(--Grayscale6, #4d4d4d);
-  font-family: 'TheJamsil';
-  font-size: 0.75rem;
-  font-style: normal;
-  font-weight: 300;
-  line-height: 1.875rem; /* 250% */
+    color: var(--Grayscale6, #4d4d4d);
+    font-family: 'TheJamsil';
+    font-size: 0.75rem;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 1.875rem; /* 250% */
 }
 
 .ootd-detail-comment-box-header-content-comment-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.625rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
 }
 
 .ootd-detail-comment-box-header-content-comment-wrapper:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .ootd-detail-comment-box-header-content-comment-button {
-  color: var(--Grayscale6, #4d4d4d);
-  font-family: 'TheJamsil';
-  font-size: 0.75rem;
-  font-style: normal;
-  font-weight: 300;
-  line-height: 1.875rem; /* 250% */
+    color: var(--Grayscale6, #4d4d4d);
+    font-family: 'TheJamsil';
+    font-size: 0.75rem;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 1.875rem; /* 250% */
 }
 
 .ootd-detail-comment-box-header-right-wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 
-  position: absolute;
-  right: 0.5rem;
+    position: absolute;
+    right: 0.5rem;
 }
 
 .ootd-detail-comment-box-header-right-wrapper:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .ootd-detail-comment-box-delete-text {
-  color: var(--Grayscale6, #4d4d4d);
-  font-family: 'TheJamsil';
-  font-size: 0.75rem;
-  font-style: normal;
-  font-weight: 300;
-  line-height: 1.875rem; /* 250% */
+    color: var(--Grayscale6, #4d4d4d);
+    font-family: 'TheJamsil';
+    font-size: 0.75rem;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 1.875rem; /* 250% */
 }
 
 .ootd-detail-reply-box-wrapper {
-  display: flex;
-  padding: 0.3125rem;
-  align-items: flex-start;
-  gap: 37rem;
-  align-self: stretch;
+    display: flex;
+    padding: 0.3125rem;
+    align-items: flex-start;
+    gap: 37rem;
+    align-self: stretch;
 
-  border-radius: 0.3125rem;
-  border: 1px solid #c6c6c6;
+    border-radius: 0.3125rem;
+    border: 1px solid #c6c6c6;
 }
 
 .ootd-detail-reply-input-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.625rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
 }
 
 .ootd-detail-reply-input {
-  color: var(--Grayscale5, #808080);
-  font-family: 'TheJamsil';
-  font-size: 0.9rem;
-  font-style: normal;
-  font-weight: 300;
-  line-height: normal;
+    color: var(--Grayscale5, #808080);
+    font-family: 'TheJamsil';
+    font-size: 0.9rem;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
 
-  outline: none;
-  border: none;
+    outline: none;
+    border: none;
 }
 
 .ootd-detail-reply-input-hint-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.625rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
 }
 
 .ootd-detail-reply-input-hint-text {
-  color: var(--Grayscale4, #c6c6c6);
-  font-family: 'TheJamsil';
-  font-size: 1rem;
-  font-style: normal;
-  font-weight: 300;
-  line-height: normal;
+    color: var(--Grayscale4, #c6c6c6);
+    font-family: 'TheJamsil';
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
 }
 
 .ootd-detail-comment-pagination-wrapper {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.6875rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6875rem;
 }
 
 .ootd-detail-comment-back-button-wrapper {
-  display: flex;
-  width: 1.875rem;
-  height: 1.875rem;
-  justify-content: center;
-  align-items: center;
-  gap: 0.625rem;
+    display: flex;
+    width: 1.875rem;
+    height: 1.875rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
 
-  border-radius: 0.3125rem;
-  border: 1px solid #c6c6c6;
-  background: #f3f3f3;
+    border-radius: 0.3125rem;
+    border: 1px solid #c6c6c6;
+    background: #f3f3f3;
 }
 
 .ootd-detail-comment-back-button {
-  width: 0.44725rem;
-  height: 0.8125rem;
-  flex-shrink: 0;
+    width: 0.44725rem;
+    height: 0.8125rem;
+    flex-shrink: 0;
 
-  fill: #c6c6c6;
+    fill: #c6c6c6;
 }
 
 .ootd-detail-comment-front-button-wrapper {
-  display: flex;
-  width: 1.875rem;
-  height: 1.875rem;
-  justify-content: center;
-  align-items: center;
-  gap: 0.625rem;
+    display: flex;
+    width: 1.875rem;
+    height: 1.875rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
 
-  border-radius: 0.3125rem;
-  border: 1px solid #c6c6c6;
-  background: #fff;
+    border-radius: 0.3125rem;
+    border: 1px solid #c6c6c6;
+    background: #fff;
 }
 
 .ootd-detail-comment-front-button {
-  width: 0.44644rem;
-  height: 0.8125rem;
-  flex-shrink: 0;
+    width: 0.44644rem;
+    height: 0.8125rem;
+    flex-shrink: 0;
 
-  fill: var(--Grayscale7, #000);
+    fill: var(--Grayscale7, #000);
 }
 
 .ootd-detail-comment-page-button-wrapper {
-  display: flex;
-  width: 1.875rem;
-  height: 1.875rem;
-  justify-content: center;
-  align-items: center;
-  gap: 0.625rem;
+    display: flex;
+    width: 1.875rem;
+    height: 1.875rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
 
-  border-radius: 0.3125rem;
-  border: 1px solid #c6c6c6;
-  background: #fff;
+    border-radius: 0.3125rem;
+    border: 1px solid #c6c6c6;
+    background: #fff;
 }
 
 .ootd-detail-comment-page-button-wrapper:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .ootd-detail-comment-page-button-wrapper.selected {
-  border-radius: 0.3125rem;
-  background: #c22727;
+    border-radius: 0.3125rem;
+    background: #c22727;
 }
 
 .ootd-detail-comment-page-button {
-  color: #000;
-  font-family: 'TheJamsil';
-  font-size: 0.9375rem;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
+    color: #000;
+    font-family: 'TheJamsil';
+    font-size: 0.9375rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
 }
 
 .ootd-detail-comment-page-button.selected {
-  color: #fff;
-  font-family: 'TheJamsil';
-  font-size: 0.9375rem;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
+    color: #fff;
+    font-family: 'TheJamsil';
+    font-size: 0.9375rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
 }
 
 .top4-ootd-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  gap: 1.1875rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 1.1875rem;
 
-  padding-top: 6rem;
-  padding-bottom: 4rem;
+    padding-top: 6rem;
+    padding-bottom: 4rem;
 }
 
 .top4-ootd-title-wrapper {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.625rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.625rem;
 }
 
 .top4-ootd-title-text {
-  color: var(--Grayscale7, #000);
-  font-family: 'TheJamsil';
-  font-size: 1.85rem;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 1.875rem; /* 150% */
+    color: var(--Grayscale7, #000);
+    font-family: 'TheJamsil';
+    font-size: 1.85rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.875rem; /* 150% */
 }
 
 .top4-ootd-list-wrapper {
-  display: flex;
-  align-items: flex-start;
-  gap: 1.3125rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1.3125rem;
 }
 
 .top4-ootd-post-card-image-wrapper {
-  display: flex;
-  width: 12.5rem;
-  height: 19.25rem;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    height: 19.25rem;
+    justify-content: center;
+    align-items: center;
 }
 
 .top4-ootd-post-card-image-wrapper:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .top4-ootd-post-card-image {
-  flex: 1 0 0;
-  align-self: stretch;
+    flex: 1 0 0;
+    align-self: stretch;
 
-  border-radius: 0.625rem;
+    border-radius: 0.625rem;
 }
 
 .product-detail-tag-wrapper {
-  display: flex;
-  align-items: flex-start;
-  width: 1.5vw;
-  height: 3vh;
-  gap: 0.625rem;
+    display: flex;
+    align-items: flex-start;
+    width: 1.5vw;
+    height: 3vh;
+    gap: 0.625rem;
 
-  position: absolute;
+    position: absolute;
 }
 
 .product-detail-tag-wrapper:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .product-detail-tag-wrapper:hover .product-detail-tag-dropdown-wrapper {
-  display: block;
+    display: block;
 }
 
 .product-detail-tag-wrapper-2 {
-  display: flex;
-  padding: 0.625rem;
-  align-items: flex-start;
-  gap: 0.625rem;
+    display: flex;
+    padding: 0.625rem;
+    align-items: flex-start;
+    gap: 0.625rem;
 
-  position: absolute;
-  left: 45%;
-  top: 35%;
+    position: absolute;
+    left: 45%;
+    top: 35%;
 }
 
 .product-detail-tag-wrapper-2:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .product-detail-tag-wrapper-2:hover .product-detail-tag-dropdown-wrapper {
-  display: block;
+    display: block;
 }
 
 .product-detail-tag {
-  width: 100%;
-  height: 100%;
+    width: 100%;
+    height: 100%;
 
-  fill: var(--Dark-Red, #c22727);
+    fill: var(--Dark-Red, #c22727);
 }
 
 .product-detail-tag-dropdown-wrapper {
-  display: none;
-  flex-direction: column;
-  align-items: center;
+    display: none;
+    flex-direction: column;
+    align-items: center;
 
-  position: absolute;
-  left: -470%;
-  bottom: -590%;
+    position: absolute;
+    left: -470%;
+    bottom: -590%;
 }
 
 .product-detail-tag-dropdown-wrapper.isActive {
-  display: block;
-  flex-direction: column;
-  align-items: center;
+    display: block;
+    flex-direction: column;
+    align-items: center;
 
-  position: absolute;
-  left: -470%;
-  bottom: -590%;
+    position: absolute;
+    left: -470%;
+    bottom: -590%;
 }
 
 .product-detail-tag-dropdown-wrapper:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .product-detail-tag-dropdown-pointer {
-  position: absolute;
-  left: 43.5%;
-  top: -9%;
+    position: absolute;
+    left: 43.5%;
+    top: -9%;
 
-  width: 2vw;
-  height: 2vh;
+    width: 2vw;
+    height: 2vh;
 
-  fill: var(--Grayscale1, #fff);
+    fill: var(--Grayscale1, #fff);
 }
 
 .product-detail-tag-dropdown-box {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 
-  width: 15vw;
-  height: 15vh;
-  padding: 5px;
+    width: 15vw;
+    height: 15vh;
+    padding: 5px;
 
-  border-radius: 0.625rem;
-  background: var(--Grayscale1, #fff);
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    border-radius: 0.625rem;
+    background: var(--Grayscale1, #fff);
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
 
 .product-detail-tag-dropdown-box-none {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-  width: 15vw;
-  height: 15vh;
-  padding: 5px;
+    width: 15vw;
+    height: 15vh;
+    padding: 5px;
 
-  border-radius: 0.625rem;
-  background: var(--Grayscale1, #fff);
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    border-radius: 0.625rem;
+    background: var(--Grayscale1, #fff);
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
 
 .product-image {
-  width: 30%;
-  height: 60%;
+    width: 30%;
+    height: 60%;
 
-  border-radius: 0.625rem;
+    border-radius: 0.625rem;
 }
 
 .product-image-brand-and-name-wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  width: 100%;
-  height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    height: 100%;
 
-  padding: 5px;
+    padding: 5px;
 }
 
 .product-image-brand {
-  color: var(--Grayscale7, #000);
-  font-family: 'TheJamsil';
-  font-size: 1vw;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 1.875rem; /* 150% */
+    color: var(--Grayscale7, #000);
+    font-family: 'TheJamsil';
+    font-size: 1vw;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.875rem; /* 150% */
 }
 
 .product-image-name {
-  color: var(--Grayscale7, #000);
-  font-family: 'TheJamsil';
-  font-size: 0.8vw;
-  font-style: normal;
-  font-weight: 300;
-  line-height: 1.5rem;
-  display: -webkit-box;
-  width: 130px;
-  white-space: normal;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+    color: var(--Grayscale7, #000);
+    font-family: 'TheJamsil';
+    font-size: 0.8vw;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 1.5rem;
+    display: -webkit-box;
+    width: 130px;
+    white-space: normal;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .product-image-price-wrapper {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
 
-  margin-top: 15px;
-  gap: 0.625rem;
+    margin-top: 15px;
+    gap: 0.625rem;
 }
 
 .product-image-price {
-  color: var(--Grayscale7, #000);
-  text-align: right;
-  font-family: 'TheJamsil';
-  font-size: 1vw;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 1.875rem; /* 120% */
+    color: var(--Grayscale7, #000);
+    text-align: right;
+    font-family: 'TheJamsil';
+    font-size: 1vw;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.875rem; /* 120% */
 }
 
 .product-coupon-wrapper {
-  display: flex;
-  width: 23.1875rem;
-  height: 3.875rem;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    width: 23.1875rem;
+    height: 3.875rem;
+    justify-content: center;
+    align-items: center;
 
-  position: absolute;
-  bottom: -3.85938rem;
+    position: absolute;
+    bottom: -3.85938rem;
 
-  border-radius: 0rem 0rem 0.625rem 0.625rem;
-  border-top: 1px solid #e9e9e9;
-  background: #fff;
+    border-radius: 0rem 0rem 0.625rem 0.625rem;
+    border-top: 1px solid #e9e9e9;
+    background: #fff;
 
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
 
 .product-coupon-text {
-  color: #000;
-  font-family: 'TheJamsil';
-  font-size: 1.25rem;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 1.875rem; /* 150% */
+    color: #000;
+    font-family: 'TheJamsil';
+    font-size: 1.25rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 1.875rem; /* 150% */
 }
 
 .ootd-detail-header-writer-info-top-wrapper {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
 }
 
 .ootd-detail-footer-writer-detail-top-wrapper {
-  display: flex;
-  flex-direction: row;
+    display: flex;
+    flex-direction: row;
 }
 
 .ootd-detail-content-image-container {
-  display: flex;
-  flex-direction: row;
-  width: 68%;
-  justify-content: center;
-  gap: 1vw;
+    display: flex;
+    flex-direction: row;
+    width: 68%;
+    justify-content: center;
+    gap: 1vw;
 }
