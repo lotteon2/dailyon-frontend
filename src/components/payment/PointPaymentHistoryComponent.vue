@@ -4,6 +4,7 @@ import { getPointPayments } from '@/apis/payment/payment'
 import type { PaymentPageResponse, PaymentResponse } from '@/apis/payment/paymentDto'
 import PointPaymentHistoryItem from './PointPaymentHistoryItem.vue'
 import PaginationComponent from '../ootd/PaginationComponent.vue'
+import WhitePageComponent from '@/components/wishcart/WhitePageComponent.vue'
 const requestPage = ref<number>(0)
 const totalElements = ref<Number | null>(0)
 const payments = ref<Array<PaymentResponse>>()
@@ -47,7 +48,10 @@ watchEffect(() => {
         <td>결제상태</td>
         <td>결제일</td>
       </tr>
-      <point-payment-history-item :payments="payments" />
+      <point-payment-history-item v-if='payments !== undefined && payments.length !== 0' :payments="payments" />
+      <td v-else colspan='4' style='width: 100%; text-align: center'>
+        <WhitePageComponent message="주문 내역이 없습니다" />
+      </td>
     </table>
     <PaginationComponent
       :onChangePage="onChangePage"
