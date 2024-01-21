@@ -66,7 +66,26 @@ const emit = defineEmits([
   'best-promotional-price-updated'
 ])
 
-const { showModal, productId, categoryId, productPriceValue } = defineProps({
+// const { showModal, productId, categoryId, productPriceValue } = defineProps({
+//   showModal: {
+//     type: Boolean,
+//     required: true
+//   },
+//   productId: {
+//     type: Number,
+//     required: true
+//   },
+//   categoryId: {
+//     type: Number,
+//     required: true
+//   },
+//   productPriceValue: {
+//     type: Number,
+//     required: true
+//   }
+// })
+
+const props = defineProps({
   showModal: {
     type: Boolean,
     required: true
@@ -85,7 +104,7 @@ const { showModal, productId, categoryId, productPriceValue } = defineProps({
   }
 })
 
-const productPrice = ref(productPriceValue) // Using the prop value
+const productPrice = ref(props.productPriceValue) // Using the prop value
 const coupons = ref<CouponInfoItemWithAvailabilityResponse[]>([])
 
 onMounted(async () => {
@@ -93,8 +112,8 @@ onMounted(async () => {
   if (!localStorage.getItem('accessToken')) {
     try {
       coupons.value = await getCouponsWithAvailibilityForProductDetailNotLoggedIn(
-        productId,
-        categoryId
+        props.productId,
+        props.categoryId
       )
     } catch (error) {
       console.error('Failed to fetch coupons for product detail:', error)
@@ -102,8 +121,8 @@ onMounted(async () => {
   } else {
     try {
       coupons.value = await getCouponsWithAvailibilityForProductDetailLoggedIn(
-        productId,
-        categoryId
+        props.productId,
+        props.categoryId
       )
     } catch (error) {
       console.error('Failed to fetch coupons for product detail:', error)
@@ -174,7 +193,7 @@ const maxDiscountAmount = computed(() => {
 
     // 할인 타입에 따라 분기
     if (coupon.discountType === 'PERCENTAGE') {
-      discountAmount = (productPriceValue * coupon.discountValue) / 100
+      discountAmount = (props.productPriceValue * coupon.discountValue) / 100
       // console.log(`PERCENTAGE:${coupon}`)
       // console.log(`discountAmount:${discountAmount}`)
     } else if (coupon.discountType === 'FIXED_AMOUNT') {
