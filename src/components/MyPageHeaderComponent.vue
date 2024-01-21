@@ -157,7 +157,7 @@ onBeforeUnmount(() => {
     <div class="user-container-point-container">
       <div class="point-wrapper">
         포인트
-        <h1>{{ memberStore.point }}</h1>
+        <h1>{{(memberStore.point ?? 0).toLocaleString() }}</h1>
         점
       </div>
       <button class="payment-modal-button" @click="open">결제하기</button>
