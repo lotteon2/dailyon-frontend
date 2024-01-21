@@ -24,7 +24,7 @@ const toggleCard = async (orderNo: string) => {
   <tr @click='toggleCard(order.orderNo)' class='table-inner-header'>
     <th>{{ order.orderNo }}</th>
     <th>{{ order.productsName }}</th>
-    <th>{{ order.totalAmount }}</th>
+    <th>{{ order.totalAmount.toLocaleString() }}</th>
     <th>{{ order.status }}</th>
     <th>{{ order.createdAt }}</th>
   </tr>
