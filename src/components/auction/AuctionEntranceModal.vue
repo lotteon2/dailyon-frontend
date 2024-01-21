@@ -145,12 +145,15 @@ watch(
           <div class="modal-button">
             <button
               class="createBtn"
-              v-if="auctionDetail.auctionResponse.ended === false"
+              v-if="
+                auctionDetail.auctionResponse.started === true &&
+                auctionDetail.auctionResponse.ended === false
+              "
               @click="enterAuction"
             >
               경매 입장
             </button>
-            <button class="disabledBtn" v-else>경매 종료</button>
+            <button class="disabledBtn" v-else>입장 불가</button>
           </div>
         </div>
       </div>
