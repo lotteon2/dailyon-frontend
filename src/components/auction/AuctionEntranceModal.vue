@@ -65,13 +65,11 @@ const closeModal = () => {
 const enterAuction = async () => {
   if (
     await confirmModal(
-      '경매에 입장하시겠습니까?\n악성 입찰 방지를 위해 경매에 낙찰될 경우 포인트로 즉시 5%가 결제됩니다\n'
+      '경매에 입장하시겠습니까?\n악성 입찰 방지를 위해 경매에 낙찰될 경우 포인트로 즉시 낙찰 가격의 5%가 결제됩니다\n'
     )
   ) {
-    if (
-      memberStore.getMemberInfo().point! >
-      auctionDetail.value.productDetailResponse.price * 0.05
-    ) {
+    console.log(memberStore.getMemberInfo().point!)
+    if (memberStore.getMemberInfo().point! >= auctionDetail.value.auctionResponse.startBidPrice) {
       auctionStore.setAuctionDetail(auctionDetail.value)
       router.push({ path: `/chat/${props.auctionId}` })
       emits('close-modal')

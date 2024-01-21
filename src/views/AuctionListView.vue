@@ -19,7 +19,6 @@ import AuctionPageComponent from '@/components/auction/AuctionPageComponent.vue'
   flex-direction: column;
   align-items: center;
   width: 72vw;
-  height: 80vh;
 }
 
 .left-align {

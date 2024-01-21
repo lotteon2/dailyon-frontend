@@ -107,7 +107,6 @@ onMounted(async () => {
     return
   }
   auctionDetail.value = res.readAuctionDetailResponse.auctionResponse
-  console.log(auctionDetail.value)
   productDetail.value = res.readAuctionDetailResponse.productDetailResponse
   auctionStore.setToken(res.token)
   currentBid.value = auctionDetail.value.startBidPrice
