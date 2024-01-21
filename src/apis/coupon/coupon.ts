@@ -24,8 +24,8 @@ export const getCouponsWithAvailibilityForProductDetailLoggedIn = async (
       `${PROMOTION_PREFIX_PATH}${COUPON_DOMAIN_PREFIX_PATH}/single-product/with-availability`,
       {
         params: {
-          productId,
-          categoryId
+          productId: productId,
+          categoryId: categoryId
         }
       }
     )
@@ -56,8 +56,8 @@ export const getCouponsWithAvailibilityForProductDetailNotLoggedIn = async (
       `${PROMOTION_PREFIX_PATH}${COUPON_DOMAIN_PREFIX_PATH}/single-product/with-availability`,
       {
         params: {
-          productId,
-          categoryId
+          productId: productId,
+          categoryId: categoryId
         }
       }
     )
