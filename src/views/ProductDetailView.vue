@@ -360,6 +360,7 @@ watch(selectedProductSize, () => {
 
 <template v-if="product">
   <ProductDetailCouponModal
+    v-if="product.categoryId"
     @close-coupon-modal="closeCouponModal"
     @total-price-updated="handleTotalPriceUpdated"
     @best-promotional-price-updated="bestPromotionalPriceUpdatedHandler"

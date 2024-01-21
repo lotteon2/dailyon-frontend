@@ -108,8 +108,6 @@ const productPrice = ref(props.productPriceValue) // Using the prop value
 const coupons = ref<CouponInfoItemWithAvailabilityResponse[]>([])
 
 onMounted(async () => {
-  console.log('ProductDetailCouponModal onMounted')
-  console.log(props.productId, props.categoryId + '로 api 보냅니다.')
   // 로그인 여부에 따라 axios intance 종류 분기
   if (!localStorage.getItem('accessToken')) {
     try {
