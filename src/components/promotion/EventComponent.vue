@@ -123,7 +123,7 @@ onBeforeMount(fetchData)
             <th>경매 상품명</th>
             <th>진행 일자</th>
             <th>내 최고 입찰금액</th>
-            <th>경매 낙찰 금액</th>
+            <th>낙찰 금액</th>
             <th>낙찰 여부</th>
             <th></th>
           </tr>
