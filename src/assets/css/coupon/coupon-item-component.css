@@ -5,7 +5,8 @@
   height: 100%;
   /* background-size: contain; */
   background-repeat: no-repeat;
-  font-family: 'TheJamsil4Medium', sans-serif;
+  font-family: 'TheJamsil';
+  font-weight: 500;
   color: white;
   position: relative; /* 하위 컴포넌트가 absolute를 달 수 있도록 relative 명시 */
   display: flex;
