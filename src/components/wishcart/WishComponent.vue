@@ -97,7 +97,7 @@ const routeOrder = async (idx: number, event: any) => {
       receiverName: props.receiver.receiverName,
       senderName: props.receiver.senderName
     }
-    productStore.setProducts(productInfo, 'GIFT', null)
+    productStore.setProducts(productInfo, 'GIFT', null, null)
     productStore.setReceiver(giftInfo)
     router.push('/orders')
   }

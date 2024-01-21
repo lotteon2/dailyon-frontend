@@ -10,11 +10,18 @@ export const useProductStore = defineStore(
     const giftInfo = ref()
     const orderType = ref()
     const referralCode = ref()
+    const auctionId = ref()
 
-    const setProducts = (productInfos: ProductInfo[], type: String, refCode: String | null) => {
+    const setProducts = (
+      productInfos: ProductInfo[],
+      type: String,
+      refCode: String | null,
+      auction: String | null
+    ) => {
       products.value = productInfos
       orderType.value = type
       referralCode.value = refCode
+      auctionId.value = auction
     }
 
     const setReceiver = (data: GiftInfo) => {
@@ -24,12 +31,15 @@ export const useProductStore = defineStore(
       products.value = null
       giftInfo.value = null
       orderType.value = null
+      referralCode.value = null
+      auctionId.value = null
     }
     return {
       products,
       orderType,
       giftInfo,
       referralCode,
+      auctionId,
       setProducts,
       setReceiver,
       deletePinia
@@ -39,7 +49,7 @@ export const useProductStore = defineStore(
     persist: {
       key: 'orderProduct',
       storage: sessionStorage,
-      paths: ['products', 'orderType', 'giftInfo', 'referralCode']
+      paths: ['products', 'orderType', 'giftInfo', 'referralCode', 'auctionId']
     }
   }
 )

@@ -228,7 +228,7 @@ const routeOrderSheet = async () => {
         discountAmount: 0
       }
     ]
-    productStore.setProducts(productInfos, 'SINGLE', referralCode.value)
+    productStore.setProducts(productInfos, 'SINGLE', referralCode.value, null)
     router.push('/orders')
   }
 }
