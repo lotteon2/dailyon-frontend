@@ -50,7 +50,7 @@ watchEffect(() => {
       </tr>
       <point-payment-history-item v-if='payments !== undefined && payments.length !== 0' :payments="payments" />
       <td v-else colspan='4' style='width: 100%; text-align: center'>
-        <WhitePageComponent message="주문 내역이 없습니다" />
+        <WhitePageComponent message="포인트 결제 내역이 없습니다" />
       </td>
     </table>
     <PaginationComponent
