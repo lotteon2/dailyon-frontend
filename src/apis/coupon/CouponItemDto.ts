@@ -56,6 +56,8 @@ export interface Coupon {
   targetImgUrl: string
   appliesToName: string
   endAt: string
+  appliesToType?: string
+  appliesToId?: number
 }
 
 export interface Coupons {

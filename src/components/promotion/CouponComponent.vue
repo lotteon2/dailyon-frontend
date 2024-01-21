@@ -4,6 +4,7 @@ import PaginationComponent from '@/components/ootd/PaginationComponent.vue'
 import { getMyCoupons } from '@/apis/coupon/coupon'
 import type { Coupons, Coupon } from '@/apis/coupon/CouponItemDto'
 import WhitePageComponent from '@/components/wishcart/WhitePageComponent.vue'
+import router from '@/router'
 
 const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
@@ -55,6 +56,18 @@ const formatDiscountValue = (coupon: Coupon) => {
   }
   return coupon.discountValue
 }
+
+const couponClickHandler = (coupon: Coupon) => {
+  if (coupon.appliesToType === 'PRODUCT') {
+    if (coupon.appliesToId) {
+      router.push({ path: `/products/${coupon.appliesToId}` })
+    }
+  } else if (coupon.appliesToType === 'CATEGORY') {
+    if (coupon.appliesToId) {
+      router.push({ path: `/product-list?category=${coupon.appliesToId}` })
+    }
+  }
+}
 </script>
 
 <template>
@@ -78,6 +91,7 @@ const formatDiscountValue = (coupon: Coupon) => {
             v-for="(coupon, index) in coupons?.memberCouponInfoReadItemResponse"
             :key="index"
             class="coupon-table-data2"
+            @click="couponClickHandler(coupon)"
           >
             <td>{{ coupon.name }}</td>
             <td>{{ formatDiscountValue(coupon) }}</td>
