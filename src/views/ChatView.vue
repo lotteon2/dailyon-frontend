@@ -243,14 +243,6 @@ const validation = (bidAmount: number): boolean => {
   }
   return true
 }
-
-const test = async () => {
-  const response = await startBid(auctionDetail.value!.id)
-}
-
-const end = async () => {
-  await endBid(auctionDetail.value!.id)
-}
 </script>
 
 <template>
@@ -286,8 +278,6 @@ const end = async () => {
           >
           <span>상품 정가 : {{ productDetail?.price.toLocaleString() }} 원</span>
           <span>최대 낙찰 인원 : {{ auctionDetail?.maximumWinner }} 명</span>
-          <button @click="test">start</button>
-          <button @click="end">end</button>
         </div>
         <!-- 경매 정보 끝 -->
       </div>
