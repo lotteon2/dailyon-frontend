@@ -23,7 +23,7 @@
           <div class="person-info-top-text">Backend, Frontend, Infra: 이채민</div>
         </div>
         <div class="person-info-bottom-wrapper">
-          <div class="person-info-botton-text">SNS 커뮤니티, 인프라, QA</div>
+          <div class="person-info-botton-text">SNS, 인프라, QA</div>
         </div>
       </div>
       <div class="person-info-wrapper">
@@ -31,7 +31,7 @@
           <div class="person-info-top-text">Backend, Frontend: 전종민</div>
         </div>
         <div class="person-info-bottom-wrapper">
-          <div class="person-info-botton-text">상품, 찜, 장바구니, 관리자, 경매</div>
+          <div class="person-info-botton-text">상품, 찜, 장바구니, 경매 관리자</div>
         </div>
       </div>
       <div class="person-info-wrapper">
@@ -39,7 +39,7 @@
           <div class="person-info-top-text">Backend, Frontend: 김성중</div>
         </div>
         <div class="person-info-bottom-wrapper">
-          <div class="person-info-botton-text">프로모션, 관리자, 알림</div>
+          <div class="person-info-botton-text">프로모션, 알림</div>
         </div>
       </div>
       <div class="person-info-wrapper">
@@ -47,7 +47,7 @@
           <div class="person-info-top-text">Backend, Frontend: 김기환</div>
         </div>
         <div class="person-info-bottom-wrapper">
-          <div class="person-info-botton-text">회원, 관리자</div>
+          <div class="person-info-botton-text">인증/인가, 회원, 상품 크롤링</div>
         </div>
       </div>
     </div>

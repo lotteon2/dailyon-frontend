@@ -22,7 +22,7 @@ onMounted(initData)
 
 <template>
   <div class="breadcrumb-container">
-    <a href="/" style="font-family: 'TheJamsil1Thin'">홈</a>
+    <a href="/" style="font-family: 'TheJamsil'; font-weight: 100">홈</a>
     <div class="breadcrumbs" v-for="category in breadCrumbs">
       <p style="padding-right: 5px; padding-left: 5px">></p>
       <a :href="`/product-list?category=${category.id}&type=NORMAL`">
@@ -54,7 +54,8 @@ onMounted(initData)
   align-items: flex-start;
   justify-items: center;
 
-  font-family: 'TheJamsil1Thin';
+  font-family: 'TheJamsil';
+  font-weight: 100;
 }
 
 .breadcrumbs > a {
