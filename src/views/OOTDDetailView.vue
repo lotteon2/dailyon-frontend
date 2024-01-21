@@ -455,7 +455,7 @@ const onTagedProductMouseLeave = async (productId: number) => {
                         {{ postImageProductDetail.name }}
                       </div>
                       <div class='product-image-price-wrapper'>
-                        <div class='product-image-price'>{{ postImageProductDetail.price }}원</div>
+                        <div class='product-image-price'>{{ (postImageProductDetail.price ?? 0).toLocaleString() }}원</div>
                       </div>
                     </div>
                   </div>
