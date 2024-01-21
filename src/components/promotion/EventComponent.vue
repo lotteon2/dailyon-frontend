@@ -122,6 +122,8 @@ onBeforeMount(fetchData)
             <th>경매 이름</th>
             <th>경매 상품명</th>
             <th>진행 일자</th>
+            <th>내 최고 입찰금액</th>
+            <th>경매 낙찰 금액</th>
             <th>낙찰 여부</th>
             <th></th>
           </tr>
@@ -131,6 +133,8 @@ onBeforeMount(fetchData)
             <td>{{ history.auctionName }}</td>
             <td>{{ history.auctionProductName }}</td>
             <td>{{ formatDate(history.createdAt) }}</td>
+            <td>{{ history.memberHighestBid.toLocaleString() }} 원</td>
+            <td>{{ history.auctionWinnerBid.toLocaleString() }} 원</td>
             <td>{{ history.winner === true ? 'T' : 'F' }}</td>
             <td>
               <div
