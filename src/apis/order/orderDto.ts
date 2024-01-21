@@ -1,8 +1,12 @@
 export interface OrderResponse {
   orderNo: string
+  memberId: number
   productsName: string
+  usedPoints: number
+  totalCouponDiscountPrice: number
   totalAmount: number
   status: string
+  type: string
   createdAt: string
 }
 

@@ -15,7 +15,7 @@ const totalPages = ref<number>()
 const orders = ref<Array<OrderResponse>>([])
 const orderNo = ref<string>('')
 const showModal = ref<boolean>(false)
-
+const type = ref('일반주문')
 const defaultOption = ref({
   value: 'SINGLE',
   label: '일반주문'
@@ -44,8 +44,9 @@ const fetchDefaultData = async (requestPage: number, type: string): Promise<void
   totalPages.value = data.totalPages
 }
 
-const open = async (index: string) => {
-  orderNo.value = index
+const open = async (order: OrderResponse) => {
+  orderNo.value = order.orderNo
+  type.value = order.type
   showModal.value = true
 }
 
@@ -105,7 +106,7 @@ const handleSelectedOptionChange = async (
           <OrderComponent
             v-if="orders.length !== 0"
             :orders="orders"
-            @showModal="(index) => open(index)"
+            @showModal="(order) => open(order)"
           />
           <td v-else colspan="5" style="width: 100%; text-align: center">
             <WhitePageComponent message="주문 내역이 없습니다" />
@@ -116,7 +117,7 @@ const handleSelectedOptionChange = async (
       <div v-if="showModal" class="modal" @click="closeModal">
         <div class="modal-content" @click.stop>
           <span class="close" @click="closeModal">&times;</span>
-          <OrderDetailComponent :orderNo="orderNo" @closeModal="closeModal" />
+          <OrderDetailComponent :orderNo="orderNo" :type="type" @closeModal="closeModal" />
         </div>
       </div>
       <PaginationComponent
