@@ -45,7 +45,8 @@
   flex-direction: column;
   gap: 1vh;
   font-size: 2rem;
-  font-family: 'TheJamsil4Medium';
+  font-family: 'TheJamsil';
+  font-weight: 500;
   margin-bottom: 1vh;
 }
 
@@ -104,7 +105,8 @@
 
 .price-content {
   text-align: center;
-  font-family: 'TheJamsil4Medium';
+  font-family: 'TheJamsil';
+  font-weight: 500;
   font-size: 1.3rem;
 }
 
@@ -118,7 +120,8 @@
 
 .no-content {
   font-size: 1.8rem;
-  font-family: 'TheJamsil4Medium';
+  font-family: 'TheJamsil';
+  font-weight: 500;
   color: #c8c8c8;
   align-self: center;
   justify-content: center;
@@ -138,6 +141,7 @@
   text-align: center;
 
   font-size: 1.8rem;
-  font-family: 'TheJamsil4Medium';
+  font-family: 'TheJamsil';
+  font-weight: 500;
   cursor: pointer;
 }
