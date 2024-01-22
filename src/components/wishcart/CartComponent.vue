@@ -93,6 +93,7 @@ const executeUpdate = (index: number, isPlus: boolean, event: any) => {
 const onChangePage = async (page: number) => {
   if (0 <= page && page < totalPages.value) {
     requestPage.value = page
+    checkedCartItems.value = []
   }
 }
 
