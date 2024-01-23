@@ -12,9 +12,11 @@ import { storeToRefs } from 'pinia'
 import { useProductStore } from '@/stores/product/ProductStore'
 import { useMemberStore } from '@/stores/member/MemberStore'
 import { useNotificationStore } from '@/stores/notification/NotificationStore'
+import { useOrderStore } from '@/stores/order/OrderStore'
 import router from '@/router'
 import { warningModal } from '@/utils/Modal'
 const productStore = useProductStore()
+const orderStore = useOrderStore()
 const { products, orderType, giftInfo, referralCode, auctionId } = storeToRefs(productStore)
 const { point } = storeToRefs(useMemberStore())
 
@@ -37,7 +39,6 @@ const totalDiscountAmount = computed((): number => {
     return prev + (current.discountAmount ? current.discountAmount : 0)
   }, 0)
 })
-
 const usedPoints = ref<number>(0)
 const usePoints = async () => {
   usedPoints.value = Math.min(Number(point.value), totalOrderPrice.value)
@@ -112,7 +113,17 @@ const doOrder = async () => {
     auctionId: auctionId.value
   }
   redirectUrl.value = await order(orderSheet)
-
+  const orderInfo = {
+    productName: products.value[0].productName,
+    imgUrl: products.value[0].imgUrl,
+    receiver: deliveryInfo.value.receiver,
+    postCode: deliveryInfo.value.postCode,
+    roadAddress: deliveryInfo.value.roadAddress,
+    detailAddress: deliveryInfo.value.detailAddress,
+    productPrice: totalOrderPrice.value,
+    productId: products.value[0].productId
+  }
+  orderStore.setOrder(orderInfo)
   if (redirectUrl.value) {
     const width = 500
     const height = 500
