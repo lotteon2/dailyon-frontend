@@ -3,6 +3,10 @@ export interface ReadProductSliceResponse {
   productResponses: ReadProductResponse[]
 }
 
+export interface ReadProductSearchResponse {
+  productResponses: ReadProductResponse[]
+}
+
 export interface ExtendedReadProductResponse extends ReadProductResponse {
   categoryId: number
 }

@@ -3,6 +3,7 @@ import { defaultAxiosInstance } from '@/apis/utils'
 import type {
   ReadCacheProductListResponse,
   ReadProductDetailResponse,
+  ReadProductSearchResponse,
   ReadProductSliceResponse
 } from '@/apis/product/ProductDto'
 import { openInternalServerErrorNotification } from '@/utils/Toast'
@@ -10,6 +11,32 @@ import { warningModal } from '@/utils/Modal'
 
 const PRODUCT_SERVICE_PREFIX: string = '/product-service'
 const PRODUCT_PREFIX: string = '/products'
+
+export const searchProducts = async (query: string): Promise<ReadProductSearchResponse> => {
+  try {
+    const { data } = await defaultAxiosInstance.get(
+      `${PRODUCT_SERVICE_PREFIX}${PRODUCT_PREFIX}/search`,
+      {
+        params: { query: query }
+      }
+    )
+    return data
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      if (error.response) {
+        if (error.response.status >= 400 && error.response.status < 500) {
+          await warningModal('알림', error.response.data.message)
+          console.error(`Client Error=${error.response.data.message}`)
+        }
+        if (error.response.status >= 500) {
+          openInternalServerErrorNotification()
+          console.error('Internal Server Error')
+        }
+      }
+    }
+    throw error
+  }
+}
 
 export const getProductSlice = async (
   brandId: number | null,

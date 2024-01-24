@@ -17,7 +17,6 @@ const notificationStore = useNotificationStore()
 const { notifications, unreadNotificationCount } = storeToRefs(notificationStore)
 
 const memberStore = useMemberStore()
-// const {  } = storeToRefs(memberStore)
 const categoryStore = useCategoryStore()
 const brandStore = useBrandStore()
 
@@ -46,7 +45,7 @@ const routeSearch = () => {
   if (searchQuery.value === null) {
     infoModal('알림', '검색 키워드를 입력해주세요.')
   } else {
-    window.location.href = `/product-list?query=${searchQuery.value}`
+    window.location.href = `/product-search?query=${searchQuery.value}`
     searchQuery.value = null
   }
 }

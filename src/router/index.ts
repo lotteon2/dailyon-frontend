@@ -27,6 +27,11 @@ const router = createRouter({
       component: () => import('@/views/ProductListView.vue')
     },
     {
+      path: '/product-search',
+      name: 'productSearch',
+      component: () => import('@/views/ProductSearchView.vue')
+    },
+    {
       path: '/products/:id',
       name: 'productDetails',
       component: () => import('@/views/ProductDetailView.vue')
@@ -223,8 +228,8 @@ router.beforeEach((to, from, next) => {
 })
 
 const isLoggedIn = () => {
-    const token = localStorage.getItem('accessToken')
-    return !!token
+  const token = localStorage.getItem('accessToken')
+  return !!token
 }
 
 export default router
