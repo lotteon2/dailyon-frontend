@@ -36,10 +36,6 @@ const initData = async () => {
     categoryId.value = Number(route.query.category)
   }
 
-  if (route.query.query) {
-    query.value = String(route.query.query)
-  }
-
   const response: ReadProductSliceResponse = await getProductSlice(
     brandId.value,
     categoryId.value,
