@@ -11,7 +11,7 @@ const VITE_STATIC_IMG_URL = ref<string>(import.meta.env.VITE_STATIC_IMG_URL)
 
 const route = useRoute()
 
-const query = ref<string | null>(null)
+const query = ref<string>('')
 const products = ref<ReadProductResponse[]>([])
 
 const loading = ref<boolean>(true)
