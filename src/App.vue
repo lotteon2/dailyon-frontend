@@ -4,7 +4,13 @@ import { computed, provide, ref } from 'vue'
 import HeaderComponent from '@/components/HeaderComponent.vue'
 import FooterComponent from '@/components/FooterComponent.vue'
 import { debounce } from 'lodash'
-
+declare global {
+  interface Window {
+    Kakao: any
+  }
+}
+const KAKAO_KEY = import.meta.env.VITE_KAKAO_KEY
+window.Kakao.init(KAKAO_KEY)
 let isScrollEnd = ref<boolean>(false)
 const route = useRoute()
 const displayHeader = computed(() => !route.path.startsWith('/order-success'))
