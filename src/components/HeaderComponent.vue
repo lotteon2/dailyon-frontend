@@ -42,7 +42,7 @@ const memberId = computed(() => memberInfo.value.memberId)
 const searchQuery = ref<string | null>(null)
 
 const routeSearch = () => {
-  if (searchQuery.value === null) {
+  if (searchQuery.value === null || searchQuery.value.trim().length === 0) {
     infoModal('알림', '검색 키워드를 입력해주세요.')
   } else {
     window.location.href = `/product-search?query=${searchQuery.value}`
