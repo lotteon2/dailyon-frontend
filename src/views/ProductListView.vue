@@ -55,11 +55,6 @@ const initData = async () => {
 
 onBeforeMount(initData)
 
-const scrollToTop = () => {
-  alert('to top')
-  window.scrollTo({ top: 0, behavior: 'smooth' })
-}
-
 const changeBrand = (idx: number) => {
   // 한 번 누른거 또 누르면 브랜드 선택 해제
   if (brandId.value === brandStore.brandList[idx].id) {
@@ -84,21 +79,23 @@ const changeGender = (genderVal: string) => {
 
 // 검색 버튼 클릭 시 다시 조회
 const changeQuery = async () => {
-  const response: ReadProductSliceResponse = await getProductSlice(
-    brandId.value,
-    categoryId.value,
-    gender.value,
-    lowPrice.value,
-    highPrice.value,
-    query.value,
-    (page.value = 0),
-    sort.value,
-    direction.value
-  )
+  if (query.value !== null && query.value.trim().length !== 0) {
+    const response: ReadProductSliceResponse = await getProductSlice(
+      brandId.value,
+      categoryId.value,
+      gender.value,
+      lowPrice.value,
+      highPrice.value,
+      query.value,
+      (page.value = 0),
+      sort.value,
+      direction.value
+    )
 
-  page.value++
-  hasNext.value = response.hasNext
-  products.value = response.productResponses
+    page.value++
+    hasNext.value = response.hasNext
+    products.value = response.productResponses
+  }
 }
 
 // 정렬 기준 변경 시 다시 조회
